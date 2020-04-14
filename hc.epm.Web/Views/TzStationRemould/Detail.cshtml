@@ -1,0 +1,392 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model Epm_ReformRecord
+
+@{
+    ViewBag.Title = "库站改造编辑";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #666666;
+        color: #fff;
+    }
+
+    .fy_jine {
+        display: none;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span>项目名称：</span>
+                        </td>
+                        <td colspan="3" align="left">
+                            <div class="form-group">
+                                @Model.ProjectName
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>库站名称：</span>
+                        </td>
+                        <td colspan="3" align="left">
+                            <div class="form-group">
+                                @Model.StationName
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>地市公司：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @ViewBag.CompanyName
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>改造类型：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Model.RemarkTypeName
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>限上/限下：</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.LimitType == "1")
+                            {
+                                <span>限上</span>
+                            }
+                            else if (Model.LimitType == "2")
+                            {
+                                <span>限下</span>
+                            }
+                            else
+                            {
+                                <span>限上</span>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span>资金来源：</span>
+                        </td>
+                        <td class="apply_time td-div">
+                            <div class="form-group">
+                                @if (Model.SourceFund == "ZIJLY1")
+                                {
+                                    <span>投资</span>
+                                }
+                                else if (Model.SourceFund == "ZIJLY2")
+                                {
+                                    <span>费用</span>
+                                }
+                                else if (Model.SourceFund == "ZIJLY3")
+                                {
+                                    <span>两者兼有</span>
+                                }
+                                else
+                                {
+                                    <span>投资</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title tz_jine">
+                            <span>投资金额：</span>
+                        </td>
+                        <td class="td-div tz_jine">
+                            <div class="form-group">
+                                <span>@Model.Investment.ToString("0.00") 万元</span>
+                            </div>
+                        </td>
+                        <td class="table_title fy_jine">
+                            <span>费用金额：</span>
+                        </td>
+                        <td class="td-div fy_jine">
+                            <div class="form-group">
+                                <span>@Model.CostAmount.ToString("0.00") 万元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>立项批复文号：</span>
+                        </td>
+                        <td class="td-div">
+                            @Model.ItemNumber
+                        </td>
+                        <td class="table_title">立项批复时间：</td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                @(Convert.ToDateTime(Model.ItemTime).ToString("yyyy-MM-dd"))
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>立项批复单位：</span>
+                        </td>
+                        <td class="td-div">
+                            @Model.ItemUnit
+                        </td>
+                        <td class="table_title">
+                            <span>立项批复金额：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.ItemMoney.ToString("0.00") 万元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>初设批复文号：</span>
+                        </td>
+                        <td class="td-div">
+                            @Model.InitialNumber
+                        </td>
+                        <td class="table_title">初设批复金额：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.InitialMoney.ToString("0.00") 万元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>改造起始时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                @(Convert.ToDateTime(Model.RemarkStartTime).ToString("yyyy-MM-dd"))
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>改造终止时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                @(Convert.ToDateTime(Model.RemarkEndTime).ToString("yyyy-MM-dd"))
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>改造金额：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.RemarkMoney.ToString("0.00") 万元</span>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>加管编码：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Model.PipetteCoding
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">决策人：</td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                @Model.DecisionMaker
+                            </div>
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">负责人：</td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                               @Model.LeaderPerson
+                            </div>
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">运营人：</td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                @Model.Operator
+                            </div>
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>改造效果</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span>原成品油销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.InitialSalesOfRefinedOil.ToString("0.00") 吨/日</span>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>改造后成品油销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.RemarkSalesOfRefinedOil.ToString("0.00") 吨/日</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>原气销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.InitialSalesOfGas.ToString("0.00") 千方/日</span>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>改造后气销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.RemarkSalesOfGas.ToString("0.00") 千方/日</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>内部收益率：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <span>@Model.IRR.ToString("0.00") %</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>工程内容：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                @Model.ProjectContent
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>备注：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                @Model.Remark
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        @*附件上传改造 start ---- *@
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzAttachs)
+                        {
+                    <tr id="${obj.GuidId}">
+                        <td><span class="font-black">@item.Sort</span></td>
+                        <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                        <td><span class="font-black">@item.TypeName</span></td>
+                        <td class="td-div" style="text-align:center">
+                            <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:#337ab7;">下载</a>
+                        </td>
+                    </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*附件上传改造 end ---- *@
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+    </form>
+</div>
+
+<script>
+
+    //返回
+    $("#Cancel").click(function () {
+        window.location.href = "/TzStationRemould/Index";
+    });
+
+    //下载附件
+    $("body").on("click", ".downloadFile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("name");
+        window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+    });
+
+    var ZIJLYval = $('input:radio[name="SourceFund"]:checked').val();
+    RadioChange(ZIJLYval);
+    function RadioChange(ZIJLYval) {
+        if (ZIJLYval == "ZIJLY1") {
+            $(".tz_jine").show();
+            $(".fy_jine").hide();
+        }
+        else if (ZIJLYval == "ZIJLY2") {
+            $(".tz_jine").hide();
+            $(".fy_jine").show();
+        }
+        else if (ZIJLYval == "ZIJLY3") {
+            $(".tz_jine").show();
+            $(".fy_jine").show();
+        }
+    }
+    //$("input[name='SourceFund']").change(function () {
+    //    ZIJLYval = $('input:radio[name="SourceFund"]:checked').val();
+    //    RadioChange(ZIJLYval);
+    //});
+
+</script>

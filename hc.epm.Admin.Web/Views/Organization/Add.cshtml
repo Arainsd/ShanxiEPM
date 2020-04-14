@@ -1,0 +1,405 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_Company
+@{
+    ViewBag.Title = "添加单位";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+
+    .info-tittle {
+        width: 100%;
+        height: 33px;
+        background-color: #d2d1d1;
+        line-height: 33px;
+        padding-left: 25px;
+        box-sizing: border-box;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> <a href="">组织机构</a> </span> > <span> 新增单位信息</span>
+    </div>
+    <div class="main mt5 pd-t-b" style="padding:0 0 15px 0 ">
+        <div class="container" style="max-width:100%;width:100%;padding-top:0">
+            <div class="row">
+                <form class="form-horizontal " id="mainForm">
+                    <input type="hidden" name="Id" id="Id" />
+                    <input type="hidden" name="PId" value="@ViewBag.rightPId" />
+                    <div class="info-tittle">
+                        <span style="padding-right:20px">></span>
+                        <label>单位信息</label>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位编码：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="Code" id="Code" value="@ViewBag.Code" placeholder="请输入单位编号" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位名称：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <input type="text" name="Name" id="Name" placeholder="请输入单位名称" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label">单位简称：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <input type="text" name="ShortName" id="ShortName" placeholder="请输入单位简称" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label" style="text-align:right"><em class="required"></em>单位类型：</label>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="Type" id="Type" lay-filter="Type" class="form-control">
+                                    <option value="">---请选择---</option>
+                                    <option value="Owner">业主</option>
+                                    <option value="Supplier">供应商</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px;display:none;" id="OrgTypeDiv">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label" style="text-align:right"><em class="required"></em>业主单位类型：</label>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="OrgType" id="OrgType" lay-filter="OrgType" class="form-control">
+                                    <option value="0">---请选择---</option>
+                                    <option value="1">省公司</option>
+                                    <option value="2">分公司</option>
+                                    <option value="3">机关</option>
+                                    <option value="4">加油站</option>
+                                    <option value="5">加气站</option>
+                                    <option value="6">研发企业</option>
+                                    <option value="7">片区</option>
+                                    <option value="8">8生产机关</option>
+                                    <option value="9">车</option>
+                                    <option value="10">船</option>
+                                    <option value="11">机关及其他部门</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label" style="text-align:right"><em class="required"></em>是否缺位：</label>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="Normal_absence" id="Normal_absence" lay-filter="Province" class="form-control">
+                                    <option value="">---请选择---</option>
+                                    <option value="正常缺位">正常缺位</option>
+                                    <option value="异常缺位">异常缺位</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>单位电话：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="Phone" id="Phone" placeholder="请输入单位电话" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label">单位传真：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="FaxPhone" id="FaxPhone" placeholder="请输入传真电话" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>邮箱地址：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="Email" id="Email" placeholder="请输入邮箱地址" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label" style="text-align:right"><em class="required"></em>所在地区：</label>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="Province" id="Province" lay-filter="Province" class="form-control">
+                                    <option value="">---请选择省---</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="City" id="City" lay-filter="City" class="form-control">
+                                    <option value="">---请选择市---</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="Country" id="Country" lay-filter="Country" class="form-control">
+                                    <option value="">---请选择县---</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="Address" id="Address" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>详细地址：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <input type="text" name="AddressInfo" id="AddressInfo" placeholder="请输入详细地址" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:130px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>简介：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <textarea name="Remark" id="Remark" placeholder="请输入简介" class="form-control" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                        <label class="col-lg-3 col-sm-3 control-label" style="margin-left:-142px;"><em class="required"></em>附件列表：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <table class="layui-table" style="margin-left:-5px;">
+                                <thead>
+                                    <tr>
+                                        <th class="table-center">附件名称</th>
+                                        <th width="90" class="table-center">附件格式</th>
+                                        <th width="100" class="table-center">大小</th>
+                                        <th width="100" class="table-center">上传时间</th>
+                                        <th width="70" class="table-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fileList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="col-lg-6 col-sm-6">
+                            <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-84px;"><em class="required"></em></label>
+                            <div class="col-lg-7 col-sm-7">
+                                <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                                <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item row  btn-save">
+                        <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                        <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var name = obj.Name;
+                        var type = name.split(".");
+                        var odiv = '<tr>';
+                        odiv += '<td style=\"text-align:center \">' + type[0] + '</td>';
+                        odiv += '<td>' + '.' + type[1] + '</td>';
+                        odiv += '<td>' + obj.Size + '</td>';
+                        odiv += '<td>' + new Date().toLocaleDateString() + '</td>';
+                        odiv += '<td style=\"text-align:center\"><a class=\"delete-file\" data-val=' + obj.GuidId + ' style="color:red;cursor:pointer">删除</a></td></tr>';
+                        $('#fileList').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+        $("#Type").change(function () {
+            var Type = $("#Type").val();
+            if (Type == "Owner") {
+                $("#OrgTypeDiv").show();
+            } else {
+                $("#OrgTypeDiv").hide();
+            }
+        });
+    });
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Code: {
+                    validators: {
+                        notEmpty: {
+                            message: '单位编号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '单位编号长度不能超过50字符'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9]+$/i,
+                            message: "单位编号由数字和字母组成"
+                        }
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '单位名称不能为空'
+                        },
+                        stringLength: {
+                            max: 254,
+                            message: '单位名称不能超过254字符'
+                        },
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, laypage = layui.laypage;
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();//序列化表单
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        var alertIndex = parent.layer.msg("单位信息添加成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(alertIndex);
+                            window.location.href = "/Organization/Index";//跳转新增页面
+                        });
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+                return true;
+            } else {
+                parent.layer.alert("请检查必填项是否填写完整。", { icon: 2 });
+            }
+            return false;
+        });
+
+        //获取区域列表（省）
+        function getRegionList() {
+            $.post("/Organization/RegionList", { parentCode: "0" }, function (data) {
+                if (data.Flag) {
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#Province").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].Fullname + "</option>")
+                    };
+                    $('#Province').addClass("show-tick").selectpicker();
+                    $('#Province').selectpicker("refresh");
+                }
+            })
+        }
+
+        $("#Province").change(function () {
+            var value = this.value
+            $.post("/Organization/RegionList", { parentCode: value }, function (data) {
+                if (data.Flag) {
+                    $("#City").empty();
+                    $("#City").append("<option value=''>---请选择市---</option>")
+                    $("#Country").empty();
+                    $("#Country").append("<option value=''>---请选择县---</option>")
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#City").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+                    $('#City').addClass("show-tick").selectpicker();
+                    $('#City').selectpicker("refresh");
+
+                }
+            })
+        });
+
+        //获取区域列表（县）
+        $("#City").change(function () {
+            var value = this.value
+            $.post("/Organization/RegionList", { parentCode: value }, function (data) {
+                if (data.Flag) {
+                    $("#Country").empty();
+                    $("#Country").append("<option value=''>---请选择县---</option>");
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#Country").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+                    $('#Country').addClass("show-tick").selectpicker();
+                    $('#Country').selectpicker("refresh");
+
+                }
+            })
+        });
+
+        //地区选择第三级选定后将地址信息保存至区域字段隐藏域
+        $("#Country").change(function () {
+            value = this.value;
+            $("#Address").val($("#Province").val() + "," + $("#City").val() + "," + value);
+        });
+
+        getRegionList();//加载地区列表
+
+        //删除附件
+        $("#fileList").on('click', 'a.delete-file', function () {
+            $(this).parents("tr").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+        //返回按钮事件
+        $(".cancel").on("click", function () {
+            window.history.go(-1);
+        })
+    });
+</script>

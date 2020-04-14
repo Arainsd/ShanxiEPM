@@ -1,0 +1,209 @@
+﻿
+@{
+    ViewBag.Title = "加油站新增";
+}
+
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+</style>
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>编号：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" class="form-control" name="Code" id="Code" placeholder="请输入编号" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位编码：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" class="form-control" name="Code1" id="Code1" placeholder="请输入单位编码" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>加油站名称：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" name="Name" id="Name" placeholder="请输入加油站名称" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label">加油站简介：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="Description" id="Description" placeholder="请输入加油站简介" class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+          
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label">地址：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <div class="col-lg-4 col-sm-4" style="padding-left:10px;">
+                        <select name="Province" id="Province" lay-filter="Province" class="form-control">
+                            <option value="420000">本省省</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-sm-4" style="padding-left:10px;">
+                        <select name="City" id="City" lay-filter="City" class="form-control">
+                            <option value="">请选择市</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-sm-4" style="padding-left:10px;">
+                        <select name="Country" id="Country" lay-filter="Country" class="form-control">
+                            <option value="">请选择县</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="Address" id="Address" class="form-control" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25" style="margin-top:57px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+     
+        //自定义验证规则
+        window.onload = function () {
+            $('#mainForm').bootstrapValidator({
+                excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    Code: {
+                        validators: {
+                            notEmpty: {
+                                message: '编号不能为空'
+                            }, stringLength: {
+                                max: 50,
+                                message: '编号长度不能超过50字符'
+                            }, regexp: {
+                                regexp: /^[a-zA-Z0-9]+$/i,
+                                message: "编号由数字和字母组成"
+                            }
+                        }
+                    },
+                    Code1: {
+                        validators: {
+                            notEmpty: {
+                                message: '单位编码不能为空'
+                            }, stringLength: {
+                                max: 50,
+                                message: '单位编码长度不能超过50字符'
+                            }, regexp: {
+                                regexp: /^[a-zA-Z0-9]+$/i,
+                                message: "编号由数字和字母组成"
+                            }
+                        }
+                    },
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: '加油站名称不能为空'
+                            }, stringLength: {
+                                max: 50,
+                                message: '加油站名称长度不能超过50字符'
+                            }, regexp: {
+                                regexp: /^[a-zA-Z0-9\u4e00-\u9fa5-]+$/i,
+                                message: "名称由汉字字母数字及-组成"
+                            }
+                        }
+                    },
+                }
+            });
+        }
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+
+                var search = $("form").serialize();//表单序列化
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");//禁止连续提交表单
+                        $("#save").val("请等待");
+                        var layerIndex = parent.layer.msg("添加成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(layerIndex);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+        });
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+
+
+    });
+
+    $("#Province").change(function () {
+        var value = this.value
+        $.post("/Organization/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                $("#City").empty();
+                $("#City").append("<option value=''>请选择市</option>")
+                $("#Country").empty();
+                $("#Country").append("<option value=''>请选择县</option>")
+                for (var i = 0; i < data.Data.length; i++) {
+                    $("#City").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                };
+                $('#City').addClass("show-tick").selectpicker();
+                $('#City').selectpicker("refresh");
+
+            }
+        })
+    });
+
+    //获取区域列表（县）
+    $("#City").change(function () {
+        var value = this.value
+        $.post("/Organization/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                $("#Country").empty();
+                $("#Country").append("<option value=''>请选择县</option>");
+                for (var i = 0; i < data.Data.length; i++) {
+                    $("#Country").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                };
+                $('#Country').addClass("show-tick").selectpicker();
+                $('#Country').selectpicker("refresh");
+
+            }
+        })
+    });
+
+    //地区选择第三级选定后将地址信息保存至区域字段隐藏域
+    $("#Country").change(function () {
+        value = this.value;
+        $("#Address").val($("#Province").val() + "," + $("#City").val() + "," + value);
+    });
+
+    $("#Province").change();//加载地区列表
+</script>
+
+

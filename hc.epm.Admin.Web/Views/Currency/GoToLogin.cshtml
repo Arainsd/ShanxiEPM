@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "正在跳转...";
+    Layout = null;
+}
+
+<script>
+    var par = window.parent;
+    if (par == null || par == undefined) {
+        window.location.href = '/Currency/Login';
+    }
+    else {
+        window.parent.location.href = '/Currency/Login';
+    }
+</script>
+

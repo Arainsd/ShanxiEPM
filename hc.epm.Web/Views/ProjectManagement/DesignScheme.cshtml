@@ -1,0 +1,410 @@
+﻿@{
+    ViewBag.Title = "设计方案";
+}
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #c3c3c3!important;
+        color: white;
+        border-radius:4px;
+        font-size:16px;
+    }
+</style>
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="module-div">
+                <h4>  项目基础信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;margin-bottom:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title">项目名称:</td>
+                            <td class="td-div" colspan="3">
+                                <div>
+                                    <input class="form-control input_unit" type="text" id="ProjectId" name="ProjectId" value="" />
+                                    <input class="btn-pro" type="button" name="name" value="选择项目" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">站库名称:</td>
+                            <td class="td-div">
+                                <div>  咸阳统一路加油站</div>
+                            </td>
+                            <td class="table_title">项目性质:</td>
+                            <td class="td-div">
+                                <div>新建</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">姓名类型：</td>
+                            <td class="td-div">
+                                <div> 加油站</div>
+                            </td>
+                            <td class="table_title">项目编号：</td>
+                            <td class="td-div">
+                                <div> 陕A-1202-2019-023</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">地区公司：</td>
+                            <td class="td-div">
+                                <div> 陕西</div>
+                            </td>
+                            <td class="table_title">地市公司：</td>
+                            <td class="td-div">
+                                <div> 西安分公司</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">估算投资：</td>
+                            <td class="td-div">
+                                <div> 100003万元</div>
+                            </td>
+                            <td class="table_title">工程费用：</td>
+                            <td class="td-div">
+                                <div>13002万元</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">土地费用：</td>
+                            <td class="td-div">
+                                <div>1043万元</div>
+                            </td>
+                            <td class="table_title">其他费用：</td>
+                            <td class="td-div">
+                                <div>2391万元</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+           
+            <div class="module-div">
+                <h4>初设信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 初步设计单位:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px" /></div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 示范/标注:</td>
+                            <td class="td-div">
+                                <select class="form-control">
+                                    <option value="value">标准加油站（油库）</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 上报概算:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 万元</div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 工程费用:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 万元</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 工程其他费用：</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 万元</div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 设计单位招标时间：</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" type="date" /> </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">设计单位负责人：</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; " /> </div>
+                            </td>
+                            <td class="table_title">职务：</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px;" /> </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">项目经理：</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; " /> </div>
+                            </td>
+                            <td class="table_title">职务：</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; " /> </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                </div>
+            <div class="module-div">
+                <h4>主要工程内容</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 占地面积:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 平米 </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 加油机:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 台</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 加气机:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 台 </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 储气机:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 方</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 罐容:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 方 </div>
+                            </td>
+                            <td class="table_title"> 罩棚面积:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 平米</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"> 站房面积:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 平米 </div>
+                            </td>
+                            <td class="table_title"> 便利店面积:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px; width:83%" /> 平米</div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                </div>
+            <div class="module-div">
+                <h4>其他信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 批复概算投资:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px;" /></div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 批复文号:</td>
+                            <td class="td-div">
+                                <div><input class="td-div form-control  input_unit" style="font-size:14px; height:30px;padding:3px 5px;" /> </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"> 其他工程内容:</td>
+                            <td class="td-div" colspan="3">
+                                <textarea placeholder="请输入其他内容" rows="3" cols="150"></textarea>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i>  项目信息是否与实际同步:</td>
+                            <td class="td-div" colspan="3">
+                                <input type="radio" name="name" value=" "  checked/> 是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="name" value=" " /> 否
+                            </td>
+
+                        </tr>
+                </table>
+                </div>
+            <div class="module-div">
+                <h4>附件信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"> 附件类型:</td>
+                            <td class="td-div">
+                                <select class="form-control">
+                                    <option value="value">公司上报文件和对初步设计预审意见（答复）</option>
+                                    <option value="value">其他资料</option>
+                                </select>
+                            </td>
+                            <td class="table_title" style="text-align:left;">
+                                <div class="btn-upload">
+                                    <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择附件" />
+                                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                                </div>
+                            </td>
+                            <td class="td-div"><div class="color_red text_lf"> 附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                        </tr>
+                        <tr class="headtr">
+                            <th class="table_title" style="width: 219px;">序号</th>
+                            <th class="td-div">附件名称</th>
+                            <th class="table_title">附件类型</th>
+                            <th class="td-div">操作</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>文件信息.doc </td>
+                            <td>其他信息</td>
+                            <td><a href="#" style="color:blue">删除</a></td>
+
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>文件信息.doc </td>
+                            <td>其他信息</td>
+                            <td><a href="#" style="color:blue">删除</a></td>
+
+                        </tr>
+                </table>
+                </div>
+                <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+                    <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="" />
+                    <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="" />
+                    <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big" />
+                </div>
+            </div>
+        <input type="file" id="loadObj" name="loadObj" style="display:none!important" onchange="uploadOpj()">
+
+        <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+    $('#btnUploadFile1').click(function () {
+        $("#loadFile").attr("fileListId", $(this).attr("name"));
+        document.getElementById("loadFile1").click();
+    });
+      
+
+    //上传附件
+    function uploadFile1() {
+       var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+       formFile.append("file", fileObj);
+       var path = formFile;
+
+   
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#fileType").find("option:selected").val();
+                    obj.TypeName = $("#fileType").find("option:selected").text()
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        //附件排序判断
+                        var sort;
+                        sort = $('.fileShow-append').find('tr:last-child').find('.sort').text();
+                        if (sort == "") {
+                            sort = 0;
+                            sort++;
+                        } else {
+                            sort++;
+                        }
+                        var odiv = `
+                                     <tr>
+                                        <td><span class ="font-black sort">${sort}</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td><span class ="font-black">${obj.TypeName}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a href="javascript:void(0)" style="color:#337ab7;" class ="fileDel">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}">
+                                        </td>
+                                    </tr>
+                           `
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+
+            }
+        });
+    }
+   
+
+
+    //获取项目
+    $(".btn-pro").click(function(){
+        layer.open({
+            type:2,
+            title: "选择项目",
+            area: ['950px', '500px'],
+            btn: ["确定", "返回"],
+            //scrollbar:"false",
+            btnAlign: 'c',
+            content: "/Comm/SelectProjectAll?companyId=@ViewBag.UnitID",
+        });
+    })
+       
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //数据提交
+        $(".save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TypeNo: $(item).find("#updata").data("typeno"),
+                    TypeName: $(item).find("#updata").data("typename"),
+                    Sort: $(item).find(".sort").text()
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            console.log(fileDataArray)
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/ProjectManagement/DesignSchemeList";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+        });
+    });
+
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/DesignSchemeList";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+</script>

@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "选择工程节点";
+    Layout = null;
+}
+<style type="text/css">
+    #maincontent {
+        margin: 20px 10px;
+    }
+    .TreeGrid tr td:nth-child(3) {
+        width: 500px !important;
+        text-indent: 10px;
+    }
+    .form-select {
+        padding: 10px 0 30px 30px;
+    }
+        .form-select .form-sub button {
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            border: none;
+            border-radius: 3px;
+            background-color: #FFA000;
+            color: #FEE9D3;
+            font-weight: 500;
+            margin-right: 10px;
+            float: right;
+        }
+</style>
+<link href="/Resource/jqtree/TreeGrid.css" rel="stylesheet" />
+<div class="contentData">
+    <div id="maincontent"></div>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="/Resource/jqtree/TreeGrid.js"></script>
+<script type="text/javascript">
+    function addinput(row, col) {
+        return "<input type='checkbox'>"
+    }
+
+    // index加载数据
+    var config = {
+        id: "tg1",
+        width: "100%",
+        renderTo: "maincontent",
+        headerAlign: "left",
+        headerHeight: "40",
+        check: 'checkbox', //勾选风格
+        checkboxName: 'aa[]',//复选框的name属性值
+        checkboxStyle: "",//设置复选框的样式，必须为字符串，css样式怎么写就怎么写
+        click: function (item) { //点击节点回调
+            console.log("item")
+        },
+        onchange: function () {//当当前input发生变化后所执行的回调
+            console.log(this);
+        },
+        dataAlign: "left",
+        indentation: "30",
+        folderOpenIcon: "/Resource/jqtree/img/folderOpen.png",
+        folderCloseIcon: "/Resource/jqtree/img/folderClose.png",
+        defaultLeafIcon: "/Resource/jqtree/img/defaultLeaf.gif",
+        hoverRowBackground: "false",
+        folderColumnIndex: "1",
+        itemClick: "itemClickEvent",
+        columns:[
+                  { headerText: "", dataField: "number", headerAlign: "center", dataAlign: "center", handler: "addinput", width: "40" },
+                  { headerText: "阶段名称", dataField: "Name", headerAlign: "center", dataAlign: "lsft" },
+                  { headerText: "阶段编码", dataField: "Code", headerAlign: "center", dataAlign: "center", width: "120" },
+                  { headerText: "排序", dataField: "Sort", headerAlign: "center", dataAlign: "center", width: "50" }
+        ],
+        data:@Html.Raw(@ViewBag.list),
+    };
+    //创建一个组件对象
+    var treeGrid = new TreeGrid(config);
+    treeGrid.show();
+
+    //点击多选框
+    $("#maincontent").on("click", "input[type=checkbox]", function () {
+        var obj = $(this);
+        var trParent = obj.closest("tr");//从元素本身开始，逐级向上级元素匹配，并返回最先匹配的元素
+        var id = trParent.attr("id");
+        var aList = [];
+        var arr = id.split("_");
+        var strP = arr[0];
+
+        for (var i = 1; i < arr.length - 1; i++) {
+            strP = strP + "_" + arr[i];
+            aList.push(strP);//依次找到当前节点所有的父辈节点
+        }
+        if (obj.is(":checked")) {
+            downSelect(id);
+            upLevSelect(aList);
+        } else {
+            downCancel(id);
+        }
+
+        //设置所有父辈节点为选中状态
+        function upLevSelect(list) {
+            for (var i = 0, len = list.length; i < len; i++) {
+                $("#" + list[i]).find(":checkbox").prop("checked", true);//设置所有多选框为选中状态
+            }
+        }
+       // 设置当前节点的所有后代子节点为选中状态
+        function downSelect(id) {
+            $("[id^='" + id + "_']").each(function (index, domEle) {
+                $(domEle).find(":checkbox").prop("checked", true);
+            });
+        }
+        //设置当前节点的所有后代子节点为非选中状态
+        function downCancel(id) {
+            $("[id^='" + id + "_']").each(function (index, domEle) {
+                $(domEle).find(":checkbox").prop("checked", false);
+                if ($(domEle).find(":checkbox").prop("checked") == false) {
+                    upLevCancel(aList);
+                }
+            });
+        }
+        //设置所有父辈节点为非选中状态
+        function upLevCancel(list) {
+            var pid;
+            var len = list.length;
+            for (var j = 1; j <= len; j++) {
+                var siblingsList = $("[data-pid=" + list[len - j] + "] :checkbox:checked");
+                if (siblingsList.size() == 0) {
+                    $("#" + list[len - j]).find(":checkbox").prop("checked", false);
+                } else {
+                    break;
+                }
+            }
+        }
+    });
+
+    function getSelectData() {
+        var result = {
+            flag: true,
+            msg: '',
+            data: []
+        };
+        if($("tbody").find("input:checkbox:checked").length > 0){
+            $("tbody").find("input:checkbox:checked").parents("tr").each(function(index,element){
+                var tr = element.outerHTML;
+                var obj = eval("("+$(tr).attr("data")+")");
+                result.data.push(obj);
+                //Code:"22222",Name:"cccccccccccc22222222222",Sort:"6",State:"1",checkboxValue:"1001659536504918353",parentId:"999099200975278080"
+            });
+        }else{
+            result.flag = false;
+            result.msg = '请选择工程节点！';
+        }
+        return result;
+    }
+</script>

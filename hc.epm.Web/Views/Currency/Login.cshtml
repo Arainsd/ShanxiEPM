@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "登录";
+    Layout = "~/Views/Shared/_LayoutUn.cshtml";
+}
+<link rel="stylesheet" href="~/Resource/css/login.css" />
+
+<div class="content">
+
+    <form id="loginForm" name="formlogin">
+        <div class="subcontent">
+            <div class="subcontentL">
+                <div class="userlogin">
+                    <p>账号登录</p>
+                </div>
+                <div class="userpass">
+                    <p>
+                        <img src="/Resource/images/user.jpg" class="imgcode">
+                        <input type="text" name="userName" id="userName" value="" placeholder="&nbsp;账户" />
+                    </p>
+                    <p class="onep">
+                        <img src="/Resource/images/pass.jpg" class="imgcode">
+                        <input type="password" name="password" id="password" value="" placeholder="&nbsp;密码" />
+                    </p>
+                    <p class="onep">
+                        <img src="/Resource/images/code.jpg" class="imgcode">
+                        <input type="text" class="inputlast" name="verifyCode" id="verifyCode" value="" placeholder="&nbsp;验证码" />
+                        <img id="verifyCodeImg" class="verify-code" src="@Url.Action("ValidateCode")" />
+                    </p>
+                </div>
+                <p class="remarks"><span></span></p>
+                <p class="checkpass">
+                    <label><input type="checkbox" name="isRemember" id="isRemember" value="true" />&nbsp;记住密码</label>
+                </p>
+                <p class="butlogin">
+                    <input type="button" name="save" id="save" value="登&nbsp;&nbsp;录" class="layui-btn layui-btn-small button-base bg-save">
+                </p>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //调用回车键事件
+        $(window).keydown(function () {
+           KeyDown();
+        });
+        $('#verifyCodeImg').click(function () {
+            this.src = "@Url.Action("ValidateCode")?ts=" + Math.random().toString();
+        });
+
+        $('#save').click(function () {
+            var data = {
+                userName: $('#userName').val() || '',
+                password: $('#password').val() || '',
+                verifyCode: $('#verifyCode').val() || '',
+                isRemember: $('#isRemember').is(':checked')
+            }
+            if (data.userName === '') {
+                $('.remarks').addClass('error').html('请输入用户名！');
+                return;
+            }
+            if (data.password === '') {
+                $('.remarks').addClass('error').html('请输入域登录密码！');
+                return;
+            }
+            if (data.verifyCode === '') {
+                $('.remarks').addClass('error').html('请输入验证码！');
+                return;
+            }
+            $('.remarks').removeClass('error').html('');
+            $.post('/Currency/Login', data, function (result) {
+                if (result.Flag) {
+                    var url = result.Data || "/Home/Index";
+                    window.location.href = url;
+                } else {
+                    $('#verifyCodeImg').click();
+                    $('.remarks').addClass('error').html(result.Message || '登录失败！');
+                }
+            });
+        });
+
+        //回车键自动登录
+        function KeyDown() {
+            if (event.keyCode == 13) {
+                event.returnValue = false;
+                event.cancel = true;
+                formlogin.save.click();
+            }
+        }
+    });
+</script>

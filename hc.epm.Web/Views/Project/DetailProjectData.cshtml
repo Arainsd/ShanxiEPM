@@ -1,0 +1,139 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@model List<Epm_ProjectDataSubmit>
+@{
+    ViewBag.Title = "项目资料详情";
+}
+<style>
+    .tab > div label {
+        text-align: left !important;
+        width: auto !important;
+    }
+
+    .tab .fileList, .tab .fileListImg {
+        padding-right: 40px;
+        margin: 30px 20px 20px 60px;
+        font-size: 14px;
+    }
+
+    .fileList .fileShow {
+        width: 100%;
+    }
+
+    .tab .fileList li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab .fileList li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab .fileList li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+</style>
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage">工期管理</li>
+        <li id="DetailMilestonePlan">工程节点</li>
+        <li id="ScheduleInfo">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video">视频集成</li>
+    </ul>
+    <form id="mainForm">
+        <div class="tab">
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <div class="upload" style="margin-bottom:0px;">
+                        <div><label>&nbsp;@item.FileName&nbsp;:</label></div>
+                    </div>
+                    <div style="width:100%;" id="@("fileList"+item.SId)" class="fileList">
+                        <ul class="fileShow"></ul>
+                    </div>
+                }
+            }
+        </div>
+    </form>
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    //获取附件
+    $.post("/Files/GetFileListByTableIds", { tableName: 'Epm_ProjectDataSubmit', ids: '@ViewBag.TableIds' }, function (data) {
+        if (data.Flag) {
+            if (data.Data.length > 0) {
+                data.Data.forEach(function (item, index, arr) {
+                    if (item.ImageType == null) {
+                        var odiv = '<li id="' + item.GuidId + '">';
+                        odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                        odiv += '<div>' + item.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '</li>';
+                        $('#fileList' + item.SId + ' .fileShow').append(odiv);
+                    }
+                });
+            }
+        } else {
+            parent.layer.alert(data.Message, { icon: 2 });
+        }
+    });
+    $(function () {
+        $("#Detail").click(function () {
+            window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailApprovalConstitute").click(function () {
+            window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectMainPoint").click(function () {
+            window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailTimeManage").click(function () {
+            window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailMilestonePlan").click(function () {
+            window.location.href = 'DetailMilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectISP").click(function () {
+            window.location.href = 'DetailProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ScheduleInfo").click(function () {
+            window.location.href = 'ScheduleInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ContractInfo").click(function () {
+            window.location.href = 'ContractInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ChangeInfo").click(function () {
+            window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#VisaInfo").click(function () {
+            window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#QuestionInfo").click(function () {
+            window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailCrossingsManage").click(function () {
+            window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#video").click(function () {
+            window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+        });
+    });
+</script>

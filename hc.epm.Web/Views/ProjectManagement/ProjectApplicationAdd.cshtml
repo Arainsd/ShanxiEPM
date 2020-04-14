@@ -1,0 +1,563 @@
+﻿
+@{
+    ViewBag.Title = "ProjectApplicationAdd";
+}
+
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                项目名称
+                            </span>
+
+                        </td>
+                        <td colspan="3">
+                            <div class="form-group">
+                                <input id="ProjectName" type="text" name="ProjectName" class="form-control " placeholder="" />
+                                <input id="ProjectId" type="hidden" name="ProjectId" class="form-control" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                项目性质
+                            </span>
+
+                        </td>
+                        <td class="td-div">
+
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="ProjectNatureTypeName" type="hidden" name="ProjectNatureTypeName" value="" />
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                站库名称
+                            </span>
+
+                        </td>
+                        <td class="td-div">
+                            <input type="text" id="StationName" name="StationName" class="form-control" placeholder="" readonly style="display:inline-block;width:66%;"/>
+                            <div class="btn-upload">
+                                <input type="button" id="SelectStationName" class=" btn  form-control" style="width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                            <input type="hidden" id="StationId" name="StationId" />
+                            <input type="hidden" id="StationCodeInvest" name="StationCodeInvest" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                提出时间
+                            </span>
+
+                        </td>
+                        <td class="apply_time td-div">
+                            <input type="text" class=" form-control position_rel" id="ApplyTime" name="ApplyTime" onClick="WdatePicker({ el: 'ApplyTime' })">
+                            <i onClick="WdatePicker({ el: 'ApplyTime' })" class="iconfont ">&#xe7e2;</i>
+                        </td>
+                        <td class="table_title">地市公司</td>
+                        <td class="td-div">
+                            <input type="text" id="CompanyName" name="CompanyName" class="form-control" placeholder="" readonly style="display:inline-block;width:66%;"/>
+                            <div class="btn-upload">
+                                <input type="button" id="SelectCompanyName" class=" btn  form-control" style="width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                            <input type="hidden" id="CompanyId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">推荐人姓名</td>
+                        <td class="td-div">
+                            <input type="text" name="Recommender" class="form-control" placeholder="" />
+                        </td>
+                        <td class="table_title">
+                            推荐人职务
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="RecommenderJob" class="form-control" placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">推荐人单位</td>
+                        <td colspan="3">
+                            <input id="Project_name" type="text" name="RecommenderCompany" class="form-control " placeholder="" />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">申报人</td>
+                        <td colspan="2">
+                            <input type="text" name="Declarer" class="form-control apply_person" placeholder="" readonly/>
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile" class="btnUploadFile btn  form-control" style="width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf">(申报人三人以上以"、"分开) </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>油站信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">
+                                地理位置
+                            </span>
+                        </td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="Position" type="hidden" name="Position" value="" />
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">
+                                项目地理位置
+                            </span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="ProjectPosition" class="form-control" placeholder="" />
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="table_title font-black">
+                        <span class="font-black">加油站类别</span>
+                        </td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="StationTypeCode" type="hidden" name="StationTypeCode" value="" />
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">
+                                估计金额
+                            </span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" class="form-control input_unit" placeholder="请输入估计金额" />万元<i style="color:white;">/</i>
+                        </td>
+                    </tr>
+
+                    <tr>    
+                        <td class="table_title">
+                        <span class="font-black">估计气日销量(CNG)</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" class="form-control input_unit" placeholder="请输入估计气日销量(CNG)金额" />万元<i style="color:white;">/</i>
+                        </td>
+                        <td class="table_title">
+                        <span class="font-black">估计气日销量(LNG)</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="请输入估计气日销量(LNG)金额" class="form-control input_unit" />日/吨
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                        <span class="font-black">估计油日销量</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" class="form-control input_unit" placeholder="请输入估计油日销量金额" />吨<i style="color:white;">/</i><i style="color:white;">/</i><i style="color:white;">/</i><i style="color:white;">/</i>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            <select class="form-control" id="fileType">
+                                @*id="fileType"后面要根据数据库的字段改*@
+                                <option value="value">谈判记录</option>
+                                <option value="value">其他资料</option>
+                            </select>
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+
+        </div>
+    </form>
+</div>
+
+<script>
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+    });
+
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+
+    $("#Cancel").on("click", function () {
+        window.location.href = "/ProjectManagement/ProjectManagementList";
+    });
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#fileType").val();
+                    obj.TypeName = $("#fileType").find("option:checked").text()
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = `
+                                     <tr>
+                                        <td><span class ="font-black">1</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td><span class ="font-black">${obj.TypeName}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}">
+                                        </td>
+                                    </tr>
+                           `
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+            }
+        });
+    }
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择地市公司
+        $("#SelectCompanyName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分公司"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#CompanyName").val(obj.data[0].Name);
+                        $("#CompanyId ").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //选择库站
+        $("#SelectStationName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择库站"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectOilStation',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#StationName").val(obj.data[0].Name);
+                        $("#StationId").val(obj.data[0].Id);
+                        $("#StationCodeInvest ").val(obj.data[0].Code);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $("#save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TypeNo: $("#fileType").val(),
+                    TypeName: $("#fileType").find("option:checked").text(),
+                    Sort: index + 1
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+
+            //性质
+            $("#ProjectNatureTypeName").val($("#ProjectNatureType option:selected").text());
+            // 地理位置：
+            $("#Position").val($("#PositionType option:selected").text());
+            //加油站类别：
+            $("#StationTypeCode").val($("#StationType option:selected").text());
+            var search = $("form").serialize();
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/TzProjectProposal/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+            }
+        });
+
+    });
+
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            ProjectName: {
+                validators: {
+                    notEmpty: {
+                        message: '项目名称不能为空'
+                    },
+                    stringLength: {
+                        max: 100,
+                        message: '项目名称不能超过100字符'
+                    },
+                }
+            },
+            ProjectNatureType: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择项目性质'
+                    }
+                }
+            },
+            //StationName: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '站库名称不能为空'
+            //        },
+            //        stringLength: {
+            //            max: 50,
+            //            message: '站库名称不能超过50字符'
+            //        },
+            //    }
+            //},
+            //ApplyTime: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '请选择提出时间'
+            //        },
+
+            //    }
+            //},
+            //CompanyName: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '请选择地市公司'
+            //        },
+
+            //    }
+            //},
+            //Recommender: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '推荐人姓名不能为空'
+            //        },
+            //        stringLength: {
+            //            max: 50,
+            //            message: '推荐人姓名不能超过50字符'
+            //        },
+            //    }
+            //},
+
+            //RecommenderJob: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '推荐人职务不能为空'
+            //        },
+            //        stringLength: {
+            //            max: 50,
+            //            message: '推荐人职务不能超过50字符'
+            //        },
+            //    }
+            //},
+            //RecommenderCompany: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '推荐人单位不能为空'
+            //        },
+            //        stringLength: {
+            //            max: 100,
+            //            message: '推荐人单位不能超过100字符'
+            //        },
+            //    }
+            //},
+            //Declarer: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '申报人不能为空'
+            //        },
+            //        stringLength: {
+            //            max: 100,
+            //            message: '申报人不能超过100字符'
+            //        },
+            //    }
+            //},
+            GeographicDosition: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择地理位置'
+                    },
+                }
+            },
+            ProjectPosition: {
+                validators: {
+                    notEmpty: {
+                        message: '项目地理位置不能为空'
+                    },
+                    stringLength: {
+                        max: 200,
+                        message: '项目地理位置不能超过200字符'
+                    },
+                }
+            },
+            //GasStationType: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '请选择加油站类别'
+            //        },
+            //    }
+            //},
+            PredictMoney: {
+                validators: {
+                    notEmpty: {
+                        message: '估计金额不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+/,
+                        message: "金额格式输入错误"
+                    }
+                }
+            },
+            PredictDayGas: {
+                validators: {
+                    notEmpty: {
+                        message: '估计气日销量不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+/,
+                        message: "估计气日销量格式输入错误"
+                    }
+                }
+            },
+            PredictDayOil: {
+                validators: {
+                    notEmpty: {
+                        message: '估计油日销量不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+/,
+                        message: "估计油日销量格式输入错误"
+                    }
+                }
+            }
+
+        }
+    });
+</script>

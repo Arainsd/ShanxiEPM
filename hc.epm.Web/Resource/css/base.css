@@ -1,0 +1,973 @@
+﻿/*通用样式表*/
+/*去掉自带样式*/
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font: normal 14px 微软雅黑, Helvetica, sans-serif;
+    background-color: #f2f2f2;
+}
+
+table {
+    /*   border-collapse: collapse; */
+    border-spacing: 0;
+}
+
+p {
+    word-wrap: break-word;
+}
+
+img {
+    border: 0;
+    vertical-align: middle;
+}
+
+/*select {
+    border-width: 1px;
+    _zoom: 1;
+    border-style: solid;
+    padding-top: 2px;
+    font-size: 12px;
+}*/
+
+
+
+li {
+    list-style: none;
+}
+
+input, button, textarea, select {
+    font-size: 1em;
+}
+
+h1, h2, h3, h4, h5, h6, b {
+    font-size: 1em;
+    font-weight: normal;
+}
+
+i, cite, em, var, dfn, address {
+    font-style: normal;
+}
+
+input {
+    outline: none;
+}
+
+:focus {
+    outline: none;
+}
+
+a {
+    text-decoration: none;
+    overflow: hidden;
+    -webkit-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+}
+
+    a:hover, a:focus {
+        text-decoration: none;
+    }
+
+
+/*去掉自带样式 end*/
+/*简单的公用样式*/
+/*定位*/
+
+.pr {
+    position: relative;
+}
+
+.pa {
+    position: absolute;
+}
+
+
+/*清除浮动*/
+.c {
+    zoom: 1;
+}
+
+    .c:before, .c:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+/*左右浮动*/
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+/* 内容区域*/
+.contentData {
+    padding: 20px;
+    width: 1200px;
+    background-color: #fff;
+    margin: auto auto 30px;
+}
+/* 详情下拉框背景颜色*/
+.bg {
+    background: #ebebe5;
+}
+
+/*搜索区域样式start*/
+.form-select {
+    margin-bottom: 20px;
+}
+
+    .form-select > form > div {
+        height: 30%;
+        width: 100%;
+        float: left;
+    }
+
+        .form-select > form > div div {
+            margin: 10px 0;
+            width: 33.33%;
+            float: left;
+        }
+
+        .form-select > form > div label {
+            color: #595959;
+            display: inline;
+            line-height: 30px;
+        }
+
+        .form-select > form > div input,
+        .form-select > form > div select {
+            width: 200px;
+            box-sizing: border-box;
+            color: #595959;
+            padding-left: 5px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .form-select > form > div .select {
+            padding: 0 10px;
+        }
+
+        .form-select > form > div .pic {
+            color: #BCBCBC;
+            font-size: 20px;
+            position: relative;
+            top: 3px;
+            right: 30px;
+            cursor: pointer;
+        }
+    /*搜索区域样式end*/
+
+    /*操作区域样式start*/
+    .form-select .form-sub {
+        width: 100%;
+    }
+
+        .form-select .form-sub button {
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            border: none;
+            border-radius: 3px;
+            background-color: #FFA000;
+            color: #FEE9D3;
+            font-weight: 500;
+            margin-right: 10px;
+            float: right;
+            cursor: pointer;
+        }
+
+        .form-select .form-sub :hover {
+            color: #FFA000;
+            font-weight: 600;
+            background-color: #f5c677;
+        }
+/*操作区域样式end*/
+
+/*列表数据样式start*/
+.datalist {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    padding: 2px;
+    border: 1px solid #D9D8D8;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+
+    .datalist th {
+        color: #000000;
+        text-align: center;
+        font-weight: 500;
+        height: 36px;
+        background-color: #E4E4E4;
+    }
+
+    .datalist td {
+        height: 40px;
+        color: #7A7A7A;
+    }
+
+    .datalist tr th,
+    .datalist tr td {
+        border: 1px solid #D9D8D8;
+    }
+
+    .datalist tr td,
+    .datalist tr th {
+        box-sizing: border-box;
+        padding: 5px;
+    }
+/*列表数据样式end*/
+
+
+/* 表单样式开始*/
+/* 按钮组开始*/
+.button-group button {
+    display: inline-block;
+    font-size: 16px;
+    letter-spacing: 3px;
+    margin: 10px 0 30px 0;
+    width: 120px;
+    height: 35px;
+    border: none;
+    border-radius: 3px;
+    background-color: #FFA000;
+    color: #FEE9D3;
+    font-weight: 500;
+}
+
+.btn-center {
+    text-align: center;
+}
+
+.tab .btn-center {
+    text-align: center;
+}
+
+.tab .btn-right {
+    text-align: right;
+}
+
+.tab .btn-left {
+    text-align: left;
+}
+
+.tab .upload-btn-group button {
+    margin: 15px 0 0 3px;
+    color: #444444;
+    letter-spacing: 1px;
+    font-size: 15px;
+    background: #E4E4E4;
+    border: 1px solid #999999;
+    border-radius: 2px;
+    height: 30px;
+    width: 90px;
+}
+/* 选项卡头部*/
+
+.tab-list {
+    margin-bottom: -1px;
+}
+
+    .tab-list li {
+        display: inline-block;
+        margin-right: 0px;
+        width: 82px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        background-color: #E4E4E4;
+        border: 1px solid #999999;
+        border-radius: 2px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #666666;
+    }
+
+        .tab-list li:hover {
+            cursor: pointer;
+        }
+
+.active {
+    border-bottom-color: #ffffff !important;
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+/* 选项卡视图开始*/
+.tab-view .key {
+    display: none;
+}
+
+.tab {
+    padding: 30px 80px;
+    box-sizing: border-box;
+}
+
+    .tab div {
+        box-sizing: border-box;
+    }
+
+    .tab > div {
+        margin-bottom: 15px;
+    }
+
+    .tab .star {
+        color: #F83C54;
+    }
+
+    .tab > div label {
+        text-align: right;
+        display: inline-block;
+        box-sizing: border-box;
+        padding-right: 15px;
+        width: 120px;
+        height: 35px;
+        line-height: 35px;
+    }
+
+    .tab > div > input[type="text"] {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 35px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+    }
+
+    .tab > div select {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 0 30px 0 15px;
+        height: 35px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+    }
+
+    /* 下拉框不可选时的样式disable-drop*/
+
+    .tab .disable-drop select {
+        background-color: #EBEBE4;
+    }
+
+    .tab > div input[type="radio"] {
+        position: relative;
+        top: 2px;
+        height: 15px;
+        width: 15px;
+    }
+    /* 日历控件小图标样式*/
+    .tab .pic {
+        font-size: 20px;
+        position: absolute;
+        top: 5px;
+        left: 325px;
+    }
+
+    .tab .radio-btn .radio-span {
+        display: inline-block;
+        color: #676767;
+        margin-right: 50px;
+    }
+    /*文本域样式*/
+    .tab .intro {
+        display: flex;
+        height: 150px;
+    }
+
+        .tab .intro div:nth-child(2) {
+            width: 100%;
+        }
+
+        .tab .intro .sub-description {
+            box-sizing: border-box;
+            padding: 15px;
+            width: 90%;
+            height: 100%;
+            resize: none;
+            margin-left: 3px;
+            border-color: #ccc;
+        }
+    /*长文本样式*/
+    .tab .long-text input {
+        width: 500px;
+    }
+
+    .tab .short-text {
+        position: relative;
+    }
+
+    .tab .long-text {
+        position: relative;
+    }
+    /*短文本样式*/
+    .tab .short-text input, .tab .short-text select {
+        width: 230px;
+    }
+    /*地域选择框样式*/
+    .tab .region select {
+        width: 174px;
+        margin-right: 20px;
+    }
+    /*上传图片样式*/
+    .tab .upload {
+        display: flex;
+    }
+
+        .tab .upload table {
+            width: 100%;
+        }
+
+        .tab .upload tr {
+            height: 30px;
+        }
+
+
+
+    .tab .del {
+        border-radius: 50%;
+        position: absolute;
+        right: -12px;
+        top: -15px;
+        font-size: 25px;
+        color: #F86C6B;
+    }
+
+
+
+    .tab .contract,
+    .tab .acceptance {
+        display: flex;
+    }
+
+    .tab .uploadmodel {
+        display: flex;
+    }
+
+        .tab .uploadmodel .modelshow {
+            position: relative;
+            width: 100%;
+        }
+
+    .tab .btn-center {
+        text-align: center;
+    }
+
+
+    .tab .listable {
+        display: flex;
+    }
+
+        .tab .listable td {
+            padding: 1px;
+        }
+
+            .tab .listable td input[type="text"] {
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+            }
+    /*附件样式*/
+    .tab .btn-upload #btnUploadFile, .tab .btn-upload #btnUploadImg {
+        margin-top: 5px;
+        height: 25px;
+        width: 100px;
+        font-size: 16px;
+    }
+
+    .tab #fileList, .tab #fileListImg {
+        padding-right: 40px;
+        margin: 30px 20px 20px 120px;
+        font-size: 14px;
+    }
+
+#fileList .fileShow {
+    width: 100%;
+}
+
+.tab #fileList li {
+    display: flex;
+    list-style: none;
+    height: 35px;
+    line-height: 30px;
+}
+
+.tab .fileList li > div:nth-child(1) {
+    flex: none !important;
+    width: 350px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.tab .fileList li > div:nth-child(2) {
+    flex: none !important;
+    width: 60px !important;
+}
+
+
+.tab #fileListFile, .tab #fileListImg {
+    padding-right: 40px;
+    margin: 30px 20px 20px 120px;
+    font-size: 14px;
+}
+
+    .tab #fileListImg ul li {
+        display: inline-block;
+        width: 20%;
+    }
+
+#fileListFile .fileShow {
+    width: 100%;
+}
+
+.tab #fileListFile li {
+    display: flex;
+    list-style: none;
+    height: 35px;
+    line-height: 30px;
+}
+
+    .tab #fileListFile li > div:nth-child(1) {
+        flex: none !important;
+        width: 350px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .tab #fileListFile li > div:nth-child(2) {
+        flex: none !important;
+        width: 60px !important;
+    }
+
+.tab .imgShow {
+    margin-right: 10px;
+}
+
+.tab #fileDetail, .tab #img_view {
+    margin-top: -60px !important;
+}
+
+.tab .fileDel {
+    width: 38px;
+    height: 18px;
+}
+
+ul li .downloadFile {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*表单信息提示样式*/
+/*错误信息*/
+span.validaterror {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    background: url("/Resource/images/ic_fail.png") no-repeat;
+    background-size: 20px 20px;
+    background-position: 10px center;
+    font-weight: 500;
+    color: #FF2525;
+    padding-left: 33px;
+    font-size: 16px;
+}
+/*正确信息*/
+span.validatevalid {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    background: url("/Resource/images/ic_success.png") no-repeat;
+    background-size: 22px 22px;
+    background-position: 10px center;
+}
+/*表单样式结束*/
+
+
+/*淘宝字体图标开始*/
+@font-face {
+    font-family: 'iconfont'; /* project id 675907 */
+    src: url('//at.alicdn.com/t/font_675907_9oiqbjxpsb0xjemi.eot');
+    src: url('//at.alicdn.com/t/font_675907_9oiqbjxpsb0xjemi.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_675907_9oiqbjxpsb0xjemi.woff') format('woff'), url('//at.alicdn.com/t/font_675907_9oiqbjxpsb0xjemi.ttf') format('truetype'), url('//at.alicdn.com/t/font_675907_9oiqbjxpsb0xjemi.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+/*淘宝字体图标结束*/
+.head {
+    height: 40px;
+    width: 100%;
+    /*border-bottom: 1px solid #e6e6e6;*/
+}
+
+    .head .subhead {
+        width: 100%;
+        height: 40px;
+        margin: 0 auto;
+        position: relative;
+        background-color: #434343;
+        color: white;
+    }
+
+.subheadRight {
+    float: right;
+    height: 100%;
+    width: 360px;
+}
+
+    .subheadRight img {
+        float: left;
+        margin-top: 10px;
+    }
+
+    .subheadRight p {
+        float: left;
+        font-size: 12px;
+        margin-left: 12px;
+        height: 100%;
+        line-height: 40px;
+    }
+
+        .subheadRight p a {
+            color: #c1c1c1;
+        }
+
+.subheadLeft {
+    font-size: 12px;
+    height: 100%;
+    line-height: 40px;
+    position: relative;
+    display: block;
+    float: right;
+    margin-right: 30px;
+    color: #006fc3;
+    font-weight: 800;
+}
+
+    .subheadLeft p:hover {
+        cursor: pointer;
+    }
+
+    .subheadLeft input {
+        height: 35px;
+        width: 400px;
+        box-sizing: border-box;
+        border-radius: 15px;
+        border-style: solid;
+        border-color: #e6e6e6;
+        margin-left: 135px;
+        outline: none;
+        background: #fff;
+        padding-left: 15px;
+    }
+
+    .subheadLeft img {
+        position: absolute;
+        right: 10px;
+        top: 20px;
+    }
+
+.selectProject {
+    width: 400px;
+    height: 350px;
+    background: #f1f5f7;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    z-index: 3;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+    .selectProject ul {
+        height: 100%;
+        width: 100%;
+    }
+
+        .selectProject ul li {
+            height: 30px;
+            margin-top: 1px;
+            width: 100%;
+            font-size: 12px;
+            color: #666;
+        }
+
+            .selectProject ul li:hover {
+                color: #3b87df;
+                cursor: pointer;
+                background: #fff;
+            }
+
+            .selectProject ul li span {
+                width: 380px;
+                margin-left: 10px;
+            }
+/*--------------------------nav------------------------*/
+.nav {
+    height: 110px;
+    width: 100%;
+    margin-bottom: 20px !important;
+    background-color: #535152;
+}
+
+    .nav .subnav {
+        width: 95%;
+        height: 110px;
+        margin: 0 auto;
+    }
+
+    .nav img {
+        margin-top: 27px;
+    }
+
+.subnavRight {
+    float: left;
+    height: 100%;
+    width: 330px;
+}
+
+.subnavLeft {
+    width: 850px;
+    float: left;
+    height: 100%;
+}
+
+    .subnavLeft > li {
+        position: relative;
+        float: left;
+        width: 120px;
+        margin: 0 auto;
+        height: 100%;
+    }
+
+        .subnavLeft > li > a {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 22px;
+            font-size: 16px;
+            margin-top: 44px;
+            text-align: center;
+            color: #fff;
+        }
+
+/*.subnavLeft li:last-child a {
+            border: none;
+        }*/
+
+.consProject {
+    width: 182px;
+    z-index: 999;
+    background: #535152;
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 110px;
+}
+
+    .consProject > li {
+        height: 44px;
+    }
+
+.subnavLeft li a:hover {
+    color: #FF9F00 !important;
+}
+
+.consProject > li > a {
+    margin: 0;
+    border: none;
+    display: block;
+    height: 44px;
+    line-height: 44px;
+    text-align: left;
+    color: #fff;
+    padding: 0 27px;
+    font-size: 16px;
+    position: relative;
+}
+
+.consProject > li:nth-child(1) {
+    border-top: 1px solid #707070;
+}
+
+.thirdProject {
+    min-width: 750px;
+    padding: 0 10px;
+    position: absolute;
+    top: 0px;
+    left: 182px;
+    background-color: #535152;
+    border-top: 1px solid #707070;
+    border-left: 1px solid #707070;
+    height: 100%;
+}
+
+    .thirdProject > li {
+        height: 44px;
+    }
+
+        .thirdProject > li > p {
+            margin: 0;
+            border: none;
+            display: block;
+            height: 44px;
+            line-height: 44px;
+            text-align: left;
+            padding-left: 27px;
+        }
+
+            .thirdProject > li > p > a {
+                height: 44px;
+                line-height: 44px;
+                color: #fff;
+                padding: 0 18px;
+            }
+
+    .thirdProject li:first-child a {
+        border-top: none;
+    }
+
+.menu-right-img {
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    top: -15px;
+}
+
+.bai-shu {
+    position: relative;
+    top: -15px;
+}
+
+/*--------------------------foot------------------------*/
+.footnav {
+    height: 54px;
+    width: 100%;
+    background: #363636;
+    border-bottom: 1px solid #4c4c4c;
+}
+
+    .footnav .subfootnav {
+        width: 1200px;
+        height: 54px;
+        margin: 0 auto;
+    }
+
+.subfootnav ul {
+    height: 100%;
+    width: 100%;
+}
+
+    .subfootnav ul li {
+        float: left;
+        width: 200px;
+        height: 54px;
+        line-height: 54px;
+        text-align: center;
+    }
+
+        .subfootnav ul li a {
+            font-size: 16px;
+            color: #FFFFFF;
+        }
+
+.foot {
+    height: 264px;
+    width: 100%;
+    background: #363636;
+}
+
+    .foot .subfoot {
+        width: 1200px;
+        height: 264px;
+        margin: 0 auto;
+    }
+
+.subfoot .ul-1 {
+    height: 100%;
+    width: 100%;
+}
+
+    .subfoot .ul-1 .li-1 {
+        box-sizing: border-box;
+        border-left: solid 1px #4c4c4c;
+        float: left;
+        width: 16.6%;
+        height: 100%;
+    }
+
+.subfoot .ul-2 li:nth-child(1) {
+    margin-top: 25px;
+}
+
+.subfoot .ul-2 li {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.subfoot .ul-2 .imgli {
+    margin-top: 30px;
+}
+
+.subfoot .ul-2 li a {
+    color: #a3a4a4;
+    font-size: 14px;
+}
+
+.footlog {
+    height: 32px;
+    width: 100%;
+    background: #1b1a1a;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+    .footlog .subfootlog {
+        width: 1200px;
+        height: 32px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 32px;
+        color: #a3a4a4;
+    }
+
+.hoverButton {
+    height: 86px;
+    width: 82px;
+    position: fixed;
+    top: 70%;
+    right: 5%;
+    z-index: 99999;
+    background: url(../image/askimg_06.jpg) no-repeat;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.layui-laypage-btn {
+    color: #333333;
+}
+/*弹出层按钮样式改变*/
+.frame_button .layui-layer-btn0, .frame_button .layui-layer-btn1 {
+    display: inline-block!important;
+    border: none!important;
+    background-color: #6a6969!important ;
+    color: #fff!important ;
+}
+/*列表居中模板*/

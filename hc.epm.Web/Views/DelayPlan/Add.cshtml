@@ -1,0 +1,283 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@using hc.epm.ViewModel;
+@model PlanDelayView
+@{
+    ViewBag.Title = "新增延期申请";
+}
+<style>
+    .company {
+        width: 100%;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName" readonly="readonly" />
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@ViewBag.ProjectId" />
+                <i class="pic iconfont " width="20" height="30" style="cursor:pointer;left:595px;">&#xe76a;</i>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;延期里程牌&nbsp;:</label>
+                @Html.DropDownList("PlanId", null, new { @class = "form-control selectpicker  show-tick" })
+                <input type="hidden" id="PlanName" name="PlanName">
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;计划开始日期&nbsp;:</label>
+                <input type="text" id="OldStartDate" name="OldStartDate" disabled>
+            </div>
+            <div class="short-text">
+                <label for="">&nbsp;计划结束日期&nbsp;:</label>
+                <input type="text" id="OldEndDate" name="OldEndDate" disabled />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;延期天数&nbsp;:</label>
+                <input type="text" id="DelayDay" name="DelayDay">
+            </div>
+            <div class="intro" style="margin-bottom:30px">
+                <div><label><span class="star">*</span>&nbsp;延期原因&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Reason" name="Reason"></textarea>
+                </div>
+            </div>
+            <div>
+                <label><span class="star">*</span>&nbsp;施工单位&nbsp;:</label>
+                <input type="text" name="CompanyName" id="CompanyName" class="form-control" style="display:inline-block;width:66%;" placeholder="请选择施工单位" value="" readonly />
+                <input type="hidden" name="CompanyId" id="CompanyId" value="" />
+                <input type="button" value="添加施工单位" style="width:100px!important;height: 33px;border: none;border-radius: 2px;background-color: #6a6969;color: white;" id="builders" />
+            </div>
+            <div class="intro">
+                <div><label>&nbsp;备注&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Remark" name="Remark"></textarea>
+                </div>
+            </div>
+            <div class="button-group btn-center">
+                <button type="button" class="saveBut" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                <button type="button" class="saveBut" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+                <input type="hidden" name="State" id="State" />
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function GetPlanInfo() {
+        var PlanId = $('#PlanId option:selected').val();
+        $.post("GetPlanTime?PlanId=" + PlanId, function (data) {
+            var StartTime = new Date(formatDateByJson(data.Plan.StartTime)).Format("yyyy-MM-dd");
+            var EndTime = new Date(formatDateByJson(data.Plan.EndTime)).Format("yyyy-MM-dd");
+            $("#OldStartDate").val(StartTime);
+            $("#OldEndDate").val(EndTime);
+        });
+    }
+
+    //操作施工单位方法
+    function getUserData(IsChecked, obj) {
+        var selectedIds = $("#CompanyId").val();  // 记录已选择的 ID
+        var selectedUsers = $("#CompanyName").val();
+
+        if (IsChecked) {
+            if (selectedIds === "") {
+                selectedIds = obj.id;
+                selectedUsers = obj.name;
+                $("#CompanyId").val(selectedIds);
+                $("#CompanyName").val(selectedUsers);
+            }
+            else {
+                if (selectedIds.indexOf(obj.id) == -1) {
+                    selectedIds += '、' + obj.id;
+                    selectedUsers += '、' + obj.name;
+                    $("#CompanyId").val(selectedIds);
+                    $("#CompanyName").val(selectedUsers);
+                }
+            }
+        }
+        else {
+            if (selectedIds.indexOf(obj.id) != -1) {
+                if (selectedIds === obj.id) {
+                    $("#CompanyId").val(selectedIds.replace(obj.id, ""));
+                    $("#CompanyName").val(selectedUsers.replace(obj.name, ""));
+                }
+                else if (selectedIds.indexOf(obj.id) == 0) {
+                    $("#CompanyId").val(selectedIds.replace(obj.id + "、", ""));
+                    $("#CompanyName").val(selectedUsers.replace(obj.name + "、", ""));
+                }
+                else {
+                    $("#CompanyId").val(selectedIds.replace("、" + obj.id, ""));
+                    $("#CompanyName").val(selectedUsers.replace("、" + obj.name, ""));
+                }
+            }
+        }
+    }
+
+    function getSelectedUserData() {
+        return {
+            userIds: $('#CompanyId').val(),
+            userNames: $('#CompanyName').val()
+        }
+    }
+
+    $(function () {
+        GetPlanInfo();
+        jQuery.validator.addMethod("Plusdigits", function (value, element, params) {
+            var regu = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/
+            return this.optional(element) || (regu.test(value));
+        }, "延期天数应为正数");
+
+        //表单验证
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                ProjectName: {
+                    required: true,
+                    maxlength: 254
+                },
+                PlanId: {
+                    required: true,
+                },
+                DelayDay: {
+                    required: true,
+                    digits: true,
+                },
+                Reason: {
+                    required: true,
+                    maxlength: 500
+                },
+                Remark: {
+                    maxlength: 500
+                },
+            },
+            messages: {
+                ProjectName: {
+                    required: "项目名称不能为空",
+                    maxlength: "项目名称长度不能大于254个字符"
+                },
+                PlanId: {
+                    required: "延期工程节点不能为空",
+                },
+                DelayDay: {
+                    required: "延期天数不能为空",
+                    digits: "延期天数应为正数",
+
+                },
+                Reason: {
+                    required: "延期原因不能为空",
+                    maxlength: "延期原因不能大于500个字符"
+                },
+                Remark: {
+                    maxlength: "备注不能大于500个字符"
+                },
+            }
+        });
+
+    });
+
+    //选择在建项目
+    $("#ProjectName").click(function () {
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("选择项目"),
+            shadeClose: false, //点击遮罩关闭层
+            area: ['800px', '600px'],
+            content: '/Comm/SelectProjectAll',
+            btn: ["确定", "取消"],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var obj = iframeWin.getSelectData();
+                if (obj && obj.flag && obj.data) {
+                    layer.close(index);
+                    window.location.href = "/DelayPlan/Add?projectId=" + obj.data[0].Id + "&projectName=" + obj.data[0].Name;
+                }
+                else if (!obj.flag) {
+                    parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                    return false;
+                }
+            }
+        });
+    });
+    $("#PlanId").change(function () {
+        var PlanName = $('#PlanId option:selected').text();
+        $("#PlanName").val(PlanName);
+        var PlanId = $(this).val();
+        //$.post("GetPlanTime?PlanId=" + PlanId, function (data) {
+        //    var StartTime = new Date(formatDateByJson(data.Plan.StartTime)).Format("yyyy-MM-dd");
+        //    var EndTime = new Date(formatDateByJson(data.Plan.EndTime)).Format("yyyy-MM-dd");
+        //    $("#OldStartDate").val(StartTime);
+        //    $("#OldEndDate").val(EndTime);
+        //});
+        GetPlanInfo();
+    })
+    //数据提交
+    $(".saveBut").click(function () {
+        if ($("#mainForm").valid()) {
+            if (parseInt($("#DelayDay").val()) == 0) {
+                layer.alert("延期天数必须大于0!", { icon: 3 });
+                return false
+            }
+            else
+            {
+                var state = $(this).data("state");
+                $("#State").val(state);
+                var search = $("form").serialize();
+                $.post("Add", search, function (result) {
+                    if (result.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/DelayPlan/Index";
+                        });
+                    } else {
+                        layer.alert(result.Message, { icon: 2 });
+                    }
+                });
+            }
+
+        }
+    });
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, unit;
+
+        //选择施工单位
+        $("#builders").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择施工单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectServiceCustomer?selectType=2',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    $("#CompanyName").val("");
+                    $("#CompanyId").val("");
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                    $("#CompanyName").val("");
+                    $("#CompanyId").val("");
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+            });
+        });
+
+        //删除
+        $("tbody").on("click", ".delete-Three", function () {
+            $(this).parent().parent().remove();
+        })
+    });
+</script>

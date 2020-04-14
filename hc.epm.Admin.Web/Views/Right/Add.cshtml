@@ -1,0 +1,268 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@{
+    ViewBag.Title = "权限添加";
+
+}
+
+<div class="form-wrap">
+    <form class="layui-form " id="mainForm">
+        <div class="container">
+
+            <div class="layui-form-item">
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("RightType")
+
+                        <input type="hidden" name="ParentId" id="ParentId" value="@ViewBag.pId" />
+                        <input type="hidden" name="Belong" id="Belong" value="@ViewBag.belong" />
+                        正常无需选择
+                    </div>
+                </div>
+                <div class="layui-inline ">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-inline" id="Type">
+                     @Html.DropDownList("Code")
+                        @*@Html.DropDownList("Code", (SelectList)ViewBag.Code, new { @class = "layui-input", lay_verify = "required" })*@
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Sort" placeholder="排序,整数，数字越小越靠前" autocomplete="off" class="layui-input" lay-verify="required|number" />
+                        <input type="hidden" name="Name" id="Name" />
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">Tips</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Tips" id="Tips" placeholder="Tips" autocomplete="off" class="layui-input" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label">是否菜单</label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("IsMenu")
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">链接方式</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Target" id="Target" placeholder="_blank,_self，_parent，_top等" autocomplete="off" class="layui-input" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item menue">
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label">Css样式类名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="CssClass" id="CssClass" placeholder="Css样式类名" autocomplete="off" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">别名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="ShortName" id="ShortName" placeholder="别名" autocomplete="off" class="layui-input" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item menue">
+                <label class="layui-form-label">URL</label>
+                <div class="layui-input-block" style="margin-left:125px;">
+                    <input type="text" name="URL" id="URL" placeholder="请输入链接地址" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            @*<div class="layui-form-item menue">
+                <label class="layui-form-label">Css样式类名</label>
+                <div class="layui-input-block" style="margin-left:125px;">
+                    <input type="text" name="CssClass" id="CssClass" placeholder="Css样式类名" autocomplete="off" class="layui-input" />
+                </div>
+            </div>*@
+            <div class="layui-form-item menue">
+                <label class="layui-form-label">显示名称</label>
+
+                <div class="layui-input-block" style="margin-left:125px;">
+                    <textarea name="DisplayName" id="DisplayName" placeholder="显示名称，支持html" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item menue">
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label">Icon&nbsp;&nbsp;</label>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn layui-btn-primary " id="btnSelect">
+                            <i class="layui-icon" style="font-size:30px;">&#xe622;</i>
+                        </button>
+                        <button class="layui-btn layui-btn-primary " id="btnUpload">
+                            <i class="layui-icon" style="font-size:30px;">&#xe62f;</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="layui-inline col-sm-5">
+                    <div id="fileList" style="width:100%;">
+                    </div>
+                    <br />
+                    <div style="width:100%;display:none;" id="fileBar">
+                        <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%"></div></div>
+                    </div>
+                    <input type="hidden" name="Icon" id="Icon" />
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text ">
+                <label class="layui-form-label">说明</label>
+                <div class="layui-input-block" style="margin-left:125px;">
+                    <textarea name="Remark" id="Remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item row btn-save">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save checkright" data-module="@(ViewBag.belong)Right" data-right="add" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            var text = $("#Code").find("option:selected").text();
+            $("#Name").val(text);
+
+            var search = $("form").serialize();
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    parent.layer.msg("权限添加成功", { time: 1000, icon: 1 }, function () {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                        parent.window.frames["mainFrame"].location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            return false;
+
+        });
+        $(".menue").hide();
+        function changeName() {
+            var text = $("#Code").find("option:selected").text();
+            $("#Name").val(text);
+        }
+        changeName();
+        //是否菜单更改
+        form.on('select', function (data) {
+            var elem = data.elem;
+            if (elem.id === "IsMenu") {
+                var val = $("#IsMenu").val();
+                if (val == "True") {
+                    $(".menue").show();
+                } else {
+                    $(".menue").hide();
+                }
+            } else if (elem.id === "Code") {
+                changeName();
+            } else if (elem.id === "RightType") {
+                var rightType = $("#RightType").val();
+                var html = ""
+                $("#Type").empty();
+                if (rightType == "Action") {
+                    html = `@Html.DropDownList("Code", (SelectList)ViewBag.Code2, new { @class = "layui-input", lay_verify = "required" })`;
+                } else {
+                    html = `@Html.DropDownList("Code", (SelectList)ViewBag.Code, new { @class = "layui-input", lay_verify = "required" })`;
+                }
+                $("#Type").append(html);
+                $('#Code').css('display', 'block');
+            }
+        });;
+
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+        //预览图标
+        $("body").on("click", "#lookIcon", function () {
+            var img = $(this).data("img");
+            layer.open({
+                type: 1,
+                shadeClose: true, //点击遮罩关闭层
+                area: [SmallLayerWidth, '300px'],
+                content: '<img src="' + img + '" />'
+            });
+        });
+
+        //图标上传
+        var uploader = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+            url: FileResourceURL, // 服务端上传路径
+            max_file_size: MaxPicSize, // 文件上传最大限制。
+            max_file_count: 1, //指示用户可以同时上传文件的最大数量
+            chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+            browse_button: 'btnSelect',//触发上传元素
+            flash_swf_url: '/Scripts/plupload_2_1_2/Moxie.swf',
+            silverlight_xap_url: '/Scripts/plupload_2_1_2/Moxie.xap',
+            multi_selection: false,//	是否可以在文件浏览对话框中选择多个文件
+            //附加参数
+            multipart_params: {
+                app: 'epm'
+            },
+            rename: false, // 是否重命名文件
+            init: {
+                PostInit: function () {
+                    $('#fileList').html("");
+                    $('#btnUpload').click(function () {
+                        uploader.start();
+                        return false;
+                    });
+                },
+                FilesAdded: function (up, files) {
+                    $('#fileList').html("");
+                    //限定只能上传一个文件
+                    if (files.length > 1) {
+                        up.removeFile(files[0]);
+                    }
+                    plupload.each(files, function (file) {
+                        $('#fileList').append('<span id="' + file.id + '">' + file.name + '(' + plupload.formatSize(file.size) + ')</span>');
+                    });
+                },
+                UploadProgress: function (up, file) {
+                    $("#fileBar").show();
+                    element.progress("fileProgress", file.percent + "%");
+                },
+                FileUploaded: function (uploader, file, responseObject) {
+                    var data = JSON.parse(responseObject.response);
+                    setTimeout(function () {
+                        $("#fileBar").hide();
+                        element.progress("fileProgress", "0%");
+                    }, 1500);
+                    if (!data.flag) {
+                        layer.alert("错误,请检查文件格式后重新上传！");
+                        return;
+                    }
+                    for (var i = 0; i < data.file.length; i++) {
+                        var imgurl = FileURL + data.file[i].VirtualURL;
+                        $("#Icon").val(imgurl);
+                        $('#fileList').append("<a data-img='" + imgurl + "' href='javascript:' id='lookIcon'>查看</a>");
+                    }
+                    //上传完成移除队列
+                    uploader.removeFile(file);
+                },
+                Error: function (up, err) {
+                    layer.alert("错误：" + err.code + ": " + err.message);
+                }
+            }
+        });
+        uploader.init();
+    });
+
+</script>
+

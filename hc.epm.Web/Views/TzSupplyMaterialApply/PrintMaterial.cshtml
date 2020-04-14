@@ -1,0 +1,332 @@
+﻿@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@using hc.epm.DataModel.Business;
+@model Epm_TzSupplyMaterialApply
+@{
+    ViewBag.Title = "工程甲供物资申请详情";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Resource/plugins/layui-2.1.2/css/layui.css" />
+
+    <style type="text/css">
+        .contentData {
+            padding: 20px;
+        }
+
+        /*列表数据样式start*/
+        .datalist {
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+            padding: 2px;
+            border: 1px solid #D9D8D8;
+        }
+
+            .datalist th {
+                color: #000000;
+                font-weight: 500;
+                height: 55px;
+                background-color: #E4E4E4;
+            }
+
+            .datalist td {
+                height: 40px;
+                color: #7A7A7A;
+            }
+
+            .datalist tr td,
+            .datalist tr th {
+                box-sizing: border-box;
+                padding: 5px;
+                border: 1px solid #D9D8D8;
+            }
+               .form-sub {
+                    width: 100%;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+        .form-sub > button {
+            margin-left: 10px;
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+    </style>
+</head>
+<body style="width:1000px;margin:0 auto;">
+    <div class="contentData" style="padding: 20px;background-color: #fff;margin: auto auto 30px;">
+        <div class="form-sub">
+            <p style="margin:0 auto;font-size:16px;font-weight:800;">工程甲供物资打印预览</p>
+            <button type="button" id="download">下 载</button>
+            <button type="button" id="print">打 印</button>
+            <input id="Id" type="hidden" value="@Model.Id" />
+        </div>
+        <form class="form-horizontal" id="contentData" style="width:1000px;">
+            <div style="width:100%; padding: 10px 20px;border: 1px solid #c5c5c5;position: relative; margin-bottom: 25px;">
+                <h4 style="display:inline-block; padding: 4px;font-weight: 600;position: absolute;top: -12px;background-color: #ffffff;">申请信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">标题</span>
+                            </td>
+                            <td style="width:402px;text-align: left;" colspan="3">
+                                <div id="title">@Model.ApplyTitle</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <span style="color: black;">申请人</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ApplyUserName</div>
+                            </td>
+                            <td style="text-align: right;width: 215px;">
+                                <span style="color: black;">申请时间</span>
+                            </td>
+                            <td style="width:402px;text-align:left;">
+                                <div>@Model.ApplyTime</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <span style="color: black;">申请部门</span>
+                            </td>
+                            <td style="width:402px;text-align: left;" colspan="3">
+                                <div>@Model.ApplyDepartment</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">合同编码</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ContractCode</div>
+                            </td>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">合同报审序号</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ContractNumber</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">联系人</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.Supplier</div>
+                            </td>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">联系电话</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.SupplierTel</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">项目名称</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ProjectName</div>
+                            </td>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">批复文号</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ApprovalNo</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width:100%; padding: 10px 20px;border: 1px solid #c5c5c5;position: relative; margin-bottom: 25px;">
+                <h4 style="display:inline-block; padding: 4px;font-weight: 600;position: absolute;top: -12px;background-color: #ffffff;">物资信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <table style="word-break:break-all;word-wrap:break-word;width:100%;">
+                                    <thead>
+                                        <tr class="ou-ta">
+                                            <th>序号</th>
+                                            <th>物资种类</th>
+                                            <th>品名</th>
+                                            <th>规格</th>
+                                            <th>单价</th>
+                                            <th>数量</th>
+                                            <th>金额</th>
+                                            <th>供应商名称</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="addtab">
+                                        @{
+                                            var index = 0;
+                                        }
+                                        @if (Model.TzSupMatApplyList != null && Model.TzSupMatApplyList.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzSupMatApplyList)
+                                            {
+                                                index++;
+                                                <tr class="tab-conten">
+                                                    <td class="Sort">@index</td>
+                                                    <td>@item.SupMatManagement</td>
+                                                    <td>@item.ProductName</td>
+                                                    <td>@item.Specification</td>
+                                                    <td>@item.UnitPrice.ToString("0.00")</td>
+                                                    <td>@item.Number.ToString("0.00")</td>
+                                                    <td>@item.Money.ToString("0.00")</td>
+                                                    <td>@item.SupplierName</td>
+                                                    <td>@item.Remark</td>
+                                                </tr>
+                                            }
+                                        }
+
+
+                                    </tbody>
+                                    @*<tr style="background-color:#e4e4e4;">
+                                            <td colspan="6" style="text-align:right">合计（元）</td>
+                                            <td><input type="text" name="Amount"  style="color:red;border:none;width:60px;height:30px;" readonly value="@Model.TotleMoney.ToString("0.00")" /></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>*@
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width:100%; padding: 10px 20px;border: 1px solid #c5c5c5;position: relative; margin-bottom: 25px;">
+                <h4 style="display:inline-block; padding: 4px;font-weight: 600;position: absolute;top: -12px;background-color: #ffffff;">收件信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">收件人</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ArrivalContacts</div>
+                            </td>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">收件电话</span>
+                            </td>
+                            <td style="width:402px;text-align: left;">
+                                <div>@Model.ArrivalContactsTel</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right;width: 215px;">
+                                <i style="color: red;margin-top: 4px;margin-right: 15px;">*</i>
+                                <span style="color: black;">收件地址</span>
+                            </td>
+                            <td style="width:402px;text-align: left;" colspan="3">
+                                <div>@Model.ArrivalAddress</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div style="width:100%; padding: 10px 20px;border: 1px solid #c5c5c5;position: relative; margin-bottom: 25px;">
+                <h4 style="display:inline-block; padding: 4px;font-weight: 600;position: absolute;top: -12px;background-color: #ffffff;">审批信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <table style="word-break:break-all;word-wrap:break-word;width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>审批人</th>
+                                            <th>部门</th>
+                                            <th>审批状态</th>
+                                            <th>审批时间</th>
+                                            <th>签名</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>@Model.ApprovalName</td>
+                                            <td>@Model.ApprovalDep</td>
+                                            <td>@(((PreProjectState)Model.State).GetText())</td>
+                                            <td>@Model.OperateTime.ToString("yyyy-MM-dd")</td>
+                                            <td><img style="height:40px;width:100px;" src="@Model.SignNameUrl" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/plugins/layui-2.1.2/layui.js"></script>
+<script>
+    $(function () {
+        $("#print").click(function () {
+            //根据div标签ID拿到div中的局部内容
+            bdhtml = window.document.body.innerHTML;
+            var jubuData = document.getElementById("contentData").innerHTML;
+            //把获取的 局部div内容赋给body标签, 相当于重置了 body里的内容
+            window.document.body.innerHTML = jubuData;
+            //调用打印功能
+            window.print();
+            window.location.reload();
+            window.document.body.innerHTML = bdhtml;//重新给页面内容赋值；
+            return false;
+        });
+    });
+
+    //将html页面导出.pdf格式文件
+    layui.use('layer', function () {
+        var layer = layui.layer;
+        $("#download").click(function () {
+            var ids = $("#Id").val();
+            parent.layer.confirm('确认要下载该物资清单吗？', { icon: 3 }, function () {
+                var loading = layer.msg('正在下载', { icon: 16, shade: 0.3, time: 0 });
+                $.post("CreatePdf", { ids: ids }, function (data) {
+                    if (data.Flag == 0) {
+                        layer.msg("下载成功", { time: 2000, icon: 1 });
+                        window.location.href = "/Download/DownLoadHB?path=" + data.download + "&fileName=" + data.fileName;
+                        layer.close(loading);
+                    } else {
+                        layer.close(loading);
+                        layer.msg("下载失败", { time: 2000, icon: 2 });
+                    }
+                }, "json");
+            });
+        });
+    });
+
+</script>
+
+
+
+
+

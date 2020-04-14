@@ -1,0 +1,393 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "新增工器具机械验收";
+}
+<style>
+    .datalist tr td {
+        padding: 2px;
+    }
+
+        .datalist tr td input[type="text"] {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+    .selectpicker {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName" readonly />
+                <i class="pic iconfont ProjectName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@ViewBag.ProjectId" />
+            </div>
+            @*<div class="long-text">
+                <label><span class="star">*</span>&nbsp;验收地址&nbsp;:</label>
+                <input type="text" name="CheckAddress" id="CheckAddress" />
+            </div>*@
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;验收日期&nbsp;:</label>
+                <input type="text" id="CheckTime" name="CheckTime" onClick="WdatePicker({ el: 'CheckTime',maxDate:'%y-%M-%d'})" readonly>
+                <i onClick="WdatePicker({ el: 'CheckTime',maxDate:'%y-%M-%d' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            @*<div class="intro">
+                <div><label><span class="star"></span>&nbsp;验收内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" name="CheckContent" id="CheckContent"></textarea>
+                </div>
+            </div>*@
+            <div class="long-text">
+                <label><span class="star "></span>&nbsp;供应商&nbsp;:</label>
+                <input type="text" name="SupplierName" id="SupplierName" readonly />
+                <i class="pic iconfont SupplierName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" name="SupplierId" id="SupplierId" />
+            </div>
+            <div class="short-text" style="display:none;">
+                <label><span class="star">*</span>&nbsp;是否合格&nbsp;:</label>
+                <select name="IsQualified" id="IsQualified">
+                    <option value="true">是</option>
+                    <option value="false">否</option>
+                </select>
+            </div>
+            <div class="long-text" style="display:none;">
+                <label><span class="star">*</span>&nbsp;验收单位&nbsp;:</label>
+                <input type="text" value="@ViewBag.CompanyName" disabled />
+                <input type="hidden" name="CheckCompanyName" id="CheckCompanyName" value="@ViewBag.CompanyName" />
+                <input type="hidden" name="CheckCompanyId" id="CheckCompanyId" value="@ViewBag.CompanyId" />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text" style="display:none;">
+                <label><span class="star">*</span>&nbsp;验收人&nbsp;:</label>
+                <input type="text" value="@ViewBag.UserName" disabled />
+                <input type="hidden" name="CheckUserName" id="CheckUserName" readonly value="@ViewBag.UserName" />
+                <input type="hidden" name="CheckUserId" id="CheckUserId" value="@ViewBag.UserId" />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="contract">
+                <div><label><span class="star">*</span>&nbsp;工器具机械&nbsp;:</label></div>
+                <table class="datalist" style="width:80%">
+                    <thead>
+                        <tr>
+                            <th width="20%">名称</th>
+                            <th width="10%">型号</th>
+                            <th width="10%">数量</th>
+                            <th width="15%">单位</th>
+                            <th width="15%">备注</th>
+                            <th width="10%">操作&nbsp;&nbsp;<a href="javascript:" class="add" style="color:blue;">添加</a></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            @*<div class="upload" style="margin-bottom:0px;">
+                <div><label><span class="star">*</span>&nbsp;附件上传&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                </div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>*@
+            <div class="button-group btn-center">
+                <input type="hidden" name="State" id="State" />
+                <button type="button" class="btnSub" data-state="@(ConfirmState.WaitConfirm.GetValue().ToString())">提交</button>
+                <button type="button" class="btnSub" data-state="@(ConfirmState.Enabled.GetValue().ToString())">保存</button>
+                <input type="hidden" name="MaterialDetails" id="MaterialDetails" />
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //var fileDataArray = [];
+    //function uploadFile() {
+    //    if (document.getElementById("loadFile").files.length == 0) {
+    //        return;
+    //    }
+    //    var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+    //    var formFile = new FormData();
+    //    formFile.append("file", fileObj);
+    //    var path = formFile;
+
+    //    $.ajax({
+    //        url: "/Upload/UploadHB",
+    //        type: "POST",
+    //        data: path,
+    //        contentType: false,
+    //        processData: false,
+    //        success: function (data) {
+    //            for (var i = 0; i < data.length; i++) {
+    //                var obj = {};
+    //                obj.Name = data[i].Name;
+    //                obj.GuidId = data[i].GuidId;
+    //                obj.Size = data[i].Size;
+    //                obj.ImageType = data[i].ImageType;
+    //                obj.Group = data[i].ResponseObject.FDFS_GROUP;
+    //                obj.Url = data[i].ResponseObject.FDFS_NAME;
+    //                fileDataArray.push(obj);
+
+    //                if (data[i].ImageType == null) {
+    //                    var imgUrl = getFileImg(obj.Name);
+    //                    var odiv = '<li id="' + obj.GuidId + '">';
+    //                    odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+    //                    odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+    //                    odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+    //                    odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+    //                    odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+    //                    odiv += '</li>';
+    //                    $('#fileListFile .fileShow').append(odiv);
+    //                }
+    //            }
+    //            fileDataJson = JSON.stringify(fileDataArray);
+    //            $("#fileDataJsonFile").val(fileDataJson);
+    //            $("#loadFile").val("");
+    //        }
+    //    });
+    //}
+
+    $(function () {
+        //$('#btnUploadFile').click(function () {
+        //    document.getElementById("loadFile").click();
+        //});
+        var validator = $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                ProjectName: {
+                    required: true,
+                    maxlength: 200
+                },
+                //CheckAddress: {
+                //    required: true,
+                //    maxlength: 200
+                //},
+                CheckTime: {
+                    required: true,
+                    date: true
+                },
+            },
+            messages: {
+                ProjectName: {
+                    required: "项目名称不能为空"
+                },
+                //CheckAddress: {
+                //    required: "验收地址不能为空",
+                //    maxlength: "验收地址不能大于200个字符"
+                //},
+                CheckTime: {
+                    required: "上传日期不能为空",
+                    date: "日期格式错误"
+                },
+            }
+        })
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //在建项目选择
+            $("#ProjectName,.ProjectName_icon").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProjectAll',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj && obj.flag && obj.data) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            layer.close(index);
+                            //alert("id:" + obj.data[0].id + " name:" + obj.data[0].name);
+                        } else if (!obj.flag) {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+
+            ////删除附件
+            //$("#fileListFile").on("click", ".fileDel", function () {
+            //    $(this).parents("li").remove();
+            //    var toremove = '';
+            //    var id = $(this).data("val");
+            //    //----删除初始文件对应的值
+            //    fileDataArray = fileDataArray.filter(function (item, index, arr) {
+            //        return item.GuidId != id
+            //    })
+            //    fileDataJsonFile = JSON.stringify(fileDataArray);
+            //    $("#fileDataJsonFile").val(fileDataJsonFile);
+            //});
+
+            //选择供应商
+            $(".SupplierName_icon,#SupplierName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择单位"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectServiceCustomer?selectType=1',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = frames['layui-layer-iframe' + index].getSelectData();
+                        if (obj.flag === false) {
+                            layer.alert(obj.msg, { icon: 2 });
+                        } else {
+                            $("#SupplierName").val(obj.data[0].Name)
+                            $("#SupplierId").val(obj.data[0].Id)
+                            layer.close(index);
+                        }
+                    },
+                    btn2: function (index, layero) {
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //默认当前日期
+            function newTime() {
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = now.getMonth() + 1;
+                month = month >= 10 ? month : "0" + month
+                var date = now.getDate();
+                date = date >= 10 ? date : "0" + date
+                return year + "-" + month + "-" + date
+            }
+            $("#CheckTime").val(newTime());
+
+            //提交和保存数据
+            $(".btnSub").click(function () {
+                if (!validator.form()) {
+                    return false;
+                }
+                //if ($(".fileShow li").length == 0) {
+                //    layer.alert("请先上传附件", { icon: 2 });
+                //    return false;
+                //}
+                var materialDetails = [];
+                var IsTrue = false;
+                $("tbody tr").each(function (index, item) {
+                    var Name, Model, Qty, Unit, Remark;
+                    Name = $(item).children("td:eq(0)").children("input").val();
+                    Model = $(item).children("td:eq(1)").children("input").val();
+                    Qty = parseFloat($(item).children("td:eq(2)").children("input").val());
+                    Unit = $(item).children("td:eq(3)").children("input").val();
+                    Remark = $(item).children("td:eq(4)").children("input").val();
+                    if (!Name) {
+                        layer.alert("物料名称不能为空", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    } else if (Name.length>100) {
+                        layer.alert("物料名称长度不能大于100个字符", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    }
+                    if (!Model) {
+                        layer.alert("物料型号不能为空", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    } else if (Model.length > 100) {
+                        layer.alert("物料型号长度不能大于100个字符", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    }
+                    if (!Qty || Qty < 0) {
+                        layer.alert("物料数量只能为正数且不能为空", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    }
+                    if (!Unit) {
+                        layer.alert("物料单位不能为空", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    } else if (Unit.length > 50) {
+                        layer.alert("物料单位长度不能大于50个字符", { icon: 2 });
+                        IsTrue = true;
+                        return;
+                    }
+                    materialDetails.push({
+                        Name: Name,
+                        Model: Model,
+                        Qty: Qty,
+                        Unit: Unit,
+                        Remark: Remark
+                    })
+                });
+                if (!IsTrue) {
+                    if (materialDetails.length > 0) {
+                        materialDetails = JSON.stringify(materialDetails);
+                        $("#MaterialDetails").val(materialDetails)
+                        var State = $(this).data("state");
+                        $("#State").val(State)
+                        var params = $("#mainForm").serialize();
+                        $.post("/Material/Add", params, function (result) {
+                            if (result.Flag) {
+                                layer.msg("操作成功", { tiem: 1000, icon: 1 })
+                                location.href = "/Material/Index";
+                                return false
+                            }
+                            layer.alert(result.Message, { icon: 2 })
+                        })
+                    } else {
+                        layer.alert("材料设备列表不能为空", { icon: 2 });
+                        return;
+                    }
+                }
+            })
+
+            //添加验收项目
+            $('table').on('click', '.add', function () {
+                var newTime = new Date().getTime();
+                var tr = `
+                        <tr>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                               <input type="text" />
+                            </td>
+                             <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <a href="javascript:" class ="delete" style="color:blue;">删除</a>
+                            </td>
+                        </tr>
+                        `
+                $('tbody').append(tr);
+            })
+            //删除验收项目
+            $("table").on("click", ".delete", function () {
+                $(this).parent().parent().remove();
+            })
+        });
+    })
+
+</script>

@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link href="~/Resource/plugins/layui-2.1.2/css/layui.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .contentData {
+            padding: 20px;
+        }
+        /*搜索区域样式start*/
+        a, a:hover {
+            list-style: none;
+            text-decoration: none;
+            color: blue;
+        }
+
+        .form-select {
+            margin-bottom: 20px;
+        }
+
+            .form-select > form > div {
+                height: 10%;
+                width: 100%;
+                float: left;
+            }
+
+                .form-select > form > div div {
+                    margin: 10px 0;
+                    width: 33.33%;
+                    float: left;
+                }
+
+                .form-select > form > div label {
+                    color: #595959;
+                }
+
+                .form-select > form > div input,
+                .form-select > form > div select {
+                    width: 200px;
+                    box-sizing: border-box;
+                    color: #B7B7B7;
+                    padding-left: 15px;
+                    height: 30px;
+                    line-height: 30px;
+                }
+
+                .form-select > form > div .select {
+                    padding: 0 10px;
+                }
+
+                .form-select > form > div .pic {
+                    color: #BCBCBC;
+                    font-size: 20px;
+                    position: relative;
+                    top: 3px;
+                    right: 30px;
+                    cursor: pointer;
+                }
+            /*搜索区域样式end*/
+
+            /*操作区域样式start*/
+            .form-select .form-sub button {
+                display: inline-block;
+                width: 80px;
+                height: 30px;
+                border: none;
+                background-color: #6a6969;
+                color: #fff;
+            }
+        /*操作区域样式end*/
+
+        /*列表数据样式start*/
+        .datalist {
+            width: 100%;
+            text-align: center;
+            border-collapse: collapse;
+            padding: 2px;
+            border: 1px solid #D9D8D8;
+        }
+
+            .datalist th {
+                color: #000000;
+                font-weight: 500;
+                height: 55px;
+                background-color: #E4E4E4;
+            }
+
+            .datalist td {
+                height: 40px;
+                color: #7A7A7A;
+            }
+
+            .datalist tr th,
+            .datalist tr td {
+                border: 1px solid #D9D8D8;
+            }
+
+            .datalist tr td,
+            .datalist tr th {
+                box-sizing: border-box;
+                padding: 5px;
+            }
+    </style>
+
+    @RenderSection("headerCss", required: false)
+</head>
+<body>
+    <div class="contentData">
+        @RenderBody()
+        <div id="page" style="text-align:right; margin-right:5px;">
+        </div>
+    </div>
+    <script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+    <script src="~/Resource/plugins/layui-2.1.2/layui.js"></script>
+
+    @if (ViewBag.SelectType == "1")
+    {
+        <script type="text/javascript">
+            $('#selectAll').attr('disabled', true);
+            $('input[name="checkbox"][type="checkbox"]').on('click', function () {
+                if (this.checked) {
+                    $("input[name='checkbox']").prop("checked", false);
+                    $(this).prop("checked", true);
+                }
+            });
+        </script>
+    }
+
+    <script type="text/javascript">
+        if ('@ViewBag.Total' == 0) {
+            $("#page").hide();
+        }
+
+        $("#selectAll").bind("click", function () {
+            if ($(this).prop("checked")) {
+                $("input[type='checkbox']").prop("checked", true);
+            } else {
+                $("input[type='checkbox']").prop("checked", false);
+            }
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

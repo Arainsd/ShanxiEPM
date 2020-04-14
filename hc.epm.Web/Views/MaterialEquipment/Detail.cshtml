@@ -1,0 +1,155 @@
+﻿@using hc.epm.ViewModel;
+@model MaterielView
+@{
+    ViewBag.Title = "材料设备验收编辑";
+}
+<style>
+    .input-group-addon {
+        cursor: pointer;
+        color: #6a6969;
+        font-size: 20px;
+    }
+
+    .datalist input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>验收信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.Epm_Materiel.ProjectName</div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">接收地点</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.Epm_Materiel.ReceiveAddress</div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">接收日期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div> @(Convert.ToDateTime(Model.Epm_Materiel.ReceiveTime).ToString("yyyy-MM-dd"))</div>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">接收内容</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.Epm_Materiel.Remark</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>甲供物资单</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.Epm_Materiel.SupMatApplyName</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>物资信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <thead>
+                    <tr>
+                        <th width="50">序号</th>
+                        <th width="200">名称</th>
+                        <th width="100">型号</th>
+                        <th width="200">供应商</th>
+                        <th width="100">设备总数量</th>、
+                        <th width="100">总验收数量</th>
+                        <th width="100">本次验收数量</th>
+                        <th width="100">待验收数量</th>
+                    </tr>
+                </thead>
+                <tbody class="addtab">
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model.MaterielDetails != null && Model.MaterielDetails.Count() > 0)
+                    {
+                        foreach (var item in Model.MaterielDetails)
+                        {
+                            index++;
+                            <tr class="tab-conten">
+                                <td class='Sort'>@index</td>
+                                <td class="Name">@item.Name</td>
+                                <td class="Model">@item.Model</td>
+                                <td class="Unit">@item.Unit</td>
+                                <td class="Qty">@item.Qty</td>
+                                <td class="wait">@item.TotalUseSum</td>
+                                <td>@item.UseSum</td>
+                                <td>@item.StayUseSum</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件上传</td>
+
+                        <td class="table_title" colspan="3" style="text-align:left;">
+
+                            <ul style="width:100%">
+                                @if (Model.FileList != null && Model.FileList.Count() > 0)
+                                {
+                                    foreach (var item in Model.FileList)
+                                    {
+                                        <li style="width:33%;cursor:pointer;float:left;box-sizing:border-box;">
+                                            <span style="color:blue;" class="downloadFile" title="下载" data-url="@item.Url" data-filename="@item.Name">@item.Name</span>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+        </div>
+    </form>
+</div>
+<script>
+    //返回
+    $("#close").click(function () {
+        window.location.href = "/MaterialEquipment/Index";
+    });
+    //下载附件
+    $("body").on("click", ".downloadFile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("filename");
+        window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+    });
+</script>

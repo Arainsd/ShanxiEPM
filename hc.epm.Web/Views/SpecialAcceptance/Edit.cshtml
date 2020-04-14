@@ -1,0 +1,524 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel
+@model SpecialAcceptanceView
+@*@{
+        ViewBag.Title = "修改专项验收";
+    }*@
+<style>
+    .datalist tr td {
+        padding: 2px;
+    }
+
+        .datalist tr td input[type="text"] {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+    .selectpicker {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" name="ProjectName" id="ProjectName" readonly value="@Model.ProjectName" />
+                    <i class="pic iconfont" id="ProjectName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.Id">
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;验收标题&nbsp;:</label>
+                    <input type="text" name="Title" id="Title" value="@Model.Title" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;专项验收&nbsp;:</label>
+                    @Html.DropDownList("TypeId", null, new { @class = "form-control selectpicker  show-tick" })
+                    <input type="hidden" name="TypeName" id="TypeName" />
+                </div>
+                <div class="intro">
+                    <div><label><span class="star">*</span>&nbsp;验收内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" name="Content" id="Content">@Model.Content</textarea>
+                    </div>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;第几次验收&nbsp;:</label>
+                    <input type="text" name="Num" id="Num" value="@Model.Num" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;验收单位&nbsp;:</label>
+                    <input type="text" name="RecCompanyName" id="RecCompanyName" value="@Model.RecCompanyName" disabled />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;验收人员&nbsp;:</label>
+                    <input type="text" name="RecUserName" id="RecUserName" value="@Model.RecUserName" disabled />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;验收时间&nbsp;:</label>
+                    <input type="text" id="RecTime" name="RecTime" onClick="WdatePicker({ el: 'RecTime',maxDate:'%y-%M-%d' })" value="@(Model.RecTime == null ? "" : Convert.ToDateTime(Model.RecTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'RecTime',maxDate:'%y-%M-%d' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="long-text">
+                    <label>&nbsp;选择模板&nbsp;:</label>
+                    <i class="pic iconfont TypeName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="text" name="TypeName1" id="TypeName1"/>
+                </div>
+                <div class="contract">
+                    <div><label><span class="star">*</span>&nbsp;验收项目&nbsp;:</label></div>
+                    <table class="datalist" style="width:88%">
+                        <thead>
+                            <tr>
+                                <th width="15%">类型</th>
+                                <th width="25%">项目名称</th>
+                                <th width="25%">结果</th>
+                                <th width="25%">备注</th>
+                                <th width="10%">操作&nbsp;&nbsp;&nbsp;<a href="javascript:" class="add">添加</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.AcceptanceDetailList.Any())
+                            {
+
+                                foreach (var item in Model.AcceptanceDetailList)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DropDownList("MonitorType", null, new { @class = "form-control selectpicker  show-tick" })
+                                            <input type="hidden" class="Droplist" value="@item.Type" />
+                                        </td>
+                                        <td>
+                                            <input type="text" value="@item.Name" />
+                                        </td>
+                                        <td>
+                                            <input type="radio" name="@item.Id" value="0" />不合格&nbsp; &nbsp; &nbsp;
+                                            <input type="radio" name="@item.Id" value="1" />合格&nbsp; &nbsp; &nbsp;
+                                            <input type="radio" name="@item.Id" value="2" />良好&nbsp; &nbsp; &nbsp;
+                                            <input type="hidden" class="radioBox" value="@item.Result" />
+                                        </td>
+                                        <td>
+                                            <input type="text" value="@item.Remark" />
+                                        </td>
+                                        <td>
+                                            <a href="javascript:" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <button id="btnUploadFile" style="position: relative; z-index: 1;">上传附件</button>
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow"></ul>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    <input type="hidden" name="State" id="State" />
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                    <input type="hidden" name="AcceptanceDetailList" id="AcceptanceDetailList" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            //专项验收
+            $("#TypeId").change(function () {
+                var TypeName = $('#TypeId option:selected').text();
+                $("#TypeName").val(TypeName);
+            });
+
+            var validator = $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true,
+                        maxlength: 200
+                    },
+                    Title: {
+                        required: true,
+                        maxlength: 200
+                    },
+                    Content: {
+                        required: true,
+                        maxlength: 500
+                    },
+                    Num: {
+                        required: true,
+                        digits: true,
+                    },
+                    RecCompanyName: {
+                        required: true,
+                        maxlength: 200,
+                    },
+                    RecUserName: {
+                        required: true,
+                        maxlength: 50,
+                    },
+                    RecTime: {
+                        required: true,
+                        date: true
+                    },
+                    State: {
+                        required: true,
+                    },
+                    AcceptanceResult: {
+                        required: true,
+                    },
+                    Remark: {
+                        required: true,
+                        maxlength: 500
+                    },
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空",
+                        maxlength: "项目名称长度不能大于200个字符"
+                    },
+                    Title: {
+                        required: "验收标题不能为空",
+                        maxlength: "验收标题长度不能大于200个字符"
+                    },
+                    Content: {
+                        required: "验收内容不能为空",
+                        maxlength: "验收内容长度不能大于500个字符"
+                    },
+                    Num: {
+                        required: "验收次数不能为空",
+                    },
+                    RecCompanyName: {
+                        required: "验收单位不能为空",
+                        maxlength: "验收单位长度不能大于200个字符"
+                    },
+                    RecUserName: {
+                        required: "验收人不能为空",
+                        maxlength: "验收人长度不能大于50个字符"
+                    },
+                    RecTime: {
+                        required: "验收日期不能为空",
+                        date: "日期格式错误"
+                    },
+                    State: {
+                        required: "状态不能为空",
+                    },
+                    AcceptanceResult: {
+                        required: "验收不能为空",
+                    },
+                    Remark: {
+                        required: "备注不能为空",
+                        maxlength: "备注长度不能大于500个字符"
+                    }
+                }
+            })
+           
+            layui.use(['layer', 'laydate', 'form', 'element', 'laypage'], function () {
+                var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage; laydate = layui.laydate
+
+                //提交和保存数据
+                $(".btnSub").click(function () {
+                    if (!validator.form()) {
+                        return false;
+                    }
+                    var AcceptanceDetailList = []
+                    $(".datalist tbody tr").each(function (index, item) {
+                        AcceptanceDetailList.push({
+                            Type: $(item).children("td:eq(0)").find(".selectpicker").val(),
+                            Name: $(item).children("td:eq(1)").children("input").val(),
+                            Result: $(item).children("td:eq(2)").find("input:checked").val(),
+                            Remark: $(item).children("td:eq(3)").children().val()
+                        })
+                    });
+                    AcceptanceDetailList = JSON.stringify(AcceptanceDetailList);
+                    $("#AcceptanceDetailList").val(AcceptanceDetailList)
+                    var State = $(this).data("state");
+                    $("#State").val(State);
+                    var data = $("#mainForm").serialize();
+                    $.post("/SpecialAcceptance/Edit", data, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { tiem: 1000, icon: 1 })
+                            location.href = "/SpecialAcceptance/Index";
+                            return false
+                        }
+                        layer.alert(result.Message, { icon: 2 })
+                    })
+                })
+                //在建项目选择
+                $("#ProjectName,#ProjectName_icon").click(function () {
+                    layer.open({
+                        type: 2,
+                        title: GetLayerTitle("选择在建项目"),
+                        shadeClose: false, //点击遮罩关闭层
+                        area: ['800px', '600px'],
+                        content: '/Comm/SelectProject',
+                        btn: ["确定", "取消"],
+                        yes: function (index, layero) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            var obj = iframeWin.getSelectData();
+                            if (obj && obj.flag && obj.data) {
+                                $("#ProjectName").val(obj.data[0].Name);
+                                $("#ProjectId").val(obj.data[0].Id);
+                                layer.close(index);
+                                //alert("id:" + obj.data[0].id + " name:" + obj.data[0].name);
+                            } else if (!obj.flag) {
+                                parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                                return false;
+                            }
+                        },
+                        btn2: function (index, layero) {
+                        },
+                        cancel: function (index, layero) {
+                        },
+                    });
+                });
+                //选择模板
+                $("#TypeName1,.TypeName_icon").click(function () {
+                    layer.open({
+                        type: 2,
+                        title: GetLayerTitle("选择模板"),
+                        shadeClose: false, //点击遮罩关闭层
+                        area: ['800px', '600px'],
+                        content: '/Comm/GetTemplateList?SelectType=1&TemplateTypeNo=ZXYS',
+                        btn: ["确定", "取消"],
+                        yes: function (index, layero) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            var obj = iframeWin.getSelectData();
+                            if (obj && obj.flag && obj.data) {
+                                $("#TypeName1").val(obj.data[0].Title)
+                                $("#Content").val(obj.data[0].Description)
+                                var tempid = obj.data[0].Id;
+                                $.post("/Comm/GetTemplateDetailsList?id=" + tempid, function (result) {
+                                    if (result) {
+                                        $('.datalist tbody').html("");
+                                        var newTime = new Date().getTime();
+                                        result.forEach(function (item, index, arr) {
+                                            newTime++;
+                                            var tr = `
+                        <tr>
+                            <td>
+                                @Html.DropDownList("MonitorType", null, new { @class = "form-control selectpicker  show-tick" })
+                            </td>
+
+                            <td>
+                                <input type="text" value="${item.Name}"/>
+                            </td>
+                            <td>
+                                <input type="radio" name="${newTime}" value="0"/>不合格&nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="${newTime}" value="1"/>合格&nbsp; &nbsp; &nbsp;
+                                <input type="radio"  name="${newTime}" value="2"/>良好&nbsp; &nbsp; &nbsp;
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <a href="javascript:" class ="delete">删除</a>
+                            </td>
+                        </tr>
+                        `
+                                            $('.datalist tbody').append(tr);
+                                        })
+
+                                    }
+                                })
+                                layer.close(index)
+                                layer.close(index)
+                                //alert("id:" + obj.data[0].id + " name:" + obj.data[0].name);
+                            } else if (!obj.flag) {
+                                parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                                return false;
+                            }
+                        },
+                        btn2: function (index, layero) {
+                        },
+                        cancel: function (index, layero) {
+                        },
+
+
+                    })
+                })
+                //验收项目下拉框取得默认值
+                var DroplistItem = $(".Droplist").parent();
+                DroplistItem.each(function (index, item) {
+                    $(item).find(".selectpicker").val($(item).find(".Droplist").val())
+                })
+                //验收项目单选按钮取得默认值
+                var radioItem = $(".radioBox").parent().find("input[type='radio']");
+                radioItem.filter(function (index, item) {
+                    return $(item).val() == $(item).nextAll(".radioBox").val()
+                }).attr("checked", "checked")
+                //添加验收项目
+                $('.datalist').on('click', '.add', function () {
+                    var newTime = new Date().getTime();
+                    var tr = `
+                        <tr>
+                            <td>
+                                @Html.DropDownList("MonitorType", null, new { @class = "form-control selectpicker  show-tick" })
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <input type="radio" name="${newTime}" value="0"/>不合格&nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="${newTime}" value="1"/>合格&nbsp; &nbsp; &nbsp;
+                                <input type="radio"  name="${newTime}" value="2"/>良好&nbsp; &nbsp; &nbsp;
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <a href="javascript:" class ="delete">删除</a>
+                            </td>
+                        </tr>
+                        `
+                    $('.datalist tbody').append(tr);
+                })
+                //删除验收项目
+                $(".datalist").on("click", ".delete", function () {
+                    $(this).parent().parent().remove();
+                })
+                var fileDataArrayFile = [];
+                var fileDataJsonFile = [];
+                //获取附件
+                $.post("/Files/GetFileList", { tableName: 'Epm_SpecialAcceptance', id: '@Model.Id' }, function (data) {
+                    if (data.Flag) {
+                        if (data.Data.length > 0) {
+                           data.Data.forEach(function (item, index, arr) {
+                               fileDataArrayFile.push({
+                                   GuidId: item.GuidId,
+                                   Name: item.Name,
+                                   Size: item.Size,
+                                   FileGuid: item.FileGuid,
+                                   Url: item.Url,
+                                   TableColumn: item.TableColumn,
+                                   ImageType: item.ImageType
+                               });
+                                if (item.ImageType == null) {
+                                    var odiv = '<li id="' + item.GuidId + '">';
+                                    odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + substrParams(item.Name,20) + '</a></div>';
+                                    odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                                    odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                                    odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.GuidId + '" style="cursor: pointer;"/></div>'
+                                    odiv += '</li>';
+                                    $('#fileListFile .fileShow').append(odiv);
+                                }
+
+                            })
+                            fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                            $("#fileDataJsonFile").val(fileDataJsonFile);
+                         }
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                //上传附件
+                var uploaderFile = new plupload.Uploader({
+                    runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                    url: FileServerURL, // 服务端上传路径
+                    max_file_size: MaxFileSize, // 文件上传最大限制。
+                    max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                    chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                    browse_button: 'btnUploadFile',//触发上传元素
+                    flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                    silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                    multi_selection: true,//	是否可以在文件浏览对话框中选择多个文件
+                    multipart_params: {//附加参数
+                        app: 'epm',
+                        crop: true
+                    },
+                    //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+                    filters: {
+                        mime_types: [
+                            { title: "Doc files", extensions: "doc,docx,xls,xlsx,rar,zip,7z,gif,rmvb,mp4,avi,jpg,png,jpeg" },
+                        ],
+                        max_file_size: MaxFileSize, //最大只能上传100mb的文件
+                        prevent_duplicates: true //不允许选取重复文件
+                    },
+                    rename: false, // 是否重命名文件
+                    init: {
+                        PostInit: function () { },
+                        FilesAdded: function (uploaderFile, files) {
+                            if (files) {
+                                files.forEach(function (item, index, arr) {
+                                    var imgUrl = getFileImg(item.name);
+                                    var odiv = '<li id="' + item.id + '">';
+                                    odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + substrParams(item.name,20) + '</a></div>';
+                                    odiv += '<div>' + plupload.formatSize(item.size) + '</div>';
+                                    odiv += '<div class="fileComplete"><span class="fileProgress" style="cursor: pointer;">' + item.percent + '</span>%</div>';
+                                    odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.id + '" style="cursor: pointer;"/></div>'
+                                    odiv += '</li>';
+                                    $('#fileListFile .fileShow').append(odiv);
+                                })
+                                uploaderFile.start();
+                            }
+                        },
+                        UploadProgress: function (uploaderFile, file) {
+                            $("#" + file.id).find(".fileProgress").html(file.percent)
+                        },
+                        FileUploaded: function (uploaderFile, file, responseObject) {
+                            var data = JSON.parse(responseObject.response);
+                            data.file.forEach(function (item, index, arr) {
+                                var obj = {};
+                                obj.GuidId = file.id;
+                                obj.Name = item.Name;
+                                obj.Size = item.FileSize;
+                                obj.FileGuid = item.Guid;
+                                obj.Url = item.VirtualURL;
+                                if (IsImage(item.Extension)) {
+                                    obj.ImageType = getImageType(item.Name, item.Extension);
+                                }
+                                fileDataArrayFile.push(obj);
+                            })
+                            var img = '<img src="/Resource/images/default_ok.png" alt="完成" />'
+                            $("#" + file.id).find(".fileComplete").html(img);
+                            $("#" + file.id).find("a").prop("href", FileDownLoadURL + data.file[0].Guid)
+                            uploaderFile.removeFile(file);
+
+                        },
+                        UploadComplete: function (uploaderFile, file, responseObject) {
+                            fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                            $("#fileDataJsonFile").val(fileDataJsonFile);
+                        },
+                        Error: function (up, err) {
+                            layer.alert("错误：" + err.code + ": " + err.message);
+
+                        }
+                    },
+
+                });
+                uploaderFile.init();
+                //删除附件
+                $("#fileListFile").on("click", ".fileDel", function () {
+                    $(this).parents("li").remove();
+                    var toremove = '';
+                    var id = $(this).data("val");
+                    //----删除初始文件对应的值
+                     fileDataArrayFile= fileDataArrayFile.filter(function (item,index,arr) {
+                        return item.GuidId!=id
+                    })
+                     fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                        $("#fileDataJsonFile").val(fileDataJsonFile);
+                 });
+            });
+        })
+
+    </script>
+</body>

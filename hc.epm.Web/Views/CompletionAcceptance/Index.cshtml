@@ -1,0 +1,329 @@
+﻿@using hc.Plat.Common.Global;
+@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model List<Epm_CompletionAcceptance>
+@{
+    var userInfo = Session[ConstStr_Session.CurrentUserEntity] as UserView;
+    var username = userInfo == null ? "noLogin" : userInfo.UserName;
+
+    var projectname = Session[ConstString.COOKIEPROJECTNAME] as string;
+    projectname = projectname == "" ? "" : "当前项目：" + projectname;
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    #reply {
+        margin-right: 660px;
+    }
+
+    #checkright {
+        display: block !important;
+    }
+</style>
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="@ViewBag.projectName">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">验收标题 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" id="Title" name="Title" value="@ViewBag.title">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">状态 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("state", ViewBag.ApprovalState as SelectList, null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <button type="button" class="add checkright" data-module="CompletionAcceptanceApply" data-right="Add">新 增</button>
+                <button type="button" id="reply">批复</button>
+                <button type="submit" id="checkright" class="checkright" data-module="CompletionAcceptanceApply" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <div><input type="checkbox" id="allcheck" /></div>
+                    </th>
+                    <th width="50">序号</th>
+                    <th width="150">项目名称</th>
+                    <th width="150">验收标题</th>
+                    <th width="300">验收内容</th>
+                    <th width="150">验收单位</th>
+                    <th width="80">验收人员</th>
+                    <th width="100">验收时间</th>
+                    <th width="80">状态</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody class="tbo" id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - 1) * 10;
+                }
+                @if (Model != null && Model.Any())
+                {
+
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                            </td>
+                            <td><input type="checkbox" value="@item.SId" data-state="@(((PreCompletionScceptanceState)item.State).GetValue())" /></td>
+                            <td>@index</td>
+                            <td>
+                                @item.ProjectName
+                                <input type="hidden" value="@item.ProjectId" />
+                            </td>
+                            <td>@item.Title</td>
+                            <td width="359px">
+                                <div>
+                                    @item.Content
+                                </div>
+                            </td>
+                            <td>@item.RecCompanyName</td>
+                            <td>@item.RecUserName</td>
+                            <td>@(item.RecTime == null ? "" : Convert.ToDateTime(item.RecTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(((PreCompletionScceptanceState)item.State).GetText())</td>
+                            <td>
+                                @if (item.State == (int)PreProjectState.ApprovalFailure || item.State == (int)PreProjectState.WaitSubmitted)
+                                {
+                                    <a href="javascript:;" class="Edit" data-module="CompletionAcceptanceApply" data-right="Modify" style="color:#0099FF;">修改</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:;" class="Detail" data-module="CompletionAcceptanceApply" data-right="Info" style="color:#0099FF;">查看</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<div id="convert" style="display:none;width:360px;margin-top:20px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:100px;height:60px;">竣工项目 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+
+                        @if (userInfo != null && userInfo.Project.Count > 0)
+                        {
+                            <select>
+                                <option value="">请选择项目</option>
+                                @foreach (var dic in userInfo.Project)
+                                {
+                                    <option value="@dic.Key">@dic.Value</option>
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    //search = decodeURIComponent(search, true)
+                    window.location.href = "/CompletionAcceptance/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        var tb = $(".tbo tr"), arr = [], state = [];
+        for (var i = 0; i < tb.length; i++) {
+            var id = tb.eq(i).find("td").eq(1).find("input").val();
+            var sta = tb.eq(i).find("td").eq(7).text();
+            arr.push(id);
+            state.push(sta)
+        }
+        //新增
+        $(".add").click(function () {
+            layer.open({
+                type: 1,
+                title: '请选择要竣工的项目',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var id = $("dl").find($(".layui-this")).attr("lay-value");
+                    if (arr.indexOf(id) != -1 && state[arr.indexOf(id)] == "待审核" || state[arr.indexOf(id)] == "草稿" || state[arr.indexOf(id)] == "审核通过") {
+                        layer.alert("该项目已经发起完工验收", { icon: 7 });
+                    } else {
+                        window.location.href = "/CompletionAcceptance/Add?projectId=" + id;
+                    }
+                }
+            });
+        });
+        //查看
+        $(".Detail").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.open("/CompletionAcceptance/Detail?id=" + id);
+        });
+
+        //修改
+        $(".Edit").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.open("/CompletionAcceptance/Edit?Id=" + id);
+        });
+        //删除
+        $(".Delete").on("click", function () {
+            var id = "";
+            id = $(this).parents("tr").find($(".inputId")).data("id");
+            if (id != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { id: id }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 2000, icon: 1 });
+                            location.reload();
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                });
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+
+        //全选反选
+        $("#allcheck").click(function () {
+            var isChecked = $("#allcheck").prop("checked");
+            $("#tbody input[type='checkbox']").prop("checked", isChecked);
+        });
+        // 单独选项控制全选
+        $("#tbody input[type='checkbox']").click(function () {
+            var allLength = $("#tbody input[type='checkbox']").length;
+            var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+            if (allLength == checkedLength) {
+                $("#allcheck").prop("checked", true);
+            } else {
+                $("#allcheck").prop("checked", false);
+            }
+        });
+
+        //批复
+        $("#reply").click(function () {
+            var flag = true,
+                state = "",
+                ids = "",
+                chkItems = $('#tbody input[type="checkbox"]:checked');
+
+            if (chkItems.length > 0) {
+                chkItems.each(function (index, item) {
+                    if ($(this).data("state") != 10) {
+                        layer.msg('请选择状态为待审核的项目！', { time: 3000, icon: 2 });
+                        flag = false;
+                        return false;
+                    }
+                    else {
+                        state = $(this).data("state");
+                        ids += $(this).val();
+                        ids += ",";
+                    }
+                });
+
+                ids = ids.substr(0, ids.lastIndexOf(","));
+
+                if (flag) {
+                    parent.layer.confirm('确认要批复所选择的项目？', { icon: 3 }, function () {
+                        $.post("UpdateState", { ids: ids, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("批复成功", { time: 2000, icon: 1 });
+                                location.reload();
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    });
+                }
+            }
+            else {
+                layer.msg('请选择要批复的项目！', { time: 3000, icon: 2 });
+            }
+
+        });
+
+    });
+</script>

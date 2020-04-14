@@ -1,0 +1,1479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="webservices.services.weaver.com.cn" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://webservices.workflow.weaver" targetNamespace="webservices.services.weaver.com.cn" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="webservices.services.weaver.com.cn">
+      <xsd:element name="deleteRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="deleteRequestResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:boolean" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="ArrayOfString">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfArrayOfString">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfString" nillable="true" type="tns:ArrayOfString" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="submitWorkflowRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="ns1:WorkflowRequestInfo" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="submitWorkflowRequestResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getToDoWorkflowRequestCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getToDoWorkflowRequestCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="submitWorkflowRequestNoChangeData">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="submitWorkflowRequestNoChangeDataResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="doCreateWorkflowRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="ns1:WorkflowRequestInfo" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="doCreateWorkflowRequestResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowRequestInfo">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowRequestInfoResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:WorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getAllWorkflowRequestList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getAllWorkflowRequestListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getMyWorkflowRequestList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getMyWorkflowRequestListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowRequestResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:WorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getProcessedWorkflowRequestCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getProcessedWorkflowRequestCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getLeaveDays">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getLeaveDaysResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowRequest4split">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowRequest4splitResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:WorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getHendledWorkflowRequestList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getHendledWorkflowRequestListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowNewFlag">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="tns:ArrayOfString" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowNewFlagResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getToDoWorkflowRequestList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getToDoWorkflowRequestListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getHendledWorkflowRequestResultSet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getHendledWorkflowRequestResultSetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:RequestResultSet" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getMyWorkflowRequestResultSet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getMyWorkflowRequestResultSetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:RequestResultSet" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCCWorkflowRequestList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCCWorkflowRequestListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in5" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowBaseInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowRequestLogs">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getWorkflowRequestLogsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestLog" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCCWorkflowRequestResultSet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCCWorkflowRequestResultSetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:RequestResultSet" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCCWorkflowRequestCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCCWorkflowRequestCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getAllWorkflowRequestCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getAllWorkflowRequestCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="submitWorkflowRequestChangeData">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="ns1:ArrayOfModifiedField" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="submitWorkflowRequestChangeDataResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getProcessedWorkflowRequestResultSet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getProcessedWorkflowRequestResultSetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:RequestResultSet" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getMyWorkflowRequestCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getMyWorkflowRequestCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getProcessedWorkflowRequestList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getProcessedWorkflowRequestListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getAllWorkflowRequestResultSet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getAllWorkflowRequestResultSetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:RequestResultSet" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="doCreateWorkflowRequestByPart">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="ns1:ArrayOfModifiedField" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="doCreateWorkflowRequestByPartResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getToDoWorkflowRequestResultSet">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getToDoWorkflowRequestResultSetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:RequestResultSet" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowTypeCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowTypeCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="forwardWorkflowRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="forwardWorkflowRequestResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="writeWorkflowReadFlag">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="writeWorkflowReadFlagResponse">
+        <xsd:complexType />
+      </xsd:element>
+      <xsd:element name="getHendledWorkflowRequestCount">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getHendledWorkflowRequestCountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowTypeList">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in2" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in3" type="xsd:int" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in4" nillable="true" type="tns:ArrayOfString" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getCreateWorkflowTypeListResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfWorkflowBaseInfo" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webservices.workflow.weaver">
+      <xsd:complexType name="WorkflowRequestInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="canEdit" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="canView" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="createTime" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="creatorId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="creatorName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="currentNodeId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="currentNodeName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="forwardButtonName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="isNextFlow" nillable="true" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="lastOperateTime" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="lastOperatorName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="mainRequestLog" nillable="true" type="ns1:ArrayOfWorkflowRequestLog" />
+          <xsd:element minOccurs="0" name="messageType" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="mustInputRemark" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="needAffirmance" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="parallelRequestLog" nillable="true" type="ns1:ArrayOfRequestLog" />
+          <xsd:element minOccurs="0" name="receiveTime" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="rejectButtonName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="remark" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="requestId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="requestLevel" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="requestName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="status" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="subRequestLog" nillable="true" type="ns1:ArrayOfRequestLog" />
+          <xsd:element minOccurs="0" name="subbackButtonName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="submitButtonName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="subnobackButtonName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="workflowBaseInfo" nillable="true" type="ns1:WorkflowBaseInfo" />
+          <xsd:element minOccurs="0" name="workflowDetailTableInfos" nillable="true" type="ns1:ArrayOfWorkflowDetailTableInfo" />
+          <xsd:element minOccurs="0" name="workflowHtmlShow" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="workflowHtmlTemplete" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="workflowMainTableInfo" nillable="true" type="ns1:WorkflowMainTableInfo" />
+          <xsd:element minOccurs="0" name="workflowPhrases" nillable="true" type="tns:ArrayOfArrayOfString" />
+          <xsd:element minOccurs="0" name="workflowRequestLogs" nillable="true" type="ns1:ArrayOfWorkflowRequestLog" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WorkflowBaseInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="workflowId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="workflowName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="workflowTypeId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="workflowTypeName" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfRequestLog">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="RequestLog" nillable="true" type="ns1:RequestLog" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RequestLog">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="log" nillable="true" type="ns1:ArrayOfWorkflowRequestLog" />
+          <xsd:element minOccurs="0" name="logCount" type="xsd:int" />
+          <xsd:element minOccurs="0" name="requestId" nillable="true" type="xsd:int" />
+          <xsd:element minOccurs="0" name="requestName" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfWorkflowRequestLog">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="WorkflowRequestLog" nillable="true" type="ns1:WorkflowRequestLog" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WorkflowRequestLog">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="agentor" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="agentorDept" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="annexDocHtmls" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="id" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="nodeId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="nodeName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operateDate" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operateTime" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operateType" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operatorDept" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operatorId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operatorName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="operatorSign" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="receivedPersons" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="remark" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="remarkSign" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="signDocHtmls" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="signWorkFlowHtmls" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfWorkflowDetailTableInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="WorkflowDetailTableInfo" nillable="true" type="ns1:WorkflowDetailTableInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WorkflowDetailTableInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="tableDBName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="tableFieldName" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="tableTitle" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="workflowRequestTableRecords" nillable="true" type="ns1:ArrayOfWorkflowRequestTableRecord" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfWorkflowRequestTableRecord">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="WorkflowRequestTableRecord" nillable="true" type="ns1:WorkflowRequestTableRecord" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WorkflowRequestTableRecord">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="recordOrder" type="xsd:int" />
+          <xsd:element minOccurs="0" name="workflowRequestTableFields" nillable="true" type="ns1:ArrayOfWorkflowRequestTableField" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfWorkflowRequestTableField">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="WorkflowRequestTableField" nillable="true" type="ns1:WorkflowRequestTableField" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WorkflowRequestTableField">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="browserurl" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="edit" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="fieldDBType" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldFormName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldHtmlType" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldOrder" type="xsd:int" />
+          <xsd:element minOccurs="0" name="fieldShowName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldShowValue" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldType" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldValue" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="filedHtmlShow" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="mand" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="selectnames" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="selectvalues" nillable="true" type="tns:ArrayOfString" />
+          <xsd:element minOccurs="0" name="view" type="xsd:boolean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="WorkflowMainTableInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="requestRecords" nillable="true" type="ns1:ArrayOfWorkflowRequestTableRecord" />
+          <xsd:element minOccurs="0" name="tableDBName" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfWorkflowRequestInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="WorkflowRequestInfo" nillable="true" type="ns1:WorkflowRequestInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="RequestResultSet">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="dateCount" type="xsd:int" />
+          <xsd:element minOccurs="0" name="infos" nillable="true" type="ns1:ArrayOfWorkflowRequestInfo" />
+          <xsd:element minOccurs="0" name="pageNo" type="xsd:int" />
+          <xsd:element minOccurs="0" name="pageSize" type="xsd:int" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfWorkflowBaseInfo">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="WorkflowBaseInfo" nillable="true" type="ns1:WorkflowBaseInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfModifiedField">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ModifiedField" nillable="true" type="ns1:ModifiedField" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ModifiedField">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="fieldId" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="fieldValue" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="forwardWorkflowRequestResponse">
+    <wsdl:part name="parameters" element="tns:forwardWorkflowRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowTypeCountResponse">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowTypeCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProcessedWorkflowRequestCountResponse">
+    <wsdl:part name="parameters" element="tns:getProcessedWorkflowRequestCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="submitWorkflowRequestNoChangeDataRequest">
+    <wsdl:part name="parameters" element="tns:submitWorkflowRequestNoChangeData" />
+  </wsdl:message>
+  <wsdl:message name="doCreateWorkflowRequestResponse">
+    <wsdl:part name="parameters" element="tns:doCreateWorkflowRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="submitWorkflowRequestRequest">
+    <wsdl:part name="parameters" element="tns:submitWorkflowRequest" />
+  </wsdl:message>
+  <wsdl:message name="getProcessedWorkflowRequestListRequest">
+    <wsdl:part name="parameters" element="tns:getProcessedWorkflowRequestList" />
+  </wsdl:message>
+  <wsdl:message name="getLeaveDaysRequest">
+    <wsdl:part name="parameters" element="tns:getLeaveDays" />
+  </wsdl:message>
+  <wsdl:message name="getHendledWorkflowRequestListResponse">
+    <wsdl:part name="parameters" element="tns:getHendledWorkflowRequestListResponse" />
+  </wsdl:message>
+  <wsdl:message name="submitWorkflowRequestChangeDataRequest">
+    <wsdl:part name="parameters" element="tns:submitWorkflowRequestChangeData" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowRequest4splitResponse">
+    <wsdl:part name="parameters" element="tns:getWorkflowRequest4splitResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCCWorkflowRequestCountRequest">
+    <wsdl:part name="parameters" element="tns:getCCWorkflowRequestCount" />
+  </wsdl:message>
+  <wsdl:message name="forwardWorkflowRequestRequest">
+    <wsdl:part name="parameters" element="tns:forwardWorkflowRequest" />
+  </wsdl:message>
+  <wsdl:message name="getToDoWorkflowRequestResultSetRequest">
+    <wsdl:part name="parameters" element="tns:getToDoWorkflowRequestResultSet" />
+  </wsdl:message>
+  <wsdl:message name="getAllWorkflowRequestListResponse">
+    <wsdl:part name="parameters" element="tns:getAllWorkflowRequestListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCCWorkflowRequestListRequest">
+    <wsdl:part name="parameters" element="tns:getCCWorkflowRequestList" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowRequestRequest">
+    <wsdl:part name="parameters" element="tns:getWorkflowRequest" />
+  </wsdl:message>
+  <wsdl:message name="getHendledWorkflowRequestCountResponse">
+    <wsdl:part name="parameters" element="tns:getHendledWorkflowRequestCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCCWorkflowRequestResultSetRequest">
+    <wsdl:part name="parameters" element="tns:getCCWorkflowRequestResultSet" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowRequest4splitRequest">
+    <wsdl:part name="parameters" element="tns:getWorkflowRequest4split" />
+  </wsdl:message>
+  <wsdl:message name="doCreateWorkflowRequestByPartResponse">
+    <wsdl:part name="parameters" element="tns:doCreateWorkflowRequestByPartResponse" />
+  </wsdl:message>
+  <wsdl:message name="getAllWorkflowRequestCountRequest">
+    <wsdl:part name="parameters" element="tns:getAllWorkflowRequestCount" />
+  </wsdl:message>
+  <wsdl:message name="doCreateWorkflowRequestRequest">
+    <wsdl:part name="parameters" element="tns:doCreateWorkflowRequest" />
+  </wsdl:message>
+  <wsdl:message name="deleteRequestResponse">
+    <wsdl:part name="parameters" element="tns:deleteRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="getHendledWorkflowRequestResultSetResponse">
+    <wsdl:part name="parameters" element="tns:getHendledWorkflowRequestResultSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="getMyWorkflowRequestResultSetRequest">
+    <wsdl:part name="parameters" element="tns:getMyWorkflowRequestResultSet" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowListResponse">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getMyWorkflowRequestListResponse">
+    <wsdl:part name="parameters" element="tns:getMyWorkflowRequestListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProcessedWorkflowRequestListResponse">
+    <wsdl:part name="parameters" element="tns:getProcessedWorkflowRequestListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getAllWorkflowRequestResultSetRequest">
+    <wsdl:part name="parameters" element="tns:getAllWorkflowRequestResultSet" />
+  </wsdl:message>
+  <wsdl:message name="getHendledWorkflowRequestResultSetRequest">
+    <wsdl:part name="parameters" element="tns:getHendledWorkflowRequestResultSet" />
+  </wsdl:message>
+  <wsdl:message name="getLeaveDaysResponse">
+    <wsdl:part name="parameters" element="tns:getLeaveDaysResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProcessedWorkflowRequestCountRequest">
+    <wsdl:part name="parameters" element="tns:getProcessedWorkflowRequestCount" />
+  </wsdl:message>
+  <wsdl:message name="getCCWorkflowRequestResultSetResponse">
+    <wsdl:part name="parameters" element="tns:getCCWorkflowRequestResultSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProcessedWorkflowRequestResultSetRequest">
+    <wsdl:part name="parameters" element="tns:getProcessedWorkflowRequestResultSet" />
+  </wsdl:message>
+  <wsdl:message name="getCCWorkflowRequestListResponse">
+    <wsdl:part name="parameters" element="tns:getCCWorkflowRequestListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getToDoWorkflowRequestListRequest">
+    <wsdl:part name="parameters" element="tns:getToDoWorkflowRequestList" />
+  </wsdl:message>
+  <wsdl:message name="writeWorkflowReadFlagResponse">
+    <wsdl:part name="parameters" element="tns:writeWorkflowReadFlagResponse" />
+  </wsdl:message>
+  <wsdl:message name="getAllWorkflowRequestResultSetResponse">
+    <wsdl:part name="parameters" element="tns:getAllWorkflowRequestResultSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowNewFlagRequest">
+    <wsdl:part name="parameters" element="tns:getWorkflowNewFlag" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowTypeListRequest">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowTypeList" />
+  </wsdl:message>
+  <wsdl:message name="getHendledWorkflowRequestCountRequest">
+    <wsdl:part name="parameters" element="tns:getHendledWorkflowRequestCount" />
+  </wsdl:message>
+  <wsdl:message name="submitWorkflowRequestChangeDataResponse">
+    <wsdl:part name="parameters" element="tns:submitWorkflowRequestChangeDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="getToDoWorkflowRequestCountRequest">
+    <wsdl:part name="parameters" element="tns:getToDoWorkflowRequestCount" />
+  </wsdl:message>
+  <wsdl:message name="getMyWorkflowRequestResultSetResponse">
+    <wsdl:part name="parameters" element="tns:getMyWorkflowRequestResultSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="submitWorkflowRequestResponse">
+    <wsdl:part name="parameters" element="tns:submitWorkflowRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="getMyWorkflowRequestCountResponse">
+    <wsdl:part name="parameters" element="tns:getMyWorkflowRequestCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowNewFlagResponse">
+    <wsdl:part name="parameters" element="tns:getWorkflowNewFlagResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowRequestInfoResponse">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowRequestInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCCWorkflowRequestCountResponse">
+    <wsdl:part name="parameters" element="tns:getCCWorkflowRequestCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getMyWorkflowRequestCountRequest">
+    <wsdl:part name="parameters" element="tns:getMyWorkflowRequestCount" />
+  </wsdl:message>
+  <wsdl:message name="getMyWorkflowRequestListRequest">
+    <wsdl:part name="parameters" element="tns:getMyWorkflowRequestList" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowRequestLogsRequest">
+    <wsdl:part name="parameters" element="tns:getWorkflowRequestLogs" />
+  </wsdl:message>
+  <wsdl:message name="getAllWorkflowRequestCountResponse">
+    <wsdl:part name="parameters" element="tns:getAllWorkflowRequestCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="writeWorkflowReadFlagRequest">
+    <wsdl:part name="parameters" element="tns:writeWorkflowReadFlag" />
+  </wsdl:message>
+  <wsdl:message name="getHendledWorkflowRequestListRequest">
+    <wsdl:part name="parameters" element="tns:getHendledWorkflowRequestList" />
+  </wsdl:message>
+  <wsdl:message name="getToDoWorkflowRequestListResponse">
+    <wsdl:part name="parameters" element="tns:getToDoWorkflowRequestListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowRequestResponse">
+    <wsdl:part name="parameters" element="tns:getWorkflowRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteRequestRequest">
+    <wsdl:part name="parameters" element="tns:deleteRequest" />
+  </wsdl:message>
+  <wsdl:message name="getToDoWorkflowRequestResultSetResponse">
+    <wsdl:part name="parameters" element="tns:getToDoWorkflowRequestResultSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowTypeListResponse">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowTypeListResponse" />
+  </wsdl:message>
+  <wsdl:message name="getToDoWorkflowRequestCountResponse">
+    <wsdl:part name="parameters" element="tns:getToDoWorkflowRequestCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowCountResponse">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowListRequest">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowList" />
+  </wsdl:message>
+  <wsdl:message name="doCreateWorkflowRequestByPartRequest">
+    <wsdl:part name="parameters" element="tns:doCreateWorkflowRequestByPart" />
+  </wsdl:message>
+  <wsdl:message name="getAllWorkflowRequestListRequest">
+    <wsdl:part name="parameters" element="tns:getAllWorkflowRequestList" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowRequestInfoRequest">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowRequestInfo" />
+  </wsdl:message>
+  <wsdl:message name="getWorkflowRequestLogsResponse">
+    <wsdl:part name="parameters" element="tns:getWorkflowRequestLogsResponse" />
+  </wsdl:message>
+  <wsdl:message name="submitWorkflowRequestNoChangeDataResponse">
+    <wsdl:part name="parameters" element="tns:submitWorkflowRequestNoChangeDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowTypeCountRequest">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowTypeCount" />
+  </wsdl:message>
+  <wsdl:message name="getProcessedWorkflowRequestResultSetResponse">
+    <wsdl:part name="parameters" element="tns:getProcessedWorkflowRequestResultSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCreateWorkflowCountRequest">
+    <wsdl:part name="parameters" element="tns:getCreateWorkflowCount" />
+  </wsdl:message>
+  <wsdl:portType name="WorkflowServicePortType">
+    <wsdl:operation name="deleteRequest">
+      <wsdl:input name="deleteRequestRequest" message="tns:deleteRequestRequest" />
+      <wsdl:output name="deleteRequestResponse" message="tns:deleteRequestResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="submitWorkflowRequest">
+      <wsdl:input name="submitWorkflowRequestRequest" message="tns:submitWorkflowRequestRequest" />
+      <wsdl:output name="submitWorkflowRequestResponse" message="tns:submitWorkflowRequestResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getToDoWorkflowRequestCount">
+      <wsdl:input name="getToDoWorkflowRequestCountRequest" message="tns:getToDoWorkflowRequestCountRequest" />
+      <wsdl:output name="getToDoWorkflowRequestCountResponse" message="tns:getToDoWorkflowRequestCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="submitWorkflowRequestNoChangeData">
+      <wsdl:input name="submitWorkflowRequestNoChangeDataRequest" message="tns:submitWorkflowRequestNoChangeDataRequest" />
+      <wsdl:output name="submitWorkflowRequestNoChangeDataResponse" message="tns:submitWorkflowRequestNoChangeDataResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="doCreateWorkflowRequest">
+      <wsdl:input name="doCreateWorkflowRequestRequest" message="tns:doCreateWorkflowRequestRequest" />
+      <wsdl:output name="doCreateWorkflowRequestResponse" message="tns:doCreateWorkflowRequestResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowRequestInfo">
+      <wsdl:input name="getCreateWorkflowRequestInfoRequest" message="tns:getCreateWorkflowRequestInfoRequest" />
+      <wsdl:output name="getCreateWorkflowRequestInfoResponse" message="tns:getCreateWorkflowRequestInfoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllWorkflowRequestList">
+      <wsdl:input name="getAllWorkflowRequestListRequest" message="tns:getAllWorkflowRequestListRequest" />
+      <wsdl:output name="getAllWorkflowRequestListResponse" message="tns:getAllWorkflowRequestListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getMyWorkflowRequestList">
+      <wsdl:input name="getMyWorkflowRequestListRequest" message="tns:getMyWorkflowRequestListRequest" />
+      <wsdl:output name="getMyWorkflowRequestListResponse" message="tns:getMyWorkflowRequestListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowRequest">
+      <wsdl:input name="getWorkflowRequestRequest" message="tns:getWorkflowRequestRequest" />
+      <wsdl:output name="getWorkflowRequestResponse" message="tns:getWorkflowRequestResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedWorkflowRequestCount">
+      <wsdl:input name="getProcessedWorkflowRequestCountRequest" message="tns:getProcessedWorkflowRequestCountRequest" />
+      <wsdl:output name="getProcessedWorkflowRequestCountResponse" message="tns:getProcessedWorkflowRequestCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getLeaveDays">
+      <wsdl:input name="getLeaveDaysRequest" message="tns:getLeaveDaysRequest" />
+      <wsdl:output name="getLeaveDaysResponse" message="tns:getLeaveDaysResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowRequest4split">
+      <wsdl:input name="getWorkflowRequest4splitRequest" message="tns:getWorkflowRequest4splitRequest" />
+      <wsdl:output name="getWorkflowRequest4splitResponse" message="tns:getWorkflowRequest4splitResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getHendledWorkflowRequestList">
+      <wsdl:input name="getHendledWorkflowRequestListRequest" message="tns:getHendledWorkflowRequestListRequest" />
+      <wsdl:output name="getHendledWorkflowRequestListResponse" message="tns:getHendledWorkflowRequestListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowNewFlag">
+      <wsdl:input name="getWorkflowNewFlagRequest" message="tns:getWorkflowNewFlagRequest" />
+      <wsdl:output name="getWorkflowNewFlagResponse" message="tns:getWorkflowNewFlagResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getToDoWorkflowRequestList">
+      <wsdl:input name="getToDoWorkflowRequestListRequest" message="tns:getToDoWorkflowRequestListRequest" />
+      <wsdl:output name="getToDoWorkflowRequestListResponse" message="tns:getToDoWorkflowRequestListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowCount">
+      <wsdl:input name="getCreateWorkflowCountRequest" message="tns:getCreateWorkflowCountRequest" />
+      <wsdl:output name="getCreateWorkflowCountResponse" message="tns:getCreateWorkflowCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getHendledWorkflowRequestResultSet">
+      <wsdl:input name="getHendledWorkflowRequestResultSetRequest" message="tns:getHendledWorkflowRequestResultSetRequest" />
+      <wsdl:output name="getHendledWorkflowRequestResultSetResponse" message="tns:getHendledWorkflowRequestResultSetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getMyWorkflowRequestResultSet">
+      <wsdl:input name="getMyWorkflowRequestResultSetRequest" message="tns:getMyWorkflowRequestResultSetRequest" />
+      <wsdl:output name="getMyWorkflowRequestResultSetResponse" message="tns:getMyWorkflowRequestResultSetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCCWorkflowRequestList">
+      <wsdl:input name="getCCWorkflowRequestListRequest" message="tns:getCCWorkflowRequestListRequest" />
+      <wsdl:output name="getCCWorkflowRequestListResponse" message="tns:getCCWorkflowRequestListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowList">
+      <wsdl:input name="getCreateWorkflowListRequest" message="tns:getCreateWorkflowListRequest" />
+      <wsdl:output name="getCreateWorkflowListResponse" message="tns:getCreateWorkflowListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowRequestLogs">
+      <wsdl:input name="getWorkflowRequestLogsRequest" message="tns:getWorkflowRequestLogsRequest" />
+      <wsdl:output name="getWorkflowRequestLogsResponse" message="tns:getWorkflowRequestLogsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCCWorkflowRequestResultSet">
+      <wsdl:input name="getCCWorkflowRequestResultSetRequest" message="tns:getCCWorkflowRequestResultSetRequest" />
+      <wsdl:output name="getCCWorkflowRequestResultSetResponse" message="tns:getCCWorkflowRequestResultSetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCCWorkflowRequestCount">
+      <wsdl:input name="getCCWorkflowRequestCountRequest" message="tns:getCCWorkflowRequestCountRequest" />
+      <wsdl:output name="getCCWorkflowRequestCountResponse" message="tns:getCCWorkflowRequestCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllWorkflowRequestCount">
+      <wsdl:input name="getAllWorkflowRequestCountRequest" message="tns:getAllWorkflowRequestCountRequest" />
+      <wsdl:output name="getAllWorkflowRequestCountResponse" message="tns:getAllWorkflowRequestCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="submitWorkflowRequestChangeData">
+      <wsdl:input name="submitWorkflowRequestChangeDataRequest" message="tns:submitWorkflowRequestChangeDataRequest" />
+      <wsdl:output name="submitWorkflowRequestChangeDataResponse" message="tns:submitWorkflowRequestChangeDataResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedWorkflowRequestResultSet">
+      <wsdl:input name="getProcessedWorkflowRequestResultSetRequest" message="tns:getProcessedWorkflowRequestResultSetRequest" />
+      <wsdl:output name="getProcessedWorkflowRequestResultSetResponse" message="tns:getProcessedWorkflowRequestResultSetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getMyWorkflowRequestCount">
+      <wsdl:input name="getMyWorkflowRequestCountRequest" message="tns:getMyWorkflowRequestCountRequest" />
+      <wsdl:output name="getMyWorkflowRequestCountResponse" message="tns:getMyWorkflowRequestCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedWorkflowRequestList">
+      <wsdl:input name="getProcessedWorkflowRequestListRequest" message="tns:getProcessedWorkflowRequestListRequest" />
+      <wsdl:output name="getProcessedWorkflowRequestListResponse" message="tns:getProcessedWorkflowRequestListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllWorkflowRequestResultSet">
+      <wsdl:input name="getAllWorkflowRequestResultSetRequest" message="tns:getAllWorkflowRequestResultSetRequest" />
+      <wsdl:output name="getAllWorkflowRequestResultSetResponse" message="tns:getAllWorkflowRequestResultSetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="doCreateWorkflowRequestByPart">
+      <wsdl:input name="doCreateWorkflowRequestByPartRequest" message="tns:doCreateWorkflowRequestByPartRequest" />
+      <wsdl:output name="doCreateWorkflowRequestByPartResponse" message="tns:doCreateWorkflowRequestByPartResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getToDoWorkflowRequestResultSet">
+      <wsdl:input name="getToDoWorkflowRequestResultSetRequest" message="tns:getToDoWorkflowRequestResultSetRequest" />
+      <wsdl:output name="getToDoWorkflowRequestResultSetResponse" message="tns:getToDoWorkflowRequestResultSetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowTypeCount">
+      <wsdl:input name="getCreateWorkflowTypeCountRequest" message="tns:getCreateWorkflowTypeCountRequest" />
+      <wsdl:output name="getCreateWorkflowTypeCountResponse" message="tns:getCreateWorkflowTypeCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="forwardWorkflowRequest">
+      <wsdl:input name="forwardWorkflowRequestRequest" message="tns:forwardWorkflowRequestRequest" />
+      <wsdl:output name="forwardWorkflowRequestResponse" message="tns:forwardWorkflowRequestResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="writeWorkflowReadFlag">
+      <wsdl:input name="writeWorkflowReadFlagRequest" message="tns:writeWorkflowReadFlagRequest" />
+      <wsdl:output name="writeWorkflowReadFlagResponse" message="tns:writeWorkflowReadFlagResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getHendledWorkflowRequestCount">
+      <wsdl:input name="getHendledWorkflowRequestCountRequest" message="tns:getHendledWorkflowRequestCountRequest" />
+      <wsdl:output name="getHendledWorkflowRequestCountResponse" message="tns:getHendledWorkflowRequestCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowTypeList">
+      <wsdl:input name="getCreateWorkflowTypeListRequest" message="tns:getCreateWorkflowTypeListRequest" />
+      <wsdl:output name="getCreateWorkflowTypeListResponse" message="tns:getCreateWorkflowTypeListResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WorkflowServiceHttpBinding" type="tns:WorkflowServicePortType">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="deleteRequest">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.deleteRequest" />
+      <wsdl:input name="deleteRequestRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="deleteRequestResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="submitWorkflowRequest">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.submitWorkflowRequest" />
+      <wsdl:input name="submitWorkflowRequestRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="submitWorkflowRequestResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getToDoWorkflowRequestCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getToDoWorkflowRequestCount" />
+      <wsdl:input name="getToDoWorkflowRequestCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getToDoWorkflowRequestCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="submitWorkflowRequestNoChangeData">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.submitWorkflowRequestNoChangeData" />
+      <wsdl:input name="submitWorkflowRequestNoChangeDataRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="submitWorkflowRequestNoChangeDataResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="doCreateWorkflowRequest">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.doCreateWorkflowRequest" />
+      <wsdl:input name="doCreateWorkflowRequestRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="doCreateWorkflowRequestResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowRequestInfo">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCreateWorkflowRequestInfo" />
+      <wsdl:input name="getCreateWorkflowRequestInfoRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCreateWorkflowRequestInfoResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllWorkflowRequestList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getAllWorkflowRequestList" />
+      <wsdl:input name="getAllWorkflowRequestListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAllWorkflowRequestListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMyWorkflowRequestList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getMyWorkflowRequestList" />
+      <wsdl:input name="getMyWorkflowRequestListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMyWorkflowRequestListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowRequest">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getWorkflowRequest" />
+      <wsdl:input name="getWorkflowRequestRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getWorkflowRequestResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedWorkflowRequestCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getProcessedWorkflowRequestCount" />
+      <wsdl:input name="getProcessedWorkflowRequestCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getProcessedWorkflowRequestCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLeaveDays">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getLeaveDays" />
+      <wsdl:input name="getLeaveDaysRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getLeaveDaysResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowRequest4split">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getWorkflowRequest4split" />
+      <wsdl:input name="getWorkflowRequest4splitRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getWorkflowRequest4splitResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHendledWorkflowRequestList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getHendledWorkflowRequestList" />
+      <wsdl:input name="getHendledWorkflowRequestListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getHendledWorkflowRequestListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowNewFlag">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getWorkflowNewFlag" />
+      <wsdl:input name="getWorkflowNewFlagRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getWorkflowNewFlagResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getToDoWorkflowRequestList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getToDoWorkflowRequestList" />
+      <wsdl:input name="getToDoWorkflowRequestListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getToDoWorkflowRequestListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCreateWorkflowCount" />
+      <wsdl:input name="getCreateWorkflowCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCreateWorkflowCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHendledWorkflowRequestResultSet">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getHendledWorkflowRequestResultSet" />
+      <wsdl:input name="getHendledWorkflowRequestResultSetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getHendledWorkflowRequestResultSetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMyWorkflowRequestResultSet">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getMyWorkflowRequestResultSet" />
+      <wsdl:input name="getMyWorkflowRequestResultSetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMyWorkflowRequestResultSetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCCWorkflowRequestList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCCWorkflowRequestList" />
+      <wsdl:input name="getCCWorkflowRequestListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCCWorkflowRequestListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCreateWorkflowList" />
+      <wsdl:input name="getCreateWorkflowListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCreateWorkflowListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getWorkflowRequestLogs">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getWorkflowRequestLogs" />
+      <wsdl:input name="getWorkflowRequestLogsRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getWorkflowRequestLogsResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCCWorkflowRequestResultSet">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCCWorkflowRequestResultSet" />
+      <wsdl:input name="getCCWorkflowRequestResultSetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCCWorkflowRequestResultSetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCCWorkflowRequestCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCCWorkflowRequestCount" />
+      <wsdl:input name="getCCWorkflowRequestCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCCWorkflowRequestCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllWorkflowRequestCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getAllWorkflowRequestCount" />
+      <wsdl:input name="getAllWorkflowRequestCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAllWorkflowRequestCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="submitWorkflowRequestChangeData">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.submitWorkflowRequestChangeData" />
+      <wsdl:input name="submitWorkflowRequestChangeDataRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="submitWorkflowRequestChangeDataResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedWorkflowRequestResultSet">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getProcessedWorkflowRequestResultSet" />
+      <wsdl:input name="getProcessedWorkflowRequestResultSetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getProcessedWorkflowRequestResultSetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMyWorkflowRequestCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getMyWorkflowRequestCount" />
+      <wsdl:input name="getMyWorkflowRequestCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getMyWorkflowRequestCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProcessedWorkflowRequestList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getProcessedWorkflowRequestList" />
+      <wsdl:input name="getProcessedWorkflowRequestListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getProcessedWorkflowRequestListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllWorkflowRequestResultSet">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getAllWorkflowRequestResultSet" />
+      <wsdl:input name="getAllWorkflowRequestResultSetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getAllWorkflowRequestResultSetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="doCreateWorkflowRequestByPart">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.doCreateWorkflowRequestByPart" />
+      <wsdl:input name="doCreateWorkflowRequestByPartRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="doCreateWorkflowRequestByPartResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getToDoWorkflowRequestResultSet">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getToDoWorkflowRequestResultSet" />
+      <wsdl:input name="getToDoWorkflowRequestResultSetRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getToDoWorkflowRequestResultSetResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowTypeCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCreateWorkflowTypeCount" />
+      <wsdl:input name="getCreateWorkflowTypeCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCreateWorkflowTypeCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="forwardWorkflowRequest">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.forwardWorkflowRequest" />
+      <wsdl:input name="forwardWorkflowRequestRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="forwardWorkflowRequestResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="writeWorkflowReadFlag">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.writeWorkflowReadFlag" />
+      <wsdl:input name="writeWorkflowReadFlagRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="writeWorkflowReadFlagResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHendledWorkflowRequestCount">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getHendledWorkflowRequestCount" />
+      <wsdl:input name="getHendledWorkflowRequestCountRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getHendledWorkflowRequestCountResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCreateWorkflowTypeList">
+      <wsdlsoap:operation soapAction="urn:weaver.workflow.webservices.WorkflowService.getCreateWorkflowTypeList" />
+      <wsdl:input name="getCreateWorkflowTypeListRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCreateWorkflowTypeListResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WorkflowService">
+    <wsdl:port name="WorkflowServiceHttpPort" binding="tns:WorkflowServiceHttpBinding">
+      <wsdlsoap:address location="http://10.202.1.72:8900/services/WorkflowService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

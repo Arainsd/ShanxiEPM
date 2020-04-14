@@ -1,0 +1,172 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_ProjectCompany>
+@{
+    ViewBag.Title = "ProjectISP";
+}
+<div class="contentData">
+    <ul class="tab-list" style="margin-bottom:38px;">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP" class="active">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage">工期管理</li>
+        <li id="DetailMilestonePlan">工程节点</li>
+        <li id="ScheduleInfo">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video">视频集成</li>
+    </ul>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="280">类型</th>
+                    <th width="300">供应商</th>
+                    <th width="280">合同</th>
+                    <th width="280">委托书/订单</th>
+                    <th width="280">项目经理</th>
+                    @*<th width="100">项目负责人</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                 @if (Model != null && Model.Count() > 0)
+                 {
+                     foreach (var item in Model)
+                     {
+                        <tr>
+                            <td>@item.Type</td>
+                            <td>@item.CompanyName</td>
+                            <td>
+                                <div>
+                                    @if (!string.IsNullOrEmpty(item.ContractName))
+                                    {
+                                        var strCon = item.ContractName.Split(',');
+                                        foreach (var epm in strCon)
+                                        {
+                                            <span>@epm</span><br />
+                                        }
+                                    }
+                                </div>
+                             </td>
+                            <td>
+                                <div>
+                                    @if (!string.IsNullOrEmpty(item.OrderName))
+                                    {
+                                        var strCon = item.OrderName.Split(',');
+                                        foreach (var ept in strCon)
+                                        {
+                                            <span>@ept</span><br />
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            @*<td><span>@item.PM</span><br /><span>@item.PMPhone</span></td>
+                            <td><span>@item.LinkMan</span><br /> <span>@item.LinkPhone </span></td>*@
+                            <td>
+
+                                @if (!string.IsNullOrEmpty(item.PMId.ToString()))
+                                {
+                                    if (item.Type == "监理")
+                                    {
+                                        <span>总监：</span>
+                                    }
+                                    else if (item.Type == "设计费" || item.Type == "地勘" || item.Type == "危废处置")
+                                    {
+                                        <span>本省地区负责人：</span>
+                                    }
+                                    else if (item.Type == "土建" || item.Type == "内衬")
+                                    {
+                                        <span>项目经理：</span>
+                                    }
+                                    else
+                                    {
+                                        <span>本省地区负责人：</span>
+                                    }
+                                    <span class="PMName">@item.PM</span>
+                                    <span class="PMPhone">@item.PMPhone</span><br />
+                                }
+                                @if (!string.IsNullOrEmpty(item.LinkManId.ToString()))
+                                {
+                                    if (item.Type == "监理")
+                                    {
+                                        <span>现场监理：</span>
+                                    }
+                                    else if (item.Type == "设计费" || item.Type == "地勘" || item.Type == "危废处置")
+                                    {
+                                        <span>本省地区负责人：</span>
+                                    }
+                                    else if (item.Type == "土建" || item.Type == "内衬")
+                                    {
+                                        <span>现场负责人：</span>
+                                    }
+                                    else if (item.Type == "安装" || item.Type == "包装" || item.Type == "加固" || item.Type == "油罐清洗费")
+                                    {
+                                        <span>现场负责人：</span>
+                                    }
+                                    else
+                                    {
+                                        <span></span>
+                                    }
+                                    <span class="LinkManName">@item.LinkMan</span>
+                                    <span class="LinkManPhone">@item.LinkPhone</span><br />
+                                }
+                            </td>
+                        </tr>
+                     }
+                 }
+               
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $("#Detail").click(function () {
+            window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailApprovalConstitute").click(function () {
+            window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectMainPoint").click(function () {
+            window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailTimeManage").click(function () {
+            window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailMilestonePlan").click(function () {
+            window.location.href = 'DetailMilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectData").click(function () {
+            window.location.href = 'DetailProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#ScheduleInfo").click(function () {
+            window.location.href = 'ScheduleInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ContractInfo").click(function () {
+            window.location.href = 'ContractInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ChangeInfo").click(function () {
+            window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#VisaInfo").click(function () {
+            window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#QuestionInfo").click(function () {
+            window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailCrossingsManage").click(function () {
+            window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#video").click(function () {
+            window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+        });
+    });
+</script>
+

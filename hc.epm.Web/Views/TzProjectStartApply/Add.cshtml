@@ -1,0 +1,1155 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+
+
+@{
+    ViewBag.Title = "StartApply";
+    var ApplyTitle= ViewBag.ApplyTitle;
+}
+
+
+<style>
+    .file-wrap {
+        height: 35px;
+        width: 300px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .timer_p {
+        position: relative;
+    }
+
+    .timer_c {
+        position: absolute;
+        bottom: 16px;
+        left: 136px;
+    }
+    #start,#management {
+        display: inline-block;
+        padding: 6px 16px;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        color:#00ccff;
+        border-color:#00ccff;
+        background-color:#fff;
+        border-bottom:1px solid #00ccff;
+
+    }
+    .topBox {
+        border-bottom:2px solid #00ccff;
+    }
+    #start {
+        border-right:0;
+        margin-right:0;
+        background-color:#00ccff;
+        color:#fff;
+    }
+    #management {
+        border-left:0;
+        margin-left:-3px;
+        border-right-color :#00ccff;
+    }
+    #content {
+        margin-bottom:2px;
+       
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData" id="content">
+    <div class="topBox">
+        <button id="start" class="col-lg-pull-3">开工申请信息</button>
+        <button id="management">工期管理及外部手续</button> 
+    </div>
+</div>
+
+<div class="contentData" id="contentOne">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>申请人信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" id="ApplyTitle" name="ApplyTitle" class="form-control" value="@ViewBag.ApplyTitle" style="display:inline-block;width:88%;" placeholder="" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selproject" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择项目" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+
+                        </td>
+                        <td class="td-div">
+                            <div>@ViewBag.ApplyUserName</div>
+                            <input type="hidden" name="ApplyUserName" value="@ViewBag.ApplyUserName" />
+                            <input type="hidden" name="ApplyUserId" value="@ViewBag.ApplyUserId" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@(Convert.ToDateTime(ViewBag.StartApplyTime).ToString("yyyy-MM-dd"))</div>
+                            <input type="hidden" name="StartApplyTime" value="@(Convert.ToDateTime(ViewBag.StartApplyTime).ToString("yyyy-MM-dd"))" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@ViewBag.ApplyDepartment</div>
+                            <input type="hidden" id="ApplyDepartment" name="ApplyDepartment" value="@ViewBag.ApplyDepartment" />
+                            <input type="hidden" id="ApplyDepartmentId" name="ApplyDepartmentId" value="@ViewBag.ApplyDepartment" />
+
+                            <input type="hidden" name="ApplyCompanyId" value="@ViewBag.ApplyCompanyId" />
+                            <input type="hidden" name="ApplyCompanyName" value="@ViewBag.ApplyCompanyName" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ApplyTel" class="form-control" placeholder="请输入联系电话" />
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="ProjectName">---</div>
+                            <input type="hidden" name="ProjectName" id="ProjectName" />
+                            <input type="hidden" name="ProjectId" id="ProjectId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+
+                            <span class="font-black">设计规模或能力</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="请输入设计规模或能力" name="DesignScale" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目建设书批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="BuildNumber" class="form-control " placeholder="请输入项目建设书批准文号" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">估算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="InvestmentEstimateAmount" class="form-control " placeholder="请输入估算投资" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">可研报告批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="FeasibilityReport" class="form-control " placeholder="请输入可研报告批准文号" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或初步设计批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入批准文号" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">批复投资或概算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ReplyInvestmentAmount" class="form-control " placeholder="请输入投资金额" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">资金来源</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.Raw(Html.DropDownList("FundsSourceType", ViewBag.MoneySourceType as SelectList, null, new { @class = "form-control" }))
+                                <input type="hidden" id="FundsSource" name="FundsSource" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">当前计划投资情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="请输入当前计划投资情况" name="CurrentPlanned" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <input type="text" name="PlanStartTime" placeholder="" id="PlanStartTime" class="form-control input_unit" style="width:43%;" onClick="WdatePicker({ onpicked: function (dp) { $('#PlanEndTime').val(''); }})" />-
+                            <i onClick="WdatePicker({ el: 'PlanStartTime' })" class="iconfont">&#xe7e2;</i>
+                            <input type="text" name="PlanEndTime" placeholder="" id="PlanEndTime" class="form-control input_unit" style="width:43%;" onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'PlanStartTime\')}', })" />
+                            <i onClick="WdatePicker({ el: 'PlanEndTime' })" class="iconfont ">&#xe7e2;</i>
+
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期（天）</span>
+                        </td>
+                        <td class="td-div">
+                            <div><span class="BuildCycles">0</span></div>
+                            <input type="hidden" id="BuildCycle" name="BuildCycle" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程项目概况及主要工程内容和主要工程量</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ProjectSummary" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构及人员到位情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ProjectManagement" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设总体部署（或施工组织设计）编制情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="BuildDeploy" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">设计单位及图纸落实情况（主要设计单位、施工图交付计划情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="DesignUnits" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ConstructionName" type="text" name="ConstructionName" class="form-control " placeholder="请输入施工单位" />
+                                <input id="ConstructionUnitId" type="hidden" name="ConstructionUnitId" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">项目经理</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ProjectManager" type="text" name="ProjectManager" class="form-control " placeholder="请输入项目经理" />
+                                <input id="ProjectManagerId" type="hidden" name="ProjectManagerId" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（施工）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="ConstructionScore" class="form-control " placeholder="请输入考试成绩" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位落实及施工队伍、机具进场情况（主要施工单位、合同签订情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ConstructionSituation" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupervisionUnit" class="form-control " placeholder="请输入监理单位" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">监理工程师</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupervisionEngineer" class="form-control " placeholder="请输入监理工程师" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（监理）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupervisionScore" class="form-control " placeholder="请输入考试成绩" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位、质量监督部门落实情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="SupervisionSituation" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工前期准备情况（包括征地、拆迁、四通一平等）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ConstructionReady" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">主要设备、材料订货、到货情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="MainEquipment" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">环境影响、劳动安全卫生、消防等审批手续办理情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="Environment" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构（项目经理部或油库项目组）设立的文件、机构组成和职责分工各一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload1" name="XMGLJGWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMGLJGWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或项目初步设计批复文件复印件一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件2-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload2" name="LXPFWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LXPFWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">经审批的施工组织设计或工程建设总体部署一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件3-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload3" name="SGSJWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SGSJWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工进场人员名单及《安全教育合格证》（复印件）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件4-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload4" name="AQJYZWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="AQJYZWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">分公司与供应厂商确定的主要设备材料交付时间表一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件5-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload5" name="GYSWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GYSWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件6-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload6" name="HSEWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="HSEWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程形象进度计划表附于此页</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <script id="editor2" name="ProjectPlan" type="text/javascript" style="width:900px;margin:0 auto;"></script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>下一步信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="LeadershipName" id="LeadershipName" class="form-control" style="display:inline-block;width:66%;" placeholder="请选择分管领导" value="" />
+                                <input type="hidden" name="LeadershipId" id="LeadershipId" value="" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selLeader" class="btn" style="position: relative; z-index: 1;width: 150px;font-size: 16px;" value="选择分管领导" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            @*<input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+    <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.Submitted.GetValue().ToString())" />
+    <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />*@
+            <button type="button" class="btnNext layui-btn layui-btn-big" style="background-color:#6a6969">下一步</button>
+           <input type="button" id="return"  value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+
+        </div>
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+
+<div class="contentData" id="contentTwo"  style="display:none">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>工期管理</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black"> 实际停业时间：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ShutdownTime" type="text" name="ShutdownTime" class="form-control " placeholder="" value="@Model.ShutdownTime" />
+                                <input type="hidden" id="ShutdownTime" name="ShutdownTime" value="@Model.ShutdownTime" />
+                                </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划开工时间：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="PlanWorkStartTime" type="text" name="PlanWorkStartTime" class="form-control " placeholder="" value="@Model.PlanWorkStartTime" readonly/>
+                                <input type="hidden" id="PlanWorkStartTime" name="PlanWorkStartTime" value="@Model.PlanWorkStartTime" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划完工时间：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="PlanWorkEndTime" type="text" name="PlanWorkEndTime" class="form-control " placeholder="" value="@Model.PlanWorkEndTime" readonly/>
+                                <input type="hidden" id="PlanWorkEndTime" name="PlanWorkEndTime" value="@Model.PlanWorkEndTime" />
+
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">工期（天）：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="Limit" type="text" name="Limit" class="form-control " placeholder="" value="@Model.Limit" readonly/>
+                                <input type="hidden" id="Limit" name="Limit" value="@Model.Limit" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">计划开业时间：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="PlanOpeningTime" type="text" name="PlanOpeningTime" class="form-control " placeholder="" value="@Model.PlanOpeningTime"/>
+                                <input type="hidden" id="PlanOpeningTime" name="PlanOpeningTime" value="@Model.PlanOpeningTime" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划停业时长（天）：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="PlanShutdowLimit" type="text" name="PlanShutdowLimit" class="form-control " placeholder="" value="@Model.PlanShutdowLimit" readonly/>
+                                <input type="hidden" id="PlanShutdowLimit" name="PlanShutdowLimit" value="@Model.PlanShutdowLimit" />
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title"> 附件类型:</td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option value="value">公司上报文件和对初步设计预审意见（答复）</option>
+                                <option value="value">其他资料</option>
+                            </select>
+                            @*@Html.Raw(Html.DropDownList("FileType", ViewBag.enclosureType as SelectList, null, new { @class = "form-control sel" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />*@
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf"> 附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @*<tr>
+                        <td>1</td>
+                        <td>文件信息.doc </td>
+                        <td>其他信息</td>
+                        <td><a href="#" style="color:blue">删除</a></td>
+
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>文件信息.doc </td>
+                        <td>其他信息</td>
+                        <td><a href="#" style="color:blue">删除</a></td>
+
+                    </tr>*@
+                    @*@if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzAttachs)
+                        {
+
+                            <tr id="${obj.GuidId}">
+                                <td><span class="font-black">@item.Sort</span></td>
+                                <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                <td><span class="font-black">@item.TypeName</span></td>
+                                <td class="td-div" style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-type="@item.TypeName">
+                                </td>
+                            </tr>
+                        }
+                    }*@
+            </table>
+
+        </div>
+        <div class="module-div">
+            <h4>外部手续</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">外部手续：</span>
+                            </td>
+                        <td class="td-div" colspan="3">
+                            <input type="radio" name="account" value="1"  id="manage" /> 办理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                             <input type="radio" name="account" value="2"   id="nulls"  checked/> 无
+                        </td>
+                    </tr>
+                    <tr id="trs">
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">外部手续附件：</span>
+                        <td class="td-div" colspan="3">
+                            <div class="btn-upload">
+                                <input type="button" id="crossingsfileDataJson" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#6a6969!important;color:white;" value="上传附件" />
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            @*<input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+                <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.Submitted.GetValue().ToString())" />*@
+                <input type="button" id="save" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="return" lay-submit lay-filter="sub" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big "  />
+
+        </div>
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+
+<script src="~/ueditor/ueditor.config.js"></script>
+
+<script src="~/ueditor/ueditor.all.js"></script>
+<script>
+    //外部手续附件
+    //function divClick() {
+    //    debugger
+    //    var show = "";
+
+    //    var tra = document.getElementsByName("transact");
+    //    for (var i = 0; i < tra.length; i++) {
+    //        if (tra[i].checked) {
+    //            show = tra[i].value;
+    //        }
+
+    //        switch (show) {
+    //            case '1':
+    //                document.getElementById("trs").style.display = "block";
+    //                break;
+    //            case '2':
+    //                document.getElementById("trs").style.display = "none";
+    //                break;
+    //            default:
+    //                document.getElementById("trs").style.display = "none";
+    //                break;
+    //        }
+    //    }
+
+    //};
+    window.onload = function () {
+
+        $('#btnUploadFile1').click(function () {
+            //$("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile1").click();
+        });
+        //菜单切换
+        //$("#start").click(function () {
+        //    $("#contentOne").show();
+        //    $("#contentTwo").hide();
+        //    $(this).css({ "background-color": "#35a1d4", "color": "#fff" })
+        //    $("#management").css({ "background-color": "#fff", "color": "#35a1d4" })
+        //});
+        //$("#management").click(function () {
+        //    $("#contentTwo").show();
+        //    $("#contentOne").hide();
+        //    $(this).css({ "background-color": "#35a1d4", "color": "#fff" })
+        //    $("#start").css({ "background-color": "#fff", "color": "#35a1d4" })
+        //});
+        //下一步
+        //$("#next").click(function () {
+            //$("#contentTwo").show();
+            //$("#contentOne").hide();
+            //$("#management").css({ "background-color": "#00ccff", "color": "#fff" })
+            //$("#start").css({ "background-color": "#fff", "color": "#00ccff" })
+        //});
+
+        $("#return").click(function () {
+            layer.open({
+                title: '系统消息',
+                content: '您当前填写的信息不做保存，是否返回？',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    window.history.back();
+                }
+            });
+        });
+        //外部手续附件
+        $('input[type="radio"][name="account"]').on('change', function () {
+            var ThisIt = $(this);
+            if (ThisIt.val() == "manage") {
+                $('#trs').remove();
+            } else {
+                $('#trs').fadeIn();
+                $('#trs').find("input").val("");
+                $('#trs').find('select option:first').prop('selected', true);
+            }
+        });
+    }
+    ////富文本编辑器实例化
+    var ue = UE.getEditor('editor1', {
+        toolbars: [[//工具条
+          'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+       'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+       'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+       'strikethrough', 'superscript', 'subscript', 'removeformat',
+       'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+       'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+       'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]],
+        initialFrameHeight: 300
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor1", {
+
+    }).ready(function () {
+        var editor = UE.getEditor("editor1");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor1').find('iframe').contents();
+        var fn = function () {
+            $("#ProjectPlan").val(UE.getEditor("editor1").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+    ////富文本编辑器实例化
+    var ue = UE.getEditor('editor2', {
+        toolbars: [[//工具条
+          'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+       'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+       'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+       'strikethrough', 'superscript', 'subscript', 'removeformat',
+       'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+       'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+       'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]],
+        initialFrameHeight: 300
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor2", {
+
+    }).ready(function () {
+        var editor = UE.getEditor("editor2");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor2').find('iframe').contents();
+        var fn = function () {
+            $("#ProjectPlan").val(UE.getEditor("editor2").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+    //表单验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            ApplyTitle: {
+                validators: {
+                    notEmpty: {
+                        message: '标题不能为空'
+                    },
+                    stringLength: {
+                        max: 100,
+                        message: '项目名称不能超过100字符'
+                    },
+                }
+            },
+            ApplyTel: {
+                validators: {
+                    notEmpty: {
+                        message: '联系电话不能为空'
+                    },
+                    regexp: {
+                        regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                        message: "联系电话格式错误"
+                    }
+                }
+            },
+        }
+    });
+
+    //附件
+    var fileDataArray = [];
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.FilePath = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = column;
+                    fileDataArray.push(obj);
+                    if (data[i].ImageType == null) {
+                        var odiv = '<li><span>' + obj.Name + '</span><i class="layui-icon fileDel" data-val="' + obj.GuidId + '">&#x1006;</i></li>';
+                        $("#" + column).append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+    $(function () {
+        $('#btnUpload1,#btnUpload2,#btnUpload3,#btnUpload4,#btnUpload5,#btnUpload6').click(function () {
+            $("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+    });
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().remove();
+        var toremove = '';
+        var id = $(this).data("val");
+        //删除初始文件对应的值
+        fileDataArray = fileDataArray.filter(function (item, index, arr) {
+            return item.GuidId != id
+        })
+        fileDataJsonFile = JSON.stringify(fileDataArray);
+        $("#fileDataJsonFile").val(fileDataJsonFile);
+    });
+
+
+    //计划建设工期
+    $("#PlanStartTime,#PlanEndTime").blur(function () {
+        var strStartTime = $("#PlanStartTime").val();
+        var endTime = $("#PlanEndTime").val();
+        if (strStartTime == "" || endTime == "") {
+            $(".BuildCycles").text(0);
+            $("#BuildCycle").val(0);
+
+        }
+        else {
+            var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+            var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+            if (startNum > endNum) {
+                $(".BuildCycles").text(0);
+                $("#BuildCycle").val(0);
+            }
+            else {
+                //$("#BuildCycle").html(DateDiff(strStartTime, endTime) + 1);  //调用/计算两个日期天数差的函数，通用
+                $(".BuildCycles").text(DateDiff(strStartTime, endTime) + 1);
+                $("#BuildCycle").val(DateDiff(strStartTime, endTime) + 1);
+            }
+        }
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/StartApplyLIst";
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择项目
+        $("#selproject").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择人员"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectTzProjectProposal',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        var ApplyUserName = "@ViewBag.ApplyUserName";
+                        var StartApplyTime = "@ViewBag.StartApplyTime";
+                        //$("#ApplyTitle").val(obj.data[0].ProjectName + '-' + ApplyUserName + '-' + StartApplyTime);
+                        $("#ProjectName").val(obj.data[0].ProjectName);
+                        $(".ProjectName").text(obj.data[0].ProjectName);
+                        $("#ProjectId").val(obj.data[0].Id);
+                    
+
+                        var ApplyTitle = $("#ApplyTitle").val();
+                        $("#ApplyTitle").val(obj.data[0].ProjectName + ApplyTitle)
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //选择分管领导
+        $("#selLeader").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分管领导"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=2',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#LeadershipName").val(obj.data[0].Name);
+                        $("#LeadershipId ").val(obj.data[0].Id);
+                    
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //点击下一步
+        $('.btn-save').on('click', ".btnNext", function () {
+            var type = $("#Type").val();
+            $("#contentTwo").show();
+            $("#contentOne").hide();
+            $("#management").css({ "background-color": "#00ccff", "color": "#fff" });
+            $("#start").css({ "background-color": "#fff", "color": "#00ccff" })
+        });
+
+        
+
+        //数据提交
+        $(".save").click(function () {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("#mainForm").serialize();
+            //资金来源
+
+            $("#FundsSource").val($("#FundsSourceType option:selected").text());
+
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/TzProjectStartApply/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            } else {
+                layer.msg("操作失败", { time: 1000, icon: 2 });
+            }
+        });
+    });
+
+</script>
+
+
+
+

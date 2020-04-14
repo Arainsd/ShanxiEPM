@@ -1,0 +1,71 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+
+
+@{
+    ViewBag.Title = "查看管家账户授权书";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+
+    .audit-info .form-control-feedback {
+        right: -463px;
+    }
+
+    .audit-state .form-control-feedback {
+        right: 120px;
+    }
+</style>
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row" style="margin-right:0">
+        <form class="form-horizontal " id="mainForm">
+            <div class="col-lg-12 col-sm-12 mb25 row">
+                <div class="form-group col-lg-11 col-sm-11 ">
+                    <label class="col-lg-3 col-sm-3 control-label" style="width:30%;text-align:right">企业名称：</label>
+                    <div style="display:inline-block">
+                        <span class='text-link' style='margin-top:8px;display:inline-block'>@ViewBag.companyName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 row">
+                <div class="form-group col-lg-11 col-sm-11 ">
+                    <label class="col-lg-3 col-sm-3 control-label" style="width:30%;text-align:right">用户名：</label>
+                    <div style="display:inline-block">
+                        <span class='text-link' style='margin-top:8px;display:inline-block'>@ViewBag.userName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 row">
+                <div class="form-group col-lg-11 col-sm-11 ">
+                    <label class="col-lg-3 col-sm-3 control-label" style="width:30%;text-align:right">管家账户授权书：</label>
+                    <div style="display:inline-block;width:270px" class="files">
+                        
+                    </div>
+                    <div class="col-lg-5 col-sm-5"></div>
+                </div>
+            </div>
+        </form>
+        <div class="layui-form-item row btn-save" style="margin-top:55px">          
+            <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+        </div>
+    </div>
+</div>
+<script>
+    $.post("GetRandomToken", {}, function (tokenData) {
+        $.post("/Files/GetFileList", { tableName: "Base_User", Id: '@ViewBag.userId' }, function (data) {
+            if (data.Flag && data.Data.length > 0) {
+                $(".files").html("<span class='text-link' style='margin-top:8px;display:inline-block'>" + data.Data[0].Name + "<span>&nbsp;&nbsp;&nbsp;<span><a href='" + FileDownLoadURL + data.Data[0].FileGuid + "&token=" + tokenData + "' style='color:#1b98b8'>下载<a></span>");
+            } else if (!data.Flag) {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        })
+    })
+    //关闭
+    $(".cancel").on("click", function () {
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    })
+</script>

@@ -1,0 +1,195 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common
+@model List<Epm_SignInformation>
+@{
+    ViewBag.Title = "考勤记录";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">用户名 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="name" value="@ViewBag.name" autocomplete="off" placeholder="请输入用户名">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="@ViewBag.projectName" autocomplete="off" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">加油站名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="oilName" value="@ViewBag.oilName" autocomplete="off" placeholder="请输入加油站名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">签到时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="time" name="time" value="@ViewBag.time" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) {  } })" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'time' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endtime" name="endtime" value="@ViewBag.endtime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'time\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                @*<button type="button" id="add">新 增</button>*@
+                <button type="submit" style="margin-left: auto;">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th class="table-center">序号</th>
+                    <th class="table-center">用户名称</th>
+                    <th class="table-center">项目名称</th>
+                    <th class="table-center">加油站名称</th>
+                    <th class="table-center">岗位信息</th>
+                    <th class="table-center">签到时间</th>
+                    <th class="table-center">签到状态</th>
+                    <th class="table-center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                            <td class="table-center">@index</td>
+                            <td>@item.userName</td>
+                            <td>@item.projectName</td>
+                            <td>@item.gasstationName</td>
+                            <td>@item.jobInfo</td>
+                            <td>@(item.SignTime == null ? "" : Convert.ToDateTime(item.SignTime).ToString("yyyy-MM-dd"))</td>
+                            @*<td>@item.SignResult</td>*@
+                            <td>@(item.SignResult == SignRes.Fail.ToString() ? "签到失败" : item.SignResult == SignRes.Success.ToString() ? "签到成功" : item.SignResult == SignRes.Other.ToString() ? "其他" : item.SignResult == SignRes.NoNetwork.ToString() ? "没有网络" : item.SignResult == SignRes.NoFace.ToString() ? "没有识别到人脸" : "")</td>
+                            <td class="table-center">
+                                <a href="javascript:;" class="detail-link" data-itemid="@item.SId" title="详情">详情</a>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/User/GetSignList?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //查看
+    $("body").on("click", ".detail-link", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/User/GetSignDetail?id=" + id;
+    });
+</script>

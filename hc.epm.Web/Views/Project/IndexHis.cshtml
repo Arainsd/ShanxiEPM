@@ -1,0 +1,167 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<ProjectView>
+@{
+    ViewBag.Title = "历史项目列表";
+}
+<style>
+    .datalist tbody td:nth-child(3) span {
+        width: 30%;
+        display: inline-block;
+    }
+
+    .datalist tbody td:nth-child(3) b {
+        color: blue;
+    }
+
+    .layui-form {
+        height: 90px;
+        padding-top: 40px;
+    }
+
+    .layui-form-label {
+        width: 100px;
+    }
+</style>
+<div id="convert" style="width:360px;display:none">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">终结类型 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select name="modules" class="modules">
+                            <option value="@ProjectState.Failure.ToString()">终止</option>
+                            <option value="@ProjectState.Discard.ToString()">作废</option>
+                            <option value="@ProjectState.Invalid.ToString()">无效</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div><label>项目名称 : </label><input type="text" id="Name" name="Name" value="@ViewBag.name"></div>
+                <div>
+                    <label class="lableStar">开始时间 : </label><input type="text" id="startTime" name="startTime" onClick="WdatePicker({ el: 'startTime' })" value="@ViewBag.startTime">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div>
+                    <label class="lableStar">结束时间 : </label><input type="text" id="endTime" name="endTime" onClick="WdatePicker({ el: 'endTime' })" value="@ViewBag.endTime">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="submit" class="checkright" data-module="ConProject" data-right="Browse">查询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="40">序号</th>
+                    <th>项目编码</th>
+                    <th width="280">项目名称</th>
+                    <th>项目地区</th>
+                    <th width="120">项目周期</th>
+                    <th>项目资金(万元)</th>
+                    <th width="100">项目负责人<br>（电话）</th>
+                    <th width="90">施工负责人<br>（电话）</th>
+                    <th width="90">监理负责人<br>（电话）</th>
+                    <th width="70">状态</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.Code</td>
+                            <td style="text-align:left;padding-left:15px">
+                                <p>@item.Name</p>
+                                <span>计划进度 : <b>@item.ScheduleRatio</b></span>
+                                <span>质量监察 : <b>@item.QualityCheckNum</b></span>
+                                <span>安全监察 : <b>@item.SecurityCheckNum</b></span>
+                                <span>监理日志 : <b>@item.SupervisorLogNum</b></span>
+                                <span>问题 : <b>@item.ProblemNum</b></span>
+                            </td>
+                            <td>@item.Address</td>
+                            <td>起：@(item.StartDate == null ? "" : Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd"))<br>止：@(item.EndDate == null ? "" : Convert.ToDateTime(item.EndDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.Amount.ToString("#0")</td>
+                            <td>@item.ContactUserName<br>@item.ContactPhone</td>
+                            <td>@item.BuildUserName<br>@item.BuildPhone</td>
+                            <td>@item.SupervisorUserName<br>@item.SupervisorPhone</td>
+                            <td>@(((ProjectState)item.State).GetText())</td>
+                            <td>
+                                <a href="javascript:;" class="Detail checkright" data-module="ConProject" data-right="Info">查看</a>
+                                <a href="javascript:">导出</a>
+                            </td>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11">暂无数据</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+
+    </div>
+</div>
+<script>
+
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Project/IndexHis?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //查看
+        $(".Detail").on("click", function () {
+            var id = $(this).parents("tr").find($(".inputId")).data("id");
+            window.location.href = "/Project/Detail?id=" + id;
+        });
+
+
+
+    })
+</script>

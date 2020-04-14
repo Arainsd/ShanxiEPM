@@ -1,0 +1,1662 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+
+@model TzResearchAllView
+@{
+    ViewBag.Title = "踏勘上报";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProjectName</div>
+                            <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.TzProjectProposal.Id" />
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.NatureName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.StationName</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>@(Convert.ToDateTime(Model.TzProjectProposal.ApplyTime).ToString("yyyy-MM-dd"))</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.Position</div>
+                        </td>
+                        <td class="table_title">估计金额</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.PredictMoney.ToString("0.00") 万元</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司</td>
+                        <td colspan="3" align="left">
+                            <div>@Model.TzProjectProposal.CompanyName</div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目起始时间</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title" style="width: 193px;">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                起始时间
+                            </span>
+                        </td>
+                        <td class="td-div apply_time" colspan="3">
+                            <div class="form-group">                              
+                                @if (Model.TzResearchOfEngineering.ResearchStartDate != null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="StartDate" name="StartDate" style="width: 34%;" onClick="WdatePicker({ el: 'StartDate', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('StartDate', 'NOT_VALIDATED', null).validateField('StartDate') } })" value="@(Convert.ToDateTime(Model.TzResearchOfEngineering.ResearchStartDate).ToString("yyyy-MM-dd"))" placeholder="年/月/日" />
+                                    <i onClick="WdatePicker({ el: 'StartDate' })" style="bottom:25px;left:32%;" class="iconfont ">&#xe7e2;</i>
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control position_rel" id="StartDate" name="StartDate" style="width: 34%;" onClick="WdatePicker({ el: 'StartDate', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('StartDate', 'NOT_VALIDATED', null).validateField('StartDate') } })" value="@(Convert.ToDateTime(Model.TzProjectProposal.ApplyTime).ToString("yyyy-MM-dd"))" placeholder="年/月/日" />
+                                    <i onClick="WdatePicker({ el: 'StartDate' })" style="bottom:25px;left:32%;" class="iconfont ">&#xe7e2;</i>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>投资方面调研</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                调研人
+                            </span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" id="InvestResearchUserName" name="InvestResearchUserName" class="form-control" style="display:inline-block;width:75%;" placeholder="请选择调研人" readonly value="@Model.TzResearchOfInvestment.ResearchUserName" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btnUploadFile btn  form-control selectResearchUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择人员" />
+                                </div>
+                                <input type="hidden" name="InvestResearchUserId" id="InvestResearchUserId" value="@Model.TzResearchOfInvestment.ResearchUserId">
+                            </div>
+                        </td>
+                        <td><div class="color_red text_lf">调研人必须为省公司人员</div></td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>职务</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("InvestJobCodes", ViewBag.InvestJobCode as SelectList, null, new { @class = "form-control" })
+                                <input id="InvestJobCode" type="hidden" name="InvestJobCode" value="@Model.TzResearchOfInvestment.JobCode" />
+                                <input id="InvestJobName" type="hidden" name="InvestJobName" value="@Model.TzResearchOfInvestment.JobName" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>详细地理位置</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="Address" class="form-control" placeholder="请填写详细地理位置" value="@Model.TzResearchOfInvestment.Address" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>周边环境</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("Environments", ViewBag.EnvironmentTypeCode as SelectList, null, new { @class = "form-control" })
+                                <input id="EnvironmentTypeCode" type="hidden" name="EnvironmentTypeCode" value="@Model.TzResearchOfInvestment.EnvironmentTypeCode" />
+                                <input id="EnvironmentTypeName" type="hidden" name="EnvironmentTypeName" value="@Model.TzResearchOfInvestment.EnvironmentTypeName" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>土地性质</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("LandNatureCodes", ViewBag.LandNatureCode as SelectList, null, new { @class = "form-control" })
+                                <input id="LandNatureCode" type="hidden" name="LandNatureCode" value="@Model.TzResearchOfInvestment.LandNatureCode" />
+                                <input id="LandNatureName" type="hidden" name="LandNatureName" value="@Model.TzResearchOfInvestment.LandNatureName" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>土地用途</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("LandUseCodes", ViewBag.LandUseCode as SelectList, null, new { @class = "form-control" })
+                                <input id="LandUseCode" type="hidden" name="LandUseCode" value="@Model.TzResearchOfInvestment.LandUseCode" />
+                                <input id="LandUseName" type="hidden" name="LandUseName" value="@Model.TzResearchOfInvestment.LandUseName" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>土地面积</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="LandArea" class="form-control input_unit" placeholder="请输入土地面积" value="@(Model.TzResearchOfInvestment.LandArea.ToString("0.00"))" />平米<i style="color:white;">/</i>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>土地形状（临街长度）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="LandShape" placeholder="请输入土地形状" class="form-control input_unit" value="@(Model.TzResearchOfInvestment.LandShape.ToString("0.00"))" />米
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>是否符合地区建站规划</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @if (Model.TzResearchOfInvestment.IsMeetAreaPlan == null)
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsMeetAreaPlan" value="SFFH1" checked />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsMeetAreaPlan" value="SFFH2" />否
+                                    </label>
+                                }
+                                else
+                                {
+                                    if (Model.TzResearchOfInvestment.IsMeetAreaPlan == "SFFH1")
+                                    {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsMeetAreaPlan" value="SFFH1" checked />是
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsMeetAreaPlan" value="SFFH2" />否
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsMeetAreaPlan" value="SFFH1" />是
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsMeetAreaPlan" value="SFFH2" checked />否
+                                        </label>
+                                    }
+
+                                }
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>周边车辆保有量</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="AroundCarCount" placeholder="请输入周边车辆保有量" class="form-control input_unit" value="@(Model.TzResearchOfInvestment.AroundCarCount.ToString("0"))" />辆
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>平均日车流量</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DailyTraffic" placeholder="请输入平均日车流量" class="form-control input_unit" value="@(Model.TzResearchOfInvestment.DailyTraffic.ToString("0"))" />辆/日
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>成品油销量测算</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="OilSaleTotal" placeholder="请输入成品油销量测算" class="form-control input_unit" value="@(Model.TzResearchOfInvestment.OilSaleTotal.ToString("0.00"))" />吨/日
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>柴汽比</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DieselGasolineRatio" class="form-control" placeholder="请输入柴汽比" value="@(Model.TzResearchOfInvestment.DieselGasolineRatio)" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>土地价格</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="LandPrice" placeholder="请输入土地价格" class="form-control input_unit" value="@(Model.TzResearchOfInvestment.LandPrice.ToString("0.00"))" />万元/亩
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>气销量测算</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="GasSaleTotal" placeholder="请输入气销量测算" class="form-control input_unit" value="@(Model.TzResearchOfInvestment.GasSaleTotal.ToString("0.00"))" />千方/日
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>法律方面调研</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                调研人
+                            </span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" name="LawResearchUserName" class="form-control" style="display:inline-block;width:75%;" placeholder="请选择调研人" readonly value="@Model.TzResearchOfLaw.ResearchUserName" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btnUploadFile btn  form-control selectResearchUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择人员" />
+                                </div>
+                                <input type="hidden" name="LawResearchUserId" id="LawResearchUserId" value="@Model.TzResearchOfLaw.ResearchUserId">
+                            </div>
+                        </td>
+                        <td><div class="color_red text_lf">调研人必须为省公司人员</div></td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>职务</span>
+                        </td>
+                        <td class="td-div">
+                            @Html.DropDownList("LawJobCodes", ViewBag.LawJobCode as SelectList, null, new { @class = "form-control" })
+                            <input id="LawJobCode" type="hidden" name="LawJobCode" value="@Model.TzResearchOfLaw.JobCode" />
+                            <input id="LawJobName" type="hidden" name="LawJobName" value="@Model.TzResearchOfLaw.JobName" />
+                        </td>
+                        <td class="table_title">
+                            <span>产权清晰</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfLaw.PropertyRights != null)
+                            {
+                                if (Model.TzResearchOfLaw.PropertyRights == "CQQX1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="PropertyRights" value="CQQX1" checked />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="PropertyRights" value="CQQX2" />否
+                                    </label>
+                                }
+                                else if (Model.TzResearchOfLaw.PropertyRights == "CQQX2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="PropertyRights" value="CQQX1" />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="PropertyRights" value="CQQX2" checked />否
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="PropertyRights" value="CQQX1" checked />是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="PropertyRights" value="CQQX2" />否
+                                </label>
+                            }
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>资产主体资格</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfLaw.AssetSubject != null)
+                            {
+                                if (Model.TzResearchOfLaw.AssetSubject == "ZCZT1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetSubject" value="ZCZT1" checked />符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetSubject" value="ZCZT2" />不符合
+                                    </label>
+                                }
+                                else if (Model.TzResearchOfLaw.AssetSubject == "ZCZT2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetSubject" value="ZCZT1" />符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetSubject" value="ZCZT2" checked />不符合
+                                    </label>
+
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="AssetSubject" value="ZCZT1" checked />符合
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="AssetSubject" value="ZCZT2" />不符合
+                                </label>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span>纠纷判断</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfLaw.DisputesJudgment != null)
+                            {
+                                if (Model.TzResearchOfLaw.DisputesJudgment == "JFPD2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="DisputesJudgment" value="JFPD1" />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="DisputesJudgment" value="JFPD2" checked />无
+                                    </label>
+                                }
+                                else if (Model.TzResearchOfLaw.DisputesJudgment == "JFPD1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="DisputesJudgment" value="JFPD1" checked />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="DisputesJudgment" value="JFPD2" />无
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="DisputesJudgment" value="JFPD1" />有
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="DisputesJudgment" value="JFPD2" checked />无
+                                </label>
+                            }
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>证照类型</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+
+                            @if (Model.TzResearchOfLaw.License != null)
+                            {
+                                foreach (var item in ViewBag.License)
+                                {
+                                    if (Array.IndexOf(Model.TzResearchOfLaw.License.Split(','), item.No) == -1)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="Licenses" value="@item.No" />@item.Name
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="Licenses" value="@item.No" checked />@item.Name
+                                        </label>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var item in ViewBag.License)
+                                {
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="Licenses" value="@item.No" />@item.Name
+                                    </label>
+                                }
+                            }
+                            <input type="hidden" name="License" id="License" value="@Model.TzResearchOfLaw.License" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>工程方面调研</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                调研人
+                            </span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" name="ReaearchUserName" class="form-control" style="display:inline-block;width:75%;" placeholder="请选择调研人" readonly value="@Model.TzResearchOfEngineering.ReaearchUserName" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btnUploadFile btn  form-control selectResearchUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择人员" />
+
+                                </div>
+                                <input type="hidden" name="ResearchUserId" id="ResearchUserId" value="@Model.TzResearchOfEngineering.ResearchUserId" />
+                            </div>
+                        </td>
+                        <td><div class="color_red text_lf">调研人必须为省公司人员</div></td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>职务</span>
+                        </td>
+                        <td class="td-div">
+                            @Html.DropDownList("JobCodes", ViewBag.JobCode as SelectList, null, new { @class = "form-control" })
+                            <input id="JobCode" type="hidden" name="JobCode" value="@Model.TzResearchOfEngineering.JobCode" />
+                            <input id="JobName" type="hidden" name="JobName" value="@Model.TzResearchOfEngineering.JobName" />
+                        </td>
+                        <td class="table_title">
+                            <span>形象工程符合行业规划</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfEngineering.IndustryPlanning != null)
+                            {
+                                if (Model.TzResearchOfEngineering.IndustryPlanning == "XINGXGC1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC1" checked />符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC2" />基本符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC3" />不符合
+                                    </label>
+                                }
+                                else if (Model.TzResearchOfEngineering.IndustryPlanning == "XINGXGC2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC1" />符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC2" checked />基本符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC3" />不符合
+                                    </label>
+                                }
+                                else if (Model.TzResearchOfEngineering.IndustryPlanning == "XINGXGC3")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC1" />符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC2" />基本符合
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IndustryPlanning" value="XINGXGC3" checked />不符合
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="IndustryPlanning" value="XINGXGC1" checked />符合
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="IndustryPlanning" value="XINGXGC2" />基本符合
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="IndustryPlanning" value="XINGXGC3" />不符合
+                                </label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text_lf" style="background-color:#D9D8D8;font-weight:600;">
+                            设备管理
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>罩棚</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="Shelter" placeholder="" class="form-control input_unit" value="@(Model.TzResearchOfEngineering.Shelter.ToString("0.00"))" />平
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>加油机</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="MachineOfOilStage" placeholder="" class="form-control input_unit" style="width:43%;" value="@(Model.TzResearchOfEngineering.MachineOfOilStage.ToString("0"))" />台
+                                <input type="text" name="MachineOfOil" placeholder="" class="form-control input_unit" style="width:43%;" value="@(Model.TzResearchOfEngineering.MachineOfOil.ToString("0"))" />枪
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>加气机</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="MachineOfGasStage" placeholder="" class="form-control input_unit" style="width:43%;" value="@(Model.TzResearchOfEngineering.MachineOfGasStage.ToString("0"))" />台
+                                <input type="text" name="MachineOfGas" placeholder="" class="form-control input_unit" style="width:43%;" value="@(Model.TzResearchOfEngineering.MachineOfGas.ToString("0"))" />枪
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>油罐</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="OilTank" placeholder="请输入油罐" class="form-control input_unit" value="@(Model.TzResearchOfEngineering.OilTank.ToString("0.00"))" />方
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>站房</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="StationRoon" placeholder="请输入站房" class="form-control input_unit" value="@(Model.TzResearchOfEngineering.StationRoon.ToString("0.00"))" />平
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>储气井</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="GasWells" placeholder="请输入储气井" class="form-control input_unit" value="@(Model.TzResearchOfEngineering.GasWells.ToString("0.00"))" />方
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>信息化系统</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfEngineering.HasInformationSystem != null)
+                            {
+
+
+                                if (Model.TzResearchOfEngineering.HasInformationSystem == "XXXT1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasInformationSystem" value="XXXT1" checked />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasInformationSystem" value="XXXT2" />无
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasInformationSystem" value="XXXT1" />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasInformationSystem" value="XXXT2" checked />无
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="HasInformationSystem" value="XXXT1" checked />有
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="HasInformationSystem" value="XXXT2" />无
+                                </label>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span>改造必要性</span>
+                        </td>
+                        <td class="td-div">
+                            @{
+
+                                foreach (var item in ViewBag.ReformCode)
+                                {
+                                    if (Model.TzResearchOfEngineering.ReformCode != null)
+                                    {
+                                        if (Model.TzResearchOfEngineering.ReformCode == item.No)
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ReformCode" data-code="ReformCode" autocomplete="off" value="@item.No" checked>
+                                                <span>@item.Name</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ReformCode" data-code="ReformCode" autocomplete="off" value="@item.No">
+                                                <span>@item.Name</span>
+                                            </label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (item.No == "GZBYX1")
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ReformCode" data-code="ReformCode" autocomplete="off" value="@item.No" checked>
+                                                <span>@item.Name</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ReformCode" data-code="ReformCode" autocomplete="off" value="@item.No">
+                                                <span>@item.Name</span>
+                                            </label>
+                                        }
+                                    }
+                                }
+                            }
+                            <input type="hidden" id="ReformName" name="ReformName" value="" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>经营方面调研</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                调研人
+                            </span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" name="ManageReaearchUserName" class="form-control" style="display:inline-block;width:75%;" placeholder="请选择调研人" readonly value="@Model.TzResearchOfManagement.ReaearchUserName" />
+                                <div class="btn-upload">
+                                    <input type="button" class="selectResearchUser btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择人员" />
+                                </div>
+                                <input type="hidden" name="ManageResearchUserId" id="ManageResearchUserId" value="@Model.TzResearchOfManagement.ResearchUserId" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="color_red text_lf">调研人必须为省公司人员</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>职务</span>
+                        </td>
+                        <td class="td-div">
+                            @Html.DropDownList("ManageJobCodes", ViewBag.ManageJobCode as SelectList, null, new { @class = "form-control" })
+                            <input id="ManageJobCode" type="hidden" name="ManageJobCode" value="@Model.TzResearchOfManagement.JobCode" />
+                            <input id="ManageJobName" type="hidden" name="ManageJobName" value="@Model.TzResearchOfManagement.JobName" />
+                        </td>
+                        <td class="table_title">
+                            <span>当前成品油日销量</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="CurrentSalesVolume" class="form-control input_unit" placeholder="请输入当前成品油日销量" value="@(Model.TzResearchOfManagement.CurrentSalesVolume.ToString("0.00"))" />吨/日
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>油运品距</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="CargoDistance" class="form-control input_unit" placeholder="请输入油运品距" value="@Model.TzResearchOfManagement.CargoDistance.ToString("0.00")" />公里
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>当前气日销量</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="GasDailySales" class="form-control input_unit" placeholder="请输入当前气日销量" value="@Model.TzResearchOfManagement.GasDailySales.ToString("0.00")" />千方/日
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>特殊销售手段</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfManagement.SalesMeans != null)
+                            {
+                                if (Model.TzResearchOfManagement.SalesMeans == "TSSD1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesMeans" value="TSSD1" checked />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesMeans" value="TSSD2" />无
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesMeans" value="TSSD1" />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesMeans" value="TSSD2" checked />无
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="SalesMeans" value="TSSD1" checked />有
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SalesMeans" value="TSSD2" />无
+                                </label>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">销量可实现性</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfManagement.SalesRealizability != null)
+                            {
+                                if (Model.TzResearchOfManagement.SalesRealizability == "XIAOLKSX1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesRealizability" value="XIAOLKSX1" checked />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesRealizability" value="XIAOLKSX2" />否
+                                    </label>}
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesRealizability" value="XIAOLKSX1" />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SalesRealizability" value="XIAOLKSX2" checked />否
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="SalesRealizability" value="XIAOLKSX1" checked />是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SalesRealizability" value="XIAOLKSX2" />否
+                                </label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">油品来源</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" style="resize:none;" name="SourceOfOil" placeholder="请输入油品来源">@Model.TzResearchOfManagement.SourceOfOil</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>安全方面调研</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">
+                                调研人
+                            </span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" name="SafeReaearchUserName" class="form-control" style="display:inline-block;width:75%;" placeholder="请选择调研人" readonly value="@Model.TzResearchOfSecurity.ReaearchUserName" />
+                                <div class="btn-upload">
+                                    <input type="button" class="selectResearchUser btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择人员" />
+                                </div>
+                                <input type="hidden" name="SafeResearchUserId" id="SafeResearchUserId" value="@Model.TzResearchOfSecurity.ResearchUserId" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="color_red text_lf">调研人必须为省公司人员</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>职务</span>
+                        </td>
+                        <td class="td-div">
+                            @Html.DropDownList("SafeJobCodes", ViewBag.SafeJobCode as SelectList, null, new { @class = "form-control" })
+                            <input id="SafeJobCode" type="hidden" name="SafeJobCode" value="@Model.TzResearchOfSecurity.JobCode" />
+                            <input id="SafeJobName" type="hidden" name="SafeJobName" value="@Model.TzResearchOfSecurity.JobName" />
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>环保问题</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfSecurity.Environmental != null)
+                            {
+                                if (Model.TzResearchOfSecurity.Environmental == "HBWT1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="Environmental" value="HBWT1" checked />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="Environmental" value="HBWT2" />无
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="Environmental" value="HBWT1" />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="Environmental" value="HBWT2" checked />无
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="Environmental" value="HBWT1" />有
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Environmental" value="HBWT2" checked />无
+                                </label>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span>隐患问题</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.TzResearchOfSecurity.hiddenDanger != null)
+                            {
+                                if (Model.TzResearchOfSecurity.hiddenDanger == "YHWT1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hiddenDanger" value="YHWT1" checked />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hiddenDanger" value="YHWT2" />无
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hiddenDanger" value="YHWT1" />有
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="hiddenDanger" value="YHWT2" checked />无
+                                    </label>
+                                }
+
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="hiddenDanger" value="YHWT1" />有
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="hiddenDanger" value="YHWT2" checked />无
+                                </label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>改进措施</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" style="resize:none;" name="ImprovementMeasures" placeholder="请输入改进措施">@Model.TzResearchOfSecurity.ImprovementMeasures</textarea>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>信息方面调研</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title" style="width:17.3%;">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                调研人
+                            </span>
+                        </td>
+                        <td class="td-div" colspan="2" style="width: 50.3%;">
+                            <div class="form-group">
+                                <input type="text" name="InfoReaearchUserName" class="form-control" style="display:inline-block;width:75%;" placeholder="请选择调研人" readonly value="@Model.TzResearchOfInformation.ReaearchUserName" />
+                                <div class="btn-upload">
+                                    <input type="button" class="selectResearchUser btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择人员" />
+                                </div>
+                                <input type="hidden" name="InfoResearchUserId" id="InfoResearchUserId" value="@Model.TzResearchOfInformation.ResearchUserId" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="color_red text_lf">调研人必须为省公司人员</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>职务</span>
+                        </td>
+                        <td class="td-div" style="width: 32.7%;">
+                            <div class="form-group">
+                                @Html.DropDownList("InfoJobCodes", ViewBag.InfoJobCode as SelectList, null, new { @class = "form-control" })
+                                <input id="InfoJobCode" type="hidden" name="InfoJobCode" value="@Model.TzResearchOfInformation.JobCode" />
+                                <input id="InfoJobName" type="hidden" name="InfoJobName" value="@Model.TzResearchOfInformation.JobName" />
+
+                            </div>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>改进措施</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" style="resize:none;" name="Improvement" placeholder="请输入改进措施">@Model.TzResearchOfInformation.Improvement</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:300px;">附件类型</td>
+                        <td class="td-div" style="width: 570px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.AnnexType as SelectList, null, new { @class = "form-control sel" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title text_lf" colspan="3">
+                            <div class="btn-upload" style="display:inline-block">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                        </td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">附件归属</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                    @if (Model.TzResearchOfInformation.TzAttachs != null && Model.TzResearchOfInformation.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzResearchOfInformation.TzAttachs)
+                        {
+                            <tr>
+                                <td><span class='sort'>@item.Sort</span></td>
+                                <td class="text_lf"><span>@item.Name</span></td>
+                                <td><span>@item.TypeName</span></td>
+                                <td>
+                                    @if (item.Uploadtype == 1)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                        </label>
+                                    }
+                                    else if (item.Uploadtype == 2)
+                                    {
+                                        if (item.FilesSize < ConstString.TzMaxFileSize())
+                                        {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                            </label>
+
+                                        }
+                                        else {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                            </label>
+                                        }
+                                    }
+                                </td>
+                                <td style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.Submitted.GetValue().ToString())" />
+            <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            <input type="hidden" name="State" id="State" />
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $("#Cancel").on("click", function () {
+        window.location.href = "/TzResearch/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                     </label>
+                                    `
+                        var html2 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                     </label>
+                                   `
+                        var html = (fileObj.size > tzmaxfilesize) ? html1 : html2;
+
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span class ='sort'> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td>${html}</td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typeno="${obj.TypeNo}" data-typename="${obj.TypeName}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择调研人
+        $(".selectResearchUser").click(function () {
+            var that = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择调研人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        that.parents().prev().val(obj.data[0].Name);
+                        that.parents().next().val(obj.data[0].Id);
+                        var nameId = that.parents().prev().attr("name");
+                        //验证
+                        $('#mainForm').data('bootstrapValidator').updateStatus(nameId, 'NOT_VALIDATED', null).validateField(nameId);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                //证照类型数据
+                var LicenseArr = [];
+                $("input[name=Licenses]:checked").each(function (i) {
+                    LicenseArr.push($(this).val());
+                });
+                //附件数据
+                var fileDataArray = [];
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    var uploadtype = 0;
+                    var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+
+                    if (uploadtype1 == true) {
+                        uploadtype = 1;
+                    }
+                    if (uploadtype1 == false) {
+                        uploadtype = 2;
+                    }
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $(item).find("#updata").data("typeno"),
+                        TypeName: $(item).find("#updata").data("typename"),
+                        Sort: index + 1,
+                        Uploadtype: uploadtype
+                    })
+                });
+
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+
+                //投资方面调研
+                //职务
+                if ($("#InvestJobCodes option:selected").val() != "") {
+                    $("#InvestJobName").val($("#InvestJobCodes option:selected").text());
+                    $("#InvestJobCode").val($("#InvestJobCodes option:selected").val());
+                }
+                //周边环境
+                if ($("#Environments option:selected").val() != "") {
+                    $("#EnvironmentTypeCode").val($("#Environments option:selected").val());
+                    $("#EnvironmentTypeName").val($("#Environments option:selected").text());
+                }
+                //土地性质
+                if ($("#LandNatureCodes option:selected").val() != "") {
+                    $("#LandNatureCode").val($("#LandNatureCodes option:selected").val());
+                    $("#LandNatureName").val($("#LandNatureCodes option:selected").text());
+                }
+                //土地用途
+                if ($("#LandUseCodes option:selected").val() != "") {
+                    $("#LandUseCode").val($("#LandUseCodes option:selected").val());
+                    $("#LandUseName").val($("#LandUseCodes option:selected").text());
+                }
+                //是否符合地区建站规划
+                // $("#IsMeetAreaPlan").val($("input[name=IsMeetAreaPlans]:checked").val());
+
+                //法律方面调研
+                //职务
+                if ($("#LawJobCodes option:selected").val() != "") {
+                    $("#LawJobName").val($("#LawJobCodes option:selected").text());
+                    $("#LawJobCode").val($("#LawJobCodes option:selected").val());
+                }
+
+                //证照类型
+                $("#License").val(LicenseArr);
+
+                //工程方面调研
+                if ($("#JobCodes option:selected").val() != "") {
+                    $("#JobName").val($("#JobCodes option:selected").text());
+                    $("#JobCode").val($("#JobCodes option:selected").val());
+                }
+                //形象工程符合行业规划
+
+                //信息化系统
+
+                //改造必要性
+                $("#ReformName").val($("input[name='ReformCode']:checked").next().text());
+
+                //经营方面调研
+                if ($("#ManageJobCodes option:selected").val() != "") {
+                    $("#ManageJobName").val($("#ManageJobCodes option:selected").text());
+                    $("#ManageJobCode").val($("#ManageJobCodes option:selected").val());
+                }
+                //销量可实现性
+
+                //特殊销售手段
+
+                //安全方面调研
+                if ($("#SafeJobCodes option:selected").val() != "") {
+                    $("#SafeJobName").val($("#SafeJobCodes option:selected").text());
+                    $("#SafeJobCode").val($("#SafeJobCodes option:selected").val());
+                }
+              
+                //信息方面调研
+                if ($("#InfoJobCodes option:selected").val() != "") {
+                    $("#InfoJobName").val($("#InfoJobCodes option:selected").text());
+                    $("#InfoJobCode").val($("#InfoJobCodes option:selected").val());
+                }
+                //性质
+                if ($("#ProjectNatureType option:selected").val() != "") {
+                    $("#NatureName").val($("#ProjectNatureType option:selected").text());
+                    $("#Nature").val($("#ProjectNatureType option:selected").val());
+                }
+                // 地理位置：
+                if ($("#PositionTypes option:selected").val() != "") {
+                    $("#Position").val($("#PositionTypes option:selected").text());
+                    $("#PositionType").val($("#PositionTypes option:selected").val())
+                }
+                //加油站类别：
+                if ($("#StationType option:selected").val() != "") {
+                    $("#StationTypeName").val($("#StationType option:selected").text());
+                    $("#StationType").val($("#StationType option:selected").val());
+                }
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+                var search = $("form").serialize();
+
+                //点击提交表单验证，点击暂存表单不验证
+                if ($(this).data("state") == "@(PreProjectState.Submitted.GetValue().ToString())") {
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (!bv.isValid()) {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        return;
+                    }
+                }
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                            window.location.href = "/TzResearch/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                    }
+                });
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+
+    });
+
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            StartDate: {
+                validators: {
+                    notEmpty: {
+                        message: '起始时间不能为空'
+                    }
+                }
+            },
+            ManageReaearchUserName: {
+                validators: {
+                    notEmpty: {
+                        message: '经营方面调研人不能为空'
+                    }
+                }
+            },
+            InvestResearchUserName: {
+                validators: {
+                    notEmpty: {
+                        message: '投资方面调研人不能为空'
+                    }
+                }
+            },
+            ApplyTime: {
+                validators: {
+                    notempty: {
+                        message: '起始时间不能为空'
+                    }
+                }
+            },
+            LandArea: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "土地面积格式输入错误"
+                    },
+                }
+            },
+            LandShape: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "土地形状（临街长度）格式输入错误"
+                    },
+                }
+            },
+            AroundCarCount: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "周边车辆保有量格式输入错误"
+                    },
+                }
+            },
+            DailyTraffic: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "平均日车流量格式输入错误"
+                    },
+                }
+            },
+            OilSaleTotal: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "成品油销量测算格式输入错误"
+                    },
+                }
+            },
+            //DieselGasolineRatio: {
+            //    validators: {
+            //        regexp: {
+            //            regexp: /^\d+(\.\d{0,2})?$/,
+            //            message: "柴汽比格式输入错误"
+            //        },
+            //    }
+            //},
+            LandPrice: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '土地价格格式输入错误'
+                    },
+
+                }
+            },
+            GasSaleTotal: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '气销量测算格式输入错误'
+                    }
+                }
+            },
+            LawResearchUserName: {
+                validators: {
+                    notEmpty: {
+                        message: '法律方面调研人不能为空'
+                    }
+
+                }
+            },
+            ReaearchUserName: {
+                validators: {
+                    notEmpty: {
+                        message: '工程方面调研人不能为空'
+                    },
+
+                }
+            },
+            Shelter: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '罩棚格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '罩棚不能为空'
+                    }
+                }
+            },
+            MachineOfOilStage: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '加油机台不能为空'
+                    }
+
+                }
+            },
+            MachineOfOil: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '加油机枪不能为空'
+                    }
+
+                }
+            },
+            MachineOfGasStage: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '加气机台不能为空'
+                    }
+
+                }
+            },
+            MachineOfGas: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '加气机枪不能为空'
+                    }
+                }
+            },
+            OilTank: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '油罐不能为空'
+                    }
+                }
+            },
+            StationRoon: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '站房不能为空'
+                    }
+                }
+            },
+            GasWells: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '格式输入错误'
+                    },
+                    notEmpty: {
+                        message: '储气井不能为空'
+                    }
+                }
+            },
+            CurrentSalesVolume: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '当前成品油日销量格式输入错误'
+                    }
+                }
+            },
+            CargoDistance: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '油运品距格式输入错误'
+                    }
+                }
+            },
+            GasDailySales: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '当前气日销量格式输入错误'
+                    }
+                }
+            },
+            SourceOfOil: {
+                validators: {
+                    stringLength: {
+                        max: 1000,
+                        message: "只能输入1000个字符"
+                    }
+                }
+            },
+            ImprovementMeasures: {
+                validators: {
+                    stringLength: {
+                        max: 1000,
+                        message: "只能输入1000个字符"
+                    }
+                }
+            },
+            Improvement: {
+                validators: {
+                    stringLength: {
+                        max: 1000,
+                        message: "只能输入1000个字符"
+                    }
+                }
+            },
+            SafeReaearchUserName: {
+                validators: {
+                    notEmpty: {
+                        message: '安全方面调研人不能为空'
+                    },
+                }
+            },
+            InfoReaearchUserName: {
+                validators: {
+                    notEmpty: {
+                        message: '信息方面调研人不能为空'
+                    }
+                }
+            }
+
+        }
+    });
+
+</script>

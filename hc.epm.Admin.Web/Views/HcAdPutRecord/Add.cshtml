@@ -1,0 +1,380 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@{
+    ViewBag.Title = "广告投放新增";
+}
+<style>
+
+</style>
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal bv-form" id="mainForm">
+            <div class="form-group col-lg-12 col-sm-12 mb25">
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-15px;"><em class="required">*</em>广告位 : </label>
+                    <div class="col-lg-7 col-sm-7">
+                        <select class="form-control selectpicker  show-tick" tabindex="-98" id="SelAdTargetName" name="SelAdTargetName">
+                            @if (ViewBag.AdTargetList.Count > 0 && ViewBag.AdTargetList != null)
+                            {
+                                <option value="--请选择--">--请选择--</option>
+                                foreach (var item in ViewBag.AdTargetList)
+                                {
+                                    <option value="@item.Id" data-itemid="@item.TargetNum" data-itemprice="@item.Price">@item.Name</option>
+                                }
+                            }
+                        </select>
+                        <input type="hidden" id="AdTargetId" name="AdTargetId" />
+                        <input type="hidden" id="AdTargetNum" name="AdTargetNum" />
+                        <input type="hidden" id="AdTargetName" name="AdTargetName" />
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6 ">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>广告名称：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" class="form-control" name="AdName" id="AdName" placeholder="请输入广告名称" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 mb25">
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-15px;"><em class="required">*</em>广告位类型 : </label>
+                    <div class="col-lg-7 col-sm-7">
+                        @Html.DropDownList("SelAdTypeName", null, new { @class = "form-control selectpicker  show-tick" })
+                        <input type="hidden" id="AdTypeId" name="AdTypeId" />
+                        <input type="hidden" id="AdTypeName" name="AdTypeName" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required"></em>价格：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="Price" id="Price" placeholder="请输入价格" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-12 col-sm-12 mb25">
+
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-15px;"><em class="required">*</em>开始日期 : </label>
+                    <div class="input-group col-lg-7 col-sm-7">
+                        <input type="text" name="StartTime" id="StartTime" style="text-align: left;border-radius: 4px;" placeholder="开始日期" autocomplete="off" class="btn btn-default form-control" value="" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd'})" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>截止日期 : </label>
+                    <div class="input-group col-lg-8 col-sm-8">
+                        <input type="text" name="EndTime" id="EndTime" style="text-align: left;border-radius: 4px;" placeholder="截止日期" autocomplete="off" class="btn btn-default form-control" value="" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="form-group col-lg-12 col-sm-12 mb25">
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-15px;"><em class="required">*</em>排序：</label>
+                    <div class="col-lg-7 col-sm-7">
+                        <input type="text" class="form-control" name="Sort" id="Sort" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required"></em>链接地址：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="AdUrl" id="AdUrl" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-15px;"><em class="required">*</em>是否启用 : </label>
+                    <div class="col-lg-7 col-sm-7">
+                        <select class="form-control selectpicker  show-tick" id="State" name="State" tabindex="-98">
+                            <option value="false">禁用</option>
+                            <option value="true">启用</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-15px;"><em class="required"></em>附件上传 : </label>
+                    <div class="col-lg-7 col-sm-7">
+                        <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                    </div>
+                </div>
+
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin-bottom:10px;">
+                <label class="layui-form-label" style="font-weight:bold;margin-right:10px;"><em class="required">*</em>附件列表：</label>
+                <div style="width:100%;">
+                    <table class="layui-table" style="width:80%;word-wrap:break-word;word-break:break-all;">
+                        <thead>
+                            <tr>
+                                <th class="table-center">附件名称</th>
+                                <th width="90" class="table-center">附件格式</th>
+                                <th width="100" class="table-center">大小</th>
+                                <th width="90" class="table-center">上传时间</th>
+                                <th width="70" class="table-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fileList"></tbody>
+                    </table>
+                </div>
+            </div>
+            @*<div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin-bottom:10px;">
+                    <label class="layui-form-label" style="font-weight:bold;margin-right:10px;margin-left: 25px;"><em class="required">*</em>图片附件：</label>
+                    <div style="width:100%;" id="fileList">
+                    </div>
+                </div>
+                <div class="layui-block col-sm-5">
+                    <div style="width:100%;display:none;margin-left:120px;" id="fileBar">
+                        <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%" style="width: 0%;"><span class="layui-progress-text">NaN%</span></div></div>
+                    </div>
+                    <input type="hidden" name="fileDataJson" id="fileDataJson">
+                </div>
+                <div class="layui-form-item ">
+                    <div class="layui-form-item menue">
+                        <div class="layui-inline col-sm-6" style="margin-left:145px">
+                            <div class="layui-input-inline">
+                                <button class="layui-btn layui-btn-primary " id="btnSelect" style="position: relative; z-index: 1;">
+                                    <i class="layui-icon" style="font-size:30px;"></i>
+                                </button>
+                                <button class="layui-btn layui-btn-primary " id="btnUpload" style="margin:0">
+                                    <i class="layui-icon" style="font-size:30px;"></i>
+                                </button>
+                                <div id="html5_1cc562u8f6oj148f1162ngkih33_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 0px; width: 71px; height: 38px; overflow: hidden; z-index: 0;">
+                                    <input id="html5_1cc562u8f6oj148f1162ngkih33" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;" accept="image/jpeg,image/gif,image/png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>*@
+
+
+            <div class="form-group col-lg-12 col-sm-12 mb25" style="margin-bottom:30px;margin-left:8px">
+                <label class="col-lg-2 col-sm-2 control-label">备注 : </label>
+                <div class="col-lg-9 col-sm-9" style="padding-left: 10px; padding-right: 20px;">
+                    <textarea name="Remark" id="Remark" class="form-control" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" placeholder="请输入备注"></textarea>
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Description" data-bv-result="NOT_VALIDATED" style="display: none;">备注不能为空</small>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12" style="margin-top:25px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right;margin-bottom:10px">
+                    <input type="button" name="save" id="save" lay-submit="" lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save">
+                </div>
+                <div class="col-lg-6 col-sm-6" style="margin-bottom:10px">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="cancel layui-btn layui-btn-small button-base bg-cancel ">
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Files/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var name = obj.Name;
+                        var type = name.split(".");
+                        var odiv = '<tr>';
+                        odiv += '<td style=\"text-align:center \">' + type[0] + '</td>';
+                        odiv += '<td>' + '.' + type[1] + '</td>';
+                        odiv += '<td>' + obj.Size + '</td>';
+                        odiv += '<td>' + new Date().toLocaleDateString() + '</td>';
+                        odiv += '<td style=\"text-align:center\"><a class=\"delete-file\" data-val=' + obj.GuidId + ' style="color:red;cursor:pointer">删除</a></td></tr>';
+                        $('#fileList').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+    });
+    $("#SelAdTargetName").change(function () {
+        var price = $('#SelAdTargetName option:selected').data("itemprice");;
+        $("#Price").val(price);
+
+    });
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                AdName: {
+                    validators: {
+                        notEmpty: {
+                            message: '广告名称不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '广告名称长度不能超过100字符'
+                        },
+                    }
+                },
+                Sort: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp: {
+                            max: 20,
+                            regexp: /^[0-9]+$/,
+                            message: '排序只能是正整数'
+                        }
+                    }
+                },
+                Price: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: '请输入正确的价格'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //广告位下拉框
+            var adTargetId = $('#SelAdTargetName option:selected').val();
+            $("#AdTargetId").val(adTargetId);
+
+            var adTargetNum = $('#SelAdTargetName option:selected').data("itemid");;
+            $("#AdTargetNum").val(adTargetNum);
+
+            var adTargetName = $('#SelAdTargetName option:selected').text();
+            $("#AdTargetName").val(adTargetName);
+
+            //广告类型下拉框
+            var adTypeId = $('#SelAdTypeName option:selected').val();
+            $("#AdTypeId").val(adTypeId);
+
+            var adTypeName = $('#SelAdTypeName option:selected').text();
+            $("#AdTypeName").val(adTypeName);
+
+            var files = $("#fileDataJsonFile").val();
+            if (files == "" || files == null) {
+                parent.layer.alert("请上传附件", { icon: 2 });
+                return;
+            }
+            if (adTargetName == "--请选择--") {
+                parent.layer.alert("请选择广告位", { icon: 2 });
+                return;
+            }
+
+            if (adTypeName == "--请选择--") {
+                parent.layer.alert("请选择广告类型", { icon: 2 });
+                return;
+            }
+
+            var startTime = $("#StartTime").val();
+            if (startTime == "") {
+                parent.layer.alert("请选择开始日期", { icon: 2 });
+                return;
+            }
+
+            var endTime = $("#EndTime").val();
+            if (endTime == "") {
+                parent.layer.alert("请选择截止日期", { icon: 2 });
+                return;
+            }
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("广告投放成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.window.frames["mainFrame"].location.reload();
+                            console.log(data.name)
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return true;
+            } else {
+                parent.layer.alert("验证错误！", { icon: 5 });
+            }
+            return false;
+
+        });
+
+        //删除附件
+        $("#fileList").on('click', 'a.delete-file', function () {
+            $(this).parents("tr").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>
+

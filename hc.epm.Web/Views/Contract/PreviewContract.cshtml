@@ -1,0 +1,77 @@
+﻿@using hc.epm.DataModel.Basic;
+@using System.Collections.Generic;
+@model List<Base_Files>
+@{
+    ViewBag.Title = "合同或订单预览";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+
+}
+<style>
+    .file-list {
+        margin-bottom: 10px;
+    }
+
+    .file-name {
+        width: 50%;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
+
+    .size {
+        display: inline-block;
+        width: 10%;
+        color: red;
+    }
+
+    .file-list a {
+        margin-left: 10px;
+    }
+</style>
+<div class="contentData">
+
+    <input type="hidden" value="@ViewBag.Id" id="conId" />
+    <div>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                var str = System.IO.Path.GetExtension(item.Name);
+                <div class="file-list">
+                    <span class="file-name" data-id="@item.Id" data-src="@item.Url" title="@item.Name" data-group="@item.Group">@item.Name</span>
+                    <span class="size">@item.Size</span>
+                    <span class="size">@item.CreateUserName</span>
+                    @if (str == ".pdf" || str == ".doc" || str == ".docx" || str == ".xls" || str == ".xlsx")
+                    {
+                        <a href="javascript:;" class="preview">预览</a>
+                    }
+                    else {
+                        <a style="color:black;cursor:auto" title="不支持该种格式文件预览">预览</a>
+                    }
+
+                    <a href="javascript:;" class="download-file">下载</a>
+                </div>
+            }
+        }
+    </div>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script>
+    //预览
+    $("body").on("click", ".file-list .preview", function () {
+        var contractId = $("#conId").val();//合同Id
+        var fileId = $(this).parent().find(".file-name").attr("data-id");//附件Id
+        var fileNames = $(this).parent().find(".file-name").text();//附件名称
+        parent.window.open('Preview?fileId=' + fileId + '&fileNames=' + fileNames + '&contractId=' + contractId);
+    });
+    //下载附件
+    $("body").on("click", ".file-list .download-file", function () {
+        var group = $(this).parent().find(".file-name").data("group");
+        var path = $(this).parent().find(".file-name").data("src");
+        var fileName = $(this).parent().find(".file-name").text();
+        window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+    });
+</script>
+

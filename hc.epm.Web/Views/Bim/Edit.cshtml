@@ -1,0 +1,428 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "修改模型";
+}
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text ProjectName">
+                    <label for="ProjectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" value="@Model.ProjectName" id="ProjectName" name="ProjectName" autocomplete="off" />
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                    <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                    <input type="hidden" id="BIMState" name="BIMState" value="@Model.BIMState" />
+                    <input type="hidden" id="BIMAddress" name="BIMAddress" value="@Model.BIMAddress" />
+                    <input type="hidden" id="BIMImg" name="BIMImg" value="@Model.BIMImg" />
+                    <input type="hidden" id="BIMState" name="BIMState" />
+                    <input type="hidden" id="BIMName" name="BIMName" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label for="Name"><span class="star">*</span>&nbsp;图模型名称&nbsp;:</label>
+                    <input type="text" id="Name" name="Name" autocomplete="off" value="@Model.Name" />
+                </div>
+                <div class="intro">
+                    <div><label for="Desciption"><span class="star">*</span>&nbsp;描述&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Desciption" name="Desciption">@Model.Desciption</textarea>
+                    </div>
+                </div>
+                <div class="short-text" style="margin-top: 30px;">
+                    <label><span class="star">*</span>&nbsp;版本标识&nbsp;:</label>
+                    @Html.DropDownList("VersionNo", null, new { @class = "form-control selectpicker  show-tick" })
+                    <input type="hidden" name="VersionName" id="VersionName" />
+                </div>
+                <div class="short-text">
+                    <label for="VisaNo"><span class="star"></span>&nbsp;版本号&nbsp;:</label>
+                    <input type="text" id="VersionOrder" name="VersionOrder" autocomplete="off" value="@Model.VersionOrder" />
+                </div>
+                <div class="intro">
+                    <div><label for="Remark">&nbsp;备注&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Remark" name="Remark">@Model.Remark</textarea>
+                    </div>
+                </div>
+                <div class="long-text user" style="display:none;">
+                    <label for="SubmitUserName"><span class="star">*</span>&nbsp;上传人&nbsp;:</label>
+                    <input type="text" id="SubmitUserName" name="SubmitUserName" value="@Model.SubmitUserName" readonly style="background-color:#EBEBE4" />
+                    <input type="hidden" id="SubmitUserId" name="SubmitUserId" value="@Model.SubmitUserId" />
+                    <i class="pic iconfont ee" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text unit" style="display:none;">
+                    <label for="SubmitCompanyName"><span class="star">*</span>&nbsp;上传单位&nbsp;:</label>
+                    <input type="text" id="SubmitCompanyName" name="SubmitCompanyName" value="@Model.SubmitCompanyName" style="background-color:#EBEBE4" readonly />
+                    <input type="hidden" id="SubmitCompanyId" name="SubmitCompanyId" value="@Model.SubmitCompanyId" />
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="short-text" style="display:none;">
+                    <label for="SubmitDate"><span class="star">*</span>&nbsp;上传时间&nbsp;:</label>
+                    <input type="text" id="SubmitDate" name="SubmitDate" value="@(Model.SubmitDate == null ? "" : Convert.ToDateTime(Model.SubmitDate).ToString("yyyy-MM-dd"))" readonly style="background-color:#EBEBE4" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star">*</span>&nbsp;模型上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <button id="btnUploadFile" style="position: relative; z-index: 1;">上传模型</button>
+                        <span style="vertical-align:bottom; margin-left:15px; color:red;">注意:将rvt文件压缩成*.rar(需要放在同名文件夹内)</span>
+                    </div>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label></label></div>
+                    <div style="width:100%;position:relative" id="drwafileList">
+                        <ul></ul>
+                        <div style="top:45%;left:35%;display:none;color:red" id="mx">
+                            @*<h3 style="font-size:24px">模型正在轻量化中...</h3>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-block col-sm-5" style="margin-bottom:0px; float:none;">
+                    <div style="width:80%;margin:10px auto 0px 110px; display:none;" id="fileBar">
+                        <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%" style="width: 0%;"><span class="layui-progress-text">NaN%</span></div></div>
+                    </div>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    @if (Model.State == int.Parse(ApprovalState.Enabled.GetValue().ToString()))
+                    {
+                        <button type="button" class="saveBut" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                        <button type="button" class="saveBut" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+                        <input type="hidden" name="State" id="State" />
+                    }
+                    else if (Model.State == int.Parse(ApprovalState.ApprFailure.GetValue().ToString()))
+                    {
+                        <button type="button" class="saveBut" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                        <button type="button" class="discard checkright" data-module="Bim" data-right="Invalid">废弃</button>
+                        <button type="button" class="exchange">沟通</button>
+                        <input type="hidden" name="State" id="State" />
+                    }
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            var VersionName = $('#VersionNo option:selected').text();
+            $("#VersionName").val(VersionName);
+
+            $("#VersionNo").change(function () {
+                var VersionName = $('#VersionNo option:selected').text();
+                $("#VersionName").val(VersionName);
+            });
+            var BIMState = $("#BIMState").val();
+            if (BIMState == '@BIMModelState.NotBIM.ToString()') {
+            }
+            else if (BIMState == '@BIMModelState.BIMLightWeight.ToString()') {
+                var imgurl = "/Resource/images/moxing.jpg";
+                var odiv = "<li><img src='" + imgurl + "' style='width: 800px;height: 350px;cursor: pointer;'/></li>";
+                $("#drwafileList ul").append(odiv);
+                $("#mx").css("display", "block");
+                $("#mx").append('<h3 style="font-size:24px">模型正在轻量化中...</h3>');
+            }
+            else if (BIMState == '@BIMModelState.BIMLightWeightSuccess.ToString()') {
+                var BIMImg = $("#BIMImg").val();
+                if (BIMImg == "" || BIMImg == null) {
+                    var imgurl = "/Resource/images/moxing.jpg";
+                    var odiv = "<li data-id='@Model.SId' class='model'><img src='" + imgurl + "' style='width: 800px;height: 350px;cursor: pointer;'/></li>";
+                    $("#drwafileList ul").append(odiv);
+                }
+                else {
+                    var odiv = "<li data-id='@Model.SId' class='model'><img src='" + BIMImg + "' style='width: 800px;height: 350px;cursor: pointer;'/></li>";
+                    $('#drwafileList ul').append(odiv);
+                }
+                $("#mx").css("display", "block");
+                $("#mx").append('<h3 style="font-size:24px">模型轻量化完成</h3>');
+            }
+
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    Desciption: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    SubmitDate: {
+                        required: true
+                    }
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空",
+                        maxlength: "项目名称不能大于254个字符串"
+                    },
+                    Name: {
+                        required: "图纸名称不能为空",
+                        maxlength: "图纸名称不能大于100个字符串"
+                    },
+                    Desciption: {
+                        required: "描述不能为空",
+                        maxlength: "描述不能大于254个字符串"
+                    },
+                    SubmitDate: {
+                        required: "上传日期不能为空"
+                    }
+                }
+            })
+        })
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Bim', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    var fileDataArray = [];
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = item.GuidId;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.Group;
+                            obj.Url = item.Url;
+                            fileDataArray.push(obj);
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    var state = $(this).data("state");
+                    $("#State").val(state);
+                    var fileDataJson = $('#fileDataJsonFile').val();
+                    if (state == @ApprovalState.WaitAppr.GetValue().ToString() && fileDataJson.length == 0) {
+                        layer.alert("请上传模型!", { icon: 2 });
+                        return;
+                    }
+                    var search = $("form").serialize();
+                    $.post("Edit", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Bim/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+            });
+            //在建项目
+            $(".ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject?type=all&selectType=1',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        console.log(obj)
+                        if (obj.flag) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            $.post("GetListByProjectId?projectId=" + obj.data[0].Id, function (data) {
+                                document.getElementById('VersionNo').disabled = false;
+                                if (data == 1) {
+                                    $("#VersionNo").find("option[value='FirstVersion']").remove();
+                                    var VersionName = $('#VersionNo option:selected').text();
+                                    $("#VersionName").val(VersionName);
+                                } else if (data == 2) {
+                                    $("#VersionNo").val('');
+                                    $("#VersionName").val('');
+                                    document.getElementById('VersionNo').disabled = true;
+                                    layer.alert("已存在竣工版模型，不能再上传！");
+                                }
+                                parent.layer.close(index);//关闭窗口
+                            });
+                        } else {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //审核
+            $('.audit').on('click', function () {
+                var state = "ApprSuccess";
+                parent.layer.prompt({
+                    formType: 2,
+                    value: '',
+                    title: '请输入审核通过原因'
+                }, function (value, index, elem) {
+                    $.post("Reject", { id: '@Model.Id', reason: value, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("审核成功", { time: 2000, icon: 1 });
+                            location.href = "/BIM/Index";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            });
+            //驳回
+            $('.reject').on('click', function () {
+                var state = "ApprFailure";
+                parent.layer.prompt({
+                    formType: 2,
+                    value: '',
+                    title: '请输入驳回理由'
+                }, function (value, index, elem) {
+                    $.post("Reject", { id: '@Model.Id', reason: value, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                            location.href = "/BIM/Index";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            });
+            //废弃
+            $('.discard').on('click', function () {
+                var id = $(this).parent('td').siblings("td").eq(0).data("itemid");
+                var state = "Discarded";
+                if (id != "") {
+                    parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                        $.post("Archive", { id: '@Model.Id', state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                                window.location.href = "/BIM/Index?pageIndex=1";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+            //沟通
+            $('.exchange').on('click', function () {
+                var projectName = $("#ProjectName").val();
+                var projectId = $("#ProjectId").val();
+                window.location.href = "/Question/Add?businType=Model&projectName=" + projectName + "&projectId=" + projectId + "&BusinessId=@Model.Id";
+            });
+
+            //图标上传
+            var fileDataArray = [];
+            var uploaderFile = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/UploadBim/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//	是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "rar" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploaderFile, files) {
+                        var item = files[files.length - 1];
+                        $.post("/Files/GetFileName", { tableName: 'Epm_Bim', name: item.name }, function (data) {
+                            var fname = "";
+                            if (data.Data.length==0) {
+                                $('#drwafileList ul').html("");
+                                $("#mx").html("");
+                                fileDataArray = [];
+                                uploaderFile.start();
+                                $("#mx").append('<h3 style="font-size:24px">模型正在轻量化中...</h3>');
+                            } else {
+                                parent.layer.msg("模型已存在", { time: 1000, icon: 2 });
+                                uploaderFile.removeFile(item);
+                            }
+                        });
+                    },
+                    UploadProgress: function (uploaderFile, file) {
+                        $("#fileBar").show();
+                        element.progress("fileProgress", file.percent + "%");
+                    },
+                    FileUploaded: function (uploaderFile, file, responseObject) {
+                        var data = JSON.parse(responseObject.response);
+                        if (data) {
+
+                            var odiv = '<li><a href="' + FileDownLoadURL + data[0].GuidId + '" target="_blank">';
+                            odiv += '<img src="/Resource/images/moxing.jpg" style="width: 800px;height: 350px;cursor: pointer;" /></a>';
+                            odiv += "</li>";
+
+                            setTimeout(function () {
+                                $("#fileBar").hide();
+                                $('#drwafileList ul').append(odiv);
+                                $("#mx").css("display", "block");
+                                element.progress("fileProgress", "0%"); 1
+                            }, 1500);
+
+                            parent.layer.msg("附件上传成功", { time: 1000, icon: 1 });
+                            uploaderFile.removeFile(file);
+
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = data[0].Name;
+                            obj.Size = data[0].Size;
+                            obj.GuidId = data[0].GuidId;
+                            obj.ImageType = data[0].ImageType;
+                            obj.Group = data[0].ResponseObject.FDFS_GROUP;
+                            obj.Url = data[0].ResponseObject.FDFS_NAME;
+
+                            fileDataArray.push(obj);
+                            fileDataJson = JSON.stringify(fileDataArray);
+                            $("#fileDataJsonFile").val(fileDataJson);
+
+                            $("#BIMName").val((data[0].Name).split('.')[0]);
+                        }
+                        uploaderFile.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        layer.alert("错误：" + err.code + ": " + err.message);
+                    }
+                }
+            });
+            uploaderFile.init();
+        });
+
+        $("#drwafileList").on("click", ".model", function () {
+            var id = $(this).data("id");
+            window.open("/Bim/BimModel?id=" + id);
+        })
+    </script>
+</body>

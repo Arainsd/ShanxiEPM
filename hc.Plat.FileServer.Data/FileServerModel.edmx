@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HCPlat_FileServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DownloadLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileGuid" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Browser" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="RecordTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FileGuid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="App" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FileSize" Type="bigint" Nullable="false" />
+          <Property Name="LastModifiedDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RecordTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Files">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Guid" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="App" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ReName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Extension" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FileType" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FileSize" Type="bigint" Nullable="false" />
+          <Property Name="LastModifiedDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="Day" Type="int" Nullable="false" />
+          <Property Name="UploadTime" Type="datetime" Nullable="false" />
+          <Property Name="RequetURL" Type="nvarchar" MaxLength="500" />
+          <Property Name="UserDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="IP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Browser" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="MD5" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDelete" Type="bit" Nullable="false" />
+          <Property Name="VirtualURL" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="StaticResource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="App" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Guid" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Extension" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="FileSize" Type="bigint" Nullable="false" />
+          <Property Name="VirtualURL" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="HttpURL" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="UploadTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TempFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="App" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FileGuid" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Chunk" Type="int" Nullable="false" />
+          <Property Name="Chunks" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ChunkName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FileLastModifiedDate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ChunkSize" Type="bigint" Nullable="false" />
+          <Property Name="FileSize" Type="bigint" Nullable="false" />
+          <Property Name="ChunkPath" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="UploadTime" Type="datetime" Nullable="false" />
+          <Property Name="RequetURL" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="IP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Browser" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="HCPlat_FileServerModelStoreContainer">
+          <EntitySet Name="DownloadLog" EntityType="Self.DownloadLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FileGuid" EntityType="Self.FileGuid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Files" EntityType="Self.Files" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StaticResource" EntityType="Self.StaticResource" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TempFiles" EntityType="Self.TempFiles" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HCPlat_FileServerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DownloadLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileGuid" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Browser" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RecordTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="FileGuid">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="App" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FileSize" Type="Int64" Nullable="false" />
+          <Property Name="LastModifiedDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RecordTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="StaticResource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="App" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Guid" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Extension" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FileSize" Type="Int64" Nullable="false" />
+          <Property Name="VirtualURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HttpURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UploadTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="TempFiles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="App" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FileGuid" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Chunk" Type="Int32" Nullable="false" />
+          <Property Name="Chunks" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ChunkName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FileLastModifiedDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ChunkSize" Type="Int64" Nullable="false" />
+          <Property Name="FileSize" Type="Int64" Nullable="false" />
+          <Property Name="ChunkPath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UploadTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RequetURL" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Browser" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="HCPlat_FileServerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DownloadLog" EntityType="Self.DownloadLog" />
+          <EntitySet Name="FileGuid" EntityType="Self.FileGuid" />
+          <EntitySet Name="StaticResource" EntityType="Self.StaticResource" />
+          <EntitySet Name="TempFiles" EntityType="Self.TempFiles" />
+          <EntitySet Name="Files" EntityType="HCPlat_FileServerModel.Files" />
+        </EntityContainer>
+        <EntityType Name="Files">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="App" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Extension" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="FilePath" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FileType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FileSize" Type="Int64" Nullable="false" />
+          <Property Name="LastModifiedDate" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="Day" Type="Int32" Nullable="false" />
+          <Property Name="UploadTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RequetURL" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UserDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Browser" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MD5" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+          <Property Name="VirtualURL" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HCPlat_FileServerModelStoreContainer" CdmEntityContainer="HCPlat_FileServerEntities">
+    <EntitySetMapping Name="DownloadLog">
+      <EntityTypeMapping TypeName="IsTypeOf(HCPlat_FileServerModel.DownloadLog)">
+        <MappingFragment StoreEntitySet="DownloadLog">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FileGuid" ColumnName="FileGuid" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="Browser" ColumnName="Browser" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FileGuid">
+      <EntityTypeMapping TypeName="IsTypeOf(HCPlat_FileServerModel.FileGuid)">
+        <MappingFragment StoreEntitySet="FileGuid">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="App" ColumnName="App" />
+          <ScalarProperty Name="FId" ColumnName="FId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StaticResource">
+      <EntityTypeMapping TypeName="IsTypeOf(HCPlat_FileServerModel.StaticResource)">
+        <MappingFragment StoreEntitySet="StaticResource">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="App" ColumnName="App" />
+          <ScalarProperty Name="Guid" ColumnName="Guid" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="Extension" ColumnName="Extension" />
+          <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+          <ScalarProperty Name="VirtualURL" ColumnName="VirtualURL" />
+          <ScalarProperty Name="HttpURL" ColumnName="HttpURL" />
+          <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TempFiles">
+      <EntityTypeMapping TypeName="IsTypeOf(HCPlat_FileServerModel.TempFiles)">
+        <MappingFragment StoreEntitySet="TempFiles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="App" ColumnName="App" />
+          <ScalarProperty Name="FileGuid" ColumnName="FileGuid" />
+          <ScalarProperty Name="Chunk" ColumnName="Chunk" />
+          <ScalarProperty Name="Chunks" ColumnName="Chunks" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="ChunkName" ColumnName="ChunkName" />
+          <ScalarProperty Name="FileLastModifiedDate" ColumnName="FileLastModifiedDate" />
+          <ScalarProperty Name="ChunkSize" ColumnName="ChunkSize" />
+          <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+          <ScalarProperty Name="ChunkPath" ColumnName="ChunkPath" />
+          <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+          <ScalarProperty Name="RequetURL" ColumnName="RequetURL" />
+          <ScalarProperty Name="IP" ColumnName="IP" />
+          <ScalarProperty Name="Browser" ColumnName="Browser" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+          <EntitySetMapping Name="Files">
+            <EntityTypeMapping TypeName="HCPlat_FileServerModel.Files">
+              <MappingFragment StoreEntitySet="Files">
+                <ScalarProperty Name="VirtualURL" ColumnName="VirtualURL" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="MD5" ColumnName="MD5" />
+                <ScalarProperty Name="Browser" ColumnName="Browser" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="UserDescription" ColumnName="UserDescription" />
+                <ScalarProperty Name="RequetURL" ColumnName="RequetURL" />
+                <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="ReName" ColumnName="ReName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="App" ColumnName="App" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,1040 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model MeetingFileReportView
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+@*<script src="~/Resource/scripts/plupload_2_1_2/plupload.full.min.js"></script>*@
+<script src="~/Resource/scripts/hc.fileUpload.js"></script>
+<style>
+    /*附件表样式 strat*/
+    .file-wrap {
+        height: 35px;
+        width: 200px;
+        margin: 0 5px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 100%;
+            float: left;
+            text-align: left;
+            padding: 0 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+            border-bottom: 1px solid #D9D8D8;
+        }
+
+            .fileShow li > div {
+                display: inline-block;
+            }
+
+                .fileShow li > div .checkbox-inline {
+                    line-height: 23px;
+                    color: #000000;
+                    padding-top: 0;
+                }
+
+                .fileShow li > div:first-child {
+                    width: 77%;
+                }
+
+            .fileShow li span {
+                display: inline-flex;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+                .fileShow li span:first-child {
+                    width: 90%;
+                    overflow: hidden;
+                }
+
+            .fileShow li i {
+                color: black;
+            }
+    /*附件表样式 end*/
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectProposal.ProjectName</div>
+                            <input type="hidden" name="ProjectId" value="@Model.MeetingFileReport.ProjectId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.StationName</div>
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.NatureName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.Position</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>@(Convert.ToDateTime(Model.TzProjectProposal.ApplyTime).ToString("yyyy-MM-dd"))</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.CompanyName</div>
+                        </td>
+                        <td class="table_title">估计金额</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.PredictMoney</div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>油气销量信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">估计油日销量</td>
+                        <td class="td-div">
+                            <div>@(Model.TzProjectProposal.OilSalesTotal == null ? "" : Model.TzProjectProposal.OilSalesTotal.ToString("0.00")) 吨</div>
+                        </td>
+                        <td class="table_title">估计气日销量（CNG）</td>
+                        <td class="td-div">
+                            <div>@(Model.TzProjectProposal.CNG == null ? "" : Model.TzProjectProposal.CNG.ToString("0.00")) 千方</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">估计气日销量（LNG）</td>
+                        <td class="td-div" colspan="3">
+                            <div>@(Model.TzProjectProposal.LNG == null ? "" : Model.TzProjectProposal.LNG.ToString("0.00")) 千方</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <th class="" width="20%">附件类型</th>
+                        <th class="" width="55%" colspan="2"><div>附件名称 / 附件归属</div></th>
+                        <th class="" width="25%">操作</th>
+                    </tr>
+                    <tr id="btnGroup0">
+                        <td class="table_title">
+                            <span class="font-black">立项请示文件</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LXQSWJ">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "LXQSWJ")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload1" name="LXQSWJ">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile0">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup1">
+                        <td class="table_title">
+                            <span class="font-black">项目评审会议纪要</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMPSJY">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XMPSJY")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload1" name="XMPSJY">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile1">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup2">
+                        <td class="table_title">
+                            <span class="font-black">分公司经理办公会议纪要</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="JLBGHJY">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "JLBGHJY")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload1" name="JLBGHJY">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile2">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup3">
+                        <td class="table_title">
+                            <span class="font-black">分公司项目评审表</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMPSB">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XMPSB")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload4" name="XMPSB">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile3">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup4">
+                        <td class="table_title">
+                            <span class="font-black">加油站经济测算表</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="JJCSB">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "JJCSB")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload5" name="JJCSB">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile4">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup5">
+                        <td class="table_title">
+                            <span class="font-black">项目可行性研究报告</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="KXYJBG">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "KXYJBG")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload6" name="KXYJBG">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile5">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup6">
+                        <td class="table_title">
+                            <span class="font-black">项目汇报材料</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="HBCL">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "HBCL")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload7" name="HBCL">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile6">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup7">
+                        <td class="table_title">
+                            <span class="font-black">项目有关cad图纸和概算文档</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="CADTZ">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "CADTZ")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload8" name="CADTZ">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile7">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup8">
+                        <td class="table_title">
+                            <span class="font-black">法律意见书</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SHFLYJS">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "SHFLYJS")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload9" name="SHFLYJS">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile8">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup9">
+                        <td class="table_title">
+                            <span class="font-black">资产评估报告</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="ZCPGBG">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "ZCPGBG")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload10" name="ZCPGBG">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile9">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup10">
+                        <td class="table_title">
+                            <span class="font-black">工程质量鉴定报告</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GCJDBG">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "GCJDBG")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload11" name="GCJDBG">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile10">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr id="btnGroup11">
+                        <td class="table_title">
+                            <span class="font-black">其他资料</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SHQTZL">
+                                        @if (Model.MeetingFileReport.TzAttachs != null && Model.MeetingFileReport.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.MeetingFileReport.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "SHQTZL")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload12" name="SHQTZL">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span id="btnUploadFile11">点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+        </div>
+        <input type="file" id="loadFile" name="loadFile" style="display:none" fileListId="" typeName="" />
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+
+<script>
+    //初始化附件
+    var btns = new Array();
+    function init() {
+        for (var i = 0; i < 12; i++) {
+            btns.push('btnUploadFile' + i);
+        }
+    }
+    init();
+    $.each(btns, function (index, item) {
+        // 初始化附件
+        $('#btnGroup' + index).InitUploader({
+            maxFileSize: '512000KB',
+            browerButton: item,
+            listContainer: '#btnGroup' + index + ' .fileShow',
+            getFileType: function () {
+                var typename = $('#btnGroup' + index).find("td").eq(0).find("span").text();
+                var typeno = $('#btnGroup' + index + ' .fileShow').attr('id');
+                var data = {
+                    typeno: typeno,
+                    typename: typename
+                };
+                return data;
+            },
+            uploadSuccess: function (uploader, data, file) {
+                var $this = this,
+                     fileTypeData = $this.getFileType(),
+                     typeno = '',
+                     typename = '';
+                FilePath = data.ResponseObject.FDFS_NAME;
+                if (typeof fileTypeData == "object") {
+                    typeno = fileTypeData.typeno || '';
+                    typename = fileTypeData.typename || '';
+                }
+                //附件归属
+                var html1 = `<label class ="checkbox-inline">
+                                                             <input type="checkbox" name="Uploadtype" value="" disabled />上传到投资系统
+                                                         </label>
+                                                        `
+                var html2 = `<label class ="checkbox-inline">
+                                                             <input type="checkbox" name="Uploadtype" value="" checked />上传到投资系统
+                                                         </label>
+                                        `
+                var html = (fileSizeConver(data.Size) > parseFloat(tzmaxfilesize)) ? html1 : html2;
+                var odiv = `<li><div><span>` + data.Name + `</span><i class="layui-icon fileDel" style="margin-left: 4px;" data-val="` + data.GuidId + `">&#x1006;</i></div><div style="margin-left: 4px;">${html}</div><input type="hidden" class ="updata" data-id="${data.GuidId}" data-name="${data.Name}" data-size="${data.Size}" data-group="${data.Group}" data-typename="${typename}" data-typeno="${typeno}" data-url="${FilePath}"></li>`;
+                $("#btnGroup" + index + ' .fileShow').append(odiv);
+                $($this.listContainer).on('click', '.fileDel', function () {
+                    $($this.listContainer).find(".fileDel").parents("li").remove();
+                    uploader.removeFile(file);
+                    $($this.listContainer + " tr:not(.headtr)").each(function (index) {
+                        $(this).find(".sort").text(index + 1);//重新赋值附件排序
+                    });
+                })
+            }
+        });
+    })
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //数据提交
+        $(".save").click(function () {
+            //附件取值
+            var dataArray = [];
+            for (i = 0; i < btns.length; i++) {
+                var data = $('#btnGroup' + i).InitUploader('getData');
+                dataArray = dataArray.concat(data);
+            }
+            @*if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                $(".fileShow-append .fileShow").each(function (index, item) {
+                    if ($(this).attr("id") == "LXQSWJ") {
+                        if ($(this).children().length == 0) {
+                            layer.msg('请上传立项请示文件类型的附件！', { time: 3000, icon: 2 });
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                        }
+                    }
+                });
+            }*@
+
+            var fileDataJson = JSON.stringify(dataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/TzMeetingFileReport/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+
+                }
+            });
+        });
+    });
+
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/TzMeetingFileReport/Index";
+    });
+
+    //删除附件
+    //$("body").on('click', '.fileDel', function () {
+    //    $(this).parents("li").remove();
+    //    document.getElementById('loadFile').value = null
+    //    $(".fileShow-append tr:not(.headtr)").each(function (index) {
+    //        $(this).find(".sort").text(index + 1);//重新赋值附件排序
+    //    });
+    //});
+</script>

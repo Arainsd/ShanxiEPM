@@ -1,0 +1,346 @@
+﻿@using hc.epm.ViewModel
+@model QuestionView
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "查看问题";
+}
+<style>
+    .comment {
+        display: flex;
+    }
+
+        .comment > div:first-child {
+            flex: 1;
+        }
+
+        .comment > div:last-child {
+            flex: 9;
+        }
+
+        .comment .timeUser span:last-child {
+            float: right;
+            color: #868686;
+        }
+
+    #Close {
+        padding: 30px 40px 0 40px;
+    }
+
+    .btn_group {
+        margin-left: 120px;
+    }
+
+    .replyInfor > div:first-child {
+        background: #f1f1f1;
+        padding: 0 20px;
+        height: 35px;
+        line-height: 35px;
+        color: #1393EC;
+        font-size: 16px;
+        width: 860px;
+    }
+
+    .replyInfor > div:last-child {
+        text-indent: 2em;
+        background: #ffffff;
+        min-height: 50px;
+        line-height: 25px;
+        letter-spacing: 0.4px;
+        font-size: 16px;
+        padding: 10px 20px;
+        color: #868686;
+        width: 860px;
+    }
+
+    .btn_group button {
+        width: 120px;
+        margin: 10px;
+        height: 40px;
+        color: #ffffff;
+        background-color: #1393EC;
+        border: none;
+        font-size: 16px;
+        letter-spacing: 3px;
+    }
+
+    .tab #fileListFile {
+        margin-left: 0;
+        margin-bottom: 0;
+    }
+
+    .line_bg {
+        margin-bottom: 0px !important;
+    }
+
+        .line_bg img {
+            position: relative;
+            left: -110px;
+        }
+    .layui-form-label {
+        padding: 9px 6px !important;
+    }
+</style>
+
+@if (Model == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+<div class="contentData">
+    <div class="tab" style="position:relative;">
+        <div class="long-text">
+            <label>&nbsp;项目名称&nbsp;:</label>
+            <input type="text" value="@Model.ProjectName" class="addbg" disabled />
+            <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+            <input type="hidden" name="projectId" id="projectId" value="@Model.ProjectId" />
+            <input type="hidden" name="ComponentIds" id="ComponentIds" value="" />
+        </div>
+        <div class="short-text">
+            <label>&nbsp;业务类型&nbsp;:</label>
+            <select disabled style="background: #ebebe5">
+                <option selected>@Model.BusinessTypeName</option>
+            </select>
+        </div>
+        <div class="short-text">
+            <label>&nbsp;问题类型&nbsp;:</label>
+            <select disabled style="background: #ebebe5">
+                <option selected>@Model.ProblemTypeName</option>
+            </select>
+        </div>
+        <div class="long-text">
+            <label>&nbsp;标题&nbsp;:</label>
+            <input type="text" disabled value="@Model.Title" />
+        </div>
+        <div class="intro">
+            <div><label>&nbsp;描述&nbsp;:</label></div>
+            <div>
+                <textarea class="sub-description" disabled>@Model.Description</textarea>
+            </div>
+        </div>
+        <div class="intro">
+            <div><label>&nbsp;建议&nbsp;:</label></div>
+            <div>
+                <textarea class="sub-description" disabled>@Model.Proposal</textarea>
+            </div>
+        </div>
+        <div class="short-text">
+            <label>&nbsp;重大事故&nbsp;:</label>
+            @if (Model.IsAccident)
+            {
+                <input type="text" value="是" disabled />
+            }
+            else
+            {
+                <input type="text" value="否" disabled />
+            }
+        </div>
+        <div class="long-text">
+            <label>&nbsp;创建人&nbsp;:</label>
+            <input type="text" disabled value="@Model.CreateUserName" />
+        </div>
+        <div class="long-text">
+            <label>&nbsp;关联BIM&nbsp;:</label>
+            @if (ViewBag.bimId == "[]")
+            {
+                <input type="text" id=""  readonly value="未关联构件" />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            }
+            else {
+                <input type="text" id="BIMSelect" name="BIMSelect" readonly value="已关联构件" style="color:blue;" />
+                <i class="pic iconfont BIMSelect_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            }
+            <input type="hidden" id="ComponentIds" name="ComponentIds" value="@ViewBag.ComponentIds" />
+        </div>
+        @if (Model.QuestionBims != null && Model.QuestionBims.Any())
+        {
+            var Bims = "";
+            foreach (var item in Model.QuestionBims)
+            {
+                Bims += item.ComponentId.ToString() + ",";
+            }
+            var first = Model.QuestionBims.First();
+            <div class="long-text" style="display:none;">
+                <label>&nbsp;BIM展示&nbsp;:</label>
+                <input type="text" id="SelectBIM" name="SelectBIM" value="@Bims" readonly />
+                <input type="hidden" id="bimId" value="@first.BIMId" />
+                <i class="pic iconfont SelectBIM_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+        }
+        <div class="long-text">
+            <label>&nbsp;接收单位&nbsp;:</label>
+            <select disabled style="background: #ebebe5">
+               <option selected>@Model.RecCompanyName</option>
+            </select>
+        </div>
+        <div class="upload" style="margin-bottom:20px;" id="fileListFile">
+            <div><label>&nbsp;附件上传&nbsp;:</label></div>
+            <ul class="fileShow"></ul>
+        </div>
+        <div class="line_bg">
+            <img src="/Resource/images/line.png" alt="Alternate Text" />
+        </div>
+        @if (Model.State == (int)(EnumState.Normal))
+        {
+            <div class="intro">
+                <div><label>&nbsp;回复内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Content" style="position:relative;top:10px;" placeholder="写下你想说的话"></textarea>
+                </div>
+            </div>
+        }
+        <div class="btn_group">
+            @if (Model.State == (int)(EnumState.Normal))
+            {
+                <button type="button" class="Reply checkright" data-module="ProblemManage" data-right="Reply">回复</button>
+                if (Model.SubmitUserId == ViewBag.UserId)
+                {
+                    <button type="button" class="Close checkright" data-module="ProblemManage" data-right="Close">关闭</button>
+                }
+            }
+        </div>
+        <div class="comment">
+            <div><label>&nbsp;历史回复&nbsp;:</label></div>
+            <div>
+                @if (Model.QuestionTracks != null && Model.QuestionTracks.Any())
+                {
+                    foreach (var item in Model.QuestionTracks)
+                    {
+                        <div class="replyInfor">
+                            <div class="timeUser c">
+                                <span>用户:@item.CreateUserName</span><span>回复时间:@item.CreateTime</span>
+                            </div>
+                            <div class="replyContent">
+                                @item.Content
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="Close" style="display:none" class="short-text layui-form">
+    <label class="layui-form-label">重大事故</label>
+    <div class="layui-input-block">
+        <input type="radio" name="isAccident" value="true" title="是">
+        <input type="radio" name="isAccident" value="false" title="否">
+    </div>
+</div>
+<script>
+    //模型构件信息添加到隐藏域
+    var PositionJson=@Html.Raw(ViewBag.PositionJson);
+    $("#ComponentIds").val(JSON.stringify(PositionJson));
+
+    layui.use(['layer', 'laydate', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage, laydate = layui.laydate;
+        //获取附件
+        $.post("/Files/GetFileList", { tableName: 'Epm_Question', id: '@Model.Id' }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    data.Data.forEach(function (item, index, arr) {
+                        if (item.ImageType == null) {
+                            var odiv = '<li id="' + item.GuidId + '">';
+                            odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                            odiv += '<div>' + item.Size + '</div>';
+                            odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                            odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                            odiv += '<span class="fileComplete" style="margin-left:20px;"></span>';
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+                    })
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+        //下载附件
+        $("body").on("click", ".downloadFile", function () {
+            var group = $(this).parent().find(".hiddenArea").data("group");
+            var path = $(this).parent().find(".hiddenArea").data("url");
+            var fileName = $(this).parent().find(".hiddenArea").data("filename");
+            window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+        });
+        //回复
+        $(".Reply").click(function () {
+            var data = {};
+            data.QuestionId = $("#Id").val()
+            data.Content = $("#Content").val();
+            $.post("/Question/Reply", data, function (result) {
+                if (result.Flag) {
+                    layer.msg("回复成功", { time: 1500, icon: 1 }, function () {
+                        window.location.reload();
+                    })
+                    return false;
+                }
+                layer.alert(result.Message, { icon: 2 });
+            })
+        })
+        var bims = $("#SelectBIM").val();
+        if (bims) {
+            bims = bims.split(",");
+            var Bims = [];
+            $.each(bims, function (index, item) {
+                Bims.push(item.split("_")[1]);
+            })
+            Bims = Bims.join(",");
+            $("#SelectBIM").val(Bims);
+        }
+
+        //关闭
+        $(".Close").click(function () {
+            layer.open({
+                type: 1,
+                title: GetLayerTitle("问题关闭"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['400px', '220px'],
+                content: $('#Close'),
+                btn: ['确认', '取消'],
+                yes(index, layero) {
+                    var isAccident = $("#Close input:checked").val();
+                    if (!isAccident) {
+                        layer.msg("请选择是否为重大事故", { time: 2000, icon: 3 });
+                        return false;
+                    }
+                    var tips = (isAccident == "true") ? "重大" : "普通";
+                    layer.confirm("确定要关闭当前问题，并将该问题设置为【" + tips + "】事故？", { icon: 3 }, function () {
+                        var id = $("#Id").val();
+                        isAccident = (isAccident == "true") ? true : false;
+                        var data = {};
+                        data.id = id;
+                        data.isAccident = isAccident;
+                        $.post("/Question/Close", data, function (result) {
+                            if (result.Flag) {
+                                layer.msg("问题关闭成功", { time: 1000, icon: 1 })
+                                window.location.href = "/Question/Index";
+                                return false;
+                            }
+                            layer.msg(result.Message, { time: 1000, icon: 2 });
+                        })
+                    })
+                },
+                btn2() { },
+                cancel() { }
+            })
+        });
+        //查看模型
+        $("#BIMSelect,.BIMSelect_icon").click(function () {
+            var id = $("#projectId").val();
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("关联BIM模型"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '700px'],
+                content: '/Comm/RelationBIM?isLook=0&bimId=@ViewBag.bimId&projectId=' + id,
+            });
+            
+        });
+    });
+</script>
+}

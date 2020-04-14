@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "SelectItem";
+}
+<form action="http://10.206.129.206:8080/BDPServer/BDPFileService/saveFile?RequestParam={%22Param%22:{%22envRoot%22:{%22UserName%22:%22000001%22,%22Product%22:%22BIM%22}}}" 
+      id="form1" method="post" style="text-align:center;" enctype="multipart/form-data">
+    Author<input type="text" name="author" /><br />
+    select file<input type="file" id="fileName2" name="fileName2" readonly="readonly" /><br />
+    <input type="submit" name="Upload" id=""><br />
+</form> 
+<br /><br />
+<input type="button" id="btn23" value="login" onclick="login()" />
+<br /><br />
+<input type="button" id="btn2" value="download2" /><br />
+<script>
+    $(function () {
+        $("#btn2").click(function () {
+            window.location.href = "/Download/DownLoadHB?group=group1&path=M00/00/6E/Cs6Bz1ufFDeAc58CAAAIXkl8ijg320.jpg&fileName=1.jpg";
+        });
+    });
+</script>
+<div>
+    <a href="/Download/DownLoadHB?group=group1&path=M00/00/71/Cs6Bz1vCw5KAMS2UAADsNWvb014544.jpg&fileName=4544.jpg">测试下载</a>
+</div>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="upload" style="margin-bottom:0px;margin-top:25px;">
+                <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" />
+                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                </div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function login() {
+        $.ajax({ url: "/Currency/LoginHB?userName=&password=" });
+    }
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: formFile,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        //var imgUrl = getFileImg(obj.Name);
+                        //var odiv = '<li id="' + obj.GuidId + '">';
+                        //odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        //odiv += '<div>' + obj.Size + '</div>';
+                        //odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        //odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        //odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                        //odiv += '</li>';
+                        //$('#fileListFile .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                //$("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+
+        //删除附件
+        $("#fileListFile").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+    });
+</script>

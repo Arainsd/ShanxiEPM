@@ -1,0 +1,74 @@
+﻿//[
+//  {
+//    "Key": "SaleTime",
+//    "Remark": "招标公告里的标书领购开始时间和领购截止时间差",
+//    "Params": {
+//      "Prequalification": "5",
+//      "Postqualification": "5",
+//      "Invitation": "5"
+//    }
+//  },
+//  {
+//    "Key": "SubmitFileTime",
+//    "Remark": "招标公告中的标书售卖开始时间和投标文件提交截止时间差",
+//    "Params": {
+//      "Prequalification": "20",
+//      "Postqualification": "5",
+//      "Invitation": "20"
+//    }
+//  },
+//  {
+//    "Key": "ClarificationTime",
+//    "Remark": "招标文件/澄清确认时间和新增时间与提交投标文件截止时间差",
+//    "Params": {
+//      "Prequalification": "15",
+//      "Postqualification": "3",
+//      "Invitation": "15"
+//    }
+//  },
+//  {
+//    "Key": "ExpExtractTime",
+//    "Remark": "评标大厅准备中的专家抽取，需要在评标开始前24小时内进行",
+//    "Params": {
+//      "Prequalification": "1",
+//      "Postqualification": "1",
+//      "Invitation": "1"
+//    }
+//  },
+//  {
+//    "Key": "PublicityResultStartTime",
+//    "Remark": "评标大厅正常关闭的时间与发布评标结果公示的时间差",
+//    "Params": {
+//      "Prequalification": "-1",
+//      "Postqualification": "3",
+//      "Invitation": "3"
+//    }
+//  },
+//  {
+//    "Key": "PublicityResultTime",
+//    "Remark": "评标结果公示开始时间和结束时间差",
+//    "Params": {
+//      "Prequalification": "-1",
+//      "Postqualification": "3",
+//      "Invitation": "3"
+//    }
+//  },
+//  {
+//    "Key": "WBResultStartTime",
+//    "Remark": "中标公告需要在评标结束后X日内进行，最晚不能超过Y日",
+//    "Params": {
+//      "Prequalification": "-1",
+//      "Postqualification": "30",
+//      "Invitation": "30"
+//    }
+//  },
+//  {
+//    "Key": "BNoticeTime",
+//    "Remark": "中标通知书应该在中标公告发布的X日内发出",
+//    "Params": {
+//      "Prequalification": "-1",
+//      "Postqualification": "7",
+//      "Invitation": "7"
+//    }
+//  }
+//]

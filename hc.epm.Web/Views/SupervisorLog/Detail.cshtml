@@ -1,0 +1,341 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model SupervisorLogView
+@{
+    ViewBag.Title = "查看监理日志";
+}
+
+@if (Model == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+    <div class="contentData">
+        <div class="tab">
+            <div class="long-text">
+                <label>项目名称&nbsp;:</label>
+                <input type="text" name="ProjectName" id="ProjectName" value="@Model.ProjectName" disabled />
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" disabled />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="short-text">
+                <label for="SubmitTime">提报日期&nbsp;:</label>
+                <input type="text" id="SubmitTime" name="SubmitTime" value="@(Convert.ToDateTime(Model.SubmitTime).ToString(" yyyy-MM-dd"))" disabled>
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="short-text">
+                <label>天气&nbsp;:</label>
+                <select disabled style="background-color:#EBEBE4">
+                    <option selected>@Model.TypeName</option>
+                </select>
+            </div>
+            <div class="short-text">
+                <label><span class="star"></span>&nbsp;风力&nbsp;:</label>
+                <input type="text" id="WindPower" name="WindPower" value="@Model.WindPower" disabled>
+            </div>
+            <div class="short-text">
+                <label><span class="star"></span>&nbsp;气温&nbsp;:</label>
+                <input type="text" id="Temperature" name="Temperature" value="@Model.Temperature" disabled>
+            </div>
+            <div class="short-text">
+                <label><span class="star"></span>&nbsp;新开工程节点&nbsp;:</label>
+                <select disabled style="background-color:#EBEBE4;width:500px;">
+                    <option style="background-color:#EBEBE4" selected>@Model.PlanName</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="short-text">
+                <label>&nbsp;新完工程节点&nbsp;:</label>
+                <select disabled style="background-color:#EBEBE4;width:500px;">
+                    <option style="background-color:#EBEBE4" selected>@Model.nextPlanName</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="short-text">
+                <label><span class="star"></span>&nbsp;施工天数&nbsp;:</label>
+                第<span style="padding:0 5px" class="ConstructionDate">@ViewBag.ConstructionDate</span>天(总工期<span style="padding:0 5px">@ViewBag.Total</span>天)
+            </div>
+            <div class="intro" style="height:100%;">
+                <label><span class="star"></span>&nbsp;施工单位&nbsp;:</label>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:3px;width:79%">
+                    <thead>
+                        <tr>
+                            <th>单位名称</th>
+                            <th width="120">姓名</th>
+                            <th width="120">身份</th>
+                            <th width="80">入场许可</th>
+                            <th width="230">是否到场</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.SupervisorLogCompanys != null && Model.SupervisorLogCompanys.Count() > 0)
+                        {
+                            foreach (var item in Model.SupervisorLogCompanys)
+                            {
+                                <tr>
+                                    <td>@item.CompanyName</td>
+                                    <td>@item.ManagerName</td>
+
+                                    <td>
+                                        @foreach (var epm in item.AttendanceList)
+                                        {
+                                            <text>@epm.workPeopleTypeName</text><br />
+                                        }
+                                    </td>
+
+
+                                    @if (item.Permit == "0")
+                                    {
+                                        <td>是</td>
+                                    }
+                                    else {
+                                        <td>否</td>
+                                    }
+                                    @if (item.BePresent == "0")
+                                    {
+                                        <td>是</td>
+                                    }
+                                    else {
+                                        <td>否</td>
+                                    }
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="intro">
+                <div><label for="ChangeContent"><span class="star"></span>&nbsp;今日工作内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Content" name="Content" disabled>@Model.Content</textarea>
+                </div>
+            </div>
+            <div class="intro">
+                <div><label><span class="star"></span>&nbsp;明日计划&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="TomorrowProject" name="TomorrowProject" disabled>@Model.TomorrowProject</textarea>
+                </div>
+            </div>
+            @if (Model.Schedule == "正常" || Convert.ToInt32(Model.Schedule) <= 0)
+            {
+                <div class="short-text">
+                    <label>&nbsp;进度&nbsp;:</label>
+                    <span>正常</span>
+                </div>
+            }
+            else
+            {
+                <div class="short-text">
+                    <label>&nbsp;进度&nbsp;:</label>
+                    <span>延期</span><span style="padding:0 5px">@Model.Schedule</span><span>天</span>
+                </div>
+                <div class="intro">
+                    <div><label>&nbsp;原因&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Reason" name="Reason" disabled>@Model.Reason</textarea>
+                    </div>
+                </div>
+            }
+            <div class="intro" style="display:none;">
+                <div><label>&nbsp;备注&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Remark" name="Remark" disabled>@Model.Remark</textarea>
+                </div>
+            </div>
+            <div class="upload" style="margin-bottom:0px;">
+                <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                <div style="width:100%;margin:3px 20px 20px 0px;" id="fileList">
+                    @*<ul class="fileShow"></ul>*@
+                </div>
+            </div>
+            <br /><br />
+            @if (Model.SenceList.Count > 0 && Model.SenceList != null)
+            {
+                foreach (var item in Model.SenceList)
+                {
+                    <div class="short-text" id="divWorkName">
+                        <label><span class="star"></span>&nbsp;危险作业&nbsp;:</label>
+                        <label id="WorkName" style="width: 70%;text-align: left;">@item.name</label>
+                    </div>
+                    <div class="short-text" id="divWorkTime">
+                        <label><span class="star"></span>&nbsp;作业时间&nbsp;:</label>
+                        <label id="WorkTime" style="width: 70%;text-align: left;">@item.time</label>
+
+                    </div>
+                    if (item.Attachs.Count > 0 && item.Attachs != null)
+                    {
+                        <div class="upload" id="workUpload">
+                            <div class="upload" style="margin-bottom:0px;margin-top: 3px;">
+                                <div><label>&nbsp;作业实景附件&nbsp;:</label></div>
+                            </div>
+                            <div style="width:100%;margin:3px 20px 20px 0px;" id="fileListFile">
+                                <ul class="fileShow">
+                                        @foreach (var temp in item.Attachs)
+                                        {
+                                            <li id="@temp.GuidId">
+                                                <div class="downloadFile"><img src="getFileImg(@temp.Name)" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow" /><a href="javascript:;" target="_blank">@temp.Name</a></div>
+                                                <div>@temp.Size</div>
+                                                <span style="margin-left:20px;">@temp.CreateUserName</span>
+                                                <span style="margin-left:20px;">@temp.CreateTime</span>
+                                            </li>
+                                        }
+                                    </ul>
+                           
+                            </div>
+                        </div>
+                                    }
+                                    <hr />
+                                        }
+                                    }
+
+            <div class="button-group btn-center">
+                @if ((ApprovalState)Model.State == ApprovalState.WaitAppr)
+                {
+                    <button type="button" class="audit checkright" data-module="LogManage" data-right="Check">审核</button>
+                    <button type="button" class="reject checkright" data-module="LogManage" data-right="UnCheck">驳回</button>
+                }
+                <button type="button" class="Communite">沟通</button>
+                <input type="hidden" name="WorkId" id="WorkId" value="@Model.WorkId" />
+                <input type="hidden" name="Type" id="Type" />
+            </div>
+        </div>
+    </div>
+    <script>
+        function getWorkInfo() {
+            var projectId = $("#ProjectId").val();
+            var submitTime = $("#SubmitTime").val();
+            if (projectId != "" && projectId != "0") {
+                $.post("/SupervisorLog/GetWorkInfo?projectId=" + projectId + "&submitTime=" + submitTime, function (data) {
+                    var workRealSceneID = data.WorkRealSceneID;
+                    $("#WorkRealSceneID").val(workRealSceneID);
+                    var workStartTime = new Date(formatDateByJson(data.WorkStartTime)).Format("yyyy-MM-dd");
+                    var workEndTime = new Date(formatDateByJson(data.WorkEndTime)).Format("yyyy-MM-dd");
+                    if (data.Flag == 0) {  //无危险作业
+                        $("#WorkId").val(0);
+                        $("#divWorkName").hide();
+                        $("#divWorkTime").hide();
+                        $("#workUpload").hide();
+                    } else {
+                        $("#WorkId").val(data.WorkId);
+                        $("#Type").val(data.Flag);
+                        $("#WorkName").html(data.TaskName);
+                        $("#WorkTime").html(workStartTime);
+                        $("#divWorkName").show();
+                        $("#divWorkTime").show();
+                        if (data.Type == 2) { //日志提报时间再作业时间内容
+                            $("#workUpload").show();
+                            //获取附件
+                            $.post("/Files/GetFileList", { tableName: 'Epm_WorkUploadRealScene', id: workRealSceneID }, function (result) {
+                                if (result.Flag) {
+                                    if (result.Data.length > 0) {
+                                        result.Data.forEach(function (item, index, arr) {
+                                            if (item.ImageType == null) {
+                                                var odiv = '<li id="' + item.GuidId + '">';
+                                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                                odiv += '<div>' + item.Size + '</div>';
+                                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                                odiv += '</li>';
+                                                $('#fileListFile .fileShow').append(odiv);
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    parent.layer.alert(result.Message, { icon: 2 });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+
+        $(function () {
+            //getWorkInfo();
+        });
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_SupervisorLog', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == "small") {
+                                //var odiv = '<li id="' + item.GuidId + '">';
+                                //odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                //odiv += '<div>' + item.Size + '</div>';
+                                //odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                //odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                //odiv += '<input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '">';
+                                //odiv += '</li>';
+                                //$('#fileList .fileShow').append(odiv);
+
+                                var odiv = '<a href="' + WebAPIURL + item.Url + '" target="_blank"><img src="' + WebAPIURL + item.Url + '" style="width: 200px;height: 200px;cursor: pointer;" title="点击下载" class="imgShow"/></a>';
+                                $('#fileList').append(odiv);
+                            }
+                        });
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+        ////下载附件
+        //$("body").on("click", ".downloadFile", function () {
+        //    var group = $(this).parent().find(".hiddenArea").data("group");
+        //    var path = $(this).parent().find(".hiddenArea").data("url");
+        //    var fileName = $(this).parent().find(".hiddenArea").data("filename");
+        //    window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+        //});
+        //审核
+        $(".audit").click(function () {
+            var id = '@Model.Id';
+            var state = "ApprSuccess";
+            parent.layer.confirm("确认审核通过？", { icon: 3 }, function () {
+                $.post("Audit", { id: '@Model.Id', state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("审核成功", { time: 2000, icon: 1 });
+                        window.location.href = "/SupervisorLog/Index";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            })
+        });
+        //驳回
+        $('.reject').on('click', function () {
+            var state = "ApprFailure";
+            parent.layer.prompt({
+                formType: 2,
+                title: '请输入驳回理由',
+                yes: function (index, layero) {
+                    // 获取文本框输入的值
+                    var value = layero.find(".layui-layer-input").val();
+                    if (value) {
+                        $.post("Reject", { id: '@Model.Id', reason: value, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                location.href = "/SupervisorLog/Index";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    } else {
+                        parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                    }
+                }
+            })
+        });
+        //沟通
+        $(".Communite").click(function () {
+            var projectId = $("#ProjectId").val();
+            window.location.href = "/Question/Add?businType=Log&projectId=" + projectId + "&BusinessId=@Model.Id";
+        });
+    </script>
+                                    }

@@ -1,0 +1,195 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_Company>
+@{
+    ViewBag.Title = "选择服务商";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+
+    .form-select > form > div select {
+        padding-left: 5px;
+    }
+    .userNameWrap {
+        margin: 10px 0;
+        min-height: 25px;
+    }
+
+    #showSelectUserName {
+        line-height: 28px;
+        color: #000000;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>公司名称 : </label><input type="text" id="name" name="name" value="@ViewBag.name" maxlength="100">
+                <input type="hidden" name="selectType" value="@ViewBag.SelectType" />
+            </div>
+            <div class="form-sub" style="width:auto;">
+                <button type="submit" style="cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<br /><br />
+<div class="userNameWrap">
+    <label id="showSelectUserName"></label>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="60">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="120">序号</th>
+                <th>公司名称</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.SId" data-name="@item.Name" data-code="@item.Code" data-phone="@item.Phone" data-address="@item.Address" data-contacts="@item.LinkMan" data-addressname="@item.AddressName" data-addressinfo="@item.AddressInfo" />
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td>@item.Name</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">暂无数据</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/Comm/SelectServiceCustomer?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize();
+                    }
+                }
+            });
+        });
+
+        if (@ViewBag.selectType == "2")
+        {
+            setSelectUsers();
+
+            $('#tbody :checkbox[name="checkbox"]').change(function (index) {
+                var obj = {};
+                var IsChecked = $(this).is(':checked');
+                obj.id = $(this).val() || '';
+                obj.name = $(this).data('name') || '';
+                parent.getUserData(IsChecked, obj);
+                var selectUserIds = parent.getSelectedUserData();
+                if (selectUserIds.userNames !== "") {
+                    $('#showSelectUserName').html("已选中：" + selectUserIds.userNames);
+                }
+                else {
+                    $('#showSelectUserName').html(selectUserIds.userNames);
+                }
+            });
+        }
+
+        
+        //全选
+        $("#selectAll").click(function () {
+            var isChecked = $("#selectAll").prop("checked");
+            $("#tbody input[type='checkbox']").prop("checked", isChecked);
+            $('#tbody :checkbox[name="checkbox"]').change();
+        });
+        // 单独选项控制全选
+        $("#tbody input[type='checkbox']").click(function () {
+            var allLength = $("#tbody input[type='checkbox']").length;
+            var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+            if (allLength == checkedLength) {
+                $("#selectAll").prop("checked", true);
+                $('#tbody :checkbox[name="checkbox"]').change();
+            } else {
+                $("#selectAll").prop("checked", false);
+                $('#tbody :checkbox[name="checkbox"]').change();
+            }
+        });
+
+
+        function setSelectUsers() {
+            var selectUserIds = parent.getSelectedUserData();
+            $.each($(':checkbox[name="checkbox"]'), function(index, item) {
+                if (selectUserIds.userIds.indexOf(item.value) !== -1)
+                {
+                    item.checked = true;
+                }
+            })
+            if (selectUserIds.userNames !== "")
+            {
+                $('#showSelectUserName').html("已选中：" + selectUserIds.userNames);
+            }
+            else {
+                $('#showSelectUserName').html(selectUserIds.userNames);
+            }
+        }
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    Name: $(this).data('name') || '',
+                    Code: $(this).data('code') || '',
+                    Address: $(this).data('address') || '',
+                    AddressName: $(this).data('addressname') + $(this).data('addressinfo') || '',
+                    Phone: $(this).data('phone') || '',
+                    LinkMan: $(this).data('contacts')
+                });
+            });
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择公司！';
+            }
+            return result;
+        }
+    </script>
+}

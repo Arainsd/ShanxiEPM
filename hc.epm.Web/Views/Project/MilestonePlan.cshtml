@@ -1,0 +1,494 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<PlanView>
+@{
+    ViewBag.Title = "MilestonePlan";
+}
+<style>
+    .datalist {
+        margin-top: 22px;
+    }
+
+    .StartTimeCon {
+        float: left;
+        height: 30px;
+        position: relative;
+    }
+
+        .StartTimeCon input {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-left: 15px;
+            height: 25px;
+            line-height: 35px;
+            border: 1px solid #C7C7C7;
+            border-radius: 1px;
+        }
+
+        .StartTimeCon .pic {
+            font-size: 20px;
+            position: absolute;
+            left: 262px;
+            top: 2px;
+        }
+
+    .CreateMilestonePlan {
+        float: left;
+        height: 25px;
+        width: 140px;
+        margin-left: 20px;
+    }
+
+    table input[type="text"] {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 25px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+    }
+
+    tbody tr td:nth-child(3) {
+        position: relative;
+    }
+
+    tbody tr td:nth-child(4) {
+        position: relative;
+    }
+
+    table .picstart {
+        font-size: 20px;
+        position: absolute;
+    }
+
+    table .picend {
+        font-size: 20px;
+        position: absolute;
+    }
+
+    .StartTimeCon select {
+        display: inline-block;
+        box-sizing: border-box;
+        height: 25px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+        width: 187px;
+    }
+</style>
+<div class="contentData">
+    <ul class="tab-list" style="margin-bottom:38px;">
+        <li id="Edit">基本信息</li>
+        <li id="ApprovalConstitute">总批复构成</li>
+        <li id="ProjectISP">工程供应商</li>
+        <li id="ProjectMainPoint">工程要点</li>
+        <li id="MilestonePlan" class="active">工程节点</li>
+        <li id="TimeManage">工期管理</li>
+        <li id="IsCrossingsManage">外部手续</li>
+    </ul>
+    <div>
+        <form>
+            <div class="StartTimeCon">
+                <label><span class="star" style="color:red;">*</span>&nbsp;计划开工时间&nbsp;:</label>
+                <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime' })" />
+                <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                <label><span class="star" style="color:red;">*</span>&nbsp;工程节点分类&nbsp;:</label>
+                @Html.DropDownList("parentId")
+            </div>
+            <button type="button" class="CreateMilestonePlan checkright" data-module="ProjectInfoManage" data-right="AddPlan">生成工程节点计划</button>
+            <input type="hidden" name="MilepostPlan" id="MilepostPlan" />
+            <input type="hidden" id="HidinputId" name="HidinputId" />
+        </form>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    @*<th style="width:50px;"></th>*@
+                    <th style="width:80px;">序号</th>
+                    <th style="width:500px;">计划名称</th>
+                    <th style="width:250px;">开工时间</th>
+                    <th style="width:250px;">完工时间</th>
+                    <th style="width:100px;">工期(天)</th>
+                    <th style="width:115px;">
+                        操作
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            <a href="javascript:;" class="addPlan" data-module="ProjectInfoManage" style="color:blue">添加</a>
+                        }
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            @*<td><input type="checkbox" checked /></td>*@
+                            <td class="Number">@index</td>
+                            <td>
+                                <input type="text" name="PlanName" class="PlanName" style="width:100%;" value="@item.Plan.Name" />
+                            </td>
+                            <td>
+                                <input type="text" name="StartTime" class="StartTime TimeIsNull" value="@(item.Plan.StartTime == null ? "" : Convert.ToDateTime(item.Plan.StartTime).ToString("yyyy-MM-dd"))" />
+                                <i class="pic iconfont picstart" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                            </td>
+                            <td>
+                                <input type="text" name="EndTime" class="EndTime TimeIsNull" value="@(item.Plan.EndTime == null ? "" : Convert.ToDateTime(item.Plan.EndTime).ToString("yyyy-MM-dd"))" />
+                                <i class="pic iconfont picend" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                            </td>
+                            <td>@item.Plan.BuildDays.ToString("#0")</td>
+                            <td style="display:none;">
+                                <input type="text" class="inputId" data-id="@item.Plan.SId" value="@item.Plan.SId" />
+                            </td>
+                            <td style="display:none;">
+                                <input type="text" class="inputState" value="@item.Plan.State" />
+                            </td>
+                            <td>
+                                @if (item.EpmPlanComponent != null && item.EpmPlanComponent.Count > 0)
+                                {
+                                    List<Epm_QuestionBIM> components = new List<Epm_QuestionBIM>();
+                                    Epm_QuestionBIM comp = null;
+                                    var bimid = "";
+                                    foreach (var plan in item.EpmPlanComponent)
+                                    {
+                                        bimid = plan.BIMId.ToString();
+                                        comp = new Epm_QuestionBIM();
+                                        comp.BIMId = plan.BIMId;
+                                        comp.BIMName = plan.BIMName;
+                                        comp.ComponentId = plan.ComponentId;
+                                        comp.ComponentPosition = "";
+                                        components.Add(comp);
+                                    }
+                                    var selectBim = Newtonsoft.Json.JsonConvert.SerializeObject(components);
+                                    <input type="hidden" id="ComponentIds" name="ComponentIds" value="@selectBim" data-bimid="@bimid" />
+                                }
+                                else {
+                                    if (Model != null && Model.Count() > 0)
+                                    {
+                                        <a href="javascript:;" class="delPlan" data-module="ProjectInfoManage" style="color:blue">删除</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="9">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (Model != null && Model.Count() > 0)
+        {
+            <div class="button-group btn-center">
+                <button type="button" class="AuditeMileston checkright" data-module="ProjectInfoManage" data-state="1" data-right="AuditPlan">提交</button>
+                <button type="button" class="AuditeMileston checkright" data-module="ProjectInfoManage" data-state="0" data-right="AuditPlan">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+
+            </div>
+        }
+    </div>
+
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+
+    //添加计划
+    $('table').on('click', '.addPlan', function () {
+        var len = Number($(".Number").last().text()) + 1;
+        var tr = "";
+        tr += '<tr><td class="Number">' + len + '</td>';
+        tr += '<td><input type="text" name="PlanName" class="PlanName" style="width:100%;" value="" /></td>';
+        tr += '<td><input type="text" name="StartTime" class="StartTime TimeIsNull" value="" /> <i class="pic iconfont picstart" width="20" height="30" style="cursor:pointer;" >&#xe7e2;</i> </td>';
+        tr += '<td><input type="text" name="EndTime" class="EndTime TimeIsNull" value=""/><i class="pic iconfont picend" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i></td>';
+        tr += " <td>0</td>";
+        tr += '<td style="display:none;"><input type="text" class="inputId" data-id="0" value="0" /></td>';
+        tr += '<td style="display:none;"> <input type="text" class="inputState" value="@((int)ApprovalState.WaitAppr)" /></td>';
+        tr += ' <td><a href="javascript:;" class="delPlan" data-module="ProjectInfoManage" style="color:blue">删除</a></td> </tr>'
+        $('tbody').append(tr);
+        init();
+    })
+
+    var inputId = "";
+    //删除计划
+    $("table").on("click", ".delPlan", function () {
+        var str = $(this).parent().parent().find(".inputId").val();
+        if (str != 0 || str != "0") {
+            inputId += str + ",";
+        }
+        $("#HidinputId").val(inputId);
+        $(this).parent().parent().remove();
+    })
+    function init() {
+        $("tbody tr").each(function (index, item) {
+            //判断状态
+            var state = $(item.children[6]).find("input").val();
+            if (state == '@((int)ApprovalState.ApprSuccess)' || state == '@((int)ApprovalState.ApprFailure)') {
+                $(item.children[0]).find("input").attr("disabled", true);
+                $(item.children[1]).find("input").attr("disabled", true);
+                $(item.children[2]).find("input").attr("disabled", true);
+                $(item.children[3]).find("input").attr("disabled", true);
+                $(".button-group button").hide();
+                $(".addPlan").hide();
+                $(".delPlan").hide();
+
+            } else {
+                $(item.children[0]).find("input").attr("disabled", false);
+                $(item.children[1]).find("input").attr("disabled", false);
+                $(item.children[2]).find("input").attr("disabled", false);
+                $(item.children[3]).find("input").attr("disabled", false);
+                $(".button-group button").show();
+            }
+
+            //每个日期input添加id选择器
+            $(item.children[2]).find("input").attr('id', "StartTime" + index);
+            $(item.children[3]).find("input").attr('id', "EndTime" + index);
+
+            $(item.children[2]).find("input,i").on("click", function () {
+                WdatePicker({ el: "StartTime" + index });//调用日期控件
+            }).on("focus", function () {
+                WdatePicker({ onpicking: cStartDayFunc });
+            });
+
+            $(item.children[3]).find("input,i").on("click", function () {
+                WdatePicker({ el: "EndTime" + index });
+            }).on("focus", function () {
+                WdatePicker({ onpicking: cEndDayFunc });
+            });
+        });
+
+    }
+    $(function () {
+        $("#Edit").click(function () {
+            window.location.href = 'Edit?projectId=@ViewBag.ProjectId';
+        });
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = "ApprovalConstitute?projectId=@ViewBag.ProjectId"
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#TimeManage").click(function () {
+            window.location.href = 'TimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'ProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        init();
+        //隐藏按钮
+        var display = $('.CreateMilestonePlan').css('display');
+        if (display == 'none') {
+            $(".StartTimeCon").hide();
+            var limitHtml = '<tr><td colspan="4" style="font-weight:bold;">总工期</td><td colspan="2" style="font-weight:bold;">@ViewBag.Limit</td></tr>'
+            $(".datalist tbody").append(limitHtml);
+        } else {
+            if ($("tbody tr").length > 1) {
+                $(".StartTimeCon").hide();
+                $('.CreateMilestonePlan').hide();
+            } else {
+                $(".StartTimeCon").show();
+            }
+
+        }
+
+        //计算工期
+        function cStartDayFunc(dp) {
+            var date = dp.cal.getNewDateStr();
+            var endTime = $(dp.el).parents("tr").find(".EndTime").val();
+            cDayFunc(date, endTime, dp.el);
+        }
+        function cEndDayFunc(dp) {
+            var startTime = $(dp.el).parents("tr").find(".StartTime").val();
+            var date = dp.cal.getNewDateStr();
+            cDayFunc(startTime, date, dp.el);
+        }
+        //失焦计算工期
+        $("body").on("blur", ".StartTime", function () {
+            var date = $(this).val();
+            var endTime = $(this).parents("tr").find(".EndTime").val();
+            cDayFunc(date, endTime, this);
+        });
+        $("body").on("blur", ".EndTime", function () {
+            var startTime = $(this).parents("tr").find(".StartTime").val();
+            var date = $(this).val();
+            cDayFunc(startTime, date, this);
+        });
+        function cDayFunc(startTime, endTime, obj) {
+            var limit = $(obj).parents("tr").find("td:eq(5)");
+            if (startTime == "" || endTime == "") {
+                $(limit).prev().html(0);
+            }
+            else {
+                var startNum = parseInt(startTime.replace(/-/g, ''), 10);
+                var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+                if (startNum > endNum) {
+                    $(limit).prev().html(0);
+                    return;
+                }
+                else {
+                    $(limit).prev().html(DateDiff(startTime, endTime) + 1);  //调用/计算两个日期天数差的函数，通用
+                }
+            }
+        }
+        //生成里程碑计划
+        $(".CreateMilestonePlan").click(function () {
+            if ($("#StartTime").val() == '') {
+                layer.alert("请输入计划开工时间", { icon: 2 })
+                return false;
+            }
+
+            var parentId = $("#parentId").val();
+            if (parentId == "") {
+                layer.alert("请选择工程节点分类", { icon: 2 })
+                return false;
+            }
+            var projectId = '@ViewBag.ProjectId';
+            var planStart = $("#StartTime").val();
+            var search = $("form").serialize();
+            $.post("MilestonePlan?projectId=" + projectId + "&planStart=" + planStart + "&mileType=" + parentId, search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/Project/MilestonePlan?projectId=@ViewBag.ProjectId";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+
+        //审核里程碑计划
+        $('.AuditeMileston').on('click', function () {
+            var MilepostPlan = [],
+                state = $(this).data('state');;
+            $("tbody tr").each(function (index, item) {
+                MilepostPlan.push({
+                    Id: $(item.children[5]).find("input").val(),
+                    State: $(item.children[6]).find("input").val(),
+                    Name: $(item.children[1]).find(".PlanName").val(),
+                    StartTime: $(item.children[2]).find("input").val(),
+                    EndTime: $(item.children[3]).find("input").val(),
+                    BuildDays: $(item.children[4]).text(),
+                    ProjectId: '@ViewBag.ProjectId'
+                });
+            });
+            if (state == "1") {
+                if (MilepostPlan.length <= 0) {
+                    layer.alert("请选择需要生成的里程碑", { icon: 2 });
+                    return;
+                }
+            }
+            MilepostPlans = JSON.stringify(MilepostPlan);
+            $("#MilepostPlan").val(MilepostPlans);
+            //计划名称不能为空
+            var Valueplan = false;
+            $("tbody .PlanName").each(function (index, item) {
+                if ($(item).val() == "") {
+                    Valueplan = true;
+                    return;
+                }
+            });
+            if (Valueplan) {
+                layer.alert("计划名称不能为空", { icon: 2 });
+                return;
+            }
+
+            //判断开工时间和完工时间不能为空
+            var ValueTime = false;
+            $("tbody .TimeIsNull").each(function (index, item) {
+                if ($(item).val() == "") {
+                    ValueTime = true;
+                    return;
+                }
+            });
+            if (ValueTime) {
+                layer.alert("开工时间或完工时间不能为空", { icon: 2 });
+                return;
+            }
+            var search = $("form").serialize();
+
+            $.post("AuditMilepostPlan", search + '&state=' + state, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/Project/MilestonePlan?projectId=@ViewBag.ProjectId";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        })
+        @*//驳回里程碑计划
+        $(".RejectMileston").click(function () {
+            var projectId = '@ViewBag.ProjectId';
+            $.post("RejectMilepostPlan?projectId=" + projectId, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/Project/MilestonePlan?projectId=@ViewBag.ProjectId";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });*@
+        //关联构件
+        //暂时注释关联构件相关功能
+        @*$("body").on("click", ".BindComponent", function () {
+            var obj = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("关联BIM模型"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '700px'],
+                content: '/Comm/RelationBIM?projectId=@ViewBag.ProjectId',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var result = iframeWin.getIds();
+                    if (result.flag) {
+                        layer.close(index);
+                        var sid = $(obj.parents("tr").children()[6]).find("input").val();
+                        console.log(sid);
+                        $.post("BindComponents?planId=" + sid + "&param=" + JSON.stringify(result.data), function (data) {
+                            if (data.Flag) {
+                                layer.msg("关联构件成功", { time: 1000, icon: 1 });
+                                obj.html("已关联构件");
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    } else {
+                        layer.alert(result.msg, { icon: 2 })
+                    }
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+            });
+        });*@
+        $(".ShowComponent").click(function () {
+            var bimid = $(this).prev().data("bimid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("关联BIM模型"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '700px'],
+                content: '/Comm/RelationBIM?isLook=0&bimId=' + bimid + '&projectId=@ViewBag.ProjectId',
+            });
+        });
+    });
+</script>

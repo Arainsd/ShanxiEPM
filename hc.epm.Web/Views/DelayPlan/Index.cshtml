@@ -1,0 +1,216 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@model List<Epm_PlanDelay>
+@{
+    ViewBag.Title = "延期列表";
+}
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <div><label>项目名称 : </label><input type="text" name="ProjectName" value="@ViewBag.ProjectName" maxlength="100"></div>
+                <div><label>工程节点名称 : </label><input type="text" name="PlanName" value="@ViewBag.PlanName" maxlength="50"></div>
+                <div><label>申请单位 : </label><input type="text" name="ApplyCompanyName" value="@ViewBag.applyCompanyName" maxlength="100"></div>
+            </div>
+            <div>
+                <div>
+                    <label>状&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 态 : </label>
+                    @Html.DropDownList("State", ViewBag.ApprovalState as SelectList)
+                </div>
+            </div>
+            <div class="form-sub">
+                @*@if (ViewBag.IsSupervisor == false)
+                {
+                    <button type="button" class="add checkright" data-module="DelayApply" data-right="Add">新 增</button>
+                }*@
+                <button type="button" class="add checkright" data-module="DelayApply" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="DelayApply" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th>所属项目</th>
+                    <th width="85">工程节点名称</th>
+                    <th width="110">原计划开始时间</th>
+                    <th width="110">原计划结束时间</th>
+                    <th width="85">延期天数</th>
+                    <th>申请单位</th>
+                    <th width="100">申请提交时间</th>
+                    <th width="85">状态</th>
+                    <th width="110">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                        <tr>
+                            <td class="table-center" data-itemid="@item.Id" data-itemname="@item.ProjectName" data-projectId="@item.ProjectId" data-state="@item.State">@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.PlanName</td>
+                            <td>@(item.OldStartDate == null ? "" : Convert.ToDateTime(item.OldStartDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.OldEndDate == null ? "" : Convert.ToDateTime(item.OldEndDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.DelayDay</td>
+                            <td>@item.ApplyCompanyName</td>
+                            <td>@(item.CreateDate == null ? "" : Convert.ToDateTime(item.CreateDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@(((ApprovalState)item.State).GetText())</td>
+                            @if (item.State == int.Parse(ApprovalState.Enabled.GetValue().ToString()))
+                            {
+                                if (item.CreateUserId.ToString() == ViewBag.UserID)
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a>
+                                        <a href="javascript:;" class="edit checkright" data-module="DelayApply" data-right="Modify">修改</a>
+                                        <a href="javascript:;" class="del checkright" data-module="DelayApply" data-right="Delete">删除</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td><a href="javascript:;" class="detail">查看</a></td>
+                                }
+                            }
+                            else if (item.State == int.Parse(ApprovalState.WaitAppr.GetValue().ToString()))
+                            {
+                                <td><a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a></td>
+                            }
+                            else if (item.State == int.Parse(ApprovalState.ApprSuccess.GetValue().ToString()))
+                            {
+                                <td><a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a></td>
+                            }
+                            else if (item.State == int.Parse(ApprovalState.ApprFailure.GetValue().ToString()))
+                            {
+                                if (item.CreateUserId.ToString() == @ViewBag.UserID)
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a>
+                                        <a href="javascript:;" class="edit checkright" data-module="DelayApply" data-right="Modify">修改</a>
+                                        <a href="javascript:;" class="discard checkright" data-module="DelayApply" data-right="Invalid">废弃</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a>
+                                        <a href="javascript:;" class="discard checkright" data-module="DelayApply" data-right="Invalid">废弃</a>
+                                    </td>
+                                }
+                            }
+                            else if (item.State == int.Parse(ApprovalState.Discarded.GetValue().ToString()))
+                            {
+                                if (item.CreateUserId.ToString().Equals(@ViewBag.UserID.ToString()))
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a>
+                                        <a href="javascript:;" class="del checkright" data-module="DelayApply" data-right="Delete">删除</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td><a href="javascript:;" class="detail checkright" data-module="DelayApply" data-right="Info">查看</a></td>
+                                }
+                            }
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"> </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/DelayPlan/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //添加
+        $('.add').click(function () {
+            location.href = "/DelayPlan/Add";
+        })
+        //查看
+        $('tbody').on('click', '.detail', function () {
+            var id = $(this).parent('td').siblings("td").eq(0).data("itemid")
+            location.href = "/DelayPlan/Detail?id=" + id;
+        });
+
+        //修改
+        $('tbody').on('click', '.edit', function () {
+            var id = $(this).parent('td').siblings("td").eq(0).data("itemid")
+            location.href = "/DelayPlan/Edit?id=" + id;
+        });
+
+        //废弃
+        $('tbody').on('click', '.discard', function () {
+            var id = $(this).parent('td').siblings("td").eq(0).data("itemid");
+            if (id != "") {
+                parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                    $.post("Discard", { id: id }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("废弃成功", { time: 2000, icon: 1 });
+                            window.location.href = "/DelayPlan/Index?pageIndex=1";
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            }
+        });
+        //删除
+        $("tbody").on('click', ".del", function () {
+            var id = $(this).parent('td').siblings("td").eq(0).data("itemid")
+            if (id != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { id: id }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("删除成功", { time: 1000, icon: 1 });
+                            window.location.href = "/DelayPlan/Index?pageIndex=1";
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        })
+    });
+</script>

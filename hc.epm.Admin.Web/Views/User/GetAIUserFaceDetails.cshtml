@@ -1,0 +1,49 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model EPM_AIUserFace
+@{
+    ViewBag.Title = "人脸库详情";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal " id="mainForm">
+            <div class="col-lg-12 col-sm-12" style="height:60px">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>姓名 : </label>
+                    <div class="col-lg-3 col-sm-3">
+                        <input type="text" class="form-control" value="@Model.UserName" disabled/>
+                        <input type="hidden" value="@Model.UserId" id="UserId" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>电话：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.UserName" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>人脸照片：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <img src="@(Model==null?"":Model.ImageBase64)" style='width: 200px;height: 200px;cursor: pointer;' />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+   
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, laypage = layui.laypage;
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>

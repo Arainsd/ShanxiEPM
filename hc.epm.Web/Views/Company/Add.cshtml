@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "单位列表";
+}
+<style type="text/css">
+    .addbg {
+        background: #ebebe5;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;单位编码&nbsp;:</label>
+                <input type="text" value="本省南桥西西大道东段加油" disabled id="PreCode" name="PreCode" />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;基础编号&nbsp;:</label>
+                <input type="text" value="JH18031310090001" disabled id="Code" name="Code" />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;单位名称&nbsp;:</label>
+                <input type="text" value="华春网络" id="Name" name="Name" />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;单位类型&nbsp;:</label>
+                <select disabled class="addbg" id="Type">
+                    <option value="">业主单位</option>
+                    <option value="">监理单位</option>
+                    <option value="">资讯单位</option>
+                    <option value="">勘察单位</option>
+                    <option value="">设计单位</option>
+                    <option value="">总承包单位</option>
+                    <option value="">施工单位</option>
+                    <option value="">供应商单位</option>
+                </select>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;单位层级&nbsp;:</label>
+                <select disabled class="addbg">
+                    <option value="总公司">总公司</option>
+                    <option value="分公司">分公司</option>
+                </select>
+            </div>
+            <div class="long-text" id="DirectCompany">
+                <label><span class="star">*</span>&nbsp;直属单位&nbsp;:</label><input type="text" value="本省-中油"  />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;单位电话&nbsp;:</label><input type="text" />
+            </div>
+            <div class="region">
+                <label><span class="star">*</span>&nbsp;所在地区&nbsp;:</label>
+                <select>
+                    <option selected>本省省</option>
+                    <option>陕西省</option>
+                </select>
+                <select>
+                    <option selected>武汉市</option>
+                    <option>西安市</option>
+                </select>
+                <select>
+                    <option style="display:none">市辖区</option>
+                    <option>雁塔区</option>
+                    <option>雁塔区</option>
+                </select>
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;单位地址&nbsp;:</label><input type="text" id="Address" name="Address" />
+            </div>
+            <div class="intro">
+                <div><label><span class="star">*</span>&nbsp;单位简介&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description"></textarea>
+                </div>
+            </div>
+            <div class="long-text" id="ContractUserName">
+                <label><span class="star">*</span>&nbsp;单位联系人&nbsp;:</label><input type="text"  />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;联系人电话&nbsp;:</label><input type="text" />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;是否启用&nbsp;:</label>
+                <select>
+                    <option value="0">启用</option>
+                    <option value="1">禁用</option>
+                </select>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;加入时间&nbsp;:</label>
+                <input type="text" id="time-single1" value="2019-09-25" disabled>
+                <i onClick="WdatePicker({ el:'time-single1' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="button-group btn-center">
+                <button type="submit">提交</button>
+                <button type="button">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                PreCode: {
+                    required: true,
+                    maxlength: 50
+                },
+                Code: {
+                    required: true,
+                    maxlength: 50
+                },
+                Name: {
+                    required: true,
+                    maxlength: 254
+                },
+                Address: {
+                    required: true,
+                    maxlength: 200
+                }
+            },
+            messages: {
+                PreCode: {
+                    required: "单位编码不能为空",
+                    maxlength: "单位编码不能大于50个字符"
+                },
+                PreCode: {
+                    required: "基础编码不能为空",
+                    maxlength: "基础编码不能大于50个字符"
+                },
+                Name: {
+                    required: "单位名称不能为空",
+                    maxlength: "单位名称长度不能大于254个字符"
+                },
+                Address: {
+                    required: "单位地址不能为空",
+                    maxlength: "单位地址长度不能大于200个字符"
+                }
+            }
+
+        });
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //$("#DirectCompany").click(function () {
+            //    layer.open({
+            //        type: 2,
+            //        title: GetLayerTitle("直属单位"),
+            //        shadeClose: false, //点击遮罩关闭层
+            //        area: ['1000px', '700px'],
+            //        content: '/Comm/SelectCompany'
+            //    });
+            //});
+            //$("#ContractUserName").click(function () {
+            //    layer.open({    
+            //        type: 2,
+            //        title: GetLayerTitle("单位联系人"),
+            //        shadeClose: false, //点击遮罩关闭层
+            //        area: ['800px', '600px'],
+            //        content: '/Comm/SelectUser'
+            //    });
+            //});
+            //监听提交
+            form.on('submit(sub)', function (data) {
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+                if (bv.isValid()) {
+                    var search = $("form").serialize();
+                    var dataConfigId = $("#DataConfigId").val();
+                    $.post("Add?dataConfigId=" + dataConfigId, search, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("添加成功", { time: 1000, icon: 1 }, function () {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);//关闭窗口
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                    return true;
+                } else {
+                    parent.layer.alert("请检查必填项是否填写完整。", { icon: 1 });
+                }
+                return false;
+            });
+        });
+    
+    });
+
+</script>

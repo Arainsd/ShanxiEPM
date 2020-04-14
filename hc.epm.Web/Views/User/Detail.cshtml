@@ -1,0 +1,39 @@
+﻿@using hc.epm.DataModel.Basic;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@using hc.epm.ViewModel;
+@model Base_User
+@{
+    ViewBag.Title = "查看用户";
+}
+
+<div class="contentData">
+    <div class="tab">
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;用户名称&nbsp;:</label><input type="text" value="@Model.UserName" disabled/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;所属单位&nbsp;:</label><input type="text" value="" disabled/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;手机号码&nbsp;:</label><input type="text" value="@Model.Phone" disabled/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;邮箱地址&nbsp;:</label><input type="text" value="@Model.Email" disabled/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;微信号&nbsp;:</label><input type="text" value="@Model.WebChat" disabled/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;QQ号&nbsp;:</label><input type="text" value="@Model.QQ" disabled/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;Logo&nbsp;:</label><img src="" style="width:100px;height:100px"/>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#logo').attr('src',FileURL + '');
+</script>
+

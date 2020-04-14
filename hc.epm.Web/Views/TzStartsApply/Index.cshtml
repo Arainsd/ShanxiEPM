@@ -1,0 +1,219 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@model List<Epm_TzProjectStartApply>
+@{
+    ViewBag.Title = "工程建设项目开工报告列表";
+}
+
+<style>
+    .plan_time {
+        width: 57% !important;
+    }
+
+    .unit {
+        width: 93px;
+        display: inline-block !important;
+        text-align: right;
+        margin-right: 3px;
+    }
+
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label>建设项目名称 : </label><input type="text" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                </div>
+                <div class="plan_time">
+                    <label>计划建设工期(开始) : </label>
+                    &nbsp;&nbsp;从&nbsp;&nbsp;
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="请选择起始时间">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                    至<span style="padding-right:25px;"></span><input type="text" class="timer se-in" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="请选择结束时间">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+
+                </div>
+
+            </div>
+            <div>
+                <div>
+                    <label class="unit">所属单位 : </label>
+                    @if (!ViewBag.IsAgencyUser)
+                    {
+                        <input type="text" name="Unit" value="@ViewBag.unit" placeholder="请输入所属单位">
+                        <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                    }
+                    else {
+                        <input type="text" id="seleId" name="Unit" value="@ViewBag.unit" placeholder="请输入所属单位">
+                        <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                    }
+                </div>
+                <div class="plan_time">
+                    <label>计划建设工期(结束) : </label>
+                    &nbsp;&nbsp;从&nbsp;&nbsp;
+                    <input type="text" class="timer se-in" id="startTime2" name="startTime2" value="@ViewBag.startTime2" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime1').val(''); }})" placeholder="请选择起始时间">
+                    <i onClick="WdatePicker({ el: 'startTime2' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                    至<span style="padding-right:25px;"></span><input type="text" class="timer se-in" id="endTime2" name="endTime2" value="@ViewBag.endTime2" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime2\')}' })" placeholder="请选择结束时间">
+                    <i onClick="WdatePicker({ el: 'endTime2' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+            </div>
+            <div class="form-sub"><button type="button" class="add" id="Add">新增</button>
+                <button type="submit" id="search">搜索</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="250">标题</th>
+                    <th width="230">所属单位</th>
+                    <th width="130">批复投资或概算投资(万元)</th>
+                    <th width="120">当年计划投资情况</th>
+                    <th width="120">计划建设工期(开始)</th>
+                    <th width="120">计划建设工期(结束)</th>
+                    <th width="120">计划工期(天)</th>
+                    <th width="110">开工报告审批时间 </th>
+                    <th width="100">审核状态</th>
+                    <th width="120">当前审核人</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                            </td>
+                            <td>@item.Title</td>
+                            <td>@item.Unit</td>
+                            <td>@item.ReplyInvestment</td>
+                            <td>@item.ThatYearPlanInvestment</td>
+                            <td>
+                                @if (item.StartTime != null&& item.StartTime !="")
+                                {
+                                    @(Convert.ToDateTime(item.StartTime).ToString("yyyy-MM-dd"))
+                                }
+                            </td>
+                            <td>
+                                @if (item.EndTime != null && item.EndTime != "")
+                                {
+                                    @(Convert.ToDateTime(item.EndTime).ToString("yyyy-MM-dd"))
+                                }
+                            </td>
+                            <td>@item.TimeLimit</td>
+                            <td>
+                                @if (item.WorkStartApprovalTime != null && item.WorkStartApprovalTime != "")
+                                {
+                                    @(Convert.ToDateTime(item.WorkStartApprovalTime).ToString("yyyy-MM-dd"))
+                                }
+                            </td>
+                            <td>@item.StateName</td>
+                            <td>@item.ApprovalName</td>
+                            <td>
+                                @if (item.State == 0)
+                                {
+                                    <a class="edit" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">修改</a>
+                                }
+                                else
+                                {
+                                    <a class="detail" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">查看</a>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="13" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+
+<script>
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzStartsApply/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //所属单位
+        $("#seleId").on("click", function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择所属单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#seleId").val(obj.data[0].Name);
+                        $("#companyId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+
+        })
+    });
+    //新增
+    $("#Add").on("click", function () {
+        window.location.href = "/TzStartsApply/Add";
+    });
+
+    //修改
+    $(".edit").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/TzStartsApply/Edit?id=" + id;
+    });
+
+    //详情
+    $(".detail").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/TzStartsApply/Detail?id=" + id;
+    });
+</script>
+
+

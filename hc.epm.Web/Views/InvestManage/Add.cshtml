@@ -1,0 +1,596 @@
+﻿@{
+    ViewBag.Title = "投资管理新增";
+}
+<style>
+    .fileShow {
+        margin-left: 200px;
+    }
+
+        .fileShow li {
+            display: flex;
+            list-style: none;
+            height: 35px;
+            line-height: 30px;
+        }
+
+    .title {
+        color: blue;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .control-label {
+        font-weight: 500;
+    }
+
+    .size {
+        font-weight: 500;
+        height: 34px;
+        line-height: 34px;
+        text-align: left;
+        padding: 0;
+    }
+
+    .timer-pic {
+        position: relative;
+        top: -25px;
+        left: 334px;
+    }
+
+    .af-na {
+        margin-left: -50px;
+    }
+
+    .sel {
+        width: 120px;
+    }
+
+    .file-name {
+        width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">改造信息</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">项目名称：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="ProjectName" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造类型：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @Html.DropDownList("RemarkType", ViewBag.RemarkType as SelectList, null, new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">站库名称：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" id="StationName" name="StationName" class="form-control" placeholder="" readonly /></div>
+                        <input type="hidden" id="StationId" name="StationId" />
+                        <input type="hidden" id="StationCodeInvest" name="StationCodeInvest" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">地市公司：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" id="CompanyName" name="CompanyName" class="form-control" placeholder="" readonly />
+                            <input type="hidden" id="CompanyId" name="CompanyId"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">限下/限上：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @if (ViewBag.LimitType != null && ViewBag.LimitType.Count > 0)
+                            {
+                                foreach (var item in ViewBag.LimitType)
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitType" value="@item.No" checked />@item.Name
+                                    </label>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">资金来源：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @if (ViewBag.SourceFund != null && ViewBag.SourceFund.Count > 0)
+                            {
+                                foreach (var item in ViewBag.SourceFund)
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="@item.No" checked />@item.Name
+                                    </label>
+                                }
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">投资金额：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control" name="Investment" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">万元</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">立项批复时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" id="ItemTime" name="ItemTime" onClick="WdatePicker({ el: 'ItemTime' })">
+                            <i onClick="WdatePicker({ el: 'ItemTime' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">立项批复单位：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="ItemUnit" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">立项批复金额：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="ItemMoney" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">初设批复文号：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="InitialNumber" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造起始时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" id="RemarkStartTime" name="RemarkStartTime" onClick="WdatePicker({ el: 'RemarkStartTime' })">
+                            <i onClick="WdatePicker({ el: 'RemarkStartTime' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造终止时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" id="RemarkEndTime" name="RemarkEndTime" onClick="WdatePicker({ el: 'RemarkEndTime' })">
+                            <i onClick="WdatePicker({ el: 'RemarkEndTime' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造金额：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="RemarkMoney" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">万元</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">决策人：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="DecisionMaker" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">负责人：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="LeaderPerson" class="form-control" placeholder="" /></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">运营人：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="Operator" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">改造效果</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">原成品油销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="InitialSalesOfRefinedOil" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造后成品油销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="RemarkSalesOfRefinedOil" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">原气销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="InitialSalesOfGas" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">千方/每日</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造后气销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="RemarkSalesOfGas" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">千方/每日</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">内部收益率：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="IRR" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">%</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">加管编码：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="PipetteCoding" class="form-control" placeholder="" /></div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">工程内容：</label>
+                        <div class="col-lg-6 col-sm-6"><textarea rows="2" name="ProjectContent" class="form-control" style="resize:none;"></textarea></div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">备注：</label>
+                        <div class="col-lg-6 col-sm-6"><textarea rows="2" name="Remark" class="form-control" style="resize:none;"></textarea></div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">上传附件：</label>
+                        <div class="col-lg-2 col-sm-2">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile" style="position: relative; z-index: 1;margin-top: 5px;height: 25px;width: 100px;font-size: 16px;" value="上传附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </div>
+                        <label class="col-lg-2 col-sm-2"></label>
+
+                        <div class="col-lg-10 col-sm-10" id="fileListFile">
+                            <div style="margin-top:10px;">
+
+                                <ul class="fileShow"></ul>
+                            </div>
+                            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6" style="text-align:right">
+                        <input type="button" name="submit" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-small button-base bg-save" />
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="button" value="取&nbsp;&nbsp;&nbsp;消" class="cancel layui-btn layui-btn-small button-base bg-cancel ">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+
+    window.onload = function () {
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ProjectName: {
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '项目名称不能超过50字符'
+                        },
+                    }
+                },
+                RemarkType: {
+                    validators: {
+                        notEmpty: {
+                            message: '改造类型不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '检查类别不能超过50字符'
+                        },
+                        //regexp: {
+                        //    regexp: /^[a-zA-Z0-9\u4e00-\u9fa5-]+$/i,
+                        //    message: "检查名称由汉字字母数字及-组成"
+                        //}
+                    }
+                },
+                Investment: {
+                    validators: {
+                        notEmpty: {
+                            message: '投资金额不能为空'
+                        },
+                        regexp: {
+                        regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,5})?$)|(^(0){1,5}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "金额格式输入错误"
+                        }
+                    }
+                },
+                RemarkMoney: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,5})?$)|(^(0){1,5}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "改造金额格式输入错误"
+                        }
+                    }
+                },
+                InitialSalesOfRefinedOil: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "原成品油销量格式输入错误"
+                        }
+                    }
+                },
+                RemarkSalesOfRefinedOil: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "改造后成品油销量格式输入错误"
+                        }
+                    }
+                },
+                InitialSalesOfGas: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "原气销量格式输入错误"
+                        }
+                    }
+                },
+                RemarkSalesOfGas: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "改造后气销量格式输入错误"
+                        }
+                    }
+                },
+                IRR: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: "内部收益率格式输入错误"
+                        }
+                    }
+                },
+                PipetteCoding: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[0-9a-zA-Z_-]{1,50}$/,
+                            message: "加管编码由数字、字母、下划线或-组成"
+                        }
+                    }
+                },
+                InitialNumber: {
+                validators: {
+                    regexp: {
+                        regexp: /^[0-9a-zA-Z_-]{1,50}$/,
+                        message: "初设批复文号由数字、字母、下划线或-组成"
+                    }
+                }
+        },
+            }
+        });
+    }
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = "";
+                    obj.TypeName = "";
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = `
+                            <li>
+                           <div class ="file-name" title="${obj.Name}"><img src="${imgUrl}" style="width: 20px;height: 20px;cursor: pointer;" class ="imgShow"/><a href="javascript:;" target="_blank">${obj.Name}</a></div>
+                           @Html.Raw(Html.DropDownList("FileType", ViewBag.AnnexType as SelectList, null, new { @class = "form-control sel" }))
+                           <div style="text-align:right; width:80px;">${obj.Size}</div>
+                           <span style="margin-left:20px;">${data[i].UploadName}</span>
+                           <span style="margin-left:20px;">${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}</span>
+                           <span style="margin-left:20px;cursor: pointer;color:blue" class ="fileDel" data-val="${obj.GuidId}">删除</span>
+
+                           <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}">
+                           </li>
+                           `
+
+                        $('#fileListFile .fileShow').append(odiv);
+                    }
+                }
+
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择地市公司
+        $("#CompanyName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分公司"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#CompanyName").val(obj.data[0].Name);
+                        $("#CompanyId ").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //选择库站
+        $("#StationName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择库站"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectOilStation',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#StationName").val(obj.data[0].Name);
+                        $("#StationId").val(obj.data[0].Id);
+                        $("#StationCodeInvest ").val(obj.data[0].Code);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $("#save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow li").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TypeNo: $(item).find(".sel option:checked").val(),
+                    TypeName: $(item).find(".sel option:checked").text(),
+                    Sort: index + 1
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+
+            var search = $("form").serialize();
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/InvestManage/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+            }
+        });
+
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().remove();
+    });
+</script>

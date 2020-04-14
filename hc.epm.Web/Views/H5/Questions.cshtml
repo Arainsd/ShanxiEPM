@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "帮助中心";
+    Layout = "~/Views/Shared/_LayoutPageH5.cshtml";
+}
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    ul {
+        list-style: none;
+        margin-bottom: 0px !important;
+    }
+
+    .use {
+        line-height: 60px;
+        background-color: #fff;
+        padding: 0 15px;
+    }
+
+    a, a:hover, a:active, a:visited, a:link, a:focus {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    .bussback li a:hover, .bussback li a:focus {
+        text-decoration: none;
+    }
+
+    .use a, .common a {
+        font-size: 20px;
+        color: #000;
+        font-weight: 500;
+        display: block;
+    }
+
+        .use a:hover, .use a:focus,
+        .common a:hover, .common a:focus {
+            text-decoration: none;
+            color: #000;
+        }
+
+    .common {
+        margin-top: 10px;
+        line-height: 60px;
+        background-color: #fff;
+        padding: 0 15px;
+        border-bottom: 1px solid #F2F2F2;
+    }
+
+    .bussback li a {
+        line-height: 30px;
+        color: #555;
+        font-size: 1.5rem;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .bton {
+        padding: 50px 15px 0;
+        text-align: center;
+    }
+
+        .bton .btn {
+            background-color: #167FF5;
+            width: 100%;
+            border-radius: 25px;
+        }
+
+            .bton .btn:hover {
+                background-color: #167FF5 !important;
+                border: 0px !important;
+            }
+</style>
+
+<link href="~/Resource/css/bootstrap.css" rel="stylesheet" />
+<link href="//at.alicdn.com/t/font_675907_i86z8m9btgp.css" rel="stylesheet" />
+<div style="background-color:#F2F2F2;padding-top:5px">
+    <div class="use">
+        <a href="javascript:;" class="quiz" title="帮助">我的提问<span class="iconfont icon-gengduo" style="float:right;color:#aaa;font-size:20px"></span><span class="badge" style="float: right;margin-top: 21px;background-color:red;border-radius:15px!important;padding:3px!important">44</span></a>
+    </div>
+    <div>
+        <div class="common">
+            <a href="javascript:;" class="help">常见问题<span class="iconfont icon-gengduo" style="float:right;color:#aaa;font-size:20px"></span><span style="float:right;color:#aaa;font-size:16px">更多</span></a>
+        </div>
+        <ul class="bussback" style="background-color:#fff;padding:5px 15px">
+            <li><a href="javascript:;">或太热胡歌然后就挺好挺好然后就挺好挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌然挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌然后就挺好挺好然后就挺好挺好然后就挺好挺好如挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌然后就挺好挺好然后就挺好挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌然后就挺好挺好何</a></li>
+            <li><a href="javascript:;">或太热胡歌好然后就挺好挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌然后好挺好然后就挺好挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌好挺好然后就挺好挺好如何</a></li>
+            <li><a href="javascript:;">或太热胡歌然后就挺好挺好然后就就挺好挺好如何</a></li>
+        </ul>
+    </div>
+    <div class="bton" style="background-color:#fff">
+        <a href="troubleshoot:" class="btn btn-primary btn-lg">遇到问题</a>
+    </div>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(".help").on("click", function () {
+        location.href = "/H5/IssuesList"
+    })
+    $(".bussback").on("click", "li",function () {
+        location.href = "/H5/Problem"
+    })
+    $(".quiz").on("click", function () {
+        location.href = "/H5/IssuesList"
+    })
+</script>

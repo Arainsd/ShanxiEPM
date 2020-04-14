@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1C5DC3D9-56B1-4580-8B69-30955F72D6BD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hc.epm.DataModel.Business</RootNamespace>
+    <AssemblyName>hc.epm.DataModel.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\ServicePush\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Data">
+      <HintPath>..\lib\AutoMapper.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessDataContext.cs" />
+    <Compile Include="DataOperateBusiness.cs" />
+    <Compile Include="Entity\EPM_AIUserFace.cs" />
+    <Compile Include="Entity\Bp_Log.cs" />
+    <Compile Include="Entity\Bp_OilStation.cs" />
+    <Compile Include="Entity\Bp_Organization.cs" />
+    <Compile Include="Entity\Bp_Project.cs" />
+    <Compile Include="Entity\Bp_ProjectNature.cs" />
+    <Compile Include="Entity\Bp_SendDate.cs" />
+    <Compile Include="Entity\Bp_Supplier.cs" />
+    <Compile Include="Entity\Bp_User.cs" />
+    <Compile Include="Entity\Epm_AdPutRecord.cs" />
+    <Compile Include="Entity\Epm_AdTarget.cs" />
+    <Compile Include="Entity\Epm_Approver.cs" />
+    <Compile Include="Entity\Epm_ApproverRecord.cs" />
+    <Compile Include="Entity\Epm_AppVersion.cs" />
+    <Compile Include="Entity\Epm_Bim.cs" />
+    <Compile Include="Entity\Epm_Change.cs" />
+    <Compile Include="Entity\Epm_ChangeCompany.cs" />
+    <Compile Include="Entity\Epm_CheckItem.cs" />
+    <Compile Include="Entity\Epm_CompletionAcceptance.cs" />
+    <Compile Include="Entity\Epm_CompletionAcceptanceResUpload.cs" />
+    <Compile Include="Entity\Epm_CompletionRectifyCompany.cs" />
+    <Compile Include="Entity\Epm_Constitute.cs" />
+    <Compile Include="Entity\Epm_ConstituteCompany.cs" />
+    <Compile Include="Entity\Epm_ConstituteCompanyDetails.cs" />
+    <Compile Include="Entity\Epm_ConstituteWorkMainPoints.cs" />
+    <Compile Include="Entity\Epm_Contract.cs" />
+    <Compile Include="Entity\EPM_CustomProperty.cs" />
+    <Compile Include="Entity\Epm_DangerousWork.cs" />
+    <Compile Include="Entity\Epm_DataConfig.cs" />
+    <Compile Include="Entity\Epm_Draw.cs" />
+    <Compile Include="Entity\Epm_MeetingFileReport.cs" />
+    <Compile Include="Entity\Epm_ProjectAttendance.cs" />
+    <Compile Include="Entity\Epm_ProjectCountWeekly.cs" />
+    <Compile Include="Entity\Epm_ProjectWeekly.cs" />
+    <Compile Include="Entity\Epm_TzBidResult.cs" />
+    <Compile Include="Entity\Epm_TimeLimitAndProcedure.cs" />
+    <Compile Include="Entity\Epm_TzConDrawing.cs" />
+    <Compile Include="Entity\Epm_TzDesignScheme.cs" />
+    <Compile Include="Entity\Epm_TzFirstNegotiation.cs" />
+    <Compile Include="Entity\Epm_TzGcGoodsOrdersApply.cs" />
+    <Compile Include="Entity\Epm_TzGcGoodsOrdersItem.cs" />
+    <Compile Include="Entity\Epm_Inspect.cs" />
+    <Compile Include="Entity\Epm_InspectItem.cs" />
+    <Compile Include="Entity\Epm_InspectScore.cs" />
+    <Compile Include="Entity\Epm_Massage.cs" />
+    <Compile Include="Entity\Epm_Material.cs" />
+    <Compile Include="Entity\Epm_MaterialDetails.cs" />
+    <Compile Include="Entity\Epm_Materiel.cs" />
+    <Compile Include="Entity\Epm_MaterielDetails.cs" />
+    <Compile Include="Entity\Epm_Milepost.cs" />
+    <Compile Include="Entity\Epm_MilepostData.cs" />
+    <Compile Include="Entity\Epm_Monitor.cs" />
+    <Compile Include="Entity\Epm_MonitorDetailBIM.cs" />
+    <Compile Include="Entity\Epm_MonitorDetails.cs" />
+    <Compile Include="Entity\Epm_MonitorRectifRecord.cs" />
+    <Compile Include="Entity\Epm_News.cs" />
+    <Compile Include="Entity\Epm_NewTarget.cs" />
+    <Compile Include="Entity\Epm_Notice.cs" />
+    <Compile Include="Entity\Epm_NoticeCompany.cs" />
+    <Compile Include="Entity\Epm_NoticeProject.cs" />
+    <Compile Include="Entity\Epm_NoticeUser.cs" />
+    <Compile Include="Entity\Epm_OilSales.cs" />
+    <Compile Include="Entity\Epm_OilStation.cs" />
+    <Compile Include="Entity\Epm_Plan.cs" />
+    <Compile Include="Entity\Epm_PlanComponent.cs" />
+    <Compile Include="Entity\Epm_PlanDelay.cs" />
+    <Compile Include="Entity\Epm_PlanDelayCompany.cs" />
+    <Compile Include="Entity\Epm_Project.cs" />
+    <Compile Include="Entity\Epm_ProjectAuditRecord.cs" />
+    <Compile Include="Entity\Epm_ProjectCompany.cs" />
+    <Compile Include="Entity\Epm_ProjectConstitute.cs" />
+    <Compile Include="Entity\Epm_ProjectConstituteHistory.cs" />
+    <Compile Include="Entity\Epm_ProjectContract.cs" />
+    <Compile Include="Entity\Epm_ProjectData.cs" />
+    <Compile Include="Entity\Epm_ProjectDataSubmit.cs" />
+    <Compile Include="Entity\Epm_ProjectKPI.cs" />
+    <Compile Include="Entity\Epm_AttendanceList.cs" />
+    <Compile Include="Entity\Epm_ProjectMilepost.cs" />
+    <Compile Include="Entity\Epm_ProjectNature.cs" />
+    <Compile Include="Entity\Epm_ProjectStateTrack.cs" />
+    <Compile Include="Entity\Epm_ProjectWorkMainPoints.cs" />
+    <Compile Include="Entity\Epm_ProjectWorkMainPointsHistory.cs" />
+    <Compile Include="Entity\Epm_Question.cs" />
+    <Compile Include="Entity\Epm_QuestionBIM.cs" />
+    <Compile Include="Entity\Epm_QuestionTrack.cs" />
+    <Compile Include="Entity\Epm_QuestionUser.cs" />
+    <Compile Include="Entity\Epm_Rectification.cs" />
+    <Compile Include="Entity\Epm_RectificationItem.cs" />
+    <Compile Include="Entity\Epm_RectificationRecord.cs" />
+    <Compile Include="Entity\Epm_ReformRecord.cs" />
+    <Compile Include="Entity\Epm_SignInformation.cs" />
+    <Compile Include="Entity\Epm_SpecialAcceptance.cs" />
+    <Compile Include="Entity\Epm_SpecialAcceptanceDetails.cs" />
+    <Compile Include="Entity\Epm_TzAttachs.cs" />
+    <Compile Include="Entity\Epm_TzCodeMap.cs" />
+    <Compile Include="Entity\Epm_TzDesiginChangeApply.cs" />
+    <Compile Include="Entity\Epm_TzDevResourceReport.cs" />
+    <Compile Include="Entity\Epm_TzDevResourceReportItem.cs" />
+    <Compile Include="Entity\Epm_TzFormTalkFile.cs" />
+    <Compile Include="Entity\Epm_TzGasStationItem.cs" />
+    <Compile Include="Entity\Epm_TzInitialTalk.cs" />
+    <Compile Include="Entity\Epm_TzLandNegotiation.cs" />
+    <Compile Include="Entity\Epm_TzLandTalk.cs" />
+    <Compile Include="Entity\Epm_TzPeopleChgApply.cs" />
+    <Compile Include="Entity\Epm_TzPeopleChgApplyItem.cs" />
+    <Compile Include="Entity\Epm_TzProjectApproval.cs" />
+    <Compile Include="Entity\Epm_TzProjectApprovalInfo.cs" />
+    <Compile Include="Entity\Epm_TzProjectProposal.cs" />
+    <Compile Include="Entity\Epm_TzProjectReveiews.cs" />
+    <Compile Include="Entity\Epm_TzProjectStartApply.cs" />
+    <Compile Include="Entity\Epm_TzProSubmissionApprova.cs" />
+    <Compile Include="Entity\Epm_TzResearchOfEngineering.cs" />
+    <Compile Include="Entity\Epm_TzResearchOfInformation.cs" />
+    <Compile Include="Entity\Epm_TzResearchOfInvestment.cs" />
+    <Compile Include="Entity\Epm_TzResearchOfLaw.cs" />
+    <Compile Include="Entity\Epm_TzResearchOfManagement.cs" />
+    <Compile Include="Entity\Epm_TzResearchOfSecurity.cs" />
+    <Compile Include="Entity\Epm_TzRivalStationReport.cs" />
+    <Compile Include="Entity\Epm_TzSecondTakl.cs" />
+    <Compile Include="Entity\Epm_TzSecondTalkAudit.cs" />
+    <Compile Include="Entity\Epm_TzSiteSurvey.cs" />
+    <Compile Include="Entity\Epm_TzStartsApply.cs" />
+    <Compile Include="Entity\Epm_TzSupMatApplyList.cs" />
+    <Compile Include="Entity\Epm_TzSupMatManagement.cs" />
+    <Compile Include="Entity\Epm_TzSupplyMaterialApply.cs" />
+    <Compile Include="Entity\Epm_TzTalkFileAudit.cs" />
+    <Compile Include="Entity\Epm_TzTalkFileHeadAudit.cs" />
+    <Compile Include="Entity\Epm_TzTalkLeaderSign.cs" />
+    <Compile Include="Entity\Epm_TzTalkRecord.cs" />
+    <Compile Include="Entity\Epm_TzTalkRecordConfirm.cs" />
+    <Compile Include="Entity\Epm_TzTalkSign.cs" />
+    <Compile Include="Entity\Epm_TzTenderingApply.cs" />
+    <Compile Include="Entity\EPM_UnconventionalWork.cs" />
+    <Compile Include="Entity\Epm_ProjectlLogName.cs" />
+    <Compile Include="Entity\Epm_WorkUploadRealScene.cs" />
+    <Compile Include="Entity\Epm_SupervisorLogWork.cs" />
+    <Compile Include="Entity\Epm_SupervisorLog.cs" />
+    <Compile Include="Entity\Epm_SupervisorLogCompany.cs" />
+    <Compile Include="Entity\Epm_SupervisorLogDetails.cs" />
+    <Compile Include="Entity\Epm_Template.cs" />
+    <Compile Include="Entity\Epm_TemplateDetails.cs" />
+    <Compile Include="Entity\Epm_Train.cs" />
+    <Compile Include="Entity\Epm_TrainCompany.cs" />
+    <Compile Include="Entity\Epm_TrainDetails.cs" />
+    <Compile Include="Entity\Epm_Visa.cs" />
+    <Compile Include="Entity\Epm_VisaCompany.cs" />
+    <Compile Include="Entity\Epm_WorkMainPoints.cs" />
+    <Compile Include="Entity\EPM_FaceOperateLog.cs" />
+    <Compile Include="Entity\Epm_TzProjectPolit.cs" />
+    <Compile Include="Entity\OMADS_BoardCompanyReveiews.cs" />
+    <Compile Include="Entity\OMADS_CompanyProjectReveiews.cs" />
+    <Compile Include="Entity\OMADS_CompletionInfo.cs" />
+    <Compile Include="Entity\OMADS_ConstructionInfo.cs" />
+    <Compile Include="Entity\OMADS_FieldInvestigation.cs" />
+    <Compile Include="Entity\OMADS_ProjectInfo.cs" />
+    <Compile Include="Entity\OMADS_ReformRecordHX.cs" />
+    <Compile Include="Entity\OMADS_TzConDrawing.cs" />
+    <Compile Include="Entity\OMADS_TzDesignScheme.cs" />
+    <Compile Include="Entity\OMADS_TzFirstNegotiation.cs" />
+    <Compile Include="Entity\OMADS_TzFormTalkFileHX.cs" />
+    <Compile Include="Entity\OMADS_TzLandNegotiation.cs" />
+    <Compile Include="Entity\OMADS_TzProjectApprovalHX.cs" />
+    <Compile Include="Entity\OMADS_TzProjectApprovalInfo.cs" />
+    <Compile Include="Entity\OMADS_TzProjectReveiews.cs" />
+    <Compile Include="Entity\RPA_BoardCompanyReveiews.cs" />
+    <Compile Include="Entity\RPA_CompanyProjectReveiews.cs" />
+    <Compile Include="Entity\RPA_CompletionInfo.cs" />
+    <Compile Include="Entity\RPA_ConstructionInfo.cs" />
+    <Compile Include="Entity\RPA_ProjectInfo.cs" />
+    <Compile Include="Entity\RPA_ReformRecordHX.cs" />
+    <Compile Include="Entity\RPA_TzDesignScheme.cs" />
+    <Compile Include="Entity\RPA_TzProjectReveiews.cs" />
+    <Compile Include="Entity\TEMP_BoardCompanyReveiews.cs" />
+    <Compile Include="Entity\TEMP_CompanyProjectReveiews.cs" />
+    <Compile Include="Entity\TEMP_CompletionInfo.cs" />
+    <Compile Include="Entity\TEMP_ConstructionInfo.cs" />
+    <Compile Include="Entity\TEMP_FieldInvestigation.cs" />
+    <Compile Include="Entity\TEMP_ProjectInfo.cs" />
+    <Compile Include="Entity\TEMP_ProjectProposal.cs" />
+    <Compile Include="Entity\RPA_FieldInvestigation.cs" />
+    <Compile Include="Entity\OMADS_ProjectProposal.cs" />
+    <Compile Include="Entity\RPA_ProjectProposal.cs" />
+    <Compile Include="Entity\RPA_TzConDrawing.cs" />
+    <Compile Include="Entity\RPA_TzFirstNegotiation.cs" />
+    <Compile Include="Entity\RPA_TzFormTalkFileHX.cs" />
+    <Compile Include="Entity\RPA_TzLandNegotiation.cs" />
+    <Compile Include="Entity\RPA_TzProjectApprovalHX.cs" />
+    <Compile Include="Entity\RPA_TzProjectApprovalInfo.cs" />
+    <Compile Include="Entity\TempModel\Temp_ReformRecord.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzAttachs.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzFormTalkFile.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzGasStationItem.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzInitialTalk.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzLandTalk.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzProjectApproval.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzProjectPolit.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzProSubmissionApprova.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzSecondTakl.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzSecondTalkAudit.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzSiteSurvey.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzTalkFileAudit.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzTalkFileHeadAudit.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzTalkLeaderSign.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzTalkRecord.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzTalkRecordConfirm.cs" />
+    <Compile Include="Entity\TempModel\Temp_TzTalkSign.cs" />
+    <Compile Include="Entity\TEMP_ReformRecordHX.cs" />
+    <Compile Include="Entity\TEMP_TzConDrawing.cs" />
+    <Compile Include="Entity\TEMP_TzDesignScheme.cs" />
+    <Compile Include="Entity\TEMP_TzFirstNegotiation.cs" />
+    <Compile Include="Entity\TEMP_TzFormTalkFileHX.cs" />
+    <Compile Include="Entity\TEMP_TzLandNegotiation.cs" />
+    <Compile Include="Entity\TEMP_TzProjectApprovalHX.cs" />
+    <Compile Include="Entity\TEMP_TzProjectApprovalInfo.cs" />
+    <Compile Include="Entity\TEMP_TzProjectReveiews.cs" />
+    <Compile Include="InitData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hc.epm.DataModel.BaseCore\hc.epm.DataModel.BaseCore.csproj">
+      <Project>{f8103b09-a5c7-48bd-b736-727fb2107165}</Project>
+      <Name>hc.epm.DataModel.BaseCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

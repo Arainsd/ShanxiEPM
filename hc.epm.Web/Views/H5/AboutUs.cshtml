@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "关于我们";
+    Layout = "~/Views/Shared/_LayoutPageH5.cshtml";
+}
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    a, a:hover, a:active, a:visited, a:link, a:focus {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    .bussback a {
+        text-decoration: none;
+        color: #333;
+        width: 100%;
+        display: inline-block;
+    }
+
+    .bussback li a:hover, .bussback li a:focus {
+        text-decoration: none;
+        color: #000;
+        background-color: #fff;
+    }
+
+    .log {
+        width: 33%;
+        margin: 0 auto 5px;
+        text-align: center;
+    }
+
+        .log .img {
+            width: 100%;
+            border: 1px solid #F2F2F2;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+    .bussback li {
+        border-bottom: 1px solid #F2F2F2;
+        background-color: #fff;
+        font-size: 1.5em;
+        padding: 10px 25px;
+    }
+
+    .bussback .fr {
+        float: right;
+    }
+
+    .copyright {
+        /*padding-top: 50px;*/
+        font-size: 1.5em;
+        text-align: center;
+        color: #777;
+        margin: 0 auto 20px;
+    }
+
+    .iconfont {
+        font-weight: 600;
+        margin-top: 1.5%;
+        font-size: 18px !important;
+        color: #777;
+    }
+</style>
+<style>
+ @("@")media only screen and (min-width: 320px){html {font-size: 62.5%}}
+ @("@")media only screen and (min-width: 360px){html {font-size: 72.5%}}
+ @("@")media only screen and (min-width: 400px){html {font-size: 82.5%}}
+ @("@")media only screen and (min-width: 480px){html {font-size: 94%}}
+</style>
+<div style="background-color:#F2F2F2;height:100%" class="body">
+    <div style="padding-top:35px">
+        <div class="log">
+            <img src="~/Resource/images/yylog.png" alt="中石油" class="img" />
+            <span style="font-size:1.5em">BIM工程管理</span>
+        </div>
+        <div class="copyright">
+            <span style="font-size:12px;">中油本省销售分公司版权所有</span>
+        </div>
+    </div>
+    <div>
+        <ul class="bussback">
+            <li><a href="update:">版本<span class="fr version"></span></a></li>
+            <li class="help" style="display:none;"><a href="javascript:;">帮助中心<i class="fr iconfont icon-gengduo"></i></a></li>
+            <li><a href="javascript:;">姓名<span class="fr">姜斌</span></a></li>
+            <li><a href="javascript:;">电话<span class="fr">15829297065</span></a></li>
+            <li><a href="javascript:;">邮箱<span class="fr">jiangbin@shangkun.onaliyun.com</span></a></li>
+        </ul>
+    </div>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(function () {
+        var search = location.search;
+        if (search != "") {
+            var val = search.slice(1).split("?");
+            console.log(val);
+            if (val != "") {
+                var arr = val[0].split("=");
+                $(".version").html(arr[1]);
+            }
+        }
+    });
+
+    $(".help").on("click", function () {
+        location.href = "/H5/Questions";
+    })
+</script>

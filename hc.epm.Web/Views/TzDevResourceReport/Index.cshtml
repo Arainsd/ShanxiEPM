@@ -1,0 +1,202 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+@model List<TzDevResourceReportItemView>
+@{
+    ViewBag.Title = "加油（气）站开发资源上报查询列表";
+}
+
+<style>
+    .datalist tr td, .datalist tr th {
+        padding: 5px 2px !important;
+    }
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label class="unit">项目名称 : </label>
+                    <input type="text" id="projectName" name="projectName" value="" placeholder="请输入项目名称">
+                </div>
+                <div>
+                    <label>地市公司 : </label>
+                    @if (!ViewBag.IsAgencyUser)
+                    {
+                        <input type="text" name="companyName" value="@ViewBag.companyName" placeholder="请输入地市公司">
+                        <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                    }
+                    else {
+                        <input type="text" id="seleId" name="companyName" value="@ViewBag.companyName" placeholder="请输入地市公司">
+                        <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                    }
+                </div>
+            </div>
+
+
+            <div class="form-sub">
+                <button type="button" class="add" id="Add">新增</button>
+                <button type="submit" id="search">搜索</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="175">项目名称</th>
+                    <th width="80">地市</th>
+                    <th width="80">区县</th>
+                    <th width="130">项目位置</th>
+                    <th width="130">项目性质</th>
+                    <th width="130">预计总投资额（万元）</th>
+                    <th width="120">可研销售</th>
+                    <th width="100">汽柴比</th>
+                    <th width="130">列为意向站时间</th>
+                    <th width="130">计划立项时间</th>
+                    <th width="120">业主姓名</th>
+                    <th width="120">业主电话</th>
+                    <th width="100">备注</th>
+                    <th width="120">审核状态</th>
+                    <th width="140">当前审核人</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                @*所属申请ID*@
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.Id" />
+                            </td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.Cities</td>
+                            <td>@item.County</td>
+                            <td>@item.ProjectAdress</td>
+                            <td>@item.ProjectTypeName</td>
+                            @*<td>@(item.ProjectedInvestment == null ? "" : item.ProjectedInvestment.ToString("0.####"))</td>*@
+                            <td>@item.ProjectedInvestment</td>
+                            <td>@item.ResearchSales</td>
+                            <td>@item.GasFuelRatio</td>
+                            <td>
+                                @if (item.FixHour != null)
+                                {
+                                    @(Convert.ToDateTime(item.FixHour).ToString("yyyy-MM-dd"))
+                                }
+                            </td>
+                            <td>
+                                @if (item.PlanningTime != null)
+                                {
+                                    @(Convert.ToDateTime(item.PlanningTime).ToString("yyyy-MM-dd"))
+                                }
+                            </td>
+                            <td>@item.OwnerName</td>
+                            <td>@item.OwnerPhone</td>
+                            <td>@item.Remark</td>
+                            <td>@item.StateName</td>
+                            <td>@item.ApprovalName</td>
+
+                            <td>
+                                @if (item.State == 0)
+                                {
+                                    <a class="edit" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">修改</a>}
+                                else
+                                {
+                                    <a class="detail" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">查看</a>
+                                }
+
+
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="17" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+<script>
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzDevResourceReport/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //选择地市公司
+        $("#seleId").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分公司"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#seleId").val(obj.data[0].Name);
+                        $("#companyId").val(obj.data[0].Id);
+                        
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+
+    //新增
+    $("#Add").on("click", function () {
+        window.location.href = "/TzDevResourceReport/Add";
+    });
+
+    //修改
+    $(".edit").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/TzDevResourceReport/edit?id=" + id;
+    });
+
+    //修改
+    $(".detail").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/TzDevResourceReport/detail?id=" + id;
+    });
+</script>

@@ -1,0 +1,185 @@
+﻿
+@using hc.epm.DataModel.Basic;
+@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+
+@model Epm_TimeLimitAndProcedure
+@{
+    ViewBag.Title = "ProcedureDetail";
+}
+<style>
+    input[type="text"] {
+        padding-left: 15px;
+    }
+
+    .long-text-other input {
+        height: 35px;
+        margin-bottom: 15px;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+    }
+
+    .addother {
+        width: 100px;
+        height: 25px;
+        margin-left: 124px;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .inputone {
+        display: inline-block;
+        height: 30px;
+        width: 108px !important;
+        line-height: 30px;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+    }
+
+    .inputTwo {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+        margin-bottom: 15px;
+    }
+
+    .default {
+        background: #ebebe5;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form>
+        <ul class="tab-list">
+            <li id="Edit" >基本信息</li>
+            <li id="ApprovalConstitute">总批复构成</li>
+            <li id="ProjectISP">工程供应商</li>
+            <li id="ProjectMainPoint">工程要点</li>
+            <li id="MilestonePlan">工程节点</li>
+            <li id="TimeManage">工期管理</li>
+            <li id="IsCrossingsManage" class="active">外部手续</li>
+        </ul>
+        <div class="tab">
+            <div class="long-text">
+                @if (Model == null)
+            {
+                    <input type="hidden" id="ProjectId" name="ProjectId" value="" />
+                }
+                @if (Model != null)
+            {
+                    <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                }
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    @if (Model != null)
+                    {
+                        <tbody>
+                            <tr>
+                                <td class="table_title"><i class="color_red">*</i>  外部手续:</td>
+                                <td class="td-div" colspan="5">
+                                    @if (Model.IsCrossings == true)
+                                    {
+                                        <div>办理</div>
+                                    }
+                                    @if (Model.IsCrossings == false)
+                                    {
+                                        <div>无</div>
+                                    }
+                                </td>
+                            </tr>
+                            @if (Model.IsCrossings == true)
+                            {
+                                <tr>
+                                    <td colspan="4">
+                                        <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                                            <tbody class="fileShow-append" id="JHMX">
+                                                <tr class="headtr">
+                                                    <th class="table_title" style="width: 219px;">序号</th>
+                                                    <th class="td-div">附件名称</th>
+                                                    <th class="td-div">操作</th>
+
+                                                </tr>
+                                                @{
+                                                    int index = 0;
+                                                }
+                                                @if (Model != null)
+                                                {
+                                                    if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                                    {
+
+
+                                                        foreach (var item in Model.TzAttachs)
+                                                        {
+                                                            index++;
+
+                                                            if (item.TypeNo == "SHOUXU")
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.Sort</td>
+                                                                    <td>@item.Name</td>
+                                                                    <td><a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:#337ab7;">下载</a></td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                                    }
+
+                        </tbody>
+                                                    }
+                    
+                </table>
+            </div>
+            @*<div class="upload" style="margin-bottom:0px;">
+                <div><label><span class="star">*</span>&nbsp;外部手续附件&nbsp;:</label></div>
+            </div>
+            <div style="width:100%;margin-top: -33px;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>*@
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+        $("#Edit").click(function () {
+            window.location.href = 'Edit?projectId=@ViewBag.ProjectId';
+        });
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = "ApprovalConstitute?projectId=@ViewBag.ProjectId"
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#TimeManage").click(function () {
+            window.location.href = 'TimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'ProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        //下载附件
+        $("body").on("click", ".downloadFile", function () {
+            var path = $(this).data("url");
+            var fileName = $(this).data("name");
+            window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+        });
+    })
+</script>

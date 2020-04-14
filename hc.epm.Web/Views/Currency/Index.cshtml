@@ -1,0 +1,268 @@
+﻿@{
+    ViewBag.Title = "未登陆首页";
+    Layout = "~/Views/Shared/_LayoutUn.cshtml";
+}
+<div class="content">
+    <div class="layui-carousel sowingMap" id="sowingMap">
+        <div carousel-item>
+            <div><img src="/Resource/images/map1.jpg"></div>
+            <div><img src="/Resource/images/map1.jpg"></div>
+            <div><img src="/Resource/images/map1.jpg"></div>
+        </div>
+    </div>
+    <div class="interApi">
+        <div class="contentApi">
+            <ul>
+                <li class="center"><a href="javascript:;"><img class="apione" src="/Resource/images/api1.jpg" /></a><p>项目投资图</p></li>
+                <li class="center"><a href="javascript:;"><img class="apitwo" src="/Resource/images/api2.png" /></a><p>项目建筑图</p></li>
+                <li class="center"><a href="javascript:;"><img class="apithree" src="/Resource/images/api3.jpg" /></a><p>油站分布图</p></li>
+                <li class="center"><a href="javascript:;"><img class="apifour" src="/Resource/images/api4.jpg" /></a><p>所有建设项目</p></li>
+            </ul>
+        </div>
+    </div>
+    <div class="news">
+        <p>最新资讯/动态</p>
+    </div>
+    <div class="line">
+        <div class="line-1"></div>
+        <div class="line-2"></div>
+        <div class="line-3"></div>
+    </div>
+    <div class="newsContent">
+        <div class="newsleft">
+            <div class="newsleft-top">
+                <ul id="selecthead">
+                    <li class="firstColor"><a href="javascript:;">最新公告</a></li>
+                    @*<li><a href="javascript:;">行业新闻</a></li>
+                    <li><a href="javascript:;">价格行情</a></li>
+                    <li><a href="javascript:;">企业新闻</a></li>*@
+                </ul>
+                <span class="newsleft-more">
+                    <a href="#">更多  》</a>
+                </span>
+            </div>
+            <div class="newsleft-bottom" id="newsleft-bottomid">
+                <ul>
+                    <li><p><a href="javascript:;">中化泉州百万吨乙烯装置BEPC总承包开工会成功召开</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 张伟总裁赴能源事业部江苏石油调研 </a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">人民日报海外版：央企重组不是搞新垄断难点有所突破</a> </p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">守住国有企业的“根”与“魂”</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">聚焦两会——肖亚庆:前2月央企利润1686亿元 增29.1%</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">"深海浩劫"中的石油巨头 "引爆核弹"</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 俄石油总裁被爆天价置地 地产市</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                </ul>
+                @*<ul>
+                    <li><p><a href="javascript:;">中化泉州百万吨乙烯装置BEPC总承包开工会成功召开</a></p> <span>06-13</span></li>
+                    <li><p><a href="javascript:;"> 张伟总裁赴能源事业部江苏石油调研 </a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">人民日报海外版：央企重组不是搞新垄断难点有所突破</a> </p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">守住国有企业的“根”与“魂”</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">聚焦两会——肖亚庆:前2月央企利润1686亿元 增29.1%</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">"深海浩劫"中的石油巨头 "引爆核弹"</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 俄石油总裁被爆天价置地 地产市</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                </ul>
+                <ul>
+                    <li><p><a href="javascript:;">中化泉州百万吨乙烯装置BEPC总承包开工会成功召开</a></p> <span>06-14</span></li>
+                    <li><p><a href="javascript:;"> 张伟总裁赴能源事业部江苏石油调研 </a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">人民日报海外版：央企重组不是搞新垄断难点有所突破</a> </p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">守住国有企业的“根”与“魂”</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">聚焦两会——肖亚庆:前2月央企利润1686亿元 增29.1%</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">"深海浩劫"中的石油巨头 "引爆核弹"</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 俄石油总裁被爆天价置地 地产市</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                </ul>
+                <ul>
+                    <li><p><a href="javascript:;">中化泉州百万吨乙烯装置BEPC总承包开工会成功召开</a></p> <span>06-15</span></li>
+                    <li><p><a href="javascript:;"> 张伟总裁赴能源事业部江苏石油调研 </a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">人民日报海外版：央企重组不是搞新垄断难点有所突破</a> </p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">守住国有企业的“根”与“魂”</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">聚焦两会——肖亚庆:前2月央企利润1686亿元 增29.1%</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">"深海浩劫"中的石油巨头 "引爆核弹"</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 俄石油总裁被爆天价置地 地产市</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;">新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                    <li><p><a href="javascript:;"> 新闻分析：欧佩克缘何8年来首次达成减产协议</a></p> <span>06-12</span></li>
+                </ul>*@
+            </div>
+        </div>
+        <div class="newsright">
+            <div class="layui-carousel" id="sowingMap-1">
+                <div carousel-item>
+                    <div><img src="/Resource/images/map01.jpg"></div>
+                    <div><img src="/Resource/images/map01.jpg"></div>
+                    <div><img src="/Resource/images/map01.jpg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===============-->
+    <div class="news">
+        <p>重点项目</p>
+    </div>
+    <div class="line">
+        <div class="line-1"></div>
+        <div class="line-2"></div>
+        <div class="line-3"></div>
+    </div>
+    <div class="newsContent newsContent2">
+        <div class="newsleft newsleft2">
+            <div class="brief">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h>中化石油湖南有限公司简介</h>
+                <p>
+
+                    <span>
+                        中化石油湖南有限公司成立于2012年6月，是中国中化集团的全资子公司，主要负责中化石油在湖南地区的成品油批发及零售业务。公司主要经营成品油 和其他石油制品的国内批发与零售。公司旨在湖南地区建设成品油销售网络，以长株潭为中心，以京广、京珠沿线及辐射的岳阳、益阳、常德、衡阳、郴州等地区为 重点，开展成品油批发和零售业务。
+                    </span><br />
+
+                    <span>技术先进、资源节约、环境友好</span><br />
+
+                    <span>秉持“创造价值、追求卓越”的核心理念，公司努力恪守企业公民的社会责任，为三湘大地在石油领域整合获取资源，实现企业发展和地方经济双赢而努力奋斗... <a href="#javascript;">查看更多</a></span>
+                </p>
+            </div>
+            <div class="brief" data-index="1" style="display:none">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h>中化石油湖南有限公司简介上篇</h>
+                <p>
+
+                    <span>
+                        中化石油湖南有限公司成立于2012年6月，是中国中化集团的全资子公司，主要负责中化石油在湖南地区的成品油批发及零售业务。公司主要经营成品油 和其他石油制品的国内批发与零售。公司旨在湖南地区建设成品油销售网络，以长株潭为中心，以京广、京珠沿线及辐射的岳阳、益阳、常德、衡阳、郴州等地区为 重点，开展成品油批发和零售业务。
+                    </span><br />
+
+                    <span>技术先进、资源节约、环境友好</span><br />
+
+                    <span>秉持“创造价值、追求卓越”的核心理念，公司努力恪守企业公民的社会责任，为三湘大地在石油领域整合获取资源，实现企业发展和地方经济双赢而努力奋斗... <a href="#javascript;">查看更多</a></span>
+                </p>
+            </div>
+            <div class="brief" data-index="2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h>中化石油湖南有限公司简介下篇</h>
+                <p>
+
+                    <span>
+                        中化石油湖南有限公司成立于2012年6月，是中国中化集团的全资子公司，主要负责中化石油在湖南地区的成品油批发及零售业务。公司主要经营成品油 和其他石油制品的国内批发与零售。公司旨在湖南地区建设成品油销售网络，以长株潭为中心，以京广、京珠沿线及辐射的岳阳、益阳、常德、衡阳、郴州等地区为 重点，开展成品油批发和零售业务。
+                    </span><br />
+
+                    <span>技术先进、资源节约、环境友好</span><br />
+
+                    <span>秉持“创造价值、追求卓越”的核心理念，公司努力恪守企业公民的社会责任，为三湘大地在石油领域整合获取资源，实现企业发展和地方经济双赢而努力奋斗... <a href="#javascript;">查看更多</a></span>
+                </p>
+            </div>
+
+        </div>
+        <div class="newsright newsright2">
+            <div class="layui-carousel" id="sowingMap-2" lay-filter="sowingMap-2">
+                <div carousel-item class="briefimg" id="briefimg">
+                    <div index="0"><img src="/Resource/images/map4.jpg"></div>
+                    <div index="1"><img src="/Resource/images/map4.jpg"></div>
+                    <div index="2"><img src="/Resource/images/map4.jpg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="news">
+        <p>合作企业</p>
+    </div>
+    <div class="line">
+        <div class="line-1"></div>
+        <div class="line-2"></div>
+        <div class="line-3"></div>
+    </div>
+    <div class="cooperationContent">
+        <ul>
+            <li><a href=""><img src="/Resource/images/cooperation1.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation2.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation3.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation4.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation5.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation6.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation7.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation8.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation9.jpg" /></a></li>
+            <li><a href=""><img src="/Resource/images/cooperation10.jpg" /></a></li>
+        </ul>
+    </div>*@
+</div>
+<!--js代码-->
+<script>
+    //快速入口切换图片
+    //$(".apione").hover(
+    //    function () {
+    //        $(this).attr("src", "/Resource/images/apimouse1.png");
+    //    },
+    //     function () {
+    //         $(this).attr("src", "/Resource/images/api1.jpg");
+    //     }
+    //    );
+    //$(".apitwo").hover(
+    //   function () {
+    //       $(this).attr("src", "/Resource/images/apimouse2.jpg");
+    //   },
+    //    function () {
+    //        $(this).attr("src", "/Resource/images/api2.png");
+    //    }
+    //   );
+    //$(".apithree").hover(
+    //   function () {
+    //       $(this).attr("src", "/Resource/images/apimouse3.png");
+    //   },
+    //    function () {
+    //        $(this).attr("src", "/Resource/images/api3.jpg");
+    //    }
+    //   );
+    //$(".apifour").hover(
+    //   function () {
+    //       $(this).attr("src", "/Resource/images/apimouse4.png");
+    //   },
+    //    function () {
+    //        $(this).attr("src", "/Resource/images/api4.jpg");
+    //    }
+    //   );
+
+    //轮播图
+    layui.use(['carousel', 'element'], function () {
+        var carousel = layui.carousel, element = layui.element;
+        carousel.render({
+            elem: '#sowingMap'
+          , width: '100%' //设置容器宽度
+          , height: '450px'//设置容器高度
+          , arrow: 'always' //始终显示箭头
+        });
+        carousel.render({
+            elem: '#sowingMap-1'
+          , width: '100%'
+          , height: '100%'
+          , arrow: 'always'
+          , indicator: 'inside'
+        });
+        carousel.render({
+            elem: '#sowingMap-2'
+          , width: '100%'
+          , height: '100%'
+          , arrow: 'always'
+          , indicator: 'inside'
+        });
+        var carousel = layui.carousel;
+        carousel.on('change(sowingMap-2)', function (obj) { //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+            //当前条目的索引
+            var indexValue = obj.index;
+            if (indexValue == 0) {
+                $(".brief:nth-child(1)").css("display", "block");
+                $(".brief:nth-child(1)").siblings().css("display", "none");
+            } else if (indexValue == 1) {
+                $(".brief:nth-child(2)").css("display", "block");
+                $(".brief:nth-child(2)").siblings().css("display", "none");
+            } else {
+                $(".brief:nth-child(3)").css("display", "block");
+                $(".brief:nth-child(3)").siblings().css("display", "none");
+            }
+        });
+    });
+</script>

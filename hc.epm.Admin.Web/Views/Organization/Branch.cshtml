@@ -1,0 +1,165 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_Company>
+@{
+    Layout = "~/Views/Shared/_OldLayui.cshtml";
+    ViewBag.Title = "组织机构管理";
+
+}
+
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a>  </span> > <span>单位管理</span> > <span>组织机构</span>
+    </div>
+    <div class="container-fluid search mt5 " style="min-height:700px;padding:0px;">
+        <div class="col-sm-2 no-padding" style="height:100%;padding:0px">
+            <fieldset class="layui-elem-field  " style="height:100%">
+                <ul id="companyTree" class="tree-wrap" style="width: 265px;"></ul>
+            </fieldset>
+        </div>
+        <div class="col-sm-10 table-wrap no-padding" style="padding:0px">
+            <form class="layui-form company-wrap" action="" method="get">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">单位名称 : </label>
+                        <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入单位名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                        <input type="hidden" name="leftPId" id="leftPId" value="@ViewBag.leftPId" />
+                        <input type="hidden" name="rightPId" id="rightPId" value="@ViewBag.rightPId" />
+                    </div>
+                    <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+                </div>
+            </form>
+            <hr style="width:98%;margin: 20px auto">
+            <div class="btns padding20">
+                <a href="/Organization/Add?Belong=@ViewBag.belong&rightPId=@ViewBag.rightPId" target="mainFrame" data-module="@AdminModule.AdminOrganization" data-right="add" id="add">新 增</a>
+                <a href="javascript:;" data-module="@AdminModule.AdminOrganization" data-right="delete" id="delete">删 除</a>
+            </div>
+            <div class="layui-form padding20">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="table-center">
+                                <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                            </th>
+                            <th width="12%" class="table-left">单位编码</th>
+                            <th class="table-left">单位名称</th>
+                            <th width="12%" class="table-left">单位电话</th>
+                            <th width="17%" class="table-center">组织机构</th>
+                            <th width="8%" class="table-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="table-center">
+                                        <input type="checkbox" lay-skin="primary" />
+                                        <input type="hidden" name="id-@item.Id" id="id-@item.Id" value="@item.Id" />
+                                    </td>
+                                    <td class="table-left">@item.Code</td>
+                                    <td class="table-left">@item.Name</td>
+                                    <td class="table-left">@item.Phone</td>
+                                    <td class="table-center">
+                                        <a href="javascript:;" class="organization-link text-link" data-itemid="@item.SId" title="组织机构">组织机构</a>&nbsp;&nbsp;
+                                    </td>
+                                    <td class="table-center">
+                                        <a href="/Organization/Edit?id=@item.SId&Belong=@ViewBag.belong" data-itemid="@item.Id" title="编辑" data-module="@AdminModule.AdminOrganization" data-right="modify"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                        <a href="/Organization/detail/?id=@item.SId&belong=@ViewBag.belong" class="detail-link" data-itemid="@item.SId" title="详情" data-module="@AdminModule.AdminOrganization" data-right="Info"><i class='glyphicon glyphicon-list-alt handle-blue'></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="table-center">
+                                    暂无数据
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+    //实例化树
+    layui.use('tree', function () {
+        $.post("GetCompanyTree", { pId: "@ViewBag.leftPId", chk: "@ViewBag.rightPId" }, function (data) {
+            var tree = layui.tree({
+                elem: '#companyTree', //指定元素，生成的树放到哪个元素上
+                check: 'checkbox', //勾选风格
+                skin: 'as', //设定皮肤
+                drag: false,//点击每一项时是否生成提示信息
+                checkboxName: 'cb[]',//复选框的name属性值
+                checkboxStyle: "",//设置复选框的样式，必须为字符串，css样式怎么写就怎么写
+                click: function (item) { //点击节点回调
+                    var pId = item.data.id;
+                    //跳转
+                    window.location.href = "/Organization/Branch?leftPId=@ViewBag.leftPId&rightPId=" + pId;
+                },
+                onchange: function () {//当当前input发生变化后所执行的回调
+                },
+                nodes: [ //节点
+                    data
+                ]
+            });
+        });
+    })
+</script>
+<script type="text/javascript">
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form();
+
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {//批量删除单位
+                    $.post("/Organization/Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Organization/branch?leftPId=@ViewBag.leftPId&rightPId=@ViewBag.rightPId";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+        //组织机构跳转
+        $(".organization-link").on("click", function () {
+            var id = $(this).data("itemid");
+            location.href = "/Organization/branch?leftPId=" + id + "&rightPId=" + id;
+        })
+    });
+</script>

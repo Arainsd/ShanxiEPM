@@ -1,0 +1,721 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+<link href="~/Resource/css/TzDesiginChangeApply.css" rel="stylesheet" />
+<style>
+    .fr-ta {
+        width: 100%;
+    }
+
+    .ou-ta div {
+        width: 100px;
+    }
+
+    .tab-conten input[type=text],#totalamont {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid;
+        box-sizing: border-box;
+    }
+        .tab-conten input[type=number] {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid;
+        box-sizing: border-box;
+    }
+    .fr-ta input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-icon i {
+        font-size: 24px;
+    }
+
+        .tab-icon i:hover {
+            cursor: pointer;
+        }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="top-title">
+            <span class="ti">工程甲供物资订审批流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr>
+                    <td class="bold-name">标题</td>
+                    <td style="text-align:center;" colspan="3">
+                        <div class="form-group">
+                            <input type="text" id="Title" name="Title" value="@ViewBag.Title" class="sel-pro" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请人</td>
+                    <td>
+                        <span>@ViewBag.Applicant</span>
+                        <input type="hidden" name="Applicant" value="@ViewBag.Applicant" />
+                        <input type="hidden" name="ApplicantId" value="@ViewBag.ApplicantID" />
+                    </td>
+                    <td class="bold-name">申请单位</td>
+                    <td>
+                        <span>@ViewBag.CompanyName</span>
+                        <input type="hidden" name="CompanyName" value="@ViewBag.CompanyName" />
+                        <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请时间</td>
+                    <td>
+                        <span style="margin-left:38px;">@(Convert.ToDateTime(ViewBag.ApplyDate).ToString("yyyy-MM-dd"))</span>
+                        <input type="hidden" name="ApplyDate" value="@(Convert.ToDateTime(ViewBag.ApplyDate).ToString("yyyy-MM-dd"))" />
+                    </td>
+                    <td class="bold-name">申请部门</td>
+                    <td>
+                        <span style="margin-right:5px;">@ViewBag.CompanyName</span>
+                        <span>@ViewBag.Department</span>
+                        <input type="hidden" name="CompanyName" value="@ViewBag.CompanyName" />
+                        <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                        <input type="hidden" name="Department" value="@ViewBag.Department" />
+                        <input type="hidden" name="DepartmentId" value="@ViewBag.DepartmentId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">合同名称</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="timer" id="ContractName" name="ContractName" value="" />
+                        </div>
+                    </td>
+                    <td class="bold-name">合同报审序号</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" name="ContractNumber" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">联系人</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="timer"  name="Contact" value="" />
+                        </div>
+                    </td>
+                    <td class="bold-name">联系人电话</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" name="ContactNumber" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">项目名称</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="timer"  name="ProjectName" value="" />
+                        </div>
+                    </td>
+                    <td class="bold-name">批文号</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" name="ApprovalNo" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">物资种类</td>
+                    <td>
+                        <div class="form-group">
+                            @Html.DropDownList("MaterialNumber", ViewBag.MaterialNumber as SelectList, null, new { @class = "timer" })
+                            <input type="hidden" name="MaterialName" id="MaterialName" />
+                        </div>
+
+                    </td>
+                    <td class="bold-name">erp订单号</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" name="ErpOrderNumber" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4" style="background-color:#e4e4e4;">供应商基础信息</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">供应商名称</td>
+                    <td colspan="3">
+                        <div class="form-group">
+                            <input type="text" name="SupplierName" class="sel-pro" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">供应商地址</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="timer" name="SupplierAdress" value="" />
+                        </div>
+                    </td>
+                    <td class="bold-name">供应商邮编</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" name="SupplierCode" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">收件人</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="timer" name="Recipient" value="" />
+                        </div>
+                    </td>
+                    <td class="bold-name">电话</td>
+                    <td>
+                        <div class="form-group">
+                            <input type="text" name="Phone" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="text-align:right;height:20px;">
+                    <td colspan="4" class="tab-icon">
+                        <i class="layui-icon tab-add" title="添加" style="color:darkseagreen">&#xe608;</i>
+                        <i class="layui-icon tab-delete" title="删除" style="color:cornflowerblue">&#xe640;</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table class="fr-ta" style="word-break:break-all;word-wrap:break-word;">
+                            <thead>
+                                <tr class="ou-ta">
+                                    <th>
+                                        <div style="width:20px;"><input type="checkbox" id="allcheck" /></div>
+                                    </th>
+                                    <th><div style="width:40px;">序号</div></th>
+                                    <th><div>单位</div></th>
+                                    <th><div>站名</div></th>
+                                    <th><div>品名</div></th>
+                                    <th><div>规格</div></th>
+                                    <th><div>数量</div></th>
+                                    <th><div>单价</div></th>
+                                    <th><div>金额</div></th>
+                                    <th><div>到货地址</div></th>
+                                    <th><div>备注</div></th>
+                                </tr>
+                            </thead>
+                            <tbody class="addtab">
+                                <tr class="tab-conten">
+                                    <td><input type="checkbox" /></td>
+                                    <td class="Sort">1</td>
+                                    <td>
+                                        <input type="text" class="CompanyName" />
+                                        <input type="hidden" class="CompanyId">
+                                    </td>
+                                    <td><input type="text" class="StationName" /></td>
+                                    <td><input type="text" class="ProductName" /></td>
+                                    <td><input type="text" class="Specifications" /></td>
+                                    <td><input type="number" class="Number"/></td>
+                                    <td><input type="number" class="UnitPrice" /></td>
+                                    <td><input type="number" class="Amount" disabled/></td>
+                                    <td><input type="text" class="Address" /></td>
+                                    <td><input type="text" class="Note" /></td>
+                                </tr>
+                            
+                            </tbody>
+                            <tr style="background-color:#e4e4e4;">
+                                <td colspan="2">合计</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="text" name="Amount"  id="totalamont" style="color:red;border:none;" readonly/></td>
+                                <td></td> 
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">部门负责人</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            <input type="text" id="DepLeaderName" name="DepLeaderName" class="timer selectUser" data-type="1"/>
+                            <input type="hidden" id="DepLeaderId" name="DepLeaderId" />
+                            <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:-30px;">&#xe76a;</i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分管领导</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            <input type="text" id="LeaderName" name="LeaderName" class="timer selectUser" data-type="2"/>
+                            <input type="hidden" id="LeaderId" name="LeaderId" />
+                            <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:-30px;">&#xe76a;</i>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color:#e4e4e4;">签字意见</td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <script type="text/plain" id="editor" style="width:1200px;height:200px;">
+                        </script>
+                        <input type="hidden" name="SignIdea" id="SignIdea" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big button-base bg-save save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big button-base bg-save save" data-state="@(XtBusinessDataState.Staged.GetValue().ToString())" />
+            <input type="button" id="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-big button-base bg-cancel cancel" />
+          
+            <!--状态数据-->
+            <input type="hidden" name="State" id="State" />
+            <!--物资订单数据-->
+            <input type="hidden" name="tzGcGoodsOrdersItem" id="tzGcGoodsOrdersItem" />
+
+        </div>
+    </form>
+</div>
+<script>
+    //富文本编辑器实例化
+    UE.getEditor('editor', {
+        toolbars: [[//工具条
+           'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+        'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+        'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+        'strikethrough', 'superscript', 'subscript', 'removeformat',
+        'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+        'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+        'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]]
+    });
+    //编辑器内容同步input
+    editor = UE.getEditor("editor", {
+        //initialFrameHeight: 40
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+    window.onload = function () {
+
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ContractName: {
+                    validators: {
+                        notEmpty: {
+                            message: '合同名称不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '合同名称不能超过100字符'
+                        },
+                    }
+                },
+                ContractNumber: {
+                    validators: {
+                        notEmpty: {
+                            message: '合同报审序号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '合同报审序号不能超过50字符'
+                        },
+                    }
+                },
+                Contact: {
+                    validators: {
+                        notEmpty: {
+                            message: '联系人不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '联系人不能超过50字符'
+                        },
+                    }
+                },
+                ContactNumber: {
+                    validators: {
+                        notEmpty: {
+                            message: '联系人电话不能为空'
+                        },
+                        regexp: {
+                            regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                            message: "联系人电话格式错误"
+                        }
+                    }
+                },
+                ProjectName: {
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '项目名称不能超过100字符'
+                        },
+                    }
+                },
+                ApprovalNo: {
+                    validators: {
+                        notEmpty: {
+                            message: '批文号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '批文号不能超过50字符'
+                        },
+                        regexp: {
+                            regexp: /^[0-9a-zA-Z_-]{1,50}$/,
+                            message: '批文号由数字、字母、下划线或-组成'
+                        }
+                    }
+                },
+                MaterialName: {
+                    validators: {
+                        notEmpty: {
+                            message: '物资种类不能为空'
+                        },
+                    }
+                },
+                Phone: {
+                    validators: {
+                        regexp: {
+                            regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                            message: "电话格式错误"
+                        }
+                    }
+                },
+                SupplierName: {
+                    validators: {
+                        notEmpty: {
+                            message: '供应商名称不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '供应商名称不能超过500字符'
+                        },
+                    }
+                },
+                SupplierCode: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[1-9]\d{5}$/,
+                            message: "供应商邮编格式错误"
+                        }
+                    }
+                },
+                ErpOrderNumber: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[0-9a-zA-Z]{1,50}$/,
+                            message: 'erp订单号由数字、字母组成'
+                        }
+                    }
+                },
+                Leader: {
+                    validators: {
+                        notEmpty: {
+                            message: '负责人不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '负责人不能超过50字符'
+                        },
+                    }
+                },
+                DepLeaderName: {
+                    validators: {
+                        notEmpty: {
+                            message: '部门负责人不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '部门负责人不能超过100字符'
+                        },
+                    }
+                },
+                LeaderName: {
+                    validators: {
+                        notEmpty: {
+                            message: '主管经理不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '主管经理不能超过100字符'
+                        },
+                    }
+                },
+            }
+        });
+    }
+ 
+ 
+    //添加人员变更
+    $(".tab-add").click(function () {
+        var index;
+        index = $('.addtab').find('tr:last-child').find('.Sort').text();
+        if (index == "") {
+            index = 0;
+            index++;
+        } else {
+            index++;
+        }
+        var tabhtml = `
+                    <tr class ="tab-conten">
+                                    <td><input type="checkbox" /></td>
+                                    <td class ="Sort">${index}</td>
+                                    <td>
+                                    <input type="text" class ="CompanyName" />
+                                    <input type="hidden" class ="CompanyId">
+                                    </td>
+                                    <td><input type="text" class ="StationName" /></td>
+                                    <td><input type="text" class ="ProductName" /></td>
+                                    <td><input type="text" class ="Specifications" /></td>
+                                    <td><input type="number" class ="Number" /></td>
+                                    <td><input type="number" class ="UnitPrice" /></td>
+                                    <td><input type="number" class ="Amount" disabled/></td>
+                                    <td><input type="text" class ="Address" /></td>
+                                    <td><input type="text" class ="Note" /></td>
+                                </tr>
+            `
+        $(".addtab").append(tabhtml);
+    });
+    //删除人员变更
+    $(".tab-delete").click(function () {
+        $(".tab-conten").find("input[type='checkbox']:checked").each(function () {
+            n = $(this).parents("tr").index();  // 获取checkbox所在行的顺序
+            $(".addtab").find("tr:eq(" + n + ")").remove();
+        });
+        $(".tab-conten").each(function (index) {
+            $(this).find(".Sort").text(index + 1);//重新赋值序号
+        });
+        //删除时金额触发计算
+        if ($(".tab-conten").length == 0) {
+            $("#totalamont").val("");
+        } else {
+            $("body .UnitPrice").change();
+        }
+    });
+    //人员变更全选和反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $(".addtab input[type='checkbox']").prop("checked", isChecked);
+    });
+
+    // 单独选项控制全选
+    $(".addtab input[type='checkbox']").click(function () {
+        var allLength = $(".addtab input[type='checkbox']").length;
+        var checkedLength = $(".addtab input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+  
+    //金额计算：数量*单价
+    var moneyArr = [];
+    $("body").on("change", ".Number,.UnitPrice", function () {
+        var money = 0;//总金额
+        $(".tab-conten").each(function (index, item) {
+            var number = $(item).find($(".Number")).val();
+            var price = $(item).find($(".UnitPrice")).val();
+                var amount = number * price;
+                $(item).find(".Amount").val(amount);//金额赋值
+                money += Number($(item).find($(".Amount")).val());//总金额
+        });
+        $("#totalamont").val(money);
+    });
+ 
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择部门负责人
+        $(".selectUser").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?companyId=@ViewBag.UnitID',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        if (_this.data("type") == "1") {
+                            $("#DepLeaderName").val(obj.data[0].Name);
+                            $("#DepLeaderId ").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                            .updateStatus('DepLeaderName', 'NOT_VALIDATED', null)
+                            .validateField('DepLeaderName');
+                        } else if (_this.data("type") == "2") {
+                            $("#LeaderName").val(obj.data[0].Name);
+                            $("#LeaderId ").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                            .updateStatus('LeaderName', 'NOT_VALIDATED', null)
+                            .validateField('LeaderName');
+                        }
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        $("body").on("click", ".CompanyName", function () { 
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        _this.val(obj.data[0].Name);
+                        _this.parent().find(".CompanyId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        
+
+        //数据提交
+        $(".save").click(function () {
+            var tzGcGoodsOrdersItem = [];
+            $(".tab-conten").each(function (index, item) {
+                tzGcGoodsOrdersItem.push({
+                    Sort: index + 1,
+                    CompanyName: $(item).find($(".CompanyName")).val(),
+                    CompanyId: $(item).find($(".CompanyId")).val(),
+                    StationName: $(item).find($(".StationName")).val(),
+                    ProductName: $(item).find($(".ProductName")).val(),
+                    Specifications: $(item).find($(".Specifications")).val(),
+                    Number: $(item).find($(".Number")).val(),
+                    UnitPrice: $(item).find($(".UnitPrice")).val(),
+                    Amount: $(item).find($(".Amount")).val(),
+                    Address: $(item).find($(".Address")).val(),
+                    Note: $(item).find($(".Note")).val(),
+                });
+            });
+            $("#tzGcGoodsOrdersItem").val(JSON.stringify(tzGcGoodsOrdersItem));//赋值
+
+            //物资种类
+            $("#MaterialName").val($("#MaterialNumber option:selected").text());
+
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+            if (bv.isValid()) {
+
+                //物资订单信息验证
+                if ($(".addtab").children("tr").length == 0) {
+                    layer.alert("物资订单信息不能为空", { icon: 2 })
+                    return;
+                }
+                var isAnull = false;
+                var isBnull = false;
+                var isCnull = false;
+                var isDnull = false;
+                $(".addtab tr").each(function (index, item) {
+                    if ($(item).children(3).find(".StationName").val() == "") {
+                        isAnull = true;
+                    }
+                    if ($(item).children(4).find(".ProductName").val() == "") {
+                        isBnull = true;
+                    }
+                    if ($(item).children(5).find(".Specifications").val() == "") {
+                        isCnull = true;
+                    }
+                    if ($(item).children(9).find(".Address").val() == "") {
+                        isDnull = true;
+                    }
+                });
+                if (isAnull) {
+                    layer.msg("站名不能为空", { time: 1000, icon: 2 })
+                    return;
+                }
+                if (isBnull) {
+                    layer.msg("品名不能为空", { time: 1000, icon: 2 })
+                    return;
+                }
+                if (isCnull) {
+                    layer.msg("规格不能为空", { time: 1000, icon: 2 })
+                    return;
+                }
+                if (isDnull) {
+                    layer.msg("到货地址不能为空", { time: 1000, icon: 2 })
+                    return;
+                }
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/TzGcGoodsOrdersApply/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+            }
+        });
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/TzGcGoodsOrdersApply/Index";
+    });
+</script>

@@ -1,0 +1,189 @@
+﻿
+
+@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@model Epm_TimeLimitAndProcedure
+
+@{
+    ViewBag.Title = "CKTimeLimitDetail";
+}
+<style>
+    .tab .long-text input, .tab .short-text input {
+        background: #ebebe5;
+        width: 230px;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage" class="active">工期管理</li>
+        <li id="DetailMilestonePlan">工程节点</li>
+        <li id="ScheduleInfo">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video">视频集成</li>
+    </ul>
+    <form id="mainForm">
+        <div class="tab">
+            @if (Model == null)
+            {
+                <input type="hidden" id="ProjectId" name="ProjectId" value="" />
+            }
+            @if (Model != null)
+            {
+                @*<input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />*@
+            }
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;实际停业时间&nbsp;:</label>
+                <input type="text" id="ShutdownTime" name="ShutdownTime" @*onClick="WdatePicker({ el: 'ShutdownTime' })"*@ value="@(Model == null ? "" : Convert.ToDateTime(Model.ShutdownTime).ToString("yyyy-MM-dd"))" readonly>
+                @*<i onClick="WdatePicker({ el: 'ShutdownTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>*@
+            </div>
+            <div class="long-text">
+                <label for="PlanWorkStartTime">&nbsp;计划开工时间&nbsp;:</label>
+                <input type="text" id="PlanWorkStartTime" name="PlanWorkStartTime" class="selectbg" autocomplete="off" value="@(Model == null ? "" : Convert.ToDateTime(Model.PlanWorkStartTime).ToString("yyyy-MM-dd"))" readonly />
+            </div>
+            <div class="long-text">
+                <label for="PlanWorkEndTime">&nbsp;计划完工时间&nbsp;:</label>
+                @if (Model != null)
+                {
+                    <input type="text" id="PlanWorkEndTime" name="PlanWorkEndTime" class="selectbg" autocomplete="off" value="@Model.PlanWorkEndTime.ToString("yyyy-MM-dd")" readonly />
+                }
+                @if (Model == null)
+                {
+                    <input type="text" id="PlanWorkEndTime" name="PlanWorkEndTime" class="selectbg" autocomplete="off" value="" readonly />
+                }
+
+            </div>
+            <div class="long-text">
+                <label for="Limit">&nbsp;工期(天)&nbsp;:</label>
+                @if (Model == null)
+                {
+                    <input type="text" id="TimeLimit" name="TimeLimit" autocomplete="off" value="" readonly class="selectbg" />
+                }
+                @if (Model != null)
+                {
+                    <input type="text" id="TimeLimit" name="TimeLimit" autocomplete="off" value="@Model.TimeLimit" readonly class="selectbg" />
+                }
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;计划开业时间&nbsp;:</label>
+                <input type="text" id="PlanOpeningTime" name="PlanOpeningTime" @*onClick="WdatePicker({ el: 'PlanOpeningTime' })"*@ value="@(Model == null ? "" : Convert.ToDateTime(Model.PlanOpeningTime).ToString("yyyy-MM-dd"))" readonly>
+                @*<i onClick="WdatePicker({ el: 'PlanOpeningTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>*@
+            </div>
+            <div class="long-text">
+                <label for="">&nbsp;计划停业时长&nbsp;:</label>
+                @if (Model == null)
+                {
+                    <input type="text" id="PlanShutdowLimit" name="PlanShutdowLimit" autocomplete="off" value="" readonly class="selectbg" />
+                }
+                @if (Model != null)
+                {
+                    <input type="text" id="PlanShutdowLimit" name="PlanShutdowLimit" autocomplete="off" value="@Model.PlanShutdowLimit" readonly class="selectbg" />
+                }
+            </div>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @if (Model != null)
+                        {
+                            if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                            {
+                                foreach (var item in Model.TzAttachs)
+                                {
+                                    if (item.TypeNo != "SHOUXU")
+                                    {
+
+                                        <tr id="${obj.GuidId}">
+                                            <td><span class="font-black">@item.Sort</span></td>
+                                            <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                            <td><span class="font-black">@item.TypeName</span></td>
+                                            <td class="td-div" style="text-align:center">
+                                                <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:#337ab7;">下载</a>
+                                                <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        }
+                </tbody>
+            </table>
+
+        </div>
+    </form>
+</div>
+<script>
+    $(function () {
+         $("#Detail").click(function () {
+            window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailApprovalConstitute").click(function () {
+            window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectMainPoint").click(function () {
+            window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailTimeManage").click(function () {
+            window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailMilestonePlan").click(function () {
+            window.location.href = 'DetailMilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectISP").click(function () {
+            window.location.href = 'DetailProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectData").click(function () {
+            window.location.href = 'DetailProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#ScheduleInfo").click(function () {
+            window.location.href = 'ScheduleInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ContractInfo").click(function () {
+            window.location.href = 'ContractInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ChangeInfo").click(function () {
+            window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#VisaInfo").click(function () {
+            window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#QuestionInfo").click(function () {
+            window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailCrossingsManage").click(function () {
+            window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#video").click(function () {
+            window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+        });
+        $("body").on("click", ".dynamicAdd", function () {
+            $(this).parent().find("input[type='text']").addClass("default").attr({ readonly: 'true' });
+            $(this).hide();
+            $(this).parent().find(".dynamicEdit").show();
+        });
+        $("body").on("click", ".dynamicEdit", function () {
+            $(this).parent().find("input[type='text']").removeClass("default").removeAttr("readonly");
+            $(this).hide().parent().find(".dynamicAdd").show();
+        });
+        //下载附件
+        $("body").on("click", ".downloadFile", function () {
+            var path = $(this).data("url");
+            var fileName = $(this).data("name");
+            window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+        });
+    });
+</script>
+
+

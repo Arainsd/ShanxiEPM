@@ -1,0 +1,157 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Msg
+@model Msg_MessageStrategy
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;"><em class="required">*</em>消息类型 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("Type", null, new { @class = "form-control selectpicker  show-tick" })
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>扫描时间 : </label>
+                    <div class="col-lg-4 col-sm-4 left-position">
+                        <input type="text" name="ScanTime" id="ScanTime" placeholder="请输入扫描时间" autocomplete="off" class="form-control" style="width:80%; display: inline-block" value="@Model.ScanTime" />  &nbsp;秒
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;"><em class="required">*</em>重发次数 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="ResendStra" id="ResendStra" placeholder="请输入重发次数" autocomplete="off" class="form-control" style="width:80%; display:inline-block" value="@Model.ResendStra" />  &nbsp;次
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" style="padding-left:0px;"><em class="required">*</em>适用时间区间 : </label>
+                    <div class="col-lg-4 col-sm-4 left-position">
+                        <input type="text" name="TimeSection" id="TimeSection" placeholder="请输入适用时间区间" autocomplete="off" class="form-control" value="@Model.TimeSection" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;">启用/禁用 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label">是否确认 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12 col-sm-12" style="overflow:hidden;top:80px;">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<script>
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Type: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择消息类型'
+                        },
+                        callback: function () {
+                            return $('.Type').val() !== '';
+                        }
+                    }
+                },
+                ScanTime: {
+                    validators: {
+                        notEmpty: {
+                            message: '扫描时间不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+$/,
+                            message: '扫描时间格式不正确'
+                        }
+                    }
+                },
+                ResendStra: {
+                    validators: {
+                        notEmpty: {
+                            message: '重发次数不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+$/,
+                            message: '重发次数格式不正确'
+                        }
+                    }
+                },
+                TimeSection: {
+                    validators: {
+                        notEmpty: {
+                            message: '适用时间区间不能为空'
+                        }
+                    }
+                },
+            }
+        });
+
+    }
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //   监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");
+                        $("#save").val("请等待")
+                        var index2 = parent.layer.msg("消息发送策略修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(index2);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>

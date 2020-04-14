@@ -1,0 +1,217 @@
+﻿
+@{
+    ViewBag.Title = "开工申请列表";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">标题 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="" value="" placeholder="请输入标题">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">计划开始 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">分公司名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="" value="" placeholder="请输入分公司名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">申请时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">计划结束 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add">开工申请</button>
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">标题</th>
+                    <th width="100">申请单位</th>
+                    <th width="100">计划建设工期</th>
+                    <th width="100">计划工期</th>
+                    <th width="100">申请时间</th>
+                    <th width="150">审批状态</th>
+                    <th width="150">当前操作人</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>咸阳统一路加油站项目改建开工申请</td>
+                    <td>公司机关</td>
+                    <td>2019-01-01  ~  2019-12-31</td>
+                    <td>365</td>
+                    <td>2019-10-22</td>
+                    <td>暂存</td>
+                    <td>常超超</td>
+                    <td>
+                        <a href="/ProjectManagement/StartApplyEdit">继续申请</a>
+                        <a href="/ProjectManagement/StartApplyDetail">查看</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>咸阳统一路加油站项目改建开工申请</td>
+                    <td>公司机关</td>
+                    <td>2019-01-01  ~  2019-12-31</td>
+                    <td>365</td>
+                    <td>2019-10-22</td>
+                    <td>待审批</td>
+                    <td>常超超</td>
+                    <td>
+                        <a href="/ProjectManagement/StartApplyDetail">查看</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>咸阳统一路加油站项目改建开工申请</td>
+                    <td>公司机关</td>
+                    <td>2019-01-01  ~  2019-12-31</td>
+                    <td>365</td>
+                    <td>2019-10-22</td>
+                    <td>已驳回</td>
+                    <td>常超超</td>
+                    <td>
+                        <a href="/ProjectManagement/StartApplyEdit">重新申请</a>
+                        <a href="/ProjectManagement/StartApplyDetail">查看</a>
+                        <a>关闭</a>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+<script>
+    $("#add").click(function () {
+        window.location.href = "/ProjectManagement/StartApply";
+    })
+</script>

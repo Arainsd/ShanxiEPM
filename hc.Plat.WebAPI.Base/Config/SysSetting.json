@@ -1,0 +1,11 @@
+﻿{
+  "pageSize": 10,
+  "resourceUrl": "http://192.168.3.25:8085/",
+  "aboutUrl": "http://192.168.3.25:8083/h5/aboutus",
+  "bimUrl": "http://192.168.3.25:8083/h5/biminfo?id=",
+  "relationBimUrl": "http://192.168.3.25:8083/h5/RelationBim?id=",
+  "kpiConstructUrl": "http://192.168.3.25:8083/h5/kpiConstruct",
+  "kpiInvestment": "http://192.168.3.25:8083/h5/kpiInvestment",
+  "problem": "http://192.168.3.25:8083/h5/Problem",
+  "questions": "http://192.168.3.25:8083/h5/Questions"
+}

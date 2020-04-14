@@ -1,0 +1,12 @@
+﻿/*新增页面样式*/
+html,body {background:#f8f8f8;height:100%}
+.layui-form-label{width:130px;}
+.layui-form-item .layui-inline {margin-right:0}
+.container {padding-top:65px;width: 98%;;height:370px;margin:0 auto;background:white;}
+.layui-btn+.layui-btn {margin-left:50px}
+.btn-group{margin-top:30px;text-align:center;width:100%}
+
+
+
+/*详情页面样式*/
+ .detail-data { float: left; display: block;  padding: 9px 15px;  width: 100%; font-weight: 400; text-align: left; }

@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "权限树预览";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<form action="Set" method="post" id="form">
+    <input type="hidden" name="id" id="id" value="@ViewBag.id" />
+    <input type="hidden" name="belong" value="@ViewBag.Belong" />
+    <div class="content-right date-wrap fl c">
+        <ul id="roleTree"></ul>
+    </div>
+    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" style="margin-left:45%;" />
+</form>
+<link rel="stylesheet" href="/Content/layui/css/layui.css" />
+<script src="/Content/layui/layui.js"></script>
+<script>
+    layui.use(['layer', 'tree', 'element'], function () {
+        var layer = layui.layer;
+        $.post("GetRightTree", { belong: "@ViewBag.belong", roleId: "@ViewBag.id" }, function (data) {
+            var tree = layui.tree({
+                elem: '#roleTree', //指定元素，生成的树放到哪个元素上
+                check: 'checkbox', //勾选风格
+                skin: 'as', //设定皮肤
+                drag: false,//点击每一项时是否生成提示信息
+                checkboxName: 'rights',//复选框的name属性值
+                checkboxStyle: "",//设置复选框的样式，必须为字符串，css样式怎么写就怎么写
+                click: function (item) { //点击节点回调
+                },
+                onchange: function () {//当当前input发生变化后所执行的回调
+                },
+                nodes: [ //节点
+                    data
+                ]
+            });
+        });
+
+        $("#save").click(function () {
+            var right = $("#form").serialize();
+            $.post("Set", right, function (data) {
+                if (data.Flag) {
+                    layer.msg("权限设置成功", { time: 1000, icon: 1 }, function () {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                        parent.location.reload();
+                    });
+                }
+                else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+    });
+</script>
+

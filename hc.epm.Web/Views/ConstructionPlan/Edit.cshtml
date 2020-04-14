@@ -1,0 +1,352 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<PlanView>
+@{
+    ViewBag.Title = "修改施工计划";
+}
+<style>
+    .NAME {
+        float: left;
+    }
+
+        .NAME input {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-left: 15px;
+            height: 25px;
+            line-height: 35px;
+            border: 1px solid #C7C7C7;
+            border-radius: 1px;
+            position: relative;
+        }
+
+    .NAMEPic {
+        position: absolute;
+        left: 588px;
+        top: 202px;
+    }
+
+    .datalist {
+        margin-top: 22px;
+    }
+
+    .StartTimeCon {
+        float: left;
+        margin-left: 40px;
+        height: 30px;
+        position: relative;
+    }
+
+        .StartTimeCon input {
+            display: inline-block;
+            box-sizing: border-box;
+            padding-left: 15px;
+            height: 25px;
+            line-height: 35px;
+            border: 1px solid #C7C7C7;
+            border-radius: 1px;
+        }
+
+        .StartTimeCon .pic {
+            font-size: 20px;
+            position: absolute;
+            left: 262px;
+            top: 2px;
+        }
+
+    .CreateMilestonePlan {
+        float: left;
+        height: 25px;
+        width: 140px;
+        margin-left: 74px;
+    }
+
+    table input[type="text"] {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 25px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+    }
+
+    tbody tr td:nth-child(3) {
+        position: relative;
+    }
+
+    tbody tr td:nth-child(4) {
+        position: relative;
+    }
+
+    table .picstart {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+
+    .picend {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+</style>
+<div class="contentData">
+    <div>
+        <form>
+            <input type="hidden" name="ConstructionPlan" id="ConstructionPlan" />@*表格数据隐藏域*@
+        </form>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th style="width:100px;">序号</th>
+                    <th style="width:500px;">计划名称</th>
+                    <th style="width:250px;">计划开工时间</th>
+                    <th style="width:250px;">计划完工时间</th>
+                    <th style="width:100px;">工期(天)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.Plan.Name</td>
+                            <td>
+                                <input type="text" name="StartTime" class="StartTime TimeIsNull" value="@(item.Plan.StartTime == null ? "" : Convert.ToDateTime(item.Plan.StartTime).ToString("yyyy-MM-dd"))" />
+                                <i class="pic iconfont picstart" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                            </td>
+                            <td>
+                                <input type="text" name="EndTime" class="EndTime TimeIsNull" value="@(item.Plan.EndTime == null ? "" : Convert.ToDateTime(item.Plan.EndTime).ToString("yyyy-MM-dd"))" />
+                                <i class="pic iconfont picend" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                            </td>
+                            <td>@item.Plan.BuildDays.ToString("#0")</td>
+                            <td style="display:none;">
+                                <input type="text" class="inputId" data-id="@item.Plan.SId" value="@item.Plan.SId" />
+                            </td>
+                            <td style="display:none;">
+                                <input type="text" class="inputState" value="@item.Plan.State" />
+                            </td>
+                            <td style="display:none;">
+                                <input type="text" class="inputprojectId" value="@item.Plan.ProjectId" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="5">暂无数据</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div class="button-group btn-center">
+            <button type="button" class="saveBut">保存</button>
+            <button type="button" class="submitBut">提交</button>
+        </div>
+    </div>
+
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    $(function () {
+        $("tbody tr").each(function (index, item) {
+            //每个日期input添加id选择器
+            $(item.children[2]).find("input").attr('id', "StartTime" + index);
+            $(item.children[3]).find("input").attr('id', "EndTime" + index);
+            $(item.children[2]).find("input,i").on("click", function () {
+                WdatePicker({ el: "StartTime" + index });//调用日期控件
+            }).on("focus", function () {
+                WdatePicker({ onpicking: cStartDayFunc });
+            });
+            $(item.children[3]).find("input,i").on("click", function () {
+                WdatePicker({ el: "EndTime" + index });
+            }).on("focus", function () {
+                WdatePicker({ onpicking: cEndDayFunc });
+            });
+            ////判断状态
+            //var state=$(item.children[6]).find("input").val();
+            //if (state == 35 || state == 40) {
+            //    $(item.children[2]).find("input").attr("disabled", true);
+            //    $(item.children[3]).find("input").attr("disabled", true);
+            //    $(".button-group button").hide();
+
+            //} else {
+            //    $(item.children[2]).find("input").attr("disabled", false);
+            //    $(item.children[3]).find("input").attr("disabled", false);
+            //}
+        });
+        //隐藏按钮
+        if ($(".datalist tbody tr").length>1) {
+            $(".CreateMilestonePlan,.StartTimeCon").hide();
+        }else{
+            $(".CreateMilestonePlan,.StartTimeCon").show();
+            $(".button-group button").hide();
+        }
+        //计算工期
+        function cStartDayFunc(dp) {
+            var date = dp.cal.getNewDateStr();
+            var endTime = $(dp.el).parents("tr").find(".EndTime").val();
+            cDayFunc(date, endTime, dp);
+        }
+        function cEndDayFunc(dp) {
+            var startTime = $(dp.el).parents("tr").find(".StartTime").val();
+            var date = dp.cal.getNewDateStr();
+            cDayFunc(startTime, date, dp);
+        }
+        function cDayFunc(startTime, endTime, dp) {
+            var limit = $(dp.el).parents("tr").find("td:eq(4)");
+           
+            if (startTime == "" || endTime == "") {
+                $(limit).html(0);
+            }
+            else {
+                var startNum = parseInt(startTime.replace(/-/g, ''), 10);
+                var endNum = parseInt(endTime.replace(/-/g, ''), 10) + 1;
+                var timeNull = $(dp.el).parents("tr").find(".EndTime");
+                if (startNum > endNum) {
+                    $(limit).html(0);
+                    return false;
+                }
+                else {
+                    $(limit).html(DateDiff(startTime, endTime) + 1);  //调用/计算两个日期天数差的函数，通用
+                }
+            }
+        }
+        //生成施工计划
+        $(".CreateMilestonePlan").click(function () {
+            if($("#StartTime").val()==''){
+                layer.alert("请输入计划开工时间",{icon: 2 })
+                return false;
+            }
+            var projectId = $("#projectId").val();
+            var planStart = $("#StartTime").val(); type = 1
+            var search = $("form").serialize();
+            $.post("ConstructionPlan?projectId=" + projectId + "&planStart=" + planStart, search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+        //获取列表数据封装函数
+        function GetTableDate() {
+            var ConstructionPlan = [];
+            $("tbody tr").each(function (index, item) {
+                ConstructionPlan.push({
+                    Id: $(item.children[5]).find("input").val(),
+                    State: $(item.children[6]).find("input").val(),
+                    Name: $(item.children[1]).text(),
+                    StartTime: $(item.children[2]).find("input").val(),
+                    EndTime: $(item.children[3]).find("input").val(),
+                    BuildDays: $(item.children[4]).text(),
+                    ProjectId: $(item.children[7]).find("input").val()
+                });
+            });
+            ConstructionPlans = JSON.stringify(ConstructionPlan);
+            $("#ConstructionPlan").val(ConstructionPlans);
+        }
+       //保存施工计划
+        $(".saveBut").click(function () {
+            GetTableDate();
+            var ValueTime = false;
+            $("tbody .TimeIsNull").each(function (index, item) {
+                console.log($(item))
+                if ($(item).val() == "") {
+                    ValueTime = true;
+                    return;
+                }
+            });
+            if (ValueTime) {
+                layer.alert("开工时间或完工时间不能为空", { icon: 2 });
+                return false;
+            }
+            $("#ConstructionPlan").val(ConstructionPlans);
+            var search = $("form").serialize();
+            $.post("SavePlanEdit", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/ConstructionPlan/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+        //提交施工计划
+        $(".submitBut").click(function () {
+            GetTableDate()
+            var search = $("form").serialize();
+            //判断开工时间和完工时间不能为空
+            var ValueTime = false;
+            $("tbody .TimeIsNull").each(function (index, item) {
+                console.log($(item))
+                if ($(item).val() == "") {
+                    ValueTime = true;
+                    return;
+                }
+            });
+            if (ValueTime) {
+                layer.alert("开工时间或完工时间不能为空", { icon: 2 });
+                return false;
+            }
+            $.post("SubmitPlanEdit", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/ConstructionPlan/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+    });
+
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, element = layui.element, $ = layui.jquery;
+        //选择项目
+        $(".NAME").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择在建项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProject',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj.flag) {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        parent.layer.close(index);//关闭窗口
+                    } else {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+</script>
+
+
+
+

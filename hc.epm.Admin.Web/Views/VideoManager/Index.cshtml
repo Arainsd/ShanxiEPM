@@ -1,0 +1,203 @@
+﻿
+@using hc.epm.DataModel.Basic;
+@model List<Base_VideoManage>
+@{
+    ViewBag.Title = "视频监控管理首页";
+}
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">项目名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="projectName" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="@ViewBag.projectName" /></div>
+                    <label class="layui-form-label">摄像头名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="CameraName" placeholder="请输入摄像头名称" autocomplete="off" class="layui-input" value="@ViewBag.CameraName" /></div>
+                    <label class="layui-form-label">摄像头状态 : </label>
+                    <div class="layui-input-inline"><input type="text" name="CameraState" placeholder="请选择摄像头状态" autocomplete="off" class="layui-input" value="@ViewBag.CameraState" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" id="search" />
+
+            </div>
+        </form>
+    </div>
+
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" target="mainFrame" id="add">新增</a>
+            <a href="javascript:;" id="delete">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" style="text-align:center;word-break:break-all;word-wrap:break-word">
+                <thead>
+                    <tr>
+                        <th width="5%" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th class="table-center">序号</th>
+                        <th class="table-center">项目ID</th>
+                        <th class="table-center">项目名称</th>
+                        <th class="table-center">摄像头名称</th>
+                        <th class="table-center">摄像头状态</th>
+                        <th class="table-center">设备描述</th>
+                        <th class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td>@item.Projectid</td>
+                                <td>@item.ProjectName</td>
+                                <td>@item.CameraName</td>
+                                <td>@item.CameraState</td>
+                                <td>@item.DescribeInfo</td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class="editor-link" data-itemid="@item.SId" title="编辑"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                    <a href="javascript:;" class="detail-link" data-itemid="@item.SId" title="详情"><i class='glyphicon glyphicon-list-alt handle-blue'></i></a>
+                                    <a href="javascript:;" class="active-line handle-blue" data-itemid="@item.SId" title="激活设备">激活</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/VideoManager/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //新增
+        $("body").on("click", "#add", function () {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("视频管理-新增"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['900px', '700px'],
+                    content: '/VideoManager/Add/'
+                });
+        });
+        //编辑
+        $("body").on("click", ".editor-link", function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("视频管理-编辑"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['900px', '700px'],
+                    content: '/VideoManager/Edit/' + id
+                });
+            }
+
+        });
+        //详情
+        $("body").on("click", ".detail-link", function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("视频管理-详情"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: [BigLayerWidth, '700px'],
+                    content: '/VideoManager/Detail/' + id
+                });
+            }
+
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {//获取选择要删除的项
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+                ids = ids.substr(0, ids.lastIndexOf(","));
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {//批量删除单位
+                    $.post("/VideoManager/Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/VideoManager/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+
+        });
+
+        //激活设备
+        $("body").on("click", ".active-line", function () {
+            var id = $(this).data("itemid");
+            $.post("Activated", { id: id }, function (data) {
+                if (data.Flag) {
+                    var search = $("form").serialize();
+                    parent.layer.msg("监控设备激活成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/VideoManager/Index?pageIndex=1&" + search;
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+    });
+</script>

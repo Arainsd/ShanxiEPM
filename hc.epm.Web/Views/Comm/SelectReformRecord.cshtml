@@ -1,0 +1,158 @@
+﻿
+@using hc.epm.DataModel.Business;
+@model IEnumerable<Epm_ReformRecord>
+@{
+    ViewBag.Title = "选择工程";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+
+    .form-select > form > div select {
+        padding-left: 5px;
+    }
+    #page {
+        display: block !important;
+    }
+        .active {
+        background-color:#009688;
+        color:white;
+        border:none;
+    }
+    .init{
+         background-color:#D9D8D8;
+    }
+    .tab-list {
+        height:40px;
+        width:300px;
+    }
+    .tabli {
+        float:left;
+        width:145px;
+        text-align:center;
+        height:100%;
+        line-height:40px;
+        box-sizing:border-box;
+        border:1px solid;
+    }
+
+        .tabli:hover {
+            cursor:pointer;
+        }
+</style>
+<ul class="tab-list">
+    <li class="tabli active" id="gcpro" style="margin-left:8px;">库站改造项目</li>
+    <li class="tabli" id="jspro">加油站项目</li>
+</ul>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>工程名称 : </label><input type="text" id="name" name="name" value="@ViewBag.name" maxlength="100">
+                <input type="hidden" name="selectType" value="@ViewBag.SelectType" />
+            </div>
+            <div class="form-sub" style="width:auto;">
+                <button type="submit" style="cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="60">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="120">序号</th>
+                <th>工程名称</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.SId" data-name="@item.ProjectName" data-code="@item.ProjectCodeProject" />
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td>@item.ProjectName</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">暂无数据</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $("#jspro").click(function () {
+            window.location.href = "/Comm/SelectTzGasStation"
+        });
+        $("#gcpro").click(function () {
+            window.location.href = "/Comm/SelectReformRecord"
+        });
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/Comm/SelectReformRecord?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize();
+                    }
+                }
+            });
+        });
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('.tbody tr :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    Name: $(this).data('name') || '',
+                    Code: $(this).data('code') || ''
+                });
+            });
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择工程！';
+            }
+            return result;
+        }
+     
+    </script>
+}

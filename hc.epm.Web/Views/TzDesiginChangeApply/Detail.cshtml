@@ -1,0 +1,225 @@
+﻿@using hc.epm.DataModel.Business;
+@model Epm_TzDesiginChangeApply
+@{
+    ViewBag.Title = "建设工程设计变更详情";
+}
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 900px;
+        border-radius: 5px;
+        padding: 0 5px;
+        border: 1px solid;
+    }
+
+    .bold-name {
+        font-weight: 800;
+        width: 15%;
+    }
+
+    table td {
+        width: 25%;
+    }
+
+    .timer {
+        width: 210px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .timer-pic {
+        left: -24px;
+        position: relative;
+    }
+
+    .tera {
+        width: 900px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .add-icon {
+        color: darkseagreen;
+    }
+
+    .file-wrap {
+        height: 35px;
+        width: 210px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+    }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 10px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                /*overflow: hidden;*/
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .datalist tr td, .datalist tr th {
+        padding: 5px 10px;
+    }
+</style>
+
+<div class="contentData">
+    <form id="formData">
+        <div class="top-title">
+            <span class="ti">建设工程设计变更申请流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr>
+                    <td class="bold-name">标题</td>
+                    <td colspan="3">@Model.Title</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请人</td>
+                    <td>@Model.Applicant</td>
+                    <td class="bold-name">申请部门</td>
+                    <td>
+                        <span style="margin-right:5px;">@Model.Unit</span>
+                        <span>@Model.Department</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请日期</td>
+                    <td  colspan="3">
+                        <span>@(Convert.ToDateTime(Model.ApplyDate).ToString("yyyy-MM-dd"))</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程名称</td>
+                    <td colspan="3">@Model.ProjectName</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">投资计划或合同造价（万元）</td>
+                    <td>@Model.InvestmentCost</td>
+                    <td class="bold-name">变更增、减价增（万元）</td>
+                    <td>@Model.ChangeCost</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">建设单位</td>
+                    <td>@Model.ConstructionUnit</td>
+                    <td class="bold-name">联系人及电话</td>
+                    <td>@Model.ConstructionUnitPeople</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">监理单位</td>
+                    <td>@Model.SupervisionUnit</td>
+                    <td class="bold-name">联系人及电话</td>
+                    <td>@Model.SupervisionUnitPeople</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">设计单位</td>
+                    <td>@Model.DesignUnit</td>
+                    <td class="bold-name">联系人及电话</td>
+                    <td>@Model.DesignUnitPeople</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color:#e4e4e4;">设计变更情况说明</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">变更的原因或依据</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="ChangeCause" autofocus readonly>@Model.ChangeCause</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">变更的内容及范围</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="ChangeContent" autofocus readonly>@Model.ChangeContent</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程量及工程造价的增减</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="ProjectChange" autofocus readonly>@Model.ProjectChange</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">变更对工期等相关工作的影响</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="Impact" autofocus readonly>@Model.Impact</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">相关附件</td>
+                    <td colspan="3">
+                        <!--附件-->
+                        <div class="SBJJ">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            <li class="downloadfile" data-url="@item.FilePath" data-fileName="@item.Name"><span>@item.Name</span></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">部门负责人</td>
+                    <td>@Model.HeaderName</td>
+                    <td class="bold-name">分管领导</td>
+                    <td>@Model.LeaderName</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">签字意见</td>
+                    <td colspan="3">@Html.Raw(Model.SignIdea)</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<script>
+    //下载附件
+    $("body").on("click", ".downloadfile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("filename");
+        window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+    });
+</script>

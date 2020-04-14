@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "ScheduleIndex";
+}
+<link href="~/Resource/css/gartt.css" rel="stylesheet" />
+<link href="~/Resource/css/prettify.min.css" rel="stylesheet" />
+<style>
+    .container {
+        display: flex;
+        padding: 0;
+    }
+
+        .container > div:nth-child(1) {
+            flex: 7;
+        }
+
+        .container > div:nth-child(2) {
+            flex: 3;
+        }
+
+        .container > div img {
+            width: 100%;
+            height: 100%;
+        }
+
+    .dataPanel {
+        left: 0 !important;
+        min-width:1018px!important;
+    }
+    #ScheduleImg {
+        position:absolute;
+        right:30px;
+    }
+    .tips {
+     display: inherit;
+    height: 30px;
+    background: #f2dedf;
+    color: #947177;
+    line-height: 30px;
+    }
+</style>
+<div class="contentData" style="margin: 0 auto;padding:20px">
+    <div class="form-select c" style="margin:0;position:relative;">
+        <form>
+            <div>
+                <div class="NAME" style="width:50%;">
+                    <label>项目名称 : </label> <input type="text" value="@ViewBag.ProjectName" id="ProjectName" name="ProjectName" style="width:300px;">
+                    <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:-30px;">&#xe76a;</i>
+                    <input type="hidden" value="@ViewBag.ProjectId" id="ProjectId" name="ProjectId" />
+                </div>
+            </div>
+            
+        </form>
+        <img src="~/Resource/images/ScheduleImg.png" id="ScheduleImg"/>
+       
+    </div>
+    
+    <div class="gantt_ot">
+        <div class="gantt"><span class="tips">提示：请您选择项目查看进度！</span></div>
+    </div>
+</div>
+
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/scripts/jquery.fn.gantt.js" charset="utf-8"></script>
+<script src="~/Resource/scripts/prettify.min.js"></script>
+<script>
+    $(function () {
+        if ('@ViewBag.ProjectId' != "") {
+            $.get('GetGantt', { id: '@ViewBag.ProjectId' },
+                               function (result) {
+                                   if (result.Flag == true) {
+                                       //初始化gantt
+                                       $(".gantt").gantt({
+                                           source: result.Data,
+                                           navigate: 'scroll',//buttons  scroll
+                                           scale: "days",// months  weeks days  hours
+                                           maxScale: "months",
+                                           minScale: "days"
+                                           //itemsPerPage: 10000
+                                       });
+                                   }
+                               }, 'json');
+        }
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, element = layui.element, $ = layui.jquery;
+        //选择项目
+        $(".NAME").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProjectAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj.flag) {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        parent.layer.close(index);//关闭窗口
+                        $.get('GetGantt',
+                            { id: obj.data[0].Id },
+                            function (result) {
+                                if (result.Flag == true) {
+                                    //初始化gantt
+                                    $(".gantt").gantt({
+                                        source: result.Data,
+                                        navigate: 'scroll',//buttons  scroll
+                                        scale: "days",// months  weeks days  hours
+                                        maxScale: "months",
+                                        minScale: "days"
+                                        //itemsPerPage: 10000
+                                    });
+                                }
+                            }, 'json');
+                    } else {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

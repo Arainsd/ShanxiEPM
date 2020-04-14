@@ -1,0 +1,127 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+
+@{
+    ViewBag.Title = "RelationBIM";
+}
+<div class="contentData" >
+    <form id="mainForm">
+        <div class="tab" style="padding:0">
+             <div class="intro" style="height:700px">
+                 <div><label><span class="star">*</span>&nbsp;选择模型&nbsp;:</label></div>
+                 <div>
+                     @Html.DropDownList("BimList", null, new { @class = "form-control selectpicker  show-tick" })
+                     <input type="hidden" name="BIMAddress" value="@ViewBag.BIMAddress" id="BIMAddress" />
+                     <input type="hidden" name="PlanId" value="@Model.Id" id="PlanId" />
+                     <input type="hidden" name="PlanName" value="@Model.Name" id="PlanName" />
+                     <input type="hidden" name="BIMId" value="" id="BIMId" />
+                     <input type="hidden" name="BIMName" value="" id="BIMName" />
+                     <div class="model" style="position:relative;margin-top:20px;height:680px"></div>
+                 </div>
+
+             </div>
+            <div class="button-group btn-center" style="margin-bottom:0">   
+                <button type="button" class="saveBut" onclick="AddPlanComponent()">保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.min.js"></script>
+<script src="/Resource/scripts/3dEngine.js"></script>
+<script>
+    var planId = $("#PlanId").val();
+    var planName = $("#PlanName").val();
+    var BIMId;
+    var BIMName
+    window.onload = function () {
+        var data = $("#BIMAddress").val();
+        BIMId = $("option:selected").val();
+        BIMName = $("option:selected").text();
+        if (data == false) {
+            imgModel()
+        } else {
+            BIMmodel()
+        }
+    }
+    //下拉框切换
+    $("select").change(function () {
+        BIMId = $(this).val()
+        BIMName = $("option:selected").text();
+        //要触发的事件
+        $.post("GetBimUrl", { id: BIMId }, function (data) {
+            if (data == "" || data == null) {
+                $(".model").html("");
+                imgModel()
+            } else {
+                $(".model").html("");
+                var url = data
+                BIMmodel(data)
+            }
+        });
+    });
+    function imgModel() {
+        var odv = "<div><img src='/Resource/images/moxing.jpg' style='width:100%;height:100%'/>";
+        odv += "<div style='position:absolute;top:45%;left:45%;color:red' id='mx'><h3 style='font-size:24px'>模型正在轻量化中...</h3></div>"
+        odv += " </div>"
+        $(".model").append(odv)
+    }
+    var arrData;
+    function BIMmodel(data) {
+        var odv = '<div id="webglContainer" style="height:100%;width:100%"></div>';
+        $(".model").append(odv);
+        var models = [{ id: BIMId, file: BimFileURL + data }]   //获取到对应的数据
+        var ModelFIle = models[0].file;
+        var ID = models[0].id;
+        EngineInit("webglContainer"); //初始化画布
+        function initAddModel() {
+            if (models.length > 0) {
+                AddModel(ModelFIle, ID); //添加模型
+            }
+            else {
+                alert("模型未加载")
+            }
+        };
+        initAddModel();
+        $.post("GetPlanComponentList", { bimId: BIMId, planId: planId }, function (data) {
+            arrData = data
+            for (var i = 0; i < data.length; i++) {
+                var IDs = data[i].BIMComponentId +"#" + IDs;
+            }
+            SetActorColor(IDs, 0, 0, 255);
+        });
+    }
+    //获取构件ID
+    var ids = "";
+    SetClickMode(2)
+    function OnSelectionChanged(id) {
+        if (ids.indexOf(id) == -1 && arrData.indexOf(id) == -1) {
+            ids += id + ",";
+            var BIMids = ids.split(",");
+            BIMids = BIMids.concat(arrData)
+            ids = BIMids.toString();
+            SetActorColor(id, 0, 0, 255);
+        } else {
+            var BIMid = ids.split(",");
+            for (var i = 0; i < BIMid.length ; i++) {
+                if (BIMid[i - 1] == "") {
+                    var bb = BIMid.splice(BIMid.length - 1, 1)
+                }
+                if (BIMid[i] == id) {
+                    var cc = BIMid.splice(i, 1)
+                }
+            }
+            SetActorColor(id, 255, 255, 255);
+            BIMid = cc.concat(arrData)
+            ids = BIMid.toString();
+        }
+    }
+
+    function AddPlanComponent() {
+        $.post("AddPlanComponent", { planId: planId, planName: planName, BIMId: BIMId, BIMName: BIMName, planComponentIds: ids }, function (data) {
+            if (data.Flag) {
+                window.location.href = "/Plan/Index";
+            } 
+        });
+    }
+   
+</script>

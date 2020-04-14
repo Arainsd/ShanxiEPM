@@ -1,0 +1,136 @@
+﻿
+.top-title {
+    text-align: center;
+}
+
+.ti {
+    font-size: 20px;
+    font-weight: 800;
+    vertical-align: bottom;
+}
+
+.sel-pro {
+    height: 35px;
+    width: 900px;
+    border-radius: 5px;
+    padding: 0 5px;
+    border: 1px solid;
+}
+
+.pic {
+    top: 2px;
+    cursor: pointer;
+    left: 220px;
+    font-size: 20px;
+    left: -28px;
+    position: relative;
+}
+
+
+.bold-name {
+    font-weight: 800;
+    width: 15%;
+}
+
+table td {
+    width: 25%;
+}
+
+.timer {
+    width: 292px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid;
+    padding-left: 10px;
+}
+
+.timer-pic {
+    left: -24px;
+    position: relative;
+}
+
+.se-in {
+    width: 141px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid;
+    padding-left: 14px;
+    font-weight: 500;
+}
+
+
+.tera {
+    width: 900px;
+    height: 120px;
+    resize: none;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-radius: 5px;
+}
+
+
+.add-icon {
+    color: darkseagreen;
+}
+
+.file-wrap {
+    height: 35px;
+    width: 300px;
+    margin-top: 5px;
+    margin-left: 34px;
+    border: 1px solid #D9D8D8;
+    line-height: 35px;
+    border-radius: 5px;
+}
+
+.fileShow {
+    height: auto;
+    overflow: hidden;
+}
+
+    .fileShow li {
+        width: 50%;
+        float: left;
+        text-align: left;
+        padding-left: 34px;
+        color: blue;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+
+        .fileShow li span {
+            display: inline-block;
+            height: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .fileShow li i {
+            color: black;
+        }
+
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-control {
+    width: 210px;
+    margin: 0 auto;
+    border: 1px solid;
+}
+
+
+.datalist tr td, .datalist tr th {
+    padding: 5px 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}

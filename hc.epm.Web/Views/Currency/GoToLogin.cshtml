@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "正在跳转...";
+    Layout = "~/Views/Shared/_LayoutUn.cshtml";
+}
+
+<script>
+    var par = window.parent;
+    if (par == null || par == undefined) {
+        window.location.href = '/Currency/Login';
+    }
+    else {
+        window.parent.location.href = '/Currency/Login';
+    }
+</script>

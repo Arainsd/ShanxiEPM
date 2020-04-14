@@ -1,0 +1,240 @@
+﻿[
+  //{
+  //  "ID": "2",
+  //  "AssemblyPath": "hc.epm.BimTimer.dll",
+  //  "ClassPath": "hc.epm.BimTimer.BimModelTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "600",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TimerSetBimModel" //方法名称，必须是无参数方法
+  //},
+  //{
+  //  "ID": "6",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "CompanyInfo" //方法名称，必须是无参数方法-岗位
+  //}
+  //,
+  //{
+  //  "ID": "7",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "DepartmentInfo" //方法名称，必须是无参数方法-单位
+  //}
+  //,
+  //{
+  //  "ID": "8",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "JobInfo" //方法名称，必须是无参数方法-用户
+  //}
+  //,
+
+  //{
+  //  "ID": "9",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "UserInfo" //方法名称，必须是无参数方法-用户
+  //}
+  //,
+
+  //{
+  //  "ID": "10",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "SyxsqWorkFlowStatus" //方法名称，必须是无参数方法-用户  试运行申请审批状态同步
+  //},
+  //{
+  //  "ID": "11",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzStartWorkFlowStatus" //方法名称，必须是无参数方法-用户 ,项目开工申请审批状态同步
+  //},
+  //{
+  //  "ID": "12",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzChangeWorkFlowStatus" //方法名称，必须是无参数方法-用户 项目设计变更申请审批状态同步
+  //},
+  //{
+  //  "ID": "13",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzPeopleChgApplyWorkFlowStatus" //方法名称，必须是无参数方法-用户 项目人员变更申请审批状态同步
+  //},
+  //{
+  //  "ID": "14",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzRivalWorkFlowStatus" //方法名称，必须是无参数方法-用户  竞争对手加油（气）站现状申请审批状态同步
+  //},
+  //{
+  //  "ID": "15",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzDevWorkFlowStatus" //方法名称，必须是无参数方法-用户  加油（气）站开发资源上报流程申请审批状态同步
+  //},
+  //{
+  //  "ID": "16",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "3000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "SendData" //方法名称，必须是无参数方法-用户
+  //},
+
+  //{
+  //  "ID": "17",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "3600",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "SysReformRecord" //方法名称，必须是无参数方法-用户
+  //}
+  //,
+  {
+    "ID": "18",
+    "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+    "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+    "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+    "IntervalTime": "1000",
+    "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+    "MethodName": "TzFormWorkFlowStatus" //方法名称，必须是无参数方法 ,评审材料上报申请审批状态同步
+  }
+  //,
+  //{
+  //  "ID": "19",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzReveiewsWorkFlowStatus" //方法名称，必须是无参数方法 ,项目评审记录申请审批状态同步
+  //}
+  //,
+  //{
+  //  "ID": "20",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "MeetingFileWorkFlowStatus" //方法名称，必须是无参数方法 ,上会材料上报申请审批状态同步
+  //}
+  //,
+  //{
+  //  "ID": "21",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzApprovalInfoWorkFlowStatus" //方法名称，必须是无参数方法 ,项目批复申请审批状态同步
+  //}
+  //,
+  //{
+  //  "ID": "22",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzDesignWorkFlowStatus" //方法名称，必须是无参数方法 ,设计方案申请审批状态同步
+  //},
+  //{
+  //  "ID": "23",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzConDrawingWorkFlowStatus" //方法名称，必须是无参数方法 ,施工图纸会审审批状态同步
+  //},
+  //{
+  //  "ID": "24",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzTenderingWorkFlowStatus" //方法名称，必须是无参数方法 ,招标申请审批状态同步
+  //},
+  //{
+  //  "ID": "25",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzBidResultWorkFlowStatus" //方法名称，必须是无参数方法 ,招标结果审批状态同步
+  //},
+  //{
+  //  "ID": "26",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzProjectProposalWorkFlowStatus" //方法名称，必须是无参数方法 ,项目提出审批状态同步
+  //}
+  //,
+  //{
+  //  "ID": "27",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzResearchWorkFlowStatus" //方法名称，必须是无参数方法 ,现场踏勘审批状态同步
+  //},
+  //{
+  //  "ID": "28",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzFirstWorkFlowStatus" //方法名称，必须是无参数方法 ,项目谈判审批状态同步
+  //},
+  //{
+  //  "ID": "29",
+  //  "AssemblyPath": "hc.epm.SXBaseTimer.dll",
+  //  "ClassPath": "hc.epm.SXBaseTimer.SXBaseTimer",
+  //  "TaskType": 2, //类型,1代表指定时间执行一次，对应IntervalTime为日期；2代表隔多少秒执行一次，对应IntervalTime为秒数；3代表隔多少天执行一次，对应IntervalTime为天数；4代表每月几号运行，对应IntervalTime为日期天；5代表每周几运行,对应IntervalTime为周；6代表每月最后一天执行，对应IntervalTime为0
+  //  "IntervalTime": "1000",
+  //  "ExcuteTime": "", //当TaskType为3,4,5,6时此属性表示那一天执行的具体时分，TaskType为1,2时留空即可
+  //  "MethodName": "TzLandWorkFlowStatus" //方法名称，必须是无参数方法 ,土地出让协议谈判审批状态同步
+  //}
+]

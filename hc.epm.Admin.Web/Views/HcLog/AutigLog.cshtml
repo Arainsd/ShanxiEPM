@@ -1,0 +1,112 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model IEnumerable<Base_StatusLog>
+@{
+    ViewBag.Title = "审核日志查询";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a>  </span> > <span> <a href="">日志管理</a> </span> > <span> 审核日志查询</span>
+    </div>
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">tableName : </label>
+                    <div class="layui-input-inline"><input type="text" name="tableName" placeholder="模块名称" autocomplete="off" class="layui-input" value="@ViewBag.tableName" /></div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">tableId : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="tableId" placeholder="数据Id" autocomplete="off" class="layui-input" value="@ViewBag.tableId" /> />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="startTime" placeholder="开始时间" autocomplete="off" class="layui-input" value="@ViewBag.startTime" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="endTime" placeholder="结束时间" autocomplete="off" class="layui-input" value="@ViewBag.endTime" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" />
+                    </div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+
+        </form>
+    </div>
+    <div class="main mt5">
+
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+
+                        <th width="10%">模块名称</th>
+                        <th width="10%">数据Id</th>
+                        <th width="10%">变更前状态</th>
+                        <th width="10%">变更后状态</th>
+
+                        <th>操作人</th>
+
+                        <th width="15%">时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>@item.TableName</td>
+                                <td>@item.TableId</td>
+                                <td>@item.OldState</td>
+                                <td>@item.State</td>
+                                <td>@item.OperateUserId</td>
+                                <td>@item.RecordTime</td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', 'laypage','laydate'], function () {
+        var layer = layui.layer, form = layui.form(), element = layui.element(), $ = layui.jquery, laypage = layui.laypage,  laydate = layui.laydate;
+        //分页
+        laypage({
+            cont: 'page'
+            , pages: @ViewBag.TotalPage
+            , skip: true
+            , curr: @ViewBag.pageIndex
+            , jump: function (obj, first) {
+                if (!first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/HcLog/AutigLog?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+</script>
+
+
+

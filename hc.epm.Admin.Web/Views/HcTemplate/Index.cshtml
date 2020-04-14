@@ -1,0 +1,187 @@
+﻿@model IEnumerable<Epm_Template>
+@{
+    ViewBag.Title = "模板";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style type="text/css">
+    .layui-form td {
+        word-break: break-all;
+    }
+</style>
+
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+                <input type="hidden" id="TL" data-templateId="@ViewBag.TemplateId" data-templateName="@ViewBag.TemplateName" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" data-right="add" id="add" class="checkright" style="display: inline;">新 增</a>
+            <a href="javascript:;" data-right="delete" id="delete" class="checkright" style="display: inline;">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" style="text-align:center">
+                <thead>
+                    <tr>
+                        <th width="40" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                        </th>
+                        <th width="60" class="table-center">序号</th>
+                        <th width="18%" class="table-center">名称</th>
+                        <th class="table-center">培训内容</th>
+                        <th width="20%" class="table-center">培训单位</th>
+                        <th width="60" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td style="text-align:center">
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="ids" id="id-@item.SId" value="@item.SId" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td>@item.Title</td>
+                                <td>@item.Description</td>
+                                <td>@item.TrainCompanyName</td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class="editor-link " data-itemid="@item.SId" title="编辑" ><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page">
+            <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">上一页</a>
+                <span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span>
+                <a href="javascript:;" class="layui-laypage-next layui-disabled" data-page="2">下一页</a>
+                <span class="layui-laypage-skip">
+                    到第<input type="text" min="1" value="1" class="layui-input">页
+                    <button type="button" class="layui-laypage-btn">确定</button>
+                </span>
+                <span class="layui-laypage-count">共 6 条</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    var typeNo = '@ViewBag.typeNo';
+                    window.location.href = "/HcTemplate/Index?typeNo="+ typeNo +"&pageIndex=" + curr + "&" +  search;
+                }
+            }
+        });
+
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            var typeNo = '@ViewBag.typeNo';
+                            window.location.href = "/HcTemplate/Index?pageIndex=1&typeNo="+ typeNo +"&"+ search;
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+
+        });
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //修改
+        $(".editor-link").click(function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("模板-编辑"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: [BigLayerWidth, '600px'],
+                    content: '/HcTemplate/Edit/' + id
+                });
+            }
+
+        });
+
+        //增加
+        $("#add").click(function () {
+            var id = $("#TL").data("templateid")
+            var name = $("#TL").data("templatename")
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("模板-添加"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '600px'],
+                content: '/HcTemplate/Add?TemplateTypeId=' + id + '&TemplateTypeName=' + name,
+            });
+        });
+
+    });
+</script>
+
+
+

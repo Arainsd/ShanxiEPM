@@ -1,0 +1,233 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model ConstituteCompanyView
+@{
+    ViewBag.Title = "服务商添加";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+
+    .datalist tr td {
+        padding: 2px;
+    }
+
+        .datalist tr td input[type="text"] {
+            width: 100%;
+            height: 100%;
+        }
+
+    .selectpicker {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row">
+        <form class="form-horizontal bv-form" id="mainForm">
+            <div class="col-lg-12 col-sm-12 mb25">
+                <div class="form-group ">
+                    <label for="parentName" class="col-sm-2 control-label"><em class="required">*</em>批复构成：</label>
+                    <div class="col-sm-8">
+                        @Html.DropDownList("ConstituteKey", null, new { @class = "form-control selectpicker  show-tick" })
+                        <input type="hidden" name="ConstituteName" id="ConstituteName" value="@Model.ConstituteCompany.ConstituteName" />
+                        <input type="hidden" name="id" id="id" value="@Model.ConstituteCompany.Id" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>服务商：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="button" id="selectISP" value="选择服务商" class="layui-btn-small" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sort" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8">
+                        <table class="layui-table datalist" style="width:100%;text-align:center;">
+                            <thead>
+                                <tr>
+                                    <th width="70%">服务商名称</th>
+                                    <th width="30%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ConstituteCompanyDetails != null && Model.ConstituteCompanyDetails.Count() > 0)
+                                {
+                                    foreach (var item in Model.ConstituteCompanyDetails)
+                                    {
+                                        <tr>
+                                            <td class="table-center">
+                                                @item.CompanyName
+                                                <input type="hidden" data-name="@item.CompanyName" value="@item.CompanyId" />
+                                            </td>
+
+                                            <td class="table-center">
+                                                <a href="javascript:" class="delete">删除</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="table-center">
+                                            暂无数据
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <input type="hidden" name="ISPValue" id="ISPValue" />
+                <input type="hidden" name="CompanyNames" id="CompanyNames" value="@Model.ConstituteCompany.CompanyNames" />
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25" style="margin-top:57px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="submit" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" value="取&nbsp;&nbsp;&nbsp;消" class="cancel layui-btn layui-btn-small button-base bg-cancel ">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $("#ConstituteKey").change(function () {
+        var constituteName = $('#ConstituteKey option:selected').text();
+        $("#ConstituteName").val(constituteName);
+
+    });
+    window.onload = function () {
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ConstituteKey: {
+                    validators: {
+                        notEmpty: {
+                            message: '总批复构成不能为空'
+                        }
+                    }
+                },
+                CompanyName: {
+                    validators: {
+                        notEmpty: {
+                            message: '服务商不能为空'
+                        },
+                    }
+                }
+            }
+        });
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //选择服务商
+        $("#selectISP").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选取服务商"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['700px', '500px'],
+                scrollbar: false,
+                content: '/HcISP/SelectServiceCustomer',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        var array = obj.data;
+                        var str = "";
+                        for (var i = 0; i < array.length; i++) {
+                            var tr = `
+                                          <tr>
+                                                <td>
+                                                   ${array[i].Name}
+                                                   <input type="hidden" value="${array[i].Id}" data-name="${array[i].Name}"/>
+                                                </td>
+                                                <td>
+                                                    <a href="javascript:" class ="delete">删除</a>
+                                                </td>
+                                        </tr>
+                                    `
+                            $('table tbody').append(tr);
+                            str += array[i].Name + ",";
+                        }
+                        if (str.length > 0) {
+                            str = str.substr(0, str.length - 1);
+                        }
+                        $("#CompanyNames").val(str);
+                        layer.close(index);//关闭窗口
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            debugger;
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var ISPValue = [];
+                var strs = "";
+                $("tbody tr").each(function (index, item) {
+                    ISPValue.push({
+                        CompanyName: $(item.children[0]).find("input[type='hidden']").data("name"),
+                        CompanyId: $(item.children[0]).find("input[type='hidden']").val(),
+                        ConstituteKey: $("#ConstituteKey").val(),
+                        ConstituteName: $('#ConstituteKey option:selected').text()
+                    });
+
+                    strs += $(item.children[0]).find("input[type='hidden']").data("name") + ",";
+                });
+                strs = strs.substring(0, strs.length - 1);
+                $("#CompanyNames").val(strs);
+                ISPValues = JSON.stringify(ISPValue);
+                $("#ISPValue").val(ISPValues);
+                if (ISPValues == "[]") {
+                    parent.layer.alert("请选择服务商!", { icon: 2 });
+                } else {
+                    var search = $("form").serialize();
+                    $.post("Edit", search, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("添加成功", { time: 1000, icon: 1 }, function () {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);//关闭窗口
+                                parent.window.frames["mainFrame"].location.reload();
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                    return true;
+                }
+            }
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+        //删除
+        $("body").on("click", ".delete", function () {
+            $(this).parents("tr").remove();
+        });
+    });
+</script>

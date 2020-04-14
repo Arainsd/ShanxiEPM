@@ -1,0 +1,401 @@
+﻿
+@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@model List<Epm_Plan>
+@{
+    ViewBag.Title = "施工计划列表";
+}
+<link href="/Resource/jqtree/TreeGrid.css" rel="stylesheet" />
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <div class="NAME">
+                    <label>项目名称 : </label> <input type="text" value="@ViewBag.ProjectName" id="ProjectName" name="ProjectName">
+                    <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:-30px;">&#xe76a;</i>
+                    <input type="hidden" value="@ViewBag.ProjectId" id="ProjectId" name="ProjectId" />
+                </div>
+                <div><label>计划名称 : </label> <input type="text" id="Name" name="Name"></div>
+                <div>
+                    <label>计划状态 : </label>
+                    <select id="" class="select">
+                        <option value="">全部</option>
+                        <option value="1">待审核</option>
+                        <option value="0">已审核</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label>批&nbsp;&nbsp;次&nbsp;&nbsp;号 : </label>
+                    @if (ViewBag.BatchNoList != null)
+                    {
+                        @Html.DropDownList("BatchNoList", ViewBag.ApplicationContext as SelectList)
+                    }
+                    else
+                    {
+                        <select>
+                            <option></option>
+                        </select>
+                    }
+                </div>
+                @*<div>
+                    <label>开始时间 : </label> <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime' })">
+                    <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div>
+                    <label id="timeLabel">结束时间 : </label> <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime' })">
+                    <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>*@
+            </div>
+            <div class="form-sub">
+                <button type="button" class="add checkright" data-module="Plan" data-right="Add">新 增</button>
+                <button type="button" class="saveBut checkright" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())" data-right="Add">提交</button>
+                <button type="button" class="audit checkright" data-module="Plan" data-right="Check">审核</button>
+                <button type="button" class="reject checkright" data-module="Plan" data-right="UnCheck">驳 回</button>
+                <button type="button" class="discard checkright" data-module="Plan" data-right="Invalid">废 弃</button>
+                <button type="button" class="gantts checkright" data-module="Plan" data-right="Browse">查看甘特图</button>
+                <button type="button" class="import checkright" data-module="Plan" data-right="Add">导 入</button>
+                <button type="submit" class="checkright" data-module="Plan" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <div id="maincontent" class="maincontent"></div>
+    </div>
+</div>
+<div id="convert" style="display:none;width:360px;margin-top:20px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:80px">提交批次 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        @if (ViewBag.BatchNoList != null)
+                        {
+                            @Html.DropDownList("BatchNoList", null, new { @class = "form-control selectpicker  show-tick" })
+                        }
+                        else
+                        {
+                            <select>
+                                <option></option>
+                            </select>
+                        }
+                        <textarea style="width: 220px;margin-top: 10px; height: 100px;resize:none" id="Batch"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="/Resource/jqtree/TreeGrid.js"></script>
+<script>
+    // index加载数据
+    function customCheckBox1(row, col) {
+        if (row.State == 0) {
+            return ' 草稿';
+        }
+        else if(row.State == 30){
+            return '待审核';
+        }
+        else if(row.State == 35){
+            return '审核通过';
+        }
+        else if(row.State == 40){
+            return '审核不通过';
+        }
+        else if(row.State == 60){
+            return '已废弃';
+        }
+    }
+    var UserID=@ViewBag.UserID;
+    function customLook(row, col) {
+        if(row.State==0){
+            if(row.CreateUserId==UserID){
+                return '<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="edit checkright" data-module="Plan" data-right="Modify">修改</a> <a href="javascript:;" class="del checkright" data-module="Plan" data-right="Modify">删除</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>';
+            }else{
+                return'<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>'
+            }
+        }
+        else if(row.State == 30){
+            return '<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="exchange">沟通</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>';
+        }
+        else if(row.State == 35){
+            return '<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="exchange">沟通</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>';
+        }
+        else if(row.State == 40){
+            if(row.CreateUserId==UserID){
+                return '<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="edit checkright" data-module="Plan" data-right="Modify">修改</a> <a href="javascript:;" class="exchange">沟通</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>';
+            }else{
+                return'<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="exchange">沟通</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a><a href="javascript:;" class="edit checkright" data-module="Plan" data-right="Modify">修改</a>'
+            };
+        }
+        else if(row.State == 60){
+            if(row.CreateUserId==UserID){
+                return '<a href="javascript:;" class="detail checkright" data-module="Draw" data-right="Info">查看</a> <a href="javascript:;" class="del checkright" data-module="Plan" data-right="Modify">删除</a> <a href="javascript:;" class="exchange">沟通</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>';
+            }else{
+                return'<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="exchange">沟通</a> <a href="javascript:;" class="Bim">查看模型</a> <a href="javascript:;" class="RelBim">关联模型</a>'
+            }
+        }
+
+    };
+    var config = {
+        id: "tg1",
+        width: "100%",
+        renderTo: "maincontent",
+        headerAlign: "left",
+        headerHeight: "30",
+        dataAlign: "left",
+        indentation: "30",
+        folderOpenIcon: "/Resource/jqtree/img/folderOpen.png",
+        folderCloseIcon: "/Resource/jqtree/img/folderClose.png",
+        defaultLeafIcon: "/Resource/jqtree/img/defaultLeaf.gif",
+        hoverRowBackground: "false",
+        folderColumnIndex: "1",
+        itemClick: "itemClickEvent",
+        columns: [
+                    { headerText: "项目名称", dataField: "ProjectName", headerAlign: "left", dataAlign: "left", width: "250" },
+                    { headerText: "计划名称", dataField: "Name", headerAlign: "left", dataAlign: "left", width: "100" },
+                    { headerText: "开始日期", dataField: "StartTime", headerAlign: "center", dataAlign: "center", width: "100" },
+                    { headerText: "截止日期", dataField: "EndTime", headerAlign: "center", dataAlign: "center", width: "100" },
+                    { headerText: "工期(天)", dataField: "BuildDays", headerAlign: "center", dataAlign: "center", width: "100" },
+                    { headerText: "工程节点", dataField: "MilepostName", headerAlign: "left", dataAlign: "left", width: "100" },
+                    { headerText: "状态", dataField: "State", headerAlign: "center", dataAlign: "center", width: "100", handler: "customCheckBox1" },
+                    { headerText: "项目Id", dataField: "ProjectId", headerAlign: "left", dataAlign: "left", width: "250" },
+                    { headerText: "操作", headerAlign: "center", dataAlign: "center", width: "320", handler: "customLook" }
+        ],
+        data:@Html.Raw(@ViewBag.planViewList),
+    };
+    //创建一个组件对象
+    var treeGrid = new TreeGrid(config);
+    treeGrid.show();
+    $("tbody tr").each(function (index, item) {
+        $(item.children[7]).css("display","none");
+    });
+    //格式化时间
+    var tr = $("tbody tr").slice(1);
+    for (var i = 0; i < tr.length; i++) {
+        var tdArr = tr.eq(i).find("td");
+        var text1 = tdArr.eq(2).text();
+        var text2 = tdArr.eq(3).text();
+        if(text1.indexOf("00:00:00")!=1){
+            text1 = text1.substring(0,10)
+            tdArr.eq(2).text(text1)
+        }
+        if(text2.indexOf("00:00:00")!=1){
+            text2 = text2.substring(0,10)
+            tdArr.eq(3).text(text2)
+        }
+    }
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, element = layui.element, $ = layui.jquery;
+        //添加
+        $('.add').click(function () {
+            location.href = "/Plan/Add";
+        });
+        //导入
+        $('.import').click(function () {
+            location.href = "/Plan/Import";
+        });
+        //修改
+        $("tbody").on('click', ".edit", function () {
+            var id = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+            location.href = "/Plan/Edit?id=" + id;
+        });
+        //关联模型
+        $("tbody").on('click', ".RelBim", function () {
+            var id = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+            var projectId = $(this).parents("tr").find("td").eq(7).text();
+            location.href = "/Plan/RelationBIM?id="+id+ "&projectId="+projectId;
+        });
+        //查看模型
+        $("tbody").on('click', ".Bim", function () {
+            var id = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+            var projectId = $(this).parents("tr").find("td").eq(7).text();
+            location.href = "/Plan/SelectRelationBIM?id="+id+ "&projectId="+projectId;
+        });
+        //查看甘特图
+        $(".gantts").on('click', function () {
+            location.href = "/Plan/GanttChart?ProjectName=" + $("#ProjectName").val();
+        });
+        //删除
+        $("tbody").on('click', ".del", function () {
+            var id = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+            if (id != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { id: id }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            window.location.href = "/Plan/Index?pageIndex=1";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        })
+        //查看
+        $("tbody").on('click', ".detail", function () {
+            var id = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+            location.href = "/Plan/Detail?id=" + id;
+        });
+        //在建项目
+        $(".NAME").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择在建项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProject',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj.flag) {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        parent.layer.close(index);//关闭窗口
+                    } else {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //审核
+        $(".audit").on('click', function () {
+            $("#Batch").hide()
+            layer.open({
+                type: 1,
+                title: '确认提交',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var BatchNo = $("select option:selected").text();
+
+                    BatchNo = BatchNo.substring(5, BatchNo.length);
+                    if (BatchNo != "" && BatchNo != null) {
+                        $.post("Audit", { batchNo: BatchNo }, function (data) {
+                            if (data.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/Plan/Index";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+        //废弃
+        $('.discard').on('click', function () {
+            $("#Batch").hide()
+            layer.open({
+                type: 1,
+                title: '确认提交',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var BatchNo = $("select option:selected").text();
+                    BatchNo = BatchNo.substring(5, BatchNo.length);
+                    if (BatchNo != "" && BatchNo != null) {
+                        $.post("Archive", { batchNo: BatchNo }, function (data) {
+                            if (data.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/Plan/Index";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+        //提交审核
+        $(".saveBut").click(function () {
+            $("#Batch").hide()
+            layer.open({
+                type: 1,
+                title: '确认提交',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var BatchNo = $("select option:selected").text();
+                    BatchNo = BatchNo.substring(4, BatchNo.length);
+                    var state = $(this).data("state");
+                    $("#State").val(state);
+                    if (BatchNo != "" && BatchNo != null) {
+                        $.post("SubmAudit", { batchNo: BatchNo }, function (data) {
+                            if (data.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/Plan/Index";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+        //驳回
+        $(".reject").on('click', function () {
+            $("#Batch").show()
+            layer.open({
+                type: 1,
+                title: '确认提交',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var BatchNo = $("select option:selected").text();
+                    BatchNo = BatchNo.substring(5, BatchNo.length);
+                    var reason = $("#Batch").val();
+                    alert(BatchNo)
+                    alert(reason)
+                    if (BatchNo != "" && BatchNo != null && reason != "" && reason != null) {
+                        $.post("Reject", { batchNo: BatchNo, reason: reason }, function (data) {
+                            if (data.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/Plan/Index";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+        //沟通
+        $('tbody').on('click', '.exchange', function () {
+            window.location.href = "/Question/Add?businType=Plan";
+        })
+    });
+</script>
+
+
+
+
+
+
+

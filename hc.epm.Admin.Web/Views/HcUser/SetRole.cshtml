@@ -1,0 +1,92 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model IEnumerable<Base_Role>
+@{
+    ViewBag.Title = "SetRole";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+
+<div class="layui-form">
+    <input type="hidden" id="Id" name="Id" value="@ViewBag.Id" />
+    <input type="hidden" id="Belong" name="Belong" value="@ViewBag.Belong" />
+    <table class="layui-table mytable">
+        <thead>
+            <tr>
+                <th width="100" class="table-center">
+                    <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                </th>
+                <th width="100" class="table-center">序号</th>
+                <th width="40%" class="table-left">角色名</th>
+                <th width="40%" class="table-left">备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int index = 0;
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td class="table-center">
+                            <input type="checkbox" lay-skin="primary" @((ViewBag.userRoles as List<long>).Contains(item.Id) ? "checked='checked'" : "") />
+                            <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td class="table-left">@item.RoleName</td>
+                        <td class="table-left">@item.Remark</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="10" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="layui-form-item row btn-save btn-group-position">
+        <input type="button" name="setrole" value="确&nbsp;&nbsp;&nbsp;定" class="layui-btn layui-btn-small button-base bg-save setrole" />
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //设置角色
+        $(".setrole").on("click", function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids == "") {
+                layer.alert("请选择要设置的角色", { icon: 2 })
+            } else {
+                $.post("/HCUser/SetRoleFun", { id: '@ViewBag.Id', ids: ids, belong: '@ViewBag.Belong' }, function (data) {
+                    if (data.Flag) {
+                        layer.msg("设置成功", { icon: 1, time: 1500 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                        })
+                    } else {
+                        parent.layer.alert(data.Message, {icon:2})
+                    }
+                })
+            }
+        })
+    })
+</script>

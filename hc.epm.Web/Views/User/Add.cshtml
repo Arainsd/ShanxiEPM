@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "新增用户";
+}
+<div class="contentData">
+    <div class="tab">
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;用户编码&nbsp;:</label><input type="text" />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;基础编号&nbsp;:</label><input type="text" value="JH18031310090001" disabled />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;用户名称&nbsp;:</label><input type="text" id="UserName" name="UserName"/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;所属单位&nbsp;:</label><input type="text" id="PrejectName" name="PrejectName"/>
+            <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;登录账户&nbsp;:</label><input type="text" value="administrator" disabled id="UserAcct" name="UserAcct"/>
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;登录密码：&nbsp;:</label><input type="text" value="123456qwe" disabled  id="PassWord" name="PassWord"/>
+        </div>
+        @*<div class="long-text">
+            <label><span class="star">*</span>&nbsp;用户昵称&nbsp;:</label><input type="text"/>
+        </div>*@
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;手机号码&nbsp;:</label><input type="text" id="Phone" name="Phone"/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;邮箱地址&nbsp;:</label><input type="text" id="Email" name="Email"/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;微信号&nbsp;:</label><input type="text" id="weChat" name="weChat"/>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;QQ号&nbsp;:</label><input type="text" id="QQ" name="QQ"/>
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;最后登录时间&nbsp;:</label>
+            <input type="text" id="LastLoginTime" value="2019-09-25" onClick="WdatePicker({ el: 'LastLoginTime' })" disabled>
+            <i onClick="WdatePicker({ el: 'LastLoginTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;最后登录IP&nbsp;:</label><input type="text" value="192.168.23.24" disabled />
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;最后登录设备&nbsp;:</label><input type="text" value="PC" disabled />
+        </div>
+        <div class="button-group btn-center">
+            <button type="button">提交</button>
+            <button type="button">沟通</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                UserName: {
+                    required: true,
+                    maxlength: 50
+                },
+                UserAcct: {
+                    required: true,
+                    maxlength: 100
+                },
+                PassWord: {
+                    required: true,
+                    maxlength: 100
+                },
+                Phone: {
+                    required: true,
+                    maxlength: 50
+                },
+                LastLoginTime: {
+                    required: true,
+                    date: true
+                }
+            },
+            messages: {
+                UserName: {
+                    required: "用户名称不能为空",
+                    maxlength: "用户名称不能大于50个字符"
+                },
+                UserAcct: {
+                    required: "登录账户不能为空",
+                    maxlength: "登录账户不能大于100个字符"
+                },
+                PassWord: {
+                    required: "登录密码不能为空",
+                    maxlength: "登录密码不能大于100个字符"
+                },
+                Phone: {
+                    required: "电话号码不能为空",
+                    maxlength: "电话号码不能大于50个字符"
+                },
+                LastLoginTime: {
+                    required: "最后登录时间不能为空",
+                    date: true
+                }
+            }
+        })
+
+    })
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        $("#PrejectName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("项目名称"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProject'
+            });
+        });
+    });
+</script>

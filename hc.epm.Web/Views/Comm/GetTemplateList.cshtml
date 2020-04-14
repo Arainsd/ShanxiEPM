@@ -1,0 +1,141 @@
+﻿@using hc.epm.DataModel.Business;
+@model IEnumerable<Epm_Template>
+@{
+    ViewBag.Title = "请选择模板";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+    #page {
+        display:block!important;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>标题 : </label> <input type="text" name="title" id="title" value=""  autocomplete="off">
+                <input type="hidden" name="selectType" value="@ViewBag.selectType" />
+                <input type="hidden" name="TemplateTypeNo" value="@ViewBag.TemplateTypeNo" />
+                <input type="hidden" name="ProjectId" value="@ViewBag.ProjectId" />
+            </div>
+            <div class="form-sub" style="width:auto;">
+                <button type="submit" class="checkright" data-module="SecurityTrian" data-right="Browse">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+        <thead>
+            <tr>
+                <th width="40">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="50">序号</th>
+                <th width="150">标题</th>
+                <th>内容</th>
+                <th style="display:none;">培训单位</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="" data-title="@item.Title" data-description="@item.Description" data-traincompanyname="@item.TrainCompanyName" data-id="@item.Id" />
+                        </td>
+                        <td>@index</td>
+                        <td>@item.Title</td>
+                        <td>@item.Description</td>
+                        <td style="display:none;">@item.TrainCompanyName</td>
+                    </tr>
+                }
+            }
+            else {
+                <tr>
+                    <td colspan="5" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="page" style="text-align:right; margin-right:5px;">
+</div>
+@section scripts
+    {
+    <script>
+        //若无数据隐藏分页组件
+        if ('@ViewBag.Total' == 0) {
+            $("#page").hide();
+        }
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //分页
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        //得到了当前页，用于向服务端请求对应数据
+                        var curr = obj.curr;
+                        var search = $("form").serialize();
+                        window.location.href = "/Comm/GetTemplateList?pageIndex=" + curr + "&" + search;
+                    }
+                }
+            });
+        });
+    function getSelectData() {
+        var result = {
+            flag: true,
+            msg: '',
+            data: []
+        };
+        $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+            result.data.push({
+                Title: $(this).data('title') || '',
+                Description: $(this).data('description') || '',
+                TrainCompanyName: $(this).data('traincompanyname') || '',
+                    TrainCompanyId: $(this).data('traincompanyid') || ''
+            });
+        });
+
+        if (result.data.length === 0) {
+            result.flag = false;
+            result.msg = '请选模板！';
+        } else {
+            var selectType = '@ViewBag.SelectType';
+            if (selectType === '1' && result.data.length > 1) {
+                result.flag = false;
+                result.msg = '一次只能选择一条模板信息！！';
+            }
+        }
+        return result;
+    }
+</script>
+}

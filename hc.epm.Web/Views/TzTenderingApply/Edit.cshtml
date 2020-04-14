@@ -1,0 +1,571 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_TzTenderingApply
+@{
+    ViewBag.Title = "发起招标修改";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #666666;
+        color: #fff;
+    }
+
+    .hideTr {
+        display: none;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称：</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input class="form-control input_unit" type="text" id="ProjectName" name="ProjectName" value="@Model.ProjectName" readonly />
+                                <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                                <input class="btn-pro" type="button" id="ProClick" value="选择项目" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">承办部门：</td>
+                        <td class="td-div">
+                            <div>
+                                <input class="form-control" type="text" id="UndertakeDepartment" name="UndertakeDepartment" value="@Model.UndertakeDepartment" style="width:73%;display: inline-block;" readonly />
+                                <input type="hidden" id="UndertakeDepartmentId" name="UndertakeDepartmentId" value="@Model.UndertakeDepartmentId" />
+                                <input class="btn-pro" type="button" id="UndertakeClick" value="选择部门" style="width:25%;" />
+                            </div>
+                        </td>
+                        <td class="table_title">联系人：</td>
+                        <td class="td-div">
+                            <div>
+                                <input class="form-control" type="text" id="UndertakeContacts" name="UndertakeContacts" value="@Model.UndertakeContacts" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">联系电话：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="UndertakeTel" name="UndertakeTel" value="@Model.UndertakeTel" />
+                            </div>
+                        </td>
+                        <td class="table_title">批复文件或者纪要：</td>
+                        <td class="td-div">
+                            <div>
+                                <input class="form-control" type="text" id="ApprovalNo" name="ApprovalNo" value="@Model.ApprovalNo" readonly />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>招标信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span><i class="color_red_x">*</i>招标名称：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="TenderingName" class="form-control" placeholder="" value="@Model.TenderingName" maxlength="50" />
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>招标类型：</span>
+                        </td>
+                        <td class="td-div">
+                            @Html.Raw(Html.DropDownList("TenderingType", null, new { @class = "form-control" }))
+                            <input type="hidden" id="TenderingTypeName" name="TenderingTypeName" value="@Model.TenderingTypeName" />
+                        </td>
+                        <td class="table_title">
+                            <span>招标方式：</span>
+                        </td>
+                        <td class="td-div">
+                            @Html.Raw(Html.DropDownList("BidType", null, new { @class = "form-control" }))
+                            <input type="hidden" id="BidName" name="BidName" value="@Model.BidName" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>资金预算及依据：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="CapitalBudget" class="form-control input_unit" placeholder="" value="@Model.CapitalBudget" />万元
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>项目概述：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" style="resize:none;" name="ProjectSummary" placeholder="请输入项目概述" rows="3">@Model.ProjectSummary</textarea>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr class="hideTr">
+                        <td class="table_title">
+                            <span>邀请谈判理由：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="InvitationNegotiate" placeholder="" value="@Model.InvitationNegotiate" />
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr class="hideTr">
+                        <td class="table_title">
+                            <span>拟邀请潜在谈判人：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="InvitationNegotiator" class="form-control" placeholder="" value="@Model.InvitationNegotiator" />
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.AnnexType as SelectList, null, new { @class = "form-control sel" }))
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzAttachs)
+                        {
+
+                            <tr id="${obj.GuidId}">
+                                <td><span class="font-black sort">@item.Sort</span></td>
+                                <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                <td><span class="font-black">@item.TypeName</span></td>
+                                <td class="td-div" style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            @if (Model.State == (int)PreProjectState.ApprovalFailure)
+            {
+                <input type="button" value="作&nbsp;&nbsp;&nbsp;废" class="layui-btn layui-btn-big" />
+            }
+            <input type="button" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            <input type="hidden" name="State" id="State" />
+        </div>
+    </form>
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+
+        //根据招标方式是否展示隐藏字段
+        var selVal = $("#BidType").children('option:selected').val();
+        IsSelVal(selVal);
+        $("#select").change(function () {
+            selVal = $(this).children('option:selected').val();
+            IsSelVal(selVal);
+        });
+        function IsSelVal(selVal) {
+            if (selVal == "ZBFSGONGKAI" || selVal == "ZBFSYAOQING") {
+                $(".hideTr").hide(100);
+            }
+            if (selVal == "ZBFSJINGZHENG") {
+                $(".hideTr").show(100);
+            }
+        }
+
+        //取消按钮
+        $("#Cancel").on("click", function () {
+            window.location.href = "/TzTenderingApply/index";
+        });
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (obj.TypeName != "请选择") {
+                        if (data[i].ImageType == null) {
+                            var imgUrl = getFileImg(obj.Name);
+                            var odiv = `
+                                     <tr id="${obj.GuidId}">
+                                        <td><span class="sort"> `+ index + ` </span></td>
+                                        <td class ="text_lf td-div"><span >${obj.Name}</span></td>
+                                        <td><span >${obj.TypeName}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typeno="${obj.TypeNo}" data-typename="${obj.TypeName}">
+                                        </td>
+                                    </tr>
+                           `
+                            index++;
+                            $('.fileShow-append').append(odiv);
+                        }
+                    } else {
+                        layer.alert("请选择附件类型", { icon: 2 });
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    //操作申报人方法
+    function getProjectData(IsChecked, obj) {
+        var selectedIds = $("#ProjectId").val();  // 记录已选择的 ID
+        var selectedProjects = $("#ProjectName").val();
+        var approvalNo = $("#ApprovalNo").val();
+
+        if (IsChecked) {
+            if (selectedIds === "") {
+                selectedIds = obj.id;
+                selectedProjects = obj.name;
+                approvalNo = obj.approvalNo;
+                $("#ProjectId").val(selectedIds);
+                $("#ProjectName").val(selectedProjects);
+                $("#ApprovalNo").val(approvalNo);
+            }
+            else {
+                if (selectedIds.indexOf(obj.id) == -1) {
+                    selectedIds += '、' + obj.id;
+                    selectedProjects += '、' + obj.name;
+                    if (obj.approvalNo != "") {
+                        approvalNo += '、' + obj.approvalNo;
+                        $("#ApprovalNo").val(approvalNo);
+                    }
+                    $("#ProjectId").val(selectedIds);
+                    $("#ProjectName").val(selectedProjects);
+                }
+            }
+        }
+        else {
+            if (selectedIds.indexOf(obj.id) != -1) {
+                if (selectedIds === obj.id) {
+                    $("#ProjectId").val(selectedIds.replace(obj.id, ""));
+                    $("#ProjectName").val(selectedProjects.replace(obj.name, ""));
+                    if (obj.approvalNo != "") {
+                        $("#ApprovalNo").val(approvalNo.replace(obj.approvalNo, ""));
+                    }
+                }
+                else if (selectedIds.indexOf(obj.id) == 0) {
+                    $("#ProjectId").val(selectedIds.replace(obj.id + "、", ""));
+                    $("#ProjectName").val(selectedProjects.replace(obj.name + "、", ""));
+                    if (obj.approvalNo != "") {
+                        $("#ApprovalNo").val(approvalNo.replace(obj.approvalNo + "、", ""));
+                    }
+                }
+                else {
+                    $("#ProjectId").val(selectedIds.replace("、" + obj.id, ""));
+                    $("#ProjectName").val(selectedProjects.replace("、" + obj.name, ""));
+                    if (obj.approvalNo != "") {
+                        $("#ApprovalNo").val(approvalNo.replace("、" + obj.approvalNo, ""));
+                    }
+                }
+            }
+
+        }
+    }
+
+    function getSelectedProjectData() {
+        return {
+            projectIds: $('#ProjectId').val(),
+            projectNames: $('#ProjectName').val(),
+            approvalNos: $('#ApprovalNo').val()
+        }
+    }
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择项目
+        $("#ProClick").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分公司"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '650px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectTzProjectProposal?selectType=2',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    //var iframeWin = window[layero.find('iframe')[0]['name']];
+                    //var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    //if (obj.flag === false) {
+                    //    layer.alert(obj.msg, { icon: 2 });
+                    //} else {
+                    //    var resultName = "",
+                    //        resultId = "",
+                    //        ApprovalNo = "";
+                    //    if (obj.data.length >= 2) {
+                    //        $(obj.data).each(function (index, item) {
+                    //            resultName += item.ProjectName + "、";
+                    //            resultId += item.Id + "、";
+                    //        });
+                    //        $("#ProjectName").val(resultName.slice(0, resultName.length - 1));
+                    //        $("#ProjectId").val(resultId.slice(0, resultId.length - 1));
+                    //        $("#ApprovalNo").val(ApprovalNo.slice(0, ApprovalNo.length - 1));
+                    //    } else {
+                    //        $("#ProjectName").val(obj.data[0].ProjectName);
+                    //        $("#ProjectId").val(obj.data[0].Id);
+                    //        $("#ApprovalNo").val(obj.data[0].ApprovalNo);
+                    //    }
+                    //}
+
+                    if ($("#ProjectName").val() === "") {
+                        //初始化禁用暂存按钮
+                        $("#Save").addClass("layui-btn-disabled");
+                        $("#Save").attr("disabled", "disabled");
+                    }
+                    else {
+                        $("#Save").removeClass("layui-btn-disabled");
+                        $("#Save").removeAttr("disabled");
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //选择部门
+        $("#UndertakeClick").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择部门"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectDepartment?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#UndertakeDepartmentId").val(obj.data[0].Id);
+                        $("#UndertakeDepartment").val(obj.data[0].Name);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                var fileDataArray = [];
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $(item).find("#updata").data("typeno"),
+                        TypeName: $(item).find("#updata").data("typename"),
+                        Sort: index + 1
+                    })
+                });
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+
+                //招标类型
+                if ($("#TenderingType option:selected").val() != "") {
+                    $("#TenderingTypeName").val($("#TenderingType option:selected").text());
+                }
+
+                //招标方式
+                if ($("#BidType option:selected").val() != "") {
+                    $("#BidName").val($("#BidType option:selected").text());
+                }
+
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+                var search = $("form").serialize();
+
+                //点击提交表单验证，点击暂存表单不验证
+                if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (!bv.isValid()) {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        return;
+                    }
+                }
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                            window.location.href = "/TzTenderingApply/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                    }
+                });
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+
+    });
+
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            TenderingName: {
+                validators: {
+                    notEmpty: {
+                        message: '招标名称不能为空'
+                    },
+                    stringLength: {
+                        max: 50,
+                        message: '招标名称不能超过50字符'
+                    },
+                }
+            },
+            UndertakeTel: {
+                validators: {
+                    regexp: {
+                        regexp: /^(1[3456789][0-9]\d{8})$/,
+                        message: '请输入正确的联系电话'
+                    }
+                }
+            },
+            CapitalBudget: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '资金预算及依据格式输入错误'
+                    }
+                }
+            }
+        }
+    });
+</script>

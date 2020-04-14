@@ -1,0 +1,239 @@
+﻿
+@{
+    ViewBag.Title = "甲供物资管理列表";
+}
+
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">物资种类：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="" placeholder="请输入物资种类名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">品名：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="" placeholder="请输入品名">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">供应商名称：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="" placeholder="请输入供应商名称">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">状态：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <select class="form-control">
+                                    <option value="value">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                   
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">规格：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="" value="" placeholder="请输入规格">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">供应商地址：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="" value="" placeholder="请输入供应商地址">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="form-sub" style="display:flow-root";margin-bottom: 25px;">
+                <button type="submit" id="btnsel" style="float:right">查 询</button>
+            </div>*@
+            <div class="form-sub">
+                <button type="button" id="add">新增物资</button>
+                <button type="button" id="">导入</button>
+                <button type="button" id="">启用</button>
+                <button type="button" id="">停用</button>
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <input type="checkbox" />
+                    </th>
+                    <th width="50">序号</th>
+                    <th width="200">物资种类</th>
+                    <th width="100">品名</th>
+                    <th width="100">规格</th>
+                    <th width="100">单价（元）</th>
+                    <th width="100">供应商名称</th>
+                    <th width="100">供应商地址</th>
+                    <th width="100">状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>1</td>
+                    <td>灯具</td>
+                    <td>吊灯</td>
+                    <td>40cm，12w</td>
+                    <td>158.66</td>
+                    <td>邢台秦星科技有限公司</td>
+                    <td>安徽省合肥市庐江县庐城镇合铜公路旁</td>
+                    <td>已启用</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>2</td>
+                    <td>加油机</td>
+                    <td>柴油加油机</td>
+                    <td>160型，12v</td>
+                    <td>2950.00</td>
+                    <td>安徽省锐凌计量器制造有限公司</td>
+                    <td>安徽省合肥市庐江县庐城镇合铜公路旁</td>
+                    <td>已停用</td>
+                </tr>
+            </tbody>
+            @*<tbody>
+                    @{
+                        int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                               
+                            </tr>
+                        }
+                    }
+                    else {
+                        <tr>
+                            <td colspan="13" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>*@
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<script>
+    $("#add").click(function () {
+        window.location.href = '/ProjectManagement/MaterialManage';
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var btnsel = $("form").serialize();
+                    window.location.href = "/ProjectManagement/MaterialManageList?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+
+    $("body").on("click", ".Detail", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/ProjectManagement/MaterialManageDetail?id=" + id;
+    });
+</script>

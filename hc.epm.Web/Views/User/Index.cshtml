@@ -1,0 +1,112 @@
+﻿@using hc.epm.ViewModel;
+@using hc.epm.DataModel.Basic;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@model List<UserListView>
+@{
+    ViewBag.Title = "用户列表";
+}
+
+<div class="contentData">
+    <div class="form-select c">
+        <form  method="get">
+            <div>
+                <div><label>用户名称 : </label><input type="text" name="userName" value="@ViewBag.UserName"></div>
+                <div>
+                    <label>单位类型 : </label>
+                    <div style="float:right;margin:0 49% 0 0">
+                            @Html.DropDownList("Belong", ViewBag.CompanyType as SelectList)
+                    </div>
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="submit">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>用户名称</th>
+                    <th>所属单位</th>
+                    <th>单位类型</th>
+                    @*<th>手机号</th>*@
+                    <th>邮箱</th>
+                    <th>微信</th>
+                    <th>QQ</th>
+                   @* <th>操作</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                        <tr>
+                            <td class="table-center">@index</td>
+                            <td>@item.UserName</td>
+                            <td>@item.CompanyName</td>
+                            <td>@(item.CompanyType.ToEnumReq<RoleType>().GetText())</td>
+                            @*<td>@item.Phone</td>*@
+                            <td>@item.Email</td>
+                            <td>@item.WeChat</td>
+                            <td>@item.Qq</td>
+                            @*<td class="table-center">
+                                <a href="javascript:;" class="detail" data-itemid="@item.UserId">查看</a>
+                            </td>*@
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+        
+    </div>
+</div>
+<script>
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['element', 'laypage'], function () {
+        var element = layui.element, laypage = layui.laypage, $ = layui.jquery;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/User/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //查看
+        $("table").on('click', '.detail', function () {
+            var id = $(this).data('itemid');
+            location.href = '/User/Detail?id=' + id;
+        });
+    });
+</script>
+
+

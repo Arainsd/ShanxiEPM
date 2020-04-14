@@ -1,0 +1,454 @@
+﻿@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model ProjectApprovalView
+@{
+    ViewBag.Title = "Edit";
+}
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .pro {
+        display: inline-block;
+        height: 50px;
+        border-bottom: 1px solid black;
+        line-height: 50px;
+        width: 300px;
+        text-align: left;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 250px;
+    }
+
+    .pic {
+        top: 2px;
+        cursor: pointer;
+        left: 220px;
+        font-size: 20px;
+        left: -28px;
+        position: relative;
+    }
+
+
+    .bold-name {
+        font-weight: 800;
+    }
+
+    table td {
+        width: 25%;
+    }
+
+    .timer {
+        width: 200px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .timer-pic {
+        left: -24px;
+        position: relative;
+    }
+
+    .tera {
+        width: 788px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .add-icon {
+        color: darkseagreen;
+    }
+
+    .file-wrap {
+        height: 35px;
+        width: 245px;
+        margin-top: 20px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+    }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+    .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 10px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+      .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                /*overflow: hidden;*/
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+     .fileShow li i {
+                color: black;
+            }
+    .iconfont {
+           left: -35px;
+            top: -1px;
+    }
+    .btn1 {
+           background-color: #6a6969!important;
+            color: white;
+            top: -33px;
+            left: 92px;
+            width: 30px;
+    }
+    .btn1:hover {
+            color:white;
+        }
+    .comPro {
+            width: 65%;
+    }
+    .input_unit {
+        margin-top:10px;
+    }
+    .module-div {
+        padding:0 !important;
+        border:0 !important;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form id="formData">
+        <div class="top-title">
+            <span class="ti">试运行申请表</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr style="height:60px;">
+                    <td class="bold-name">
+                        <div class="btn-upload">
+                            项目名称
+                        </div>
+                       
+                    </td>
+                    <td class="td-div">
+                        <input type="text" placeholder="" name="ProjectName" class="form-control " id="ProjectName" value="@Model.ProjectPolit.ProjectName"/>
+                        <input type="hidden"  name="ProjectId"  value="@Model.ProjectPolit.ProjectId" />
+                        <input type="hidden" name="Id" value="@Model.ProjectPolit.Id" />
+                    </td>
+                    
+                    <td >
+                        <div class="btn-upload">
+                            <div class="bold-name">
+                                地市公司名称
+                            </div>
+                        </div>
+                    </td>
+                    <td class="td-div">
+                        <input type="text" placeholder="" name="CompanyName" class="form-control " id="CompanyName" value="@ViewBag.CompanyName" />
+                        <input type="hidden" placeholder="" name="CompanyId" class="form-control " id="CompanyId" value="@ViewBag.CompanyId" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">开工时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.StartDate != null)
+                        {
+                            <input type="text" class="form-control input_unit" id="StartDate" name="StartDate" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#EndDate').val(''); } })" value="@Convert.ToDateTime(Model.ProjectPolit.StartDate).ToString("yyyy-MM-dd")" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd'})">
+                            <i onClick="WdatePicker({ el: 'StartDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        @if (Model.ProjectPolit.StartDate == null)
+                        {
+                            <input type="text" class="form-control input_unit" id="StartDate" name="StartDate" onClick="WdatePicker({ el: 'StartDate' })" value="">
+                            <i onClick="WdatePicker({ el: 'StartDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                      
+                    </td>
+                    <td class="bold-name">竣工时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.EndDate != null)
+                        {
+                            <input type="text" class="form-control input_unit" id="EndDate" name="EndDate" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'StartDate\')}', })" value="@Convert.ToDateTime(Model.ProjectPolit.EndDate).ToString("yyyy-MM-dd")">
+                            <i onClick="WdatePicker({ el: 'EndDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        @if (Model.ProjectPolit.EndDate == null)
+                        {
+                            <input type="text" class="form-control input_unit" id="EndDate" name="EndDate" onClick="WdatePicker({ el: 'EndDate' })" value="">
+                            <i onClick="WdatePicker({ el: 'EndDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程交接验收时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.AcceptDate != null)
+                        {
+                            <input type="text" class="form-control input_unit" id="AcceptDate" name="AcceptDate" onClick="WdatePicker({ el: 'AcceptDate' })" value="@Convert.ToDateTime(Model.ProjectPolit.AcceptDate).ToString("yyyy-MM-dd")">
+                            <i onClick="WdatePicker({ el: 'AcceptDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        @if (Model.ProjectPolit.AcceptDate == null)
+                        {
+                            <input type="text" class="form-control input_unit" id="AcceptDate" name="AcceptDate" onClick="WdatePicker({ el: 'AcceptDate' })" value="">
+                            <i onClick="WdatePicker({ el: 'AcceptDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        
+                    </td>
+                    <td class="bold-name">验收问题整改完成时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.RectFinishDate != null)
+                        {
+                            <input type="text" class="form-control input_unit" id="RectFinishDate" name="RectFinishDate" onClick="WdatePicker({ el: 'RectFinishDate' })" value="@Convert.ToDateTime(Model.ProjectPolit.RectFinishDate).ToString("yyyy-MM-dd")">
+                            <i onClick="WdatePicker({ el: 'RectFinishDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        @if (Model.ProjectPolit.RectFinishDate == null)
+                        {
+                            <input type="text" class="form-control input_unit" id="RectFinishDate" name="RectFinishDate" onClick="WdatePicker({ el: 'RectFinishDate' })" value="">
+                            <i onClick="WdatePicker({ el: 'RectFinishDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">计划完成工程决算时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.FinalDate != null)
+                        {
+                            <input type="text" class="form-control input_unit" id="FinalDate" name="FinalDate" onClick="WdatePicker({ el: 'FinalDate' })" value="@Convert.ToDateTime(Model.ProjectPolit.FinalDate).ToString("yyyy-MM-dd")">
+                            <i onClick="WdatePicker({ el: 'FinalDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        @if (Model.ProjectPolit.FinalDate == null)
+                        {
+                            <input type="text" class="form-control input_unit" id="FinalDate" name="FinalDate" onClick="WdatePicker({ el: 'FinalDate' })" value="">
+                            <i onClick="WdatePicker({ el: 'FinalDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        
+                    </td>
+                    <td class="bold-name">计划完成工程审计时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.AuditDate != null)
+                        {
+                            <input type="text" class="form-control input_unit" id="AuditDate" name="AuditDate" onClick="WdatePicker({ el: 'AuditDate' })" value="@Convert.ToDateTime(Model.ProjectPolit.AuditDate).ToString("yyyy-MM-dd")">
+                            <i onClick="WdatePicker({ el: 'AuditDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        @if (Model.ProjectPolit.AuditDate == null)
+                        {
+                            <input type="text" class="form-control input_unit" id="AuditDate" name="AuditDate" onClick="WdatePicker({ el: 'AuditDate' })" value="">
+                            <i onClick="WdatePicker({ el: 'AuditDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                        }
+                        
+                    </td>
+                </tr>
+           
+                <tr>
+                    <td class="bold-name">消防、环保、安全、专项验收情况及竣工资料是否齐全</td>
+                    <td colspan="3" class="td-div">
+                        <textarea class="form-control " name="FullFiles" value="" rows="3" autofocus>@Model.ProjectPolit.FullFiles</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分公司验收意见</td>
+                    <td colspan="3" class="td-div">
+                        <textarea class="form-control " name="AcceptOpinion" value="" rows="3" autofocus>@Model.ProjectPolit.AcceptOpinion</textarea>
+                    </td>
+                </tr>
+                <div class="module-div">
+                    @*<h4>附件信息</h4>*@
+                    <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                        <tbody class="fileShow-append fileShow-append1" id="SCFJ">
+                            <tr class="headtr">
+                                <td style="width:220px;">附件类型</td>
+                                <td class="td-div" style="width: 409px!important;">
+                                    @Html.Raw(Html.DropDownList("FileType", ViewBag.PolitFileType as SelectList, null, new { @class = "form-control sel" }))
+                                    <input id="FileType" type="hidden" name="FileType" value="" />
+                                </td>
+                                <td class="table_title" style="text-align:left;">
+                                    <div class="btn-upload">
+                                        <input type="button" id="btnUploadFile7" name="SCFJ" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择附件" />
+                                        <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                                    </div>
+                                </td>
+                                <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                            </tr>
+                            <tr class="headtr">
+                                <th class="table_title" style="width: 219px;">序号</th>
+                                <th class="td-div">附件名称</th>
+                                <th class="table_title">附件类型</th>
+                                <th class="td-div">操作</th>
+                            </tr>
+                                @if (Model.ProjectPolit.TzAttachs != null && Model.ProjectPolit.TzAttachs.Count() > 0)
+                                {
+                                    foreach (var item in Model.ProjectPolit.TzAttachs)
+                                    {
+                                            <tr id="${obj.GuidId}">
+                                                <td><span class="font-black sort">@item.Sort</span></td>
+                                                <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                                <td><span class="font-black">@item.TypeName</span></td>
+                                                <td class="td-div" style="text-align:center">
+                                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                                    <input type="hidden" class="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                                </td>
+                                            </tr>
+
+                                    }
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            </tbody>
+        </table>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="save layui-btn layui-btn-big button-base bg-save" data-state="@(PreProjectApprovalState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="save layui-btn layui-btn-big button-base bg-save" data-state="@(PreProjectApprovalState.WaitApproval.GetValue().ToString())" />
+           <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big button-base bg-cancel cancel" />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+            <input type="hidden" name="State" id="State" />
+        </div>
+    </form>
+</div>
+<script>
+    $('#btnUploadFile7').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append1 tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span class="sort"> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" class="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append1').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().parent("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+    });
+
+    //数据提交
+    $(".save").click(function () {
+        //附件是否上传完成 isFlagFile
+        if (isFlagFile) {
+            $(".save").addClass("layui-btn-disabled");
+            $(".save").attr("disabled", "disabled");
+
+            var JsonFileTimer = [];
+            $(".fileShow-append1 tr:not(.headtr)").each(function (index, item) {
+                JsonFileTimer.push({
+                    Name: $(item).find(".updata").data("name"),
+                    GuidId: $(item).find(".updata").data("id"),
+                    Size: $(item).find(".updata").data("size"),
+                    Group: $(item).find(".updata").data("group"),
+                    FilePath: $(item).find(".updata").data("url"),
+                    TypeNo: $(item).find(".updata").data("typeno"),
+                    TypeName: $(item).find(".updata").data("typename"),
+                    Sort: index + 1,
+                })
+            });
+            var fileDataJsonFile = JSON.stringify(JsonFileTimer);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+            //接口调用
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("#formData").serialize();
+            $.post("Edit", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        window.location.href = "/ProjectOperateApply/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                }
+            });
+        }
+        else {
+            layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+        }
+    });
+
+    $("#close").click(function () {
+        window.location.href = "/ProjectOperateApply/Index";
+    });
+</script>
+

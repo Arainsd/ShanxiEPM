@@ -1,0 +1,226 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_Right>
+@{
+    ViewBag.Title = "权限管理";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> <a href="">权限管理</a> </span> > <span>@(ViewBag.belongText)权限列表</span>
+    </div>
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="name" placeholder="请输入权限名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <input type="hidden" name="belong" id="belong" value="@ViewBag.belong" />
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" data-module="@(ViewBag.belong)Right" data-right="add" id="add" class="checkright">新 增</a>
+            <a href="javascript:;" data-module="@(ViewBag.belong)Right" data-right="delete" id="delete" class="checkright">删 除</a>
+            <a href="javascript:;" id="look">权限树</a>
+            <a href="Search?belong=@ViewBag.belong" id="search">全部检索</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="5%" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th width="5%" class="table-center">序号</th>
+                        <th width="10%">名称</th>
+                        <th width="7%">类型</th>
+
+                        <th width="5%" class="table-center">图标</th>
+                        <th width="5%" class="table-center">排序</th>
+                        <th>菜单</th>
+                        <th width="7%">打开方式</th>
+                        <th width="10%">显示名称</th>
+                        <th width="7%" class="table-center">权限结构</th>
+                        <th width="5%" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="id-@item.Id" id="id-@item.Id" value="@item.Id" />
+                                </td>
+                                <td class="table-center">@index</td>
+
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>@(item.RightType.ToEnumReq<FunctionType>().GetText())</td>
+
+                                <td class="table-center">
+                                    @if (!string.IsNullOrEmpty(item.Icon))
+                                    {
+                                        <a href="javascript:" name="look" data-img="@item.Icon">
+                                            <i class="glyphicon glyphicon-eye-open" style="color:#1b98b8;font-size:18px"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>none</span>
+                                    }
+                                </td>
+                                <td class="table-center">@item.Sort</td>
+                                <td>@(item.IsMenu ? item.URL : "非菜单")</td>
+                                <td>@(item.Target)</td>
+                                <td>@(item.DisplayName.CutByLength(12))</td>
+                                
+                                <td class="table-center"><a href="Child?leftPId=@(item.SId)&rightPId=@(item.SId)&belong=@ViewBag.belong" title="权限结构" style="cursor: pointer;color: #1b98b8;">权限结构</a>
+                                </td>
+
+                                <td class="table-center">
+                                    <a href="javascript:;" data-itemid="@item.SId" class="edit checkright" title="编辑" data-module="@(ViewBag.belong)Right" data-right="modify">
+                                        <i class="glyphicon glyphicon-pencil handle-blue"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="13" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+
+        //查看icon
+        $("a[name='look']").click(function () {
+            var img = $(this).data("img");
+            layer.open({
+                type: 1,
+                shadeClose: true, //点击遮罩关闭层
+                area: [SmallLayerWidth, '300px'],
+                content: '<img src="' + img + '" />'
+            });
+        });
+        //权限树预览
+        $("#look").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("@(ViewBag.belongText)权限树-预览"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '720px'],
+                content: '/Right/Look?belong=@ViewBag.belong'
+            });
+        });
+        //修改
+        $(".edit").click(function () {
+            var id = $(this).data("itemid");
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("@(ViewBag.belongText)权限-编辑"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '720px'],
+                content: '/Right/Edit/' + id
+            });
+        });
+        //增加
+        $("#add").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("@(ViewBag.belongText)权限-新增"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '720px'],
+                content: '/Right/add?pId=0&belong=@ViewBag.belong'
+            });
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm('确认删除所选择的项？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Right/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                });
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+        //启用禁用切换
+        $(".change-state").click(function () {
+            var id = $(this).data("itemid");
+            var value = $(this).data("value");
+            var type = $(this).data("type");
+            var mes = GetIsEnableLayerMes(value, type);//获取弹出询问层的提示语句
+            if (type == "2" && value == "True") {//若该条数据为已确认数据将不能改变其确认状态
+                parent.layer.alert(mes, { icon: 2 });
+            } else {
+                parent.layer.confirm(mes, { icon: 3 }, function () {
+                    $.post("EditState", { id: id, type: type }, function (data) {
+                        if (data.Flag) {
+                            window.location.reload();
+                            parent.layer.msg("操作成功！", { time: 1000, icon: 1 });
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    })
+                })
+            }
+
+        });
+    });
+</script>

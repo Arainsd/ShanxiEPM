@@ -1,0 +1,718 @@
+﻿
+@{
+    ViewBag.Title = "现场调研详情";
+}
+
+<style>
+    .fileShow {
+        margin-left: 200px;
+    }
+
+        .fileShow li {
+            display: flex;
+            list-style: none;
+            height: 35px;
+            line-height: 30px;
+        }
+
+    .title {
+        color: blue;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .control-label {
+        font-weight: 500;
+    }
+
+    .size {
+        font-weight: 500;
+        height: 34px;
+        line-height: 34px;
+        text-align: left;
+        padding: 0;
+    }
+
+    .timer-pic {
+        position: relative;
+        top: -25px;
+        left: 334px;
+    }
+
+    .af-na {
+        margin-left: -50px;
+    }
+
+    .sel {
+        width: 120px;
+    }
+
+    .file-name {
+        width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            @*项目信息*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">项目信息</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">项目名称：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="ProjectName" class="form-control" placeholder="" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">项目性质：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">text</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">地市公司：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="" class="form-control" placeholder="" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">地理位置：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*开始调研时间*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">开始调研时间</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">起始时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" id="ItemTime" name="ItemTime" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*投资方面调研*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">投资方面调研</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">调研人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">(省公司人员)</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">职务：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">部门(副)经理</option>
+                                <option value="value">部门管理人员</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">详细地理位置：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">周边环境：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">住宅区</option>
+                                <option value="value">厂矿企业</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地性质：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">国有</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地用途：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">国有出让</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地面积：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">平米</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地形状(临街长度)：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">米</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">是否符合地区建站规划：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">周边车辆保有量(*)：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">辆</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">平均日车流量：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">辆/日</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">成品油销量测算：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">柴汽比：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地价格(*)：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">万元/亩</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">气销量测算：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">千方/日</label>
+                    </div>
+                </div>
+            </div>
+            @*法律方面调研*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">法律方面调研</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">调研人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">(省公司人员)</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">职务：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">部门(副)经理</option>
+                                <option value="value">部门管理人员</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">产权清晰：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">资产主体资格：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />符合
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />不符合
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">纠纷判断：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />有
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />无
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">证照：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" />工程规划
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" checked />用地规划
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" checked />土地证
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" checked />化危证
+                                </label>
+                            </div>
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" />消防验收
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" checked />营业执照
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" checked />成品油证
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="" checked />房产证
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*工程方面调研*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">工程方面调研</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">调研人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">(省公司人员)</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">职务：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">部门(副)经理</option>
+                                <option value="value">部门管理人员</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">形象工程符合行业规划：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">符合</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">设施设备：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">罩棚：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">平</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地形状(临街长度)：</label>
+                        <div class="col-lg-3 col-sm-3">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-1 col-sm-1 size">台</label>
+                        <div class="col-lg-3 col-sm-3">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-1 col-sm-1 size">枪</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">加气机：</label>
+                        <div class="col-lg-3 col-sm-3">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-1 col-sm-1 size">台</label>
+                        <div class="col-lg-3 col-sm-3">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-1 col-sm-1 size">枪</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">油罐：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">方</label>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">站房：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">平</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">储气井：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">方</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">信息化系统：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />有
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />无
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">证照：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="" />不改造
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="" checked />标识包装
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="" checked />局部改造
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="" checked />全面改造
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            @*经营方面调研*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">经营方面调研</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">调研人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">(省公司人员)</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">职务：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">部门(副)经理</option>
+                                <option value="value">部门管理人员</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">销量可实现性：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">油品运距：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">公里</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">油品来源：</label>
+                    <div class="col-lg-6 col-sm-6"><textarea rows="2" disabled class="form-control" style="resize:none;"></textarea></div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">                
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">当前成品油日销量(*)：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">特殊销售手段(*)：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />有
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />无
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">当前气日销量：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">千方/日</label>
+                    </div>
+                </div>
+            </div>
+            @*安全方面调研*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">安全方面调研</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">调研人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">(省公司人员)</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">职务：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">部门(副)经理</option>
+                                <option value="value">部门管理人员</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">环保问题：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />有
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />无
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">隐患问题：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <label class="radio-inline">
+                                <input type="radio" name="" />有
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="" checked />无
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">改进措施：</label>
+                    <div class="col-lg-6 col-sm-6"><textarea rows="2" disabled class="form-control" style="resize:none;"></textarea></div>
+                </div>
+            </div>            
+            @*信息方面调研*@
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">信息方面调研</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">调研人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="" class="form-control" placeholder="" disabled />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">(省公司人员)</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">职务：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" disabled>
+                                <option value="value">部门(副)经理</option>
+                                <option value="value">部门管理人员</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">信息系统部署方案意见：</label>
+                    <div class="col-lg-6 col-sm-6"><textarea rows="2" disabled class="form-control" style="resize:none;"></textarea></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

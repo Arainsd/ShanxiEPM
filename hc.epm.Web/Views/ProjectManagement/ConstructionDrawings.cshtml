@@ -1,0 +1,247 @@
+﻿
+@{
+    ViewBag.Title = "施工图纸会审";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">站库名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="" placeholder="请输入站库名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">地市公司 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <select class="form-control">
+                                    <option value="value">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">提出时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目性质 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <select class="form-control">
+                                    <option value="value">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">审批状态 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <select class="form-control">
+                                    <option value="value">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <button type="button" id="add">图纸上传</button>
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">项目名称</th>
+                    <th width="100">站库名称</th>
+                    <th width="100">项目性质</th>
+                    <th width="100">提出时间</th>
+                    <th width="100">当前操作人</th>
+                    <th width="100">审批状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>汉城加油站项目立项申请</td>
+                    <td>汉城路加油站</td>
+                    <td>新建</td>
+                    <td>2019-10-13</td>
+                    <td>张凯</td>
+                    <td>待审批</td>
+                    <td><a class="Detail" style="cursor:pointer;color:#0099FF;padding: 6px;">查看</a></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>合阳洽川景区加油站技改</td>
+                    <td>汉城路加油站</td>
+                    <td>技改</td>
+                    <td>2019-10-13</td>
+                    <td>张凯</td>
+                    <td>已驳回</td>
+                    <td>
+                        <a class="add" href="/ProjectManagement/ConstructionDrawingsEdit" style="cursor:pointer;color:#0099FF;padding: 6px;">重新编辑</a>
+                        <a class="Detail" style="cursor:pointer;color:#0099FF;padding: 6px;">查看</a>
+                    </td>
+                </tr>
+            </tbody>
+            @*<tbody>
+                    @{
+                        int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td style="display:none">
+                                    <input type="hidden" class="inputId" data-id="@item.TzProjectProposal.Id" data-sid="@item.TzProjectProposal.SId" />
+                                </td>
+                                <td>@index</td>
+                                <td>@item.TzProjectProposal.ProjectName</td>
+                                <td>@item.TzProjectProposal.ProjectNatureTypeName</td>
+                                <td>@item.TzProjectProposal.ProvinceName</td>
+                                <td>@item.TzProjectProposal.CompanyName</td>
+                                <td>@( Convert.ToDateTime(item.TzLandTalk.TalkTime).ToString("yyyy-MM-dd"))</td>
+                                <td>@item.TzLandTalk.TalkAdress</td>
+                                <td>@item.TzLandTalk.Fees</td>
+                                <td>@item.TzLandTalk.FeesTime</td>
+                                <td>@item.TzLandTalk.TalkResultName</td>
+                                <td>@item.TzLandTalk.Operator</td>
+                                <td>
+                                    @if (item.TzLandTalk.State == 0)
+                                    {
+                                        <span style="color:#000000">待审批</span>
+                                    }
+                                    else if (item.TzLandTalk.State == 1)
+                                    {
+                                        <span style="color:#008000">审批通过</span>
+
+                                    }
+                                    else if (item.TzLandTalk.State == 2)
+                                    {
+                                        <span style="color:#FF0000">审批不通过</span>
+
+                                    }
+                                </td>
+                                <td><a class="Detail" style="cursor:pointer;color:#0000FF;">查看</a></td>
+                            </tr>
+                        }
+                    }
+                    else {
+                        <tr>
+                            <td colspan="13" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>*@
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+<script>
+    $("#add").on("click", function () {
+        window.location.href = "/ProjectManagement/ConstructionDrawingsAdd";
+    });
+</script>

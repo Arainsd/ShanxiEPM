@@ -1,0 +1,405 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+                                
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">项目主体：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                
+                            </div>
+                            <input id="NatureName" type="hidden" name="NatureName" value="" />
+                            <input id="Nature" type="hidden" name="Nature" value="" />
+                        </td>
+                        <td class="table_title">项目类型：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">开始时间：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+
+                                <input type="hidden" id="StationId" name="StationId" />
+                                <input type="hidden" id="StationCode" name="StationCode" />
+                            </div>
+                        </td>
+                        <td class="table_title">结束时间：</td>
+                        <td class="td-div">
+
+                            <input type="hidden" id="CompanyId" value="@ViewBag.CompanyId" />
+                        </td>
+                    </tr>
+                    <tr>                        
+                        <td class="table_title">项目负责人：</td>
+                        <td class="td-div">
+
+                        </td>
+                        <td class="table_title">负责人电话：</td>
+                        <td class="td-div"></td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">项目地址：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">项目简介：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>更多项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">验收标题：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">验收时间：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                        <td class="table_title">验收类型：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">验收内容：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">整改单位：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">整改内容：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">验收单位：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">验收人员：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">验收单：</td>
+                        <td colspan="3">
+                            <div class="form-group">
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>更多项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title" style="width:195px;">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                验收意见说明：
+                            </span>
+                        </td>
+                        <td colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" name=""></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        @*附件上传改造 start ---- *@
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:300px;">附件类型</td>
+                        <td class="td-div" style="width: 570px!important;">
+                            @*@Html.Raw(Html.DropDownList("FileType", ViewBag.AnnexType as SelectList, null, new { @class = "form-control sel" }))*@
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title text_lf" colspan="3">
+                            <div class="btn-upload" style="display:inline-block">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                        </td>
+                        @*<td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>*@
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">附件归属</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @*附件上传改造 end ---- *@
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            @*<input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />*@
+            @*<input type="button" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />*@
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            <input type="hidden" name="State" id="State" />
+        </div>
+    </form>
+</div>
+
+
+<script>
+    //取消
+    $("#close").click(function () {
+        window.location.href = "/TzProjectProposal/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+    });
+
+    //附件上传改造 start ----
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" disabled />投资回写
+                                     </label>
+                                     <label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype2" value="" checked />工程管理
+                                     </label>`
+                        var html2 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" checked />投资回写
+                                     </label>
+                                     <label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype2" value="" checked />工程管理
+                                     </label>`
+                        var html = (fileObj.size > tzmaxfilesize) ? html1 : html2;
+
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span > `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td>${html}</td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+              
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                var fileDataArray = [];
+                // 附件上传改造 start ----
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    var uploadtype = 0;
+                    var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+                    var uploadtype2 = $(this).find("input[name='Uploadtype2']").is(':checked');
+                    if (uploadtype1 == true && uploadtype2 == false) {
+                        uploadtype = 1;
+                    }
+                    if (uploadtype1 == false && uploadtype2 == true) {
+                        uploadtype = 2;
+                    }
+                    if (uploadtype1 == true && uploadtype2 == true) {
+                        uploadtype = 3;
+                    }
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $("#FileType").val(),
+                        TypeName: $("#FileType").find("option:checked").text(),
+                        Sort: index + 1,
+                        Uploadtype: uploadtype
+                    })
+                });
+                // 附件上传改造 end ----
+
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+                var search = $("form").serialize();
+                if (bv.isValid()) {
+                    $.post("Add", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/TzProjectProposal/Index";
+                                $(".save").removeClass("layui-btn-disabled");
+                                $(".save").removeAttr("disabled");
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                        }
+                    });
+                }
+                else {
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                }
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+
+    });
+
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            ProjectName: {
+                validators: {
+                    notEmpty: {
+                        message: '项目名称不能为空'
+                    },
+                    stringLength: {
+                        max: 100,
+                        message: '项目名称不能超过100字符'
+                    },
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,58 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Msg
+@model Msg_SMSSetting
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="form-wrap" style="min-height:500px;position: relative;">
+    <table class="layui-table" style="width:80%;margin:0 auto;margin-top:20px;table-layout: fixed">
+        <tbody>
+            <tr>
+                <td style="text-align:right;width:25%;">短信接口编号</td>
+                <td>@Model.No</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信接口名称</td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信接口URL</td>
+                <td>@Model.URL</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信接口AppId</td>
+                <td>@Model.AppId</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信接口Key</td>
+                <td>@Model.AppKey</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">AppSecret</td>
+                <td>@Model.AppSecret</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信接口费用</td>
+                <td>@Model.Cost</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">字数限制</td>
+                <td>@Model.CharacterLimit</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信接口返回值说明</td>
+                <td style="word-break: break-all">@Model.ReturnValDes</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">启用/禁用</td>
+                <td>@(Model.IsEnable == true ? "启用" : "禁用")</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">确认状态</td>
+                <td>@(Model.IsConfirm == true ? "已确认" : "未确认")</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>

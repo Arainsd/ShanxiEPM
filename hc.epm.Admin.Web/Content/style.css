@@ -1,0 +1,182 @@
+﻿/*去掉自带样式*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding: 0}
+body {font:normal 14px 微软雅黑, Helvetica, sans-serif;}
+table {border-collapse:collapse;border-spacing:0}
+p{word-wrap:break-word}
+img{border:0;vertical-align:middle}
+del,ins {text-decoration:none}
+li {list-style:none}
+q:before,q:after {content:''}
+sup,sub {vertical-align:baseline}
+input,button,textarea,select{font-size:1em}
+h1,h2,h3,h4,h5,h6,b {font-size:1em;font-weight:normal}
+i,cite,em,var,dfn,address {font-style:normal}
+input{outline: none;}
+:focus{outline: none;}
+a {text-decoration:none;overflow:hidden;-webkit-transition: all .5s ease; -o-transition: all .5s ease;-moz-transition: all .5s ease;}
+a:hover,a:focus {text-decoration:solid;}
+/*去掉自带样式 end*/
+/*简单的公用样式*/
+/*定位*/
+.pr {position:relative;}
+.pa {position:absolute;}
+/*清除浮动*/
+.c:before,.c:after {content:"";display:table}
+.c:after {clear:both}
+.c {zoom:1}
+/*左右浮动*/
+.fl {float:left;}
+.fr {float: right;}
+/*外边距*/
+.mt5 {margin-top:5px;}
+.mt10 {margin-top:10px;}
+.mb25 {margin-bottom:20px}
+/*简单的公用样式 end*/
+/*盒子模型*/
+div{
+box-sizing:border-box;
+-moz-box-sizing:border-box; /* Firefox */
+-webkit-box-sizing:border-box; /* Safari */
+}
+/*公共按钮样式*/
+ .button-base {width: 100px; height: 35px; font-size: 16px;}
+ .bg-cancel {background:#b5bbc7}/*取消按钮背景色*/
+ .bg-save{background:#138baa}/*保存按钮背景色*/
+ /*公共颜色*/
+.icon-enable, .icon-confirm, .icon-tree, .icon-detail{color:#1b98b8}
+.icon-detail{margin-left:15px}/*详情图标左边距*/
+.layui-form .big-lable{width:130px}/*较长lable宽度*/
+.icon-disenable,.disconfirm{color:#f14848}
+.icon-edit {color:#1b98b8}
+.layui-table .table-center{text-align:center}
+.layui-table .table-left {text-align:left}
+.layui-table .table-right {text-align:right}
+.mytable .table-right{text-align:right}
+.mytable .fr{float:right}
+.mytable .table-left{text-align:left}
+.layui-table .text-link{color:#1b98b8} /*文字操作样式*/
+.layui-table .text-link:hover {color:#666}
+.required{color:red;margin-right:5px;font-size:14px}/*表单必填项提示*样式*/
+.color-orange {color:#e5913f}
+.color-red {color:#f86c6b}
+.color-blue{color:#0b8fd6}
+
+
+ /* header */
+.wrap{width:100%;height:100%}
+.header{width:100%;height:130px;background-color:#1B98B8;box-shadow:0px 2px 10px #666}
+.header-left{padding:2% 0 0 3%}
+.header-right{width:65%;margin-top:1.5%}
+.header-right .loginbar{width:35%}
+.header-right .loginbar div{margin-right:9%;font-size:16px;color:#fff;position:relative;}
+.header-right .loginbar div a{font-size:16px;color:#fff;transition:background 0.5s linear 0s}
+.header-right .loginbar div a:hover{background-color: #eee;color: #333;}
+.header-right .loginbar div i.icon-user{background:url(/Images/icon-user.png) no-repeat center center;width:16px;height:16px;position:absolute;top:1px;left:-23px;}
+.header-right .loginbar div i.icon-password{background:url(/Images/icon-password.png) no-repeat center center;width:16px;height:18px;position:absolute;top:1px;left:-23px;}
+.header-right .loginbar div i.icon-editor{background:url(/Images/icon-editor.png) no-repeat center center;width:18px;height:18px;position:absolute;top:1px;left:-23px;}
+.header-right .loginbar div i.icon-close{background:url(/Images/icon-close.png) no-repeat center center;width:14px;height:18px;position:absolute;top:1px;left:-23px;}
+.menu{margin-top:34px;width:82%}
+.menu li{float:left;margin-right:2.5%;}
+.menu li a{font-size:21px;color:#fefefe;padding-bottom:12px;transition:none;}
+.menu li a:hover{color:#ffea00;border-bottom:5px solid #fefefe;}
+.menu li a.active{color:#ffea00;border-bottom:5px solid #fefefe;}
+/*content*/
+.content{width:100%;margin:0;padding:0;}
+.content-left{width:11.78%;height:950px;background-color:#EDEDED;box-shadow:5px 0px 10px #ddd}
+.content .level-one>a{padding:9% 37%;padding-right:0px;display:block;position:relative;}
+.content .level-two>li>a{padding-top:12px;padding-left:60px;padding-bottom:14px;display:block}
+.content-left a{color:#555;}
+.icon-left{width:28px;height:28px;position:absolute;top:15px;left:23px;}
+.icon-left-company{background:url(/Images/icon-left-company.png) no-repeat center center;}
+.icon-left-user{background:url(/Images/icon-left-user.png) no-repeat center center;}
+.icon-left-users{background:url(/Images/icon-left-users.png) no-repeat center center;}
+.level-two>li>a{position:relative;}
+.icon-left-point{width:8px;height:8px;position:absolute;top:17px;left:32px;}
+.icon-point-gray{background:url(/Images/icon-point-gray.png) no-repeat center center;}
+.level-one{border-bottom:1px solid #DEDEDE}
+.icon-more{background:url(/Images/icon-more.png) no-repeat center center;width:10px;height:10px;position:absolute;top:24px;right:25px;}
+.icon-more-gray {background:url(/Images/icon-more-gray.png) no-repeat center center;width:10px;height:10px;position:absolute;top:24px;right:25px;}
+.left-menu .level-one>a:hover{background-color:#D6D6D6;color:#1B98B8}
+.level-two-active{background-color:#D6D6D6;color:#1B98B8!important;border-left:5px solid #1B98B8}
+.left-menu .level-two>li>a:hover{color:#1B98B8;}
+.left-menu .level-two>li>a.active{color:#1B98B8;}
+.left-menu .level-two>li>a:hover em{background:url(/Images/icon-point.png) no-repeat center center;}
+.level-two{display:none}
+/*content-right*/
+.content-right{width:86.5%;min-height:706px;margin-top:20px;margin-left:20px;}
+.date-wrap {width:98%;height:100%;margin-top:20px;margin-left:20px;}
+.content-right .top-url{width:100%;height:44px;padding-left:25px;border:1px solid #DDE0E7;box-shadow:5px 5px 20px #DDE0E7;color:#666;font-size:14px;line-height:44px;font-weight:bold}
+.content-right .search{width:100%;height:auto;padding:11px 25px;border:1px solid #DDE0E7;box-shadow:5px 5px 20px #DDE0E7;color:#666;font-size:14px;}
+.content-right .layui-form-label{width:140px;}
+.content-right .layui-form-select dl dd.layui-this{background-color:#1b98b8}
+.content-right .layui-btn-warm{margin-left: 40px;margin-top: -10px;padding: 0 25px;}
+.content-right .layui-form .layui-form-item:last-child{margin-bottom:0}
+.content-right .main{width:100%;padding:20px 30px 15px 30px;border:1px solid #DDE0E7;box-shadow:5px 5px 20px #DDE0E7;color:#666;font-size:14px;min-height:600px;}
+.content-right .btns a{padding:6px 18px;margin-right:10px; color:#1b98b8;background-color:#fff;border:1px solid #1b98b8;border-radius:5px}
+.content-right .btns a:hover{color:#fff;background-color:#1b98b8;}
+.content-right .layui-form{margin-top:5px;}
+.content-right .layui-form .layui-table a{clear:both}
+.content-right .layui-laypage .layui-laypage-curr .layui-laypage-em{background-color:#1b98b8!important}
+/*footer*/
+.footer{width:100%;height:56px;background-color:#1B98B8}
+.footer div{color:#fff;text-align:center;line-height:56px;} 
+/*媒体查询*/
+@media screen and (max-width: 1867px) {
+   .menu li a{font-size:20px;}
+   .header-right .loginbar div{font-size:14px;}
+   .header-right .loginbar div a{font-size:14px;}
+}
+@media screen and (max-width: 1600px) {
+   .menu li a{font-size:18px;}
+}
+/*全选样式修改*/
+.layui-form-checked[lay-skin=primary] i{border-color:#1b98b8!important;background-color:#1b98b8!important}
+.layui-form-checkbox[lay-skin=primary]:hover i{border-color:#1b98b8!important}
+/*提示弹出框 按钮位置*/
+.layui-layer-btn{text-align:center!important;}
+
+/*组织机构页面样式*/
+.tree-wrap {padding-top:25px;padding-left:15px}
+.company-wrap .layui-inline .layui-form-label{width:100px}
+.table-wrap .company-wrap .layui-btn-warm{margin-left:7px}
+.table-wrap .layui-form{margin-top:20px}
+.padding20{padding:0 20px}
+.mytable {width:100%}
+.mytable td{padding-top:18px}
+.mytable .btn-group{margin-top:0}
+.detail-table{margin:0}
+.big-lable{width:130px}
+.layui-elem-field{min-height:700px}  
+
+/*会员管理样式*/
+.layui-inline .layui-form-radio i:hover, .layui-inline .layui-form-radioed i {color:#1b98b8}
+.layui-input-inline .layui-form-radio i:hover, .layui-input-inline .layui-form-radioed i {color:#1b98b8}
+
+/*地区选择器显示层级样式*/
+.layui-input-inline .layui-anim-upbit {z-index:1000;max-height:200px}
+
+/*专家专业选择*/
+.pro-wrap{margin:2% 2%;min-height:300px}
+.list-item{padding:5px 15px;cursor:pointer}
+.pro-list {width:20%;display:inline-block;margin-left:1%;vertical-align:top}
+.left-wrap,.right-wrap{border:1px solid #D6D6D6;margin-left:1%;display:inline-block;min-height:300px;vertical-align:top}
+.left-wrap{width:60%}
+.right-wrap{width:37%}
+.left-wrap .selected {color:Highlight;}
+/*附件上传样式*/
+#fileList span {
+    margin-right: 10px;
+}
+#fileList a{margin-right:5px;color:#1b98b8}
+/*二级菜单图标*/
+em.icon-left img{width:28px;}
+/*列表页操作图标样式*/
+.handle-blue{color:#1b98b8;font-size:15px;}
+.handle-red{color:#f14848;font-size:15px;}
+/*弹窗 按钮组 位置*/
+.btn-group-position{width:754px!important;position:absolute;bottom:10px;}
+.layui-input-inline {width:192px}
+
+/*覆盖下拉列表插件样式*/
+ .btn-group {margin-top: 0px !important;text-align: left !important;}
+

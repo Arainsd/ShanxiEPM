@@ -1,0 +1,84 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@{
+    ViewBag.Title = "ChangePWD";
+}
+
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+</style>
+<div class="form-wrap" style="margin-top:30px">
+    <form class="layui-form " id="mainForm">
+        <div class="container">
+            <div class="layui-form-item ">
+                <input type="hidden" name="Id" id="Id" value="@ViewBag.userId" />
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label">用户名：</label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="Id" id="Id" value="@ViewBag.userId" />
+                        <input type="text" name="userName" id="userName" autocomplete="off" class="layui-input" value="@ViewBag.userName" disabled="" />
+                    </div>
+                </div>
+                <div class="layui-inline ">
+                    <label class="layui-form-label"><em class="required">*</em>旧密码：</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="oldPWD" id="oldPWD" placeholder="请输入旧密码" autocomplete="off" class="layui-input" lay-verify="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item ">
+                <div class="layui-inline col-sm-6">
+                    <label class="layui-form-label"><em class="required">*</em>新密码：</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="newPWD" id="newPWD" placeholder="请输入新密码" autocomplete="off" class="layui-input" lay-verify="required" />
+                    </div>
+                </div>
+                <div class="layui-inline ">
+                    <label class="layui-form-label"><em class="required">*</em>密码确认：</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="confirmPWD" id="confirmPWD" placeholder="请再次输入新密码" autocomplete="off" class="layui-input" lay-verify="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item row btn-save" style="margin-top:83px">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save checkright" data-module="ExpProfessional" data-right="add" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            var oldPWD = data.field.oldPWD;
+            var newPWD = data.field.newPWD;
+            var confirmPWD = data.field.confirmPWD
+            $.post("/User/ChangePasswod", { oldPWD: oldPWD, newPWD: newPWD, confirmPWD: confirmPWD }, function (data) {
+                if (data.Flag) {
+                    var layerIndex = parent.layer.alert("密码修改成功，点击确认重新登录！", { icon: 1 }, function () {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                        parent.layer.close(layerIndex);
+                        parent.window.location.href = "/Currency/LogOut";
+                    })
+                } else {
+                    layer.msg(data.Message, { icon: 2, time: 2500 });
+                }
+            });
+            return false;
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>

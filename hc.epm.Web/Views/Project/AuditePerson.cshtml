@@ -1,0 +1,258 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_ProjectCompany
+@{
+    ViewBag.Title = "AuditePerson";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<link href="~/Resource/plugins/layui-2.1.2/css/layui.css" rel="stylesheet" />
+<style>
+    .long-text {
+        margin-bottom: 10px;
+        height: 35px;
+        margin-left: 20px;
+    }
+
+        .long-text input {
+            height: 25px;
+            display: inline-block;
+            border: 1px solid #C7C7C7;
+            box-sizing: border-box;
+            padding-left: 15px;
+            width: 230px;
+        }
+
+    .button-group {
+        padding-left: 328px;
+    }
+
+        .button-group button {
+            display: inline-block;
+            font-size: 14px;
+            margin: 30px 0 20px 0;
+            height: 25px;
+            border: none;
+            border-radius: 3px;
+            background-color: #FFA000;
+            color: #FEE9D3;
+            font-weight: 500;
+            width: 88px;
+        }
+</style>
+<div class="contentData">
+    <form>
+        <div class="tab">
+            <div class="long-text Supervisor">
+                <label id="labPMTextNameNew">新总监：</label>
+                <input type="text" id="PM_New" name="PM_New" value="@Model.PM_New" disabled />&nbsp;
+                <label id="labPMTextName">原总监：</label>
+                <input type="text" id="PM" name="PM" value="@Model.PM" disabled />&nbsp;
+            </div>
+            <div class="long-text Supervisor">
+                <label id="labPMTextPhoneNew">新总监电话：</label>
+                <input type="text" id="PMPhone_New" name="PMPhone_New" value="@Model.PMPhone_New" disabled />&nbsp;
+                <label id="labPMTextPhone">原总监电话：</label>
+                <input type="text" id="PMPhone" name="PMPhone" value="@Model.PMPhone" disabled />&nbsp;
+            </div>
+            @*<div class="long-text Construction" style="display:none;">
+                    <label style="margin-left: -1px;">新本省负责人：</label>
+                    <input type="text" id="SafeMan_New" name="SafeMan_New" value="@Model.SafeMan_New" disabled />&nbsp;
+                    <label style="margin-left: 23px;">原本省负责人：</label>
+                    <input type="text" id="SafeMan" name="SafeMan" value="@Model.SafeMan" disabled />&nbsp;
+                </div>
+                <div class="long-text Construction" style="display:none;">
+                    <label style="margin-left: -29px;">新本省负责人电话：</label>
+                    <input type="text" id="SafePhone_New" name="SafePhone_New" value="@Model.SafePhone_New" disabled />&nbsp;
+                    <label style="margin-left: -4px;">原本省负责人电话：</label>
+                    <input type="text" id="SafePhone" name="SafePhone" value="@Model.SafePhone" disabled />&nbsp;
+                </div>*@
+            <div class="long-text Design">
+                <label id="labTextNameNew">新设计负责人：</label>
+                <input type="text" id="LinkMan_New" name="LinkMan_New" value="@Model.LinkMan_New" disabled />&nbsp;
+                <label id="labTextName">原设计负责人：</label>
+                <input type="text" id="LinkMan" name="LinkMan" value="@Model.LinkMan" disabled />&nbsp;
+            </div>
+            <div class="long-text Design">
+                <label id="labTextPhoneNew">新设计负责人电话：</label>
+                <input type="text" id="LinkPhone_New" name="LinkPhone_New" value="@Model.LinkPhone_New" disabled />&nbsp;
+                <label id="labTextPhone">原设计负责人电话：</label>
+                <input type="text" id="LinkPhone" name="LinkPhone" value="@Model.LinkPhone" disabled />&nbsp;
+            </div>
+            <div class="button-group btn-center">
+                <button type="button" class="AuditePass" data-state="@(ApprovalState.ApprSuccess.GetValue().ToString())">审核</button>
+                <button type="button" class="AuditeNotPass" data-state="@(ApprovalState.ApprFailure.GetValue().ToString())">驳回</button>
+                <input type="hidden" id="Id" name="Id" value="@ViewBag.Id" />
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                <input type="hidden" id="CompanyId" name="CompanyId" value="@Model.CompanyId" />
+                <input type="hidden" id="State" name="State" value="" />
+            </div>
+            <input type="hidden" id="Type" value="@Model.Type" />
+        </div>
+    </form>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+
+    $(function () {
+        var type = $("#Type").val();
+        if (type == "监理") {
+            $(".Supervisor").show();
+            $(".Design").show();
+
+            $("#labPMTextName").text("原总监：");
+            $("#labPMTextName").removeAttr("style");
+            $("#labPMTextName").attr("style", "margin-left:62px");
+
+            $("#labPMTextNameNew").text("新总监：");
+            $("#labPMTextNameNew").removeAttr("style");
+            $("#labPMTextNameNew").attr("style", "margin-left:29px");
+
+            $("#labPMTextPhone").text("原总监电话：");
+            $("#labPMTextPhone").removeAttr("style");
+            $("#labPMTextPhone").attr("style", "margin-left:36px");
+
+            $("#labPMTextPhoneNew").text("新总监电话：");
+
+            $("#labTextName").text("原现场监理：");
+            $("#labTextName").removeAttr("style");
+            $("#labTextName").attr("style", "margin-left:37px");
+
+            $("#labTextNameNew").text("新现场监理：");
+
+            $("#labTextPhone").text("原现场监理电话：");
+            $("#labTextPhone").removeAttr("style");
+            $("#labTextPhone").attr("style", "margin-left:10px");
+
+            $("#labTextPhoneNew").text("新现场监理电话：");
+            $("#labTextPhoneNew").removeAttr("style");
+            $("#labTextPhoneNew").attr("style", "margin-left:-29px");
+        } else if (type == "设计费" || type == "地勘" || type == "危废处置") {
+            $(".Design").hide();
+            $(".Supervisor").show();
+
+            $("#labPMTextName").text("原本省地区负责人：");
+            $("#labPMTextName").removeAttr("style");
+            $("#labPMTextName").attr("style", "margin-left:28px");
+
+            $("#labPMTextNameNew").text("新本省地区负责人：");
+            $("#labPMTextNameNew").removeAttr("style");
+            $("#labPMTextNameNew").attr("style", "margin-left:27px");
+
+            $("#labPMTextPhone").text("原本省地区负责人电话：");
+            $("#labPMTextPhoneNew").text("新本省地区负责人电话：");
+        } else if (type == "土建" || type == "内衬") {
+            $(".Supervisor").hide();
+            $(".Design").show();
+
+            $("#labTextName").text("原项目经理：");
+            $("#labTextName").removeAttr("style");
+            $("#labTextName").attr("style", "margin-left:35px");
+
+            $("#labTextNameNew").text("新现场负责人：");
+            $("#labTextNameNew").removeAttr("style");
+            $("#labTextNameNew").attr("style", "margin-left:14px");
+
+            $("#labTextPhone").text("原项目经理电话：");
+            $("#labTextPhone").removeAttr("style");
+            $("#labTextPhone").attr("style", "margin-left:7px");
+
+            $("#labTextPhoneNew").text("新现场负责人电话：");
+            $("#labTextPhoneNew").removeAttr("style");
+            $("#labTextPhoneNew").attr("style", "margin-left:-14px");
+        } else if (type == "安装" || type == "包装" || type == "加固" || type == "油罐清洗费") {
+            $(".Supervisor").hide();
+            $(".Design").show();
+
+            $("#labTextName").text("原本省地区负责人：");
+            $("#labTextName").removeAttr("style");
+            $("#labTextName").attr("style", "margin-left:35px");
+
+            $("#labTextNameNew").text("新现场负责人：");
+            $("#labTextNameNew").removeAttr("style");
+            $("#labTextNameNew").attr("style", "margin-left:14px");
+
+            $("#labTextPhone").text("原本省地区负责人电话：");
+            $("#labTextPhone").removeAttr("style");
+            $("#labTextPhone").attr("style", "margin-left:7px");
+
+            $("#labTextPhoneNew").text("新现场负责人电话：");
+            $("#labTextPhoneNew").removeAttr("style");
+            $("#labTextPhoneNew").attr("style", "margin-left:-14px");
+        } else //if (type == "网架" || type == "油罐" || type == "管线" || type == "发电机" || type == "液位仪" || type == "加油机" || type == "配电柜")
+        {
+            $(".Supervisor").show();
+            $(".Design").hide();
+
+            $("#labPMTextName").text("原本省地区负责人：");
+            $("#labPMTextName").removeAttr("style");
+            $("#labPMTextName").attr("style", "margin-left:47px");
+
+            $("#labPMTextNameNew").text("新本省地区负责人：");
+            $("#labPMTextNameNew").removeAttr("style");
+            $("#labPMTextNameNew").attr("style", "margin-left:28px");
+
+            $("#labPMTextPhone").text("原本省地区负责人电话：");
+            $("#labPMTextPhone").removeAttr("style");
+            $("#labPMTextPhone").attr("style", "margin-left:21px");
+
+            $("#labPMTextPhoneNew").text("新本省地区负责人电话：");
+            
+        }
+    })
+
+    $(".AuditePass").click(function () {
+        var state = $(this).data("state");
+        $("#State").val(state);
+        var search = $("form").serialize();
+        $.post("AuditePerson", search, function (data) {
+            if (data.Flag) {
+                parent.layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                    var id = $("#Id").val();
+                    var ids = parent.$(".datalist").find(".inputId");
+                    if (ids.length > 0) {
+                        for (var i = 0; i < ids.length; i++) {
+                            if (ids[i].value == id) {
+                                $(ids[i]).parent().parent().find(".PMAudite").hide();
+                                $(ids[i]).parent().parent().find(".LinkManAudite").hide();
+                            }
+                        }
+                    }
+                });
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+
+    });
+    $(".AuditeNotPass").click(function () {
+        var state = $(this).data("state");
+        $("#State").val(state);
+        var search = $("form").serialize();
+        $.post("RejectPerson", search, function (data) {
+            if (data.Flag) {
+                parent.layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                    var id = $("#Id").val();
+                    var ids = parent.$(".datalist").find(".inputId");
+                    if (ids.length > 0) {
+                        for (var i = 0; i < ids.length; i++) {
+                            if (ids[i].value == id) {
+                                $(ids[i]).parent().parent().find(".PMAudite").hide();
+                                $(ids[i]).parent().parent().find(".LinkManAudite").hide();
+                            }
+                        }
+                    }
+                });
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+    });
+</script>
+
+

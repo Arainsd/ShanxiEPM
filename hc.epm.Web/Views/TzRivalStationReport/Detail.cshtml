@@ -1,0 +1,383 @@
+﻿@using hc.epm.DataModel.Business;
+@model Epm_TzRivalStationReport
+@{
+    ViewBag.Title = "Detail";
+}
+
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 900px;
+        border-radius: 5px;
+        padding: 0 5px;
+        border: 1px solid;
+    }
+
+    .select-box {
+        height: 35px;
+        width: 240px;
+        border-radius: 5px;
+        padding: 0 5px;
+        border: 1px solid;
+    }
+
+    .bold-name {
+        font-weight: 800;
+    }
+
+    table td {
+        width: 193px;
+    }
+
+    .timer {
+        width: 706px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .timers {
+        width: 300px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .tera {
+        width: 900px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .pad-left {
+        padding-left: 38px;
+    }
+</style>
+
+<div class="contentData">
+    <form id="mainForm">
+        <div class="top-title">
+            <span class="ti">陕西省各竞争对手加油（气）站现状上报流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold-name">标题</td>
+                    <td style="text-align:left;" colspan="5">
+                        <div class="pad-left" style="width:376px;">
+                            @Model.Title
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申报人</td>
+                    <td style="text-align:left;" colspan="2">
+                        <div class="pad-left" style="width:376px;">
+                            @Model.ApplyUser
+                        </div>
+                    </td>
+                    <td class="bold-name">申报日期</td>
+                    <td style="text-align:left;" colspan="2">
+                        <div class="pad-left" style="width:376px;">
+                            @(Convert.ToDateTime(Model.ApplyDate).ToString("yyyy-MM-dd"))
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申报单位</td>
+                    <td style="text-align:left;" colspan="2">
+                        <div class="pad-left" style="width:376px;">
+                            <span style="margin-right:5px;">@Model.CompanyName</span>
+                            <span>@Model.Department</span>
+                        </div>
+                    </td>
+                    <td class="bold-name">统计截止日期</td>
+                    <td style="text-align:left;" colspan="2">
+                        <div class="pad-left" style="width:376px;">
+                            @(Convert.ToDateTime(Model.TotalEndDate).ToString("yyyy-MM-dd"))
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">地市</td>
+                    <td colspan="5" style="text-align: left;">
+                        <div class="pad-left">
+                            @Model.City
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站总数</td>
+                    <td colspan="5" style="text-align:left">
+                        <span id="OilStationSum" style="margin-left:38px;">@Model.OilStationSum</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">全省运营加油站站总数</td>
+                    <td colspan="5" style="text-align:left">
+                        <span id="OilStaNum" style="margin-left:38px;">@Model.OilStaNum</span>
+                    </td>
+                </tr>
+
+                @*全省运营加气站总数*@
+                <tr>
+                    <td class="bold-name" rowspan="2">全省运营加气站总数</td>
+                    <td class="bold-name">CNG</td>
+                    <td colspan="4" style="text-align:left">
+                        <span style="margin-left:38px;">@Model.GasStaNumCNG</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG</td>
+                    <td colspan="4" style="text-align:left">
+                        <span style="margin-left:38px;">@Model.GasStaNumLNG</span>
+                    </td>
+                </tr>
+
+                @*中石油*@
+                <tr>
+                    <td class="bold-name" rowspan="4">中石油</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZsyStaSum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZsyOilStaNum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZsyGasStaNumCNG</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZsyGasStaNumLNG</span>
+                        </div>
+                    </td>
+                </tr>
+
+                @*中石化*@
+                <tr>
+                    <td class="bold-name" rowspan="4">中石化</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZshStaSum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZshOilStaNum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZshGasStaNumCNG</span>
+                        </div>
+                    </td>                    
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ZshGasStaNumLNG</span>
+                        </div>
+                    </td>
+                </tr>
+
+                @*延长壳牌*@
+                <tr>
+                    <td class="bold-name" rowspan="4">延长壳牌</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcqpStaSum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcqpOilStaNum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcqpGasStaNumCNG</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcqpGasStaNumLNG</span>
+                        </div>
+                    </td>
+                </tr>
+
+                @*延长石油*@
+                <tr>
+                    <td class="bold-name" rowspan="4">延长石油</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcsyStaSum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcsyOilStaNum</span>
+                        </div>
+                    </td>                    
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcsyGasStaNumCNG</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.YcsyGasStaNumLNG</span>
+                        </div>
+                    </td>
+                </tr>
+
+                @*社会站*@
+                <tr>
+                    <td class="bold-name" rowspan="4">社会站</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ShzStaSum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ShzOilStaNum</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ShzGasStaNumCNG</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4" style="text-align:left">
+                        <div class="form-group">
+                            <span style="margin-left:38px;">@Model.ShzGasStaNumLNG</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">备注</td>
+                    <td colspan="5">
+                        <textarea class="tera" name="Remark" rows="2" readonly>@Model.Remark</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:left;padding:10px 20px;">
+                        <p>填表说明：</p>
+                        <p>中石油总数以具备运营条件加油站数量为准(包括改造、各种原因暂时停运等)，运营数以加管BW系统当月运营站数量为准(运营站数字准确)；</p>
+                        <p>竞争对手站以分公司掌握情况为准，其中延长石油包括延长直供站、延长交通等同延长集团合作加油站；</p>
+                        <p>有需要解释事宜，在备注中进行说明；</p>
+                        <p>截止日期请填写每个月最后一天。</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">部门负责人</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            @Model.DepLeaderName
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分管领导</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            @Model.LeaderName
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="bold-name">签字意见</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        @Html.Raw(Model.SignIdea)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>

@@ -1,0 +1,574 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TrainView
+@{
+    ViewBag.Title = "修改质量培训";
+}
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label for="PrejectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="ProjectName" name="ProjectName" value="@Model.ProjectName" readonly="readonly" autocomplete="off" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                    <input type="hidden" name="id" id="id" value="@Model.Id" />
+                </div>
+                <div class="long-text">
+                    <label for="Title"><span class="star">*</span>&nbsp;培训标题&nbsp;:</label>
+                    <input type="text" name="Title" id="Title" value="@Model.Title" autocomplete="off" />
+
+                </div>
+                <div class="intro">
+                    <div><label for="Content"><span class="star">*</span>&nbsp;培训内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" name="Content" id="Content">@Model.Content</textarea>
+                    </div>
+                </div>
+                <div class="long-text">
+                    <label for="TrainCompanyName"><span class="star">*</span>&nbsp;培训单位&nbsp;:</label>
+                    <input type="text" name="TrainCompanyName" id="TrainCompanyName" value="@Model.TrainCompanyName" autocomplete="off" readonly />
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="TrainCompanyId" id="TrainCompanyId" value="@Model.TrainCompanyId" />
+
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;培训人员&nbsp;:</label>
+                    <input type="text" name="TrainUserName" id="TrainUserName" value="@Model.TrainUserName" autocomplete="off" readonly />
+                    <i class="pic iconfont ee" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="TrainUserId" id="TrainUserId" value="@Model.TrainUserId" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;培训参与单位&nbsp;:</label>
+                    <input type="button" value="选择参与单位" style="width:100px!important" id="setCompany" />
+                    <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:120px;width:88%">
+                        <thead>
+                            <tr>
+                                <th width="50">单位编码</th>
+                                <th width="50">单位名称</th>
+                                <th width="30">单位类型</th>
+                                <th width="30">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @if (Model.TrainCompany.Count > 0)
+                            {
+                                foreach (var item in Model.TrainCompany)
+                                {
+                                    <tr>
+                                        <td>@item.CompanyCode<input type="hidden" name="id" id="companyID" value="@item.Id" /></td>
+                                        <td>@item.CompanyName</td>
+                                        <td>@(((RoleType)(Enum.Parse(typeof(RoleType), item.CompanyType))).GetText())</td>
+                                        <td><a class="delete-Three" data-val="@item.CompanyId" style="cursor:pointer;">删除</a></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="CompanyIds" id="CompanyIds" value="" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;开始时间&nbsp;:</label>
+                    <input type="text" name="StartTime" id="StartTime" onClick="WdatePicker({ el: 'StartTime' })" value="@(Model.StartTime == null ? "" : Convert.ToDateTime(Model.StartTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;结束时间&nbsp;:</label>
+                    <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime' })" value="@(Model.EndTime == null ? "" : Convert.ToDateTime(Model.EndTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <button id="btnUploadFile" style="position: relative; z-index: 1;">上传附件</button>
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow"></ul>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    @if (Model.State == (int)ConfirmState.WaitConfirm)
+                    {
+                        <button type="button" class="saveBut" data-state="@(ConfirmState.WaitConfirm.GetValue().ToString())">提交</button>
+                        <button type="button" class="saveBut" data-state="@(ConfirmState.Enabled.GetValue().ToString())">保存</button>
+                        <button type="button" class="Audit checkright" data-module="QualityTrain" data-right="Check">确认</button>
+                        <button type="button" class="Reject checkright" data-module="QualityTrain" data-right="UnCheck">驳回</button>
+
+                    }
+                    else if (Model.State == (int)ConfirmState.ConfirmFailure)
+                    {
+                        <button type="button" class="saveBut" data-state="@(ConfirmState.WaitConfirm.GetValue().ToString())">提交</button>
+                        <button type="button" class="saveBut" data-state="@(ConfirmState.Enabled.GetValue().ToString())">保存</button>
+                        <button type="button" class="Discard checkright" data-module="QualityTrain" data-right="Invalid">废弃</button>
+
+
+                    }
+                    else {
+                        <button type="button" class="saveBut" data-state="@(ConfirmState.WaitConfirm.GetValue().ToString())">提交</button>
+                        <button type="button" class="saveBut" data-state="@(ConfirmState.Enabled.GetValue().ToString())">保存</button>
+                    }
+                    <input type="hidden" name="State" id="State" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        var original = []
+        var tr = $("tbody tr")
+        for (var i = 0; i < tr.length; i++) {
+            var id = $(tr[i]).find('td').eq(3).find("a").data("val");
+            original.push(id)
+        }
+        $("#CompanyIds").val(original);
+        $(function () {
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    Title: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    Content: {
+                        required: true,
+                    },
+                    TrainCompanyName: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    TrainUserName: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    StartTime: {
+                        required: true,
+                        date: true
+                    },
+                    EndTime: {
+                        required: true,
+                        date: true
+                    }
+
+                },
+                messages: {
+                    Title: {
+                        required: "标题不能为空",
+                        maxlength: "标题长度不能大于254个字符"
+                    },
+                    Content: {
+                        required: "描述不能为空"
+                    },
+                    TrainCompanyName: {
+                        required: "培训公司名称不能为空",
+                        maxlength: "培训公司长度不能大于254个",
+                    },
+                    TrainUserName: {
+                        required: "培训人员不能为空",
+                        maxlength: "培训人员长度不能大于50个"
+                    },
+                    StartTime: {
+                        required: "培训开始时间不能为空"
+                    },
+                    EndTime: {
+                        required: "培训结束时间不能为空"
+                    }
+                }
+            });
+            //判断开始时间和结束时间
+            $("#StartTime,#EndTime").blur(function () {
+                var strStartTime = $("#StartTime").val();
+                var endTime = $("#EndTime").val();
+                var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+                var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+                if (startNum > endNum) {
+                    layer.alert("培训结束时间不能小于培训开始时间!", { icon: 2 });
+                    $("#EndTime").val("");
+                    return false;
+                }
+            });
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    if ($("tbody tr").length > 0) {
+                        var state = $(this).data("state");
+                        $("#State").val(state);
+                        var search = $("form").serialize();
+                        $.post("EditZL", search, function (data) {
+                            if (data.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/Train/IndexZL";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    } else {
+                        layer.alert("请选择培训参与单位", { icon: 2 });
+                    }
+                }
+            });
+        });
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //培训资料上传
+            var fileDataArrayFile = [];
+            var fileDataJsonFile = [];
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Train', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            fileDataArrayFile.push({
+                                GuidId: item.GuidId,
+                                Name: item.Name,
+                                Size: item.Size,
+                                FileGuid: item.FileGuid,
+                                Url: item.Url,
+                                TableColumn: item.TableColumn,
+                                ImageType: item.ImageType
+                            });
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                                odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                                odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.GuidId + '" style="cursor: pointer;"/></div>'
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+                        })
+                        fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                        $("#fileDataJsonFile").val(fileDataJsonFile);
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //附件上传
+            var uploaderFile = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: FileServerURL, // 服务端上传路径
+                max_file_size: MaxFileSize, // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: true,//	是否可以在文件浏览对话框中选择多个文件
+                multipart_params: {//附加参数
+                    app: 'epm',
+                    crop: true
+                },
+                //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "doc,docx,xls,xlsx,rar,zip,7z,gif,rmvb,mp4,avi,jpg,png,jpeg" },
+                    ],
+                    max_file_size: MaxFileSize, //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                rename: false, // 是否重命名文件
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploaderFile, files) {
+                        if (files) {
+                            files.forEach(function (item, index, arr) {
+                                var imgUrl = getFileImg(item.name);
+                                var odiv = '<li id="' + item.id + '">';
+                                odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                                odiv += '<div>' + plupload.formatSize(item.size) + '</div>';
+                                odiv += '<div class="fileComplete"><span class="fileProgress" style="cursor: pointer;">' + item.percent + '</span>%</div>';
+                                odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.id + '" style="cursor: pointer;"/></div>'
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            })
+                            uploaderFile.start();
+                        }
+                    },
+                    UploadProgress: function (uploaderFile, file) {
+                        $("#" + file.id).find(".fileProgress").html(file.percent)
+                    },
+                    FileUploaded: function (uploaderFile, file, responseObject) {
+                        var data = JSON.parse(responseObject.response);
+                        data.file.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.GuidId = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.FileSize;
+                            obj.FileGuid = item.Guid;
+                            obj.Url = item.VirtualURL;
+                            if (IsImage(item.Extension)) {
+                                obj.ImageType = getImageType(item.Name, item.Extension);
+                            }
+                            fileDataArrayFile.push(obj);
+                        })
+                        var img = '<img src="/Resource/images/default_ok.png" alt="完成" />'
+                        $("#" + file.id).find(".fileComplete").html(img);
+                        $("#" + file.id).find("a").prop("href", FileDownLoadURL + data.file[0].Guid)
+                        uploaderFile.removeFile(file);
+                    },
+                    UploadComplete: function (uploaderFile, file, responseObject) {
+                        fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                        $("#fileDataJsonFile").val(fileDataJsonFile);
+                    },
+                    Error: function (up, err) {
+                        layer.alert("错误：" + err.code + ": " + err.message);
+                    }
+                },
+            });
+            uploaderFile.init();
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArrayFile = fileDataArrayFile.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+            //项目名称
+            $("#ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj && obj.flag && obj.data) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else if (!obj.flag) {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //培训单位
+            $("#TrainCompanyName").click(function () {
+                var _this = $(this);
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择验收单位"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    skin: 'frame_button',
+                    btnAlign: 'c',
+                    content: '/Comm/SelectCustomerByNameOrType?selectType=1',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = frames['layui-layer-iframe' + index].getSelectData();
+                        if (obj.flag === false) {
+                            layer.alert(obj.msg, { icon: 2 });
+                        } else {
+                            $("#TrainCompanyName").val(obj.data[0].Name);
+                            $("#TrainCompanyId").val(obj.data[0].Id);
+                        }
+                        layer.close(index);
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //设置参与培训单位
+            var companyArray = [];
+            var valueId;
+            $("#setCompany").click(function () {
+                var projectName = $("#ProjectName").val();
+                var projectId = $("#ProjectId").val();
+                if (projectId == "" || projectName == "") {
+                    parent.layer.msg("请先选择项目", { time: 1000, icon: 2 });
+                    return false;
+                }
+
+                //layer.open({
+                //    type: 2,
+                //    title: GetLayerTitle("设置第三方单位"),
+                //    shadeClose: false, //点击遮罩关闭层
+                //    area: ['800px', '600px'],
+                //    content: '/Comm/SelectCompany2?companyType=all&selectType=2&projectId=' + projectId,
+                //    btn: ["确定", "取消"],
+                //    yes: function (index, layero) {
+                //        var iframeWin = window[layero.find('iframe')[0]['name']];
+                //        var obj = iframeWin.getSelectData();
+                //        console.log(obj)
+                //        if (obj && obj.flag && obj.data) {
+                //            var row = getRowNum($("tbody"));
+                //            for (var i = 0; i < obj.data.length; i++) {
+                //                if (companyArray.indexOf(obj.data[i].Id) == -1 && original.indexOf(obj.data[i].Id) == -1) {
+                //                    var str = "";
+                //                    str += "<tr><td>" + obj.data[i].Code + "</td>";
+                //                    str += "<td>" + obj.data[i].CompanyName + "</td>";
+                //                    str += '<td>' + obj.data[i].CompanyTypeName + "</td>";
+                //                    str += '<td><a class=\"delete-Three\" data-val="' + obj.data[i].Id + '" style="cursor:pointer;">删除</a></td></tr>';
+                //                    $("tbody").append(str);
+                //                    companyArray.push(obj.data[i].Id);
+                //                }
+                //            }
+                //            valueId = $("#CompanyIds").val().split(",");
+                //            companyArray = companyArray.concat(valueId);
+                //            $("#CompanyIds").val(companyArray);
+                //            parent.layer.close(index);//关闭窗口
+                //        } else if (!obj.flag) {
+                //            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                //            return false;
+                //        }
+                //    },
+                //    btn2: function (index, layero) {
+                //        parent.layer.close(index);//关闭窗口
+                //    },
+                //    cancel: function (index, layero) {
+                //    },
+                //});
+            });
+            $("tbody").on("click", "a.delete-Three", function () {
+                var arr = $("#CompanyIds").val().split(",")
+                var val = $(this).data("val");
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].indexOf(val) != -1) {
+                        arr.splice(i, 1)
+                    }
+                }
+                $("#CompanyIds").val(arr);
+                $(this).parent().parent().remove();
+            });
+            function getRowNum(obj) {
+                var i = 0;
+                if ($(obj).find("tr").length != 0) {
+                    var row = $(obj).find("tr:last").find("td:first").html();
+                    i = Number(row);
+                }
+                return i;
+            }
+            //培训人员
+            $("#TrainUserName").click(function () {
+                var _this = $(this);
+                var CompanyId = $("#TrainCompanyId").val();
+                if (CompanyId == "") {
+                    parent.layer.msg("请先选择排训单位", { time: 1000, icon: 2 });
+                    return false;
+                }
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择验收人员"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    skin: 'frame_button',
+                    btnAlign: 'c',
+                    content: '/Comm/SelectUserListByCompanyId?CompanyId=' + CompanyId,
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = frames['layui-layer-iframe' + index].getSelectData();
+                        if (obj.flag === false) {
+                            layer.alert(obj.msg, { icon: 2 });
+                        } else {
+                            $("#TrainUserName").val(obj.data[0].Name);
+                            $("#TrainUserId").val(obj.data[0].Id);
+                        }
+                        layer.close(index);
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+        });
+        //废弃
+        $(".Discard").click(function () {
+            var id = '@Model.Id';
+            var state = "Discarded";
+            if (id != "") {
+                parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                    $.post("UpdateState", { id: id, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Train/IndexZL";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            }
+        });
+
+        //驳回
+        $(".Reject").click(function () {
+            var id = '@Model.Id';
+            var state = "";
+            var state = "ConfirmFailure";
+            parent.layer.prompt({
+                formType: 2,
+                value: '',
+                title: '请输入驳回理由'
+            }, function (value, index, elem) {
+                $.post("UpdateState", { id: id, reason: value, state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                        window.location.href = "/Train/IndexZL";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            })
+        });
+        //确认
+        $(".Audit").click(function () {
+            var id = '@Model.Id';
+            var state = "Confirm";
+            if (id != "") {
+                parent.layer.confirm("是否确认？", { icon: 3 }, function () {
+                    $.post("UpdateState", { id: id, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("确认成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Train/IndexZL";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            }
+        });
+    </script>
+</body>
+
+
+
+

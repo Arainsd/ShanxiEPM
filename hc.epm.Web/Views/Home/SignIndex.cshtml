@@ -1,0 +1,573 @@
+﻿@using hc.epm.Common
+@using hc.epm.DataModel.Business
+@using hc.epm.ViewModel
+@using hc.Plat.Common.Global;
+@{
+    ViewBag.Title = "登录首页";
+}
+<style type="text/css">
+    .kpitxt {
+        font-size: 70px;
+        text-align: center;
+        padding-top: 20px;
+        color: #0d90eb;
+    }
+
+    .AdImg img {
+        width: 100%;
+        height: 450px;
+    }
+
+    .change {
+        position: relative;
+        width: 130px;
+        text-indent: 28px;
+        font-size: 20px;
+        font-weight: bold;
+        float: left;
+        height: 60px;
+        border-bottom: 2px solid #3ab107 !important;
+        color: #3ab107 !important;
+        line-height: 60px;
+    }
+    .contentCate {
+        height:650px;
+    }
+    .todoListright {
+      float:initial;
+      width:100%;
+      
+    }
+    .todoListright-title {
+        width:600px;
+    }
+    .todoListright-title {
+        width: 1140px;
+    }
+     .todoListright-title h3 {
+            margin:0 auto;
+        }
+        .todoListright-title .line {
+            left:547px;
+        }
+    .todoListright ul {
+        width: 100%;
+        height:200px;
+        overflow:hidden;
+    }
+        .todoListright ul .liother {
+            margin-left: 80px;
+        }
+        .todoListright ul li {
+            margin-right:196px;
+            margin-left:0;
+         }
+</style>
+@{
+    List<Epm_Approver> approverList = ViewBag.ApproverList;
+    List<Epm_SupervisorLogDetails> supervisorLogList = ViewBag.SupervisorLogList;
+    List<MessageView> msgList = ViewBag.MsgList;
+    List<Epm_Bim> bimList = ViewBag.BimList;
+    ProjectKPIView pKPI = ViewBag.kpiList;
+    var userInfo = Session[ConstStr_Session.CurrentUserEntity] as UserView;
+}
+<div class="content">
+    <!--==========轮播图==========-->
+    <div class="layui-carousel sowingMap" id="sowingMap2" style="height:450px;">
+        <div carousel-item class="AdImg"></div>
+    </div>
+    <!--==========KPI==========-->
+    <div class="contentCate">
+        <ul class="contentCate-sub" id="contentCate-subid">
+            <li class="lastEight">
+                <i class="kpitxt" style="font-size:50px; padding-top:30px;">@(pKPI == null ? 0 : pKPI.TotelNum)</i>
+                <p>今年项目总数</p>
+                <span>@(pKPI == null ? 0 : pKPI.TotelNum)</span>
+            </li>
+            <li class="lastEight">
+                <i class="kpitxt" style="font-size:50px; padding-top:30px;">@(pKPI == null ? 0 : pKPI.FinishNum)</i>
+                <p>已完工项目</p>
+                <span>@(pKPI == null ? 0 : pKPI.FinishNum)</span>
+            </li>
+            <li class="lastEight">
+                <i class="kpitxt" style="font-size:50px; padding-top:30px;">@(pKPI == null ? 0 : pKPI.ConstrunctionNum)</i>
+                <p>施工中项目</p>
+                <span>@(pKPI == null ? 0 : pKPI.ConstrunctionNum)</span>
+            </li>
+            <li class="lastEight">
+                <i class="kpitxt" style="font-size:50px; padding-top:30px;">@(pKPI == null ? 0 : pKPI.DelayNum)</i>
+                <p>已延期项目</p>
+                <span>@(pKPI == null ? 0 : pKPI.DelayNum)</span>
+            </li>
+            @*<li class="lastEight">
+                    <i class="kpitxt" style="font-size:50px; padding-top:30px;">85%</i>
+                    <p>项目资料完成率</p>
+                    <span>10%</span>
+                </li>
+                <li class="lastEight">
+                    <i class="kpitxt" style="font-size:18px; padding-top:10px;">10%以下:63<br />10%~30%:12<br />30%~50%:3<br />50%以上下:0</i>
+                    <p>项目预算误差率</p>
+                    <span>10%</span>
+                </li>
+                <li class="lastEight">
+                    <i class="kpitxt" style="font-size:50px; padding-top:30px;">85%</i>
+                    <p>项目质量合格率</p>
+                    <span>10%</span>
+                </li>*@
+            @*<li>
+                    <img src="/Resource/images/askimg_06.jpg" alt="" title="请提问" />
+                    <img src="/Resource/images/resettop.jpg" alt="" title="置顶" />
+                </li>*@
+        </ul>
+        @*</div>*@  @*KPI闭合标签*@
+        <!--==========待办+消息==========-->
+        @*<div class="todoList">*@
+        @*<div class="todoListleft message-tab">
+            <div class="todoListleft-title">
+                <h3 style="cursor:pointer;" class="change">
+                    待办列表
+                </h3>
+                <h3 style="margin-left:10px;cursor:pointer;">
+                    消息列表
+                </h3>
+                <span class="moreItemtoDo"><a href="@Html.Raw(Url.Action("MyJob", "Home"))">更多 》</a></span>
+                <span class="moreMessage" style="display:none;"><a href="@Html.Raw(Url.Action("Message", "Home"))">更多 》</a></span>
+            </div>
+            <div class="message">
+                <!--==========待办==========-->
+                <ul>
+                    @if (approverList != null && approverList.Any())
+                    {
+                        foreach (var epmApprover in approverList)
+                        {
+                            switch ((BusinessType)(Enum.Parse(typeof(BusinessType), epmApprover.BusinessTypeNo)))
+                            {
+                                case BusinessType.Model:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Bim/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Bim/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Contract:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Contract/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Contract/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Change:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Change/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Change/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Draw:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Draw/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Draw/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Visa:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Visa/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Visa/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.SecurityCheck:
+                                    if (epmApprover.Action == SystemRight.Rectif.ToString())
+                                    {
+                                        <li><p><a href="/Monitor/DetailAQ?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Monitor/UploadRectifyResult?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Dangerous:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        if (epmApprover.BusinessState == (int)ApprovalState.ApprFailure)
+                                        {
+                                            <li><p><a href="/Work/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                        }
+                                        else if (epmApprover.BusinessState == (int)ApprovalState.ApprSuccess)
+                                        {
+                                            <li><p><a href="/Work/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Work/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.DelayApply:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/DelayPlan/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/DelayPlan/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Equipment:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Material/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Material/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Track:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Materiel/Edit?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Materiel/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Plan:
+                                    if (epmApprover.Action == SystemRight.UnCheck.ToString())
+                                    {
+                                        <li><p><a href="/Project/MilestonePlan?projectId=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><p><a href="/Project/MilestonePlan?projectId=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    }
+                                    break;
+                                case BusinessType.Question:
+                                    <li><p><a href="/Question/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    break;
+                                case BusinessType.Log:
+                                    <li><p><a href="/SupervisorLog/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    break;
+                                case BusinessType.Project:
+                                    <li><p><a href="/Project/ProjectISP?projectId=@epmApprover.ProjectId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    break;
+                                case BusinessType.Completed:
+                                    <li><p><a href="/CompletionAcceptance/Detail?id=@epmApprover.BusinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                </ul>
+                <!--==========消息==========-->
+                <ul style="display:none;">
+                    @if (msgList != null && msgList.Any())
+                    {
+                        foreach (var epmApprover in msgList)
+                        {
+                            @*<li><p><a href="@epmApprover.BusinessUrl">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>*@
+
+        @*switch ((BusinessType)(Enum.Parse(typeof(BusinessType), epmApprover.BussinesType)))
+                    {
+                        case BusinessType.Model:
+                            <li><p><a href="/Bim/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Contract:
+                            <li><p><a href="/Contract/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Change:
+                            <li><p><a href="/Change/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Draw:
+                            <li><p><a href="/Draw/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Visa:
+                            <li><p><a href="/Visa/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.SecurityCheck:
+                            <li><p><a href="/Monitor/DetailAQ?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Dangerous:
+                            <li><p><a href="/Work/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.DelayApply:
+                            <li><p><a href="/DelayPlan/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Equipment:
+                            <li><p><a href="/Material/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Track:
+                            <li><p><a href="/Materiel/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Plan:
+                            <li><p><a href="/Project/MilestonePlan?projectId=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+
+                            break;
+                        case BusinessType.Question:
+                            <li><p><a href="/Question/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                            break;
+                        case BusinessType.Log:
+                            <li><p><a href="/SupervisorLog/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                            break;
+                        case BusinessType.Project:
+                            <li><p><a href="/Project/ProjectISP?projectId=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                            break;
+                        case BusinessType.Completed:
+                            <li><p><a href="/CompletionAcceptance/Detail?id=@epmApprover.BussinessId">@epmApprover.Title</a></p><span>@string.Format("{0:MM-dd}", epmApprover.SendTime)</span><span>@epmApprover.SendUserName</span></li>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                </ul>
+            </div>*@
+        @*</div>*@
+        <!--==========快速入口==========-->
+        <div class="todoListright" id="todoList">
+            <div class="todoListright-title">
+                <h3>快速入口</h3>
+                <i class="line"></i>
+            </div>
+            <ul>
+                <li class="liother">
+                    <a href="@Html.Raw(Url.Action("Index", "Project"))"><img class="interone" src="/Resource/images/inter1_06.jpg" /></a>
+                    <p>项目管理</p>
+                </li>
+                <li>
+                    <a href="@Html.Raw(Url.Action("ScheduleIndex", "ConstructionPlan"))"><img class="intertwo" src="/Resource/images/inter2_06.png" /></a>
+                    <p>进度追踪</p>
+                </li>
+                <li>
+                    <a href="@Html.Raw(Url.Action("IndexAQ", "Monitor"))"><img class="interseven" src="/Resource/images/inter7_06.jpg" /></a>
+                    <p>现场检查</p>
+                </li>
+                <li>
+                    <a href="@Html.Raw(Url.Action("Add", "Question"))"><img class="intersix" src="/Resource/images/inter6_06.jpg" /></a>
+                    <p>问题沟通</p>
+                </li>
+                @if (userInfo.CompanyType == RoleType.Supplier.ToString())
+                {
+                    <li class="liother">
+                        <a href="@Html.Raw(Url.Action("Add", "SupervisorLog"))"><img class="interthree" src="/Resource/images/inter3_06.jpg" /></a>
+                        <p>日志提报</p>
+                    </li>
+                    <li>
+                        <a href="@Html.Raw(Url.Action("Add", "Material"))"><img class="interfour" src="/Resource/images/inter4_06.jpg" /></a>
+                        <p>工具器机械验收</p>
+                    </li>
+                    <li>
+                        <a href="@Html.Raw(Url.Action("Add", "Visa"))"><img class="interfive" src="/Resource/images/inter5_06.jpg" /></a>
+                        <p>签证提报</p>
+                    </li>
+                    <li>
+                        <a href="@Html.Raw(Url.Action("Add", "Work"))"><img class="interthree" src="/Resource/images/inter3_06.jpg" /></a>
+                        <p>危险作业</p>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    @*</div>*@
+    <!--==========模型==========-->
+    @*<div class="modelShow" style="display:none">
+        <div class="selectModel">
+            <p>
+                选择模型：
+                <select>
+                    <option value="请选择">请选择</option>
+                </select>
+                <span><a href="#javascript">全屏显示</a> &nbsp;&nbsp;<a href="#javascript;"><img src="/Resource/images/screeshow_03.jpg" /></a></span>
+                <div class="modelImg">
+                    <img src="/Resource/images/modelimg.jpg" />
+                </div>
+            </p>
+        </div>
+    </div>*@
+    <!--==========模型==========-->
+    @*<div class="modelPart">
+        <div class="BIMmodel">
+            <div class="BIMmodelSub">
+                <span class="modelTitle">BIM模型</span>
+            </div>
+            <div class="layui-carousel BIMmodelSwon" id="BIMmodelSwon">
+                <div carousel-item class="mainShowPart">
+                    @if (bimList != null && bimList.Any())
+                    {
+                        int pageIndex = 0;
+                        var temp = bimList.Count % 4;
+                        if (temp > 0)
+                        {
+                            pageIndex = bimList.Count / 4 + 1;
+                        }
+                        else
+                        {
+                            pageIndex = bimList.Count / 4;
+                        }
+                        for (int i = 0; i < pageIndex; i++)
+                        {
+                            <div class="divider">
+                                <ul>
+                                    @{int skip = i * 4;
+                                        var tempList = bimList.Skip(skip).Take(4);
+                                        foreach (var item in tempList)
+                                        {
+                                            <li>
+                                                <a href="javascript:window.open('/Bim/BimModel?id=@item.SId');">
+                                                    <img src="@item.BIMImg">
+                                                </a>
+                                                <p style="padding-top:22px;">
+                                                    <span style="word-wrap:break-word; word-break:break-all;">@item.ProjectName</span>
+                                                </p>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                                            }
+                                        }
+                </div>
+            </div>
+        </div>
+    </div>*@
+</div>
+<!--js代码-->
+<script>
+    $(".message-tab h3").click(function () {
+        var _index = $(this).index();
+        $(".message-tab .message ul").eq(_index).show().siblings().hide();
+        if (_index == 0) {
+            $(".moreItemtoDo").show();
+            $(".moreMessage").hide();
+        } else {
+            $(".moreMessage").show();
+            $(".moreItemtoDo").hide();
+        }
+        $(this).addClass("change").siblings().removeClass("change");
+    });
+    //快速入口
+    $(".interone").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou1 .png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter1_06.jpg");
+        }
+    );
+    $(".intertwo").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou2.png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter2_06.png");
+        }
+    );
+    $(".interthree").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou3.png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter3_06.jpg");
+        }
+    );
+    $(".interfour").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou4.png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter4_06.jpg");
+        }
+    );
+    $(".interfive").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou5.png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter5_06.jpg");
+        }
+    );
+    $(".intersix").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou6.png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter6_06.jpg");
+        }
+    );
+    $(".interseven").hover(
+        function () {
+            $(this).attr("src", "/Resource/images/intermou7.png");
+        },
+        function () {
+            $(this).attr("src", "/Resource/images/inter7_06.jpg");
+        }
+    );
+    //获取广告
+    $.get("GetAdPutRecord?targetNum=LoginHome", function (data) {
+        if (data.Flag) {
+            var AdArry = [];
+            for (var i = 0; i < data.Data.length; i++) {
+                AdArry.push(data.Data[i].Url);
+            }
+            if (AdArry != null && AdArry.length > 0) {
+                for (var item in AdArry) {
+                    if (AdArry[item] != null) {
+                        var AdHtml = "<div><img src=" + AdArry[item] + "></div>";
+                    }
+                    $(".AdImg").append(AdHtml);
+                }
+            }
+        } else {
+            layer.alert(data.Message, { icon: 2 });
+        }
+        //轮播图
+        layui.use(['carousel', 'element'], function () {
+            var carousel = layui.carousel, element = layui.element;
+            carousel.render({
+                elem: '#sowingMap2'
+                , width: '100%' //设置容器宽度
+                , height: '450px'//设置容器高度
+                , arrow: 'always' //始终显示箭头
+            });
+            carousel.render({
+                elem: '#BIMmodelSwon'
+                , width: '100%'
+                , height: '362px'
+                , arrow: 'always'
+            });
+        });
+    });
+    function SetShowBIM(projectId) {
+        $(".modelShow").hide();
+        $(".modelPart").show();
+    }
+</script>

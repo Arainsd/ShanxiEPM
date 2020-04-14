@@ -1,0 +1,638 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model MonitorView
+@{
+    ViewBag.Title = "修改质量检查";
+}
+<style>
+    .datalist tr td {
+        padding: 2px;
+    }
+
+        .datalist tr td input[type="text"] {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+    .selectpicker {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label for="ProjectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="ProjectName" name="ProjectName" value="@Model.Monitor.ProjectName" readonly="readonly" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="projectId" id="projectId" value="@Model.Monitor.ProjectId" />
+                    <input type="hidden" name="MonitorDetails" id="MonitorDetails" value="" />
+                    <input type="hidden" name="MonitorTypeNo" id="MonitorTypeNo" value="QualityCheck" />
+                    <input type="hidden" name="MonitorTypeName" id="MonitorTypeName" value="质量检查" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.Monitor.Id" />
+                </div>
+                @*<div class="long-text Template">
+                    <label for="Title"><span class="star"></span>&nbsp;选择模板&nbsp;:</label>
+                    <input type="text" id="Template" name="Template" autocomplete="off" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    </div>*@
+                <div class="long-text">
+                    <label for="Title"><span class="star">*</span>&nbsp;检查标题&nbsp;:</label>
+                    <input type="text" id="Title" name="Title" autocomplete="off" value="@Model.Monitor.Title" />
+                </div>
+                <div class="intro">
+                    <div><label for="Content"><span class="star">*</span>&nbsp;检查说明&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Content" name="Content">@Model.Monitor.Content</textarea>
+                    </div>
+                </div>
+                <div class="contract">
+                    <div><label><span class="star">*</span>&nbsp;检查资料&nbsp;:</label></div>
+                    <table class="datalist" style="width:88%">
+                        <thead>
+                            <tr>
+                                <th width="25%">资料名称</th>
+                                <th width="25%">结果</th>
+                                <th width="25%">备注</th>
+                                <th width="10%">操作&nbsp;&nbsp;&nbsp;<a href="javascript:" class="add">添加</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.MonitorDetails != null && Model.MonitorDetails.Count > 0)
+                            {
+                                var newTime = Convert.ToDouble(DateTime.Now.ToString("HHmmssyyyy"));
+                                foreach (var item in Model.MonitorDetails)
+                                {
+                                    newTime++;
+                                    <tr>
+                                        <td><input type="text" name="Name" value="@item.Name" /></td>
+                                        @if (item.MonitorResultNo != null && item.MonitorResultNo == "0")
+                                        {
+                                            <td>
+                                                <input type="radio" name="@newTime" value="0" checked />不合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="1" />合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="2" />良好&nbsp; &nbsp; &nbsp;
+                                            </td>
+                                        }
+                                        else if (item.MonitorResultNo != null && item.MonitorResultNo == "1")
+                                        {
+                                            <td>
+                                                <input type="radio" name="@newTime" value="0" />不合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="1" checked />合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="2" />良好&nbsp; &nbsp; &nbsp;
+                                            </td>
+                                        }
+                                        else if (item.MonitorResultNo != null && item.MonitorResultNo == "2")
+                                        {
+                                            <td>
+                                                <input type="radio" name="@newTime" value="0" />不合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="1" />合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="2" checked />良好&nbsp; &nbsp; &nbsp;
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <input type="radio" name="@newTime" value="0" />不合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="1" />合格&nbsp; &nbsp; &nbsp;
+                                                <input type="radio" name="@newTime" value="2" />良好&nbsp; &nbsp; &nbsp;
+                                            </td>
+                                        }
+                                        <td><input type="text" name="Remark" value="@item.Remark" /></td>
+                                        <td><a href="javascript:" class="delete">删除</a></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;检查结果&nbsp;:</label>
+                    <select style="width:230px" name="Result">
+                        <option value="0">请选择</option>
+                        <option value="1">通过</option>
+                        <option value="2">需整改</option>
+                    </select>
+                    <input type="hidden" name="result" id="result" value="@Model.Monitor.Result" />
+                </div>
+                <div class="intro suggest" style="display:none">
+                    <div><label for="Rectification"><span class="star">*</span>&nbsp;整改建议&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Rectification" name="Rectification"></textarea>
+                    </div>
+                </div>
+                <div class="short-text suggest" style="display:none">
+                    <label><span class="star">*</span>&nbsp;要求完成时间&nbsp;:</label>
+                    <input type="text" id="Deadline" name="Deadline" onClick="WdatePicker({ el: 'Deadline' })" autocomplete="off">
+                    <i onClick="WdatePicker({ el: 'Deadline' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                @{
+                    var component = "未关联构件";
+                    var bimid = "";
+                    var strColor = "";
+                    if (Model.MonitorDetailBIM != null && Model.MonitorDetailBIM.Any())
+                    {
+                        component = "已关联构件";
+                        bimid = Model.MonitorDetailBIM.First().BIMId.ToString();
+                        strColor = "style=color:blue;";
+                    }
+                }
+                <div class="long-text">
+                    <label>&nbsp;关联BIM&nbsp;:</label>
+                    <input type="text" id="SelectBIM" name="SelectBIM" value="@component" @strColor readonly />
+                    <input type="hidden" id="bimId" value="@bimid" />
+                    <i class="pic iconfont SelectBIM_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label for="MonitorCompanyName"><span class="star">*</span>&nbsp;检查单位&nbsp;:</label>
+                    <input type="text" autocomplete="off" id="MonitorCompanyName" name="MonitorCompanyName" value="@Model.Monitor.MonitorCompanyName" />
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" autocomplete="off" id="MonitorCompanyId" name="MonitorCompanyId" />
+                </div>
+                <div class="long-text">
+                    <label for="MonitorUserName"><span class="star">*</span>&nbsp;检查人员&nbsp;:</label>
+                    <input type="text" autocomplete="off" id="MonitorUserName" name="MonitorUserName" value="@Model.Monitor.MonitorUserName" />
+                    <i class="pic iconfont ee" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" autocomplete="off" id="MonitorUserId" name="MonitorUserId" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;检查日期&nbsp;:</label>
+                    <input type="text" id="MonitorTime" name="MonitorTime" onClick="WdatePicker({ el: 'MonitorTime' })" value="@(Model.Monitor.MonitorTime == null ? "" : Convert.ToDateTime(Model.Monitor.MonitorTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'MonitorTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <button id="btnUploadFile" style="position: relative; z-index: 1;">上传附件</button>
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow"></ul>
+                    <input type="hidden" name="fileDataJson" id="fileDataJson">
+                </div>
+                <div class="button-group btn-center">
+                    <input type="hidden" name="ComponentIds" id="ComponentIds" />
+                    <button type="button" class="saveBut" data-state="@(CheckState.WaitCheck.GetValue().ToString())">保存</button>
+                    <input type="hidden" name="State" id="State" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        //检查结果
+        $("select").change(function () {
+            //检查结果
+            if ($("select option:selected").text() == "需整改") {
+                $(".saveBut").text("提交")
+                $(".suggest").show()
+            } else if ($("select option:selected").text() == "通过") {
+                $(".saveBut").text("提交")
+                $(".suggest").hide()
+            }
+            else if ($("select option:selected").text() == "请选择") {
+                $(".saveBut").text("保存")
+                $(".suggest").hide()
+            }
+        })
+        if ($(".result").val() == 0) {
+            $("select option:selected").val("请选择");
+            $(".suggest").hide();
+            $(".saveBut").text("保存")
+        } else if ($(".result").val() == 1) {
+            $("select option:selected").val("通过");
+            $(".suggest").hide();
+            $(".saveBut").text("提交")
+        } else if ($(".result").val() == 2) {
+            $("select option:selected").val("需整改");
+            $(".suggest").show();
+            $(".saveBut").text("提交")
+        }
+        //删除资料
+        $('tbody').on('click', '.delete', function () {
+            var tr = $(this).parent().parent()
+            tr.remove()
+        })
+
+        $(function () {
+            $(function () {
+                $("#mainForm").validate({
+                    errorClass: "validaterror",
+                    validClass: "validatevalid",
+                    errorElement: "span",
+                    success: function (label) {
+                        label.addClass("validatevalid").html("&nbsp;");
+                    },
+                    rules: {
+                        ProjectName: {
+                            required: true,
+                            maxlength: 254
+                        },
+                        Title: {
+                            required: true,
+                            maxlength: 254
+                        },
+                        Content: {
+                            required: true,
+                        },
+                        MonitorCompanyName: {
+                            required: true,
+                            maxlength: 254
+                        },
+                        MonitorUserName: {
+                            required: true,
+                            maxlength: 50
+                        },
+                        MonitorTime: {
+                            required: true,
+                            date: true
+                        },
+                        Rectification: {
+                            required: true,
+                        }
+
+                    },
+                    messages: {
+                        ProjectName: {
+                            required: "项目名称不能为空",
+                            maxlength: "标题长度不能大于254"
+                        },
+                        Title: {
+                            required: "标题不能为空",
+                            maxlength: "标题长度不能大于254"
+                        },
+                        Content: {
+                            required: "说明不能为空"
+                        },
+                        MonitorCompanyName: {
+                            required: "检查单位名称不能为空",
+                            maxlength: "检查单位长度不能大于254",
+                        },
+                        MonitorUserName: {
+                            required: "检查人员不能为空",
+                            maxlength: "检查人员长度不能大于50"
+                        },
+                        MonitorTime: {
+                            required: "检查时间不能为空",
+                            date: "日期格式错误"
+                        },
+                        Rectification: {
+                            required: "整改建议不能为空",
+                        }
+                    }
+                })
+            });
+        });
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    if ($("tbody tr").length > 0) {
+                        var MonitorDetails = []
+                        var IsTrue = false;
+                        $("tbody tr").each(function (index, item) {
+                            var name = $(item.children[0]).find("input").val();
+                            var radio = $(item.children[1]).find("input:radio:checked").val();
+                            if (!name) {
+                                layer.alert("资料名称不能为空", { icon: 2 });
+                                IsTrue = true;
+                                return;
+                            }
+                            if (!radio) {
+                                layer.alert("资料状态不能为空", { icon: 2 });
+                                IsTrue = true;
+                                return;
+                            }
+                            MonitorDetails.push({
+                                Name: $(item).children("td:eq(0)").children("input").val(),
+                                MonitorResultNo: $(item).children("td:eq(1)").find("input:checked").val(),
+                                Remark: $(item).children("td:eq(2)").children().val()
+                            })
+                        });
+                        if (!IsTrue) {
+                            MonitorDetails = JSON.stringify(MonitorDetails);
+                            $("#MonitorDetails").val(MonitorDetails)
+                            var state = $(this).data("state");
+                            $("#State").val(state);
+                            var search = $("form").serialize();
+                            $.post("EditZL", search, function (data) {
+                                if (data.Flag) {
+                                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                        window.location.href = "/QualityMonitor/IndexZL";
+                                    });
+                                } else {
+                                    layer.alert(data.Message, { icon: 2 });
+                                }
+                            });
+                        }
+                    } else {
+                        layer.alert("请选择检查资料", { icon: 2 });
+                    }
+                }
+            });
+
+
+            var fileDataArrayFile = [];
+            var fileDataJsonFile = [];
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Monitor', id: '@Model.Monitor.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            fileDataArrayFile.push({
+                                GuidId: item.GuidId,
+                                Name: item.Name,
+                                Size: item.Size,
+                                FileGuid: item.FileGuid,
+                                Url: item.Url,
+                                TableColumn: item.TableColumn,
+                                ImageType: item.ImageType
+                            });
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                                odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                                odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.GuidId + '" style="cursor: pointer;"/></div>'
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+
+                        })
+                        fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                        $("#fileDataJson").val(fileDataJsonFile);
+
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //附件上传
+            var uploaderFile = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: FileServerURL, // 服务端上传路径
+                max_file_size: MaxFileSize, // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: true,//	是否可以在文件浏览对话框中选择多个文件
+                multipart_params: {//附加参数
+                    app: 'epm',
+                    crop: true
+                },
+                //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "doc,docx,xls,xlsx,rar,zip,7z,gif,rmvb,mp4,avi,jpg,png,jpeg" },
+                    ],
+                    max_file_size: MaxFileSize, //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                rename: false, // 是否重命名文件
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploaderFile, files) {
+                        if (files) {
+                            files.forEach(function (item, index, arr) {
+                                var imgUrl = getFileImg(item.name);
+                                var odiv = '<li id="' + item.id + '">';
+                                odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                                odiv += '<div>' + plupload.formatSize(item.size) + '</div>';
+                                odiv += '<div class="fileComplete"><span class="fileProgress" style="cursor: pointer;">' + item.percent + '</span>%</div>';
+                                odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.id + '" style="cursor: pointer;"/></div>'
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            })
+                            uploaderFile.start();
+                        }
+                    },
+                    UploadProgress: function (uploaderFile, file) {
+                        $("#" + file.id).find(".fileProgress").html(file.percent)
+                    },
+                    FileUploaded: function (uploaderFile, file, responseObject) {
+                        var data = JSON.parse(responseObject.response);
+                        data.file.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.GuidId = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.FileSize;
+                            obj.FileGuid = item.Guid;
+                            obj.Url = item.VirtualURL;
+                            if (IsImage(item.Extension)) {
+                                obj.ImageType = getImageType(item.Name, item.Extension);
+                            }
+                            fileDataArrayFile.push(obj);
+                        })
+                        var img = '<img src="/Resource/images/default_ok.png" alt="完成" />'
+                        $("#" + file.id).find(".fileComplete").html(img);
+                        $("#" + file.id).find("a").prop("href", FileDownLoadURL + data.file[0].Guid)
+                        uploaderFile.removeFile(file);
+                    },
+                    UploadComplete: function (uploaderFile, file, responseObject) {
+                        fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                        $("#fileDataJson").val(fileDataJsonFile);
+                    },
+                    Error: function (up, err) {
+                        layer.alert("错误：" + err.code + ": " + err.message);
+
+                    }
+                },
+
+            });
+            uploaderFile.init();
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArrayFile = fileDataArrayFile.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                $("#fileDataJson").val(fileDataJsonFile);
+            });
+
+            //项目名称
+            $("#ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj && obj.flag && obj.data) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#projectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else if (!obj.flag) {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //检查单位
+            $("#MonitorCompanyName").click(function () {
+                var projectName = $("#ProjectName").val();
+                var MonitorCompanyName = $("#MonitorCompanyName").val();
+                var companyName;
+                var projectId = $("#ProjectId").val();
+                if (projectId == "" || projectName == "") {
+                    parent.layer.msg("请先选择项目", { time: 1000, icon: 2 });
+                    return false;
+                }
+
+                //layer.open({
+                //    type: 2,
+                //    title: GetLayerTitle("选择单位"),
+                //    shadeClose: false, //点击遮罩关闭层
+                //    area: ['800px', '600px'],
+                //    content: '/Comm/SelectCompany2?companyType=all&selectType=1&projectId=' + projectId,
+                //    btn: ["确定", "取消"],
+                //    yes: function (index, layero) {
+                //        var iframeWin = window[layero.find('iframe')[0]['name']];
+                //        var obj = frames['layui-layer-iframe' + index].getSelectData();
+                //        if (obj.flag === false) {
+                //            layer.alert(obj.msg, { icon: 2 });
+                //        } else {
+                //            $("#MonitorCompanyName").val(obj.data[0].CompanyName)
+                //            $("#MonitorCompanyId").val(obj.data[0].Id);
+                //            layer.close(index);
+                //        }
+                //        if (companyName != MonitorCompanyName) {
+                //            companyName = MonitorCompanyName;
+                //            $("#MonitorUserName").val("")
+                //        }
+                //    },
+                //    btn2: function (index, layero) {
+                //        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                //        parent.layer.close(index);//关闭窗口
+                //    },
+                //    cancel: function (index, layero) {
+                //    },
+                //});
+            });
+            //检查人员
+            //$("#MonitorUserName").click(function () {
+            //    var monitorCompanyId = $("#MonitorCompanyId").val();
+            //    var monitorCompanyName = $("#MonitorCompanyName").val();
+            //    if (monitorCompanyId == "" || monitorCompanyId == "") {
+            //        parent.layer.msg("请先选择检查单位", { time: 1000, icon: 2 });
+            //        return false;
+            //    }
+
+            //    parent.layer.open({
+            //        type: 2,
+            //        title: GetLayerTitle("选择用户"),
+            //        shadeClose: false, //点击遮罩关闭层
+            //        area: ['800px', '600px'],
+            //        content: '/Comm/SelectUser?selectType=1&companyIds=' + monitorCompanyId,
+            //        btn: ["确定", "取消"],
+            //        yes: function (index, layero) {
+            //            var iframeWin = window[layero.find('iframe')[0]['name']];
+            //            var obj = frames['layui-layer-iframe' + index].getSelectData();
+
+            //            if (obj.flag === false) {
+            //                layer.alert(obj.msg, { icon: 2 });
+            //            } else {
+            //                $("#MonitorUserName").val(obj.data[0].UserName);
+            //                $("#MonitorUserId").val(obj.data[0].Id);
+            //                layer.close(index);
+            //            }
+            //        },
+            //        btn2: function (index, layero) {
+            //            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            //            parent.layer.close(index);//关闭窗口
+            //        },
+            //        cancel: function (index, layero) {
+            //        },
+            //    });
+            //});
+            //添加检查资料
+            $('table').on('click', '.add', function () {
+                var newTime = new Date().getTime();
+                var tr = `
+                        <tr>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <input type="radio" name="${newTime}" value="0"/>不合格&nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="${newTime}" value="1"/>合格&nbsp; &nbsp; &nbsp;
+                                <input type="radio"  name="${newTime}" value="2"/>良好&nbsp; &nbsp; &nbsp;
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                            <td>
+                                <a href="javascript:" class ="delete">删除</a>
+                            </td>
+                        </tr>
+                        `
+                $('tbody').append(tr);
+            });
+            //BIM模型展示
+            $("#SelectBIM").click(function () {
+                var id = $("#projectId").val();
+                if (!id) {
+                    layer.alert("请先选择项目", { icon: 2 })
+                    return false
+                }
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("关联BIM模型"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['1300px', '800px'],
+                    content: '/Comm/RelationBIM?projectId=' + id,
+                    btn: ["确定", "取消"],
+                    success: function (layero, index) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                    },
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var result = iframeWin.getIds();
+                        if (result.flag) {
+                            layer.msg("操作成功", { icon: 1, time: 1000 })
+                            var data = result.data;
+                            data = JSON.stringify(data)
+                            $("#ComponentIds").val(data);
+                            $("#SelectBIM").val("已关联构件").css("color", "blue");
+                            layer.close(index)
+                        } else {
+                            layer.alert(result.msg, { icon: 2 })
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        $("#ComponentIds").val("");
+                        $("#SelectBIM").val("未关联构件").css("color", "");
+                    },
+                    cancel: function (index, layero) {
+                        $("#ComponentIds").val("");
+                        $("#SelectBIM").val("未关联构件").css("color", "");
+                    },
+                });
+            });
+        });
+    </script>
+</body>

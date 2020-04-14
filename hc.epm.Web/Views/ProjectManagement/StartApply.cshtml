@@ -1,0 +1,732 @@
+﻿
+@{
+    ViewBag.Title = "StartApply";
+}
+
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+
+<style>
+    .file-wrap {
+        height: 35px;
+        width: 300px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+       text-align:center;
+    }
+        .file-wrap:hover {
+        cursor:pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+    .timer_p {
+        position:relative;
+    }
+    .timer_c {
+    position: absolute;
+    bottom: 16px;
+    left: 136px;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>申请人信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="工程甲供物资订单审批流程-常超超-2019-09-09" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+              
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control"  placeholder="请输入联系电话" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:88%;" placeholder="请输入合同名称" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择合同" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同报审序号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="根据选择的合同名称自动加载" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">erp订单号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入erp订单号" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入到货联系人" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入到货联系电话" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入到货联系地址" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                         
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>--</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+
+                            <span class="font-black">设计规模或能力</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                              <textarea placeholder="请输入设计规模或能力" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目建设书批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入项目建设书批准文号" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">估算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入估算投资" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">可研报告批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入可研报告批准文号" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或初步设计批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入批准文号" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">批复投资或概算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入投资金额" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">资金来源</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                               <select>
+                                   <option>--</option>
+                               </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">当前计划投资情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="请输入当前计划投资情况" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期</span>
+                        </td>
+                        <td class="td-div apply_time" >
+                            @*<input type="text" class="form-control position_rel input_unit" id="ApplyTime" name="ApplyTime" onClick="WdatePicker({ el: 'ApplyTime' })" style="width:43%;">
+                            <i onClick="WdatePicker({ el: 'ApplyTime' })" class="iconfont ">&#xe7e2;</i>
+                            <input type="text" class="form-control position_rel" id="ApplyTime" name="ApplyTime" onClick="WdatePicker({ el: '' })" style="width:43%;">
+                            <i onClick="WdatePicker({ el: '' })" class="iconfont ">&#xe7e2;</i>*@
+                            <input type="text" name="" placeholder="" id="startTime" class="form-control input_unit" style="width:43%;" />-
+                            <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont">&#xe7e2;</i>
+                            <input type="text" name="" placeholder="" id="endTime" class="form-control input_unit" style="width:43%;" />
+                            <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont ">&#xe7e2;</i>
+                          
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期（天）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>--</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程项目概况及主要工程内容和主要工程量</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构及人员到位情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设总体部署（或施工组织设计）编制情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">设计单位及图纸落实情况（主要设计单位、施工图交付计划情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入施工单位" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">项目经理</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入项目经理" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（施工）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入考试成绩" />
+                            </div>
+                        </td>
+                   
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位落实及施工队伍、机具进场情况（主要施工单位、合同签订情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入监理单位" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">监理工程师</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入监理工程师" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（监理）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入考试成绩" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位、质量监督部门落实情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工前期准备情况（包括征地、拆迁、四通一平等）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">主要设备、材料订货、到货情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">环境影响、劳动安全卫生、消防等审批手续办理情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+      
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构（项目经理部或油库项目组）设立的文件、机构组成和职责分工各一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload1" name="XMGLJGWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMGLJGWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或项目初步设计批复文件复印件一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件2-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload2" name="LXPFWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LXPFWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">经审批的施工组织设计或工程建设总体部署一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件3-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload3" name="SGSJWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SGSJWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工进场人员名单及《安全教育合格证》（复印件）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload4" name="AQJYZWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="AQJYZWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">分公司与供应厂商确定的主要设备材料交付时间表一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload5" name="GYSWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GYSWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload6" name="HSEWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="HSEWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <script id="editor2" name="SignIdea" type="text/javascript" style="width:900px;margin:0 auto;"></script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Staged.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+        </div>
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+
+<script src="~/ueditor/ueditor.config.js"></script>
+<script src="~/ueditor/ueditor.all.js"></script>
+<script>
+    ////富文本编辑器实例化
+    var ue = UE.getEditor('editor1', {
+        toolbars: [[//工具条
+          'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+       'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+       'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+       'strikethrough', 'superscript', 'subscript', 'removeformat',
+       'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+       'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+       'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]],
+        initialFrameHeight: 300
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor1", {
+
+    }).ready(function () {
+        var editor = UE.getEditor("editor1");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor1').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor1").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+    ////富文本编辑器实例化
+    var ue = UE.getEditor('editor2', {
+        toolbars: [[//工具条
+          'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+       'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+       'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+       'strikethrough', 'superscript', 'subscript', 'removeformat',
+       'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+       'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+       'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]],
+        initialFrameHeight: 300
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor2", {
+
+    }).ready(function () {
+        var editor = UE.getEditor("editor2");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor2').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor2").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+    
+    //附件
+    var fileDataArray = [];
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.FilePath = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = column;
+                    fileDataArray.push(obj);
+                    if (data[i].ImageType == null) {
+                        var odiv = '<li><span>' + obj.Name + '</span><i class="layui-icon fileDel" data-val="' + obj.GuidId + '">&#x1006;</i></li>';
+                        $("#" + column).append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+    $(function () {
+        $('#btnUpload1,#btnUpload2,#btnUpload3,#btnUpload4,#btnUpload5,#btnUpload6').click(function () {
+            $("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+    });
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().remove();
+        var toremove = '';
+        var id = $(this).data("val");
+        //删除初始文件对应的值
+        fileDataArray = fileDataArray.filter(function (item, index, arr) {
+            return item.GuidId != id
+        })
+        fileDataJsonFile = JSON.stringify(fileDataArray);
+        $("#fileDataJsonFile").val(fileDataJsonFile);
+    });
+
+
+    //计划建设工期
+    $("#startTime,#endTime").blur(function () {
+        var strStartTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        if (strStartTime == "" || endTime == "") {
+            $("#TimeLimit").html(0);
+            $("#TimeLimits").val(0);
+        }
+        else {
+            var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+            var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+            if (startNum > endNum) {
+                $("#TimeLimit").html(0);
+                $("#TimeLimits").val(0);
+            }
+            else {
+                $("#TimeLimit").html(DateDiff(strStartTime, endTime) + 1);  //调用/计算两个日期天数差的函数，通用
+                $("#TimeLimits").val(DateDiff(strStartTime, endTime) + 1);
+            }
+        }
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/StartApplyLIst";
+    });
+
+
+</script>
+
+
+
+

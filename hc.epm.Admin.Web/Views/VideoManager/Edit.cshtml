@@ -1,0 +1,233 @@
+﻿@using hc.epm.DataModel.Basic;
+@model Base_VideoManage
+@{
+    ViewBag.Title = "视频监控编辑";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal " id="mainForm">
+            <div class="col-lg-12 col-sm-12" style="height:60px">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>项目名称 : </label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.ProjectName" id="ProjectName" name="ProjectName" placeholder="请选择项目" />
+                        <input type="hidden" id="ProjectId" name="Projectid" value="@Model.Projectid" />
+                        <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>URL地址：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.UrlAddress" name="UrlAddress" placeholder="请输入URL地址" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>摄像头名称：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.CameraName" name="CameraName" placeholder="请输入摄像头名称" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>施工方单位：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.Companyname" name="Companyname" placeholder="请输入施工方单位" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>施工人姓名：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.CompanyPerson" name="CompanyPerson" placeholder="请输入施工人姓名" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>设备序列号：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.DeviceSequence" name="DeviceSequence" placeholder="请输入设备序列号" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>设备验证码：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" value="@Model.VerificationCode" name="VerificationCode" placeholder="请输入设备验证码" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">设备描述：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <textarea name="DescribeInfo" placeholder="请输入设备描述" class="form-control" rows="4">@Model.DescribeInfo</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item row btn-save" style="margin-top:60px">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    window.onload = function () {
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ProjectName: {
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        },
+                        //regexp: {
+                        //    regexp: /^[a-zA-Z0-9]+$/i,
+                        //    message: "单位编号由数字和字母组成"
+                        //}
+                    }
+                },
+                UrlAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: 'URL地址不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[^\u4e00-\u9fa5]+$/,
+                            message: "URL地址不能包含中文"
+                        }
+                    }
+                },
+                CameraName: {
+                    validators: {
+                        notEmpty: {
+                            message: '摄像头名称不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '摄像头名称不能超过50字符'
+                        },
+                    }
+                },
+                Companyname: {
+                    validators: {
+                        notEmpty: {
+                            message: '施工方名称不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '施工方名称不能超过50字符'
+                        },
+                    }
+                },
+                CompanyPerson: {
+                    validators: {
+                        notEmpty: {
+                            message: '施工人姓名不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '施工人姓名不能超过50字符'
+                        }
+                    }
+                },
+                DeviceSequence: {
+                    validators: {
+                        notEmpty: {
+                            message: '设备序列号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '设备序列号不能超过50字符'
+                        },
+                        regexp: {
+                            regexp: /^[^\u4e00-\u9fa5]+$/,
+                            message: "设备序列号不能包含中文"
+                        }
+                    }
+                },
+                VerificationCode: {
+                    validators: {
+                        notEmpty: {
+                            message: '设备验证码不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '设备验证码不能超过50字符'
+                        },
+                        regexp: {
+                            regexp: /^[^\u4e00-\u9fa5]+$/,
+                            message: "设备验证码不能包含中文"
+                        }
+                    }
+                },
+
+            }
+        });
+    }
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //选择项目
+        $("#ProjectName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                area: ['850px', '800px'],
+                content: ['/VideoManager/IndexProject'],
+                end: function () {
+                    console.log($("#CompanyId").val() + "-" + $("#CompanyName").val());
+                }
+            });
+        });
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("视频监控维护成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            };
+
+            return false;
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+
+    });
+    var setProjectValue = function (names, ids) {
+        $("#ProjectName").val(names);
+        $("#ProjectId").val(ids);
+    }
+</script>

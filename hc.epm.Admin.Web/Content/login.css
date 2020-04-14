@@ -1,0 +1,32 @@
+﻿/*登录头部logo样式*/
+.header {width:100%;height:160px;}
+.header>img{width:100%;height:100%}
+
+/*登录主体*/
+.login-wrap{width:100%;height:600px;background:url(/Images/login-background.jpg) no-repeat;background-size:100% 100%;filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/Images/login-background.jpg', sizingMethod='scale');} 
+.login-box{width:330px;height:600px;background:white;background:rgba(255,255,255,.7);filter:Alpha(opacity=70);position:absolute;right:20%;color:black;padding:6% 15px 0 15px;box-sizing:border-box}
+.login-tittle{font-size:17px;color:#4195f2;margin-left:5px}
+.login-line{background:#5c6265;}
+.input-box{width:98%;height:44px;border:1px solid #869ba5;margin:0 auto;/*line-height:44px;*/padding-left:10px;margin-top:35px;vertical-align:middle}
+.input-box>.icon{font-size:28px;color:#4195f2;vertical-align:middle}
+.input-box>input{width:89.7%;height:42px;/*vertical-align:middle;*/background:rgba(255,255,255,0);line-height:42px;border:0;margin-left:10px}
+.auto-box{font-size:12px;color:#666666;margin-top:20px}
+.layui-form-checked[lay-skin=primary] i { border-color: #4195f2; background-color: #4195f2;color: #fff;vertical-align:middle}
+.layui-form-checked i, .layui-form-checked:hover i { border-color:#4195f2;}
+.auto-box>input{background:#4195f2}
+.forget-pwd{float:right;cursor:pointer}
+.login-btn {width:275px;height:44px;background:#4195f2;color:white;display:block;text-align:center;line-height:44px;border-radius:3px;margin:22px auto 30px auto;font-size:20px;cursor:pointer;outline:none;border:0}
+/*登录尾部样式*/
+.footer{width:100%;height:50px;text-align:center;line-height:50px;position:fixed;bottom:0;left:0;}
+.footer>span{font-size:12px}
+
+/*验证码区域样式*/
+.verify-box div {width:100%;height:100%}
+.verify-box {padding-left:0;margin-top:7px;}
+.nc-container .nc_scale span {height:42px;line-height:42px}
+.nc-container .nc_scale .clickCaptcha{top:42px}
+.caution {font-size:12px;color:#f14848;display:inline-block;margin-top:7px;margin-left:7px}
+/*直接用css的内阴影来覆盖输入框黄色*/
+input:-webkit-autofill { 
+-webkit-box-shadow: 0 0 0px 1000px #B3DDF0 inset; 
+} 

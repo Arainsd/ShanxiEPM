@@ -1,0 +1,97 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<PlanView>
+@{
+    ViewBag.Title = "查看施工计划";
+}
+<style>
+    table input[type="text"] {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 25px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+    }
+
+    table .pic {
+        font-size: 20px;
+    }
+
+    tbody tr td:nth-child(3) {
+        position: relative;
+    }
+
+    tbody tr td:nth-child(4) {
+        position: relative;
+    }
+
+    table .picstart {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+
+    .picend {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+</style>
+<div class="contentData">
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th style="width:100px;">序号</th>
+                    <th style="width:500px;">计划名称</th>
+                    <th style="width:250px;">开工时间</th>
+                    <th style="width:250px;">完工时间</th>
+                    <th style="width:100px;">工期(天)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.Plan.Name</td>
+                            <td>
+                                <input type="text" name="StartTime" class="StartTime" value="@(item.Plan.StartTime == null ? "" : Convert.ToDateTime(item.Plan.StartTime).ToString("yyyy-MM-dd"))" data-state="@item.State" disabled/>
+                                <i class="pic iconfont picstart" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                            </td>
+                            <td>
+                                <input type="text" name="EndTime" class="EndTime" value="@(item.Plan.EndTime == null ? "" : Convert.ToDateTime(item.Plan.EndTime).ToString("yyyy-MM-dd"))" disabled/>
+                                <i class="pic iconfont picend" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                            </td>
+                            <td>@item.Plan.BuildDays.ToString("#0")</td>
+                            <td style="display:none;">
+                                <input type="text" class="inputId" data-id="@item.Plan.SId" value="@item.Plan.SId" />
+                            </td>
+                            <td style="display:none;">
+                                <input type="text" class="inputState" value="@item.Plan.State" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="5">暂无数据</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+

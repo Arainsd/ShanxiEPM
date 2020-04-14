@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "查看工程节点";
+    Layout = null;
+}
+<link href="/Resource/jqtree/TreeGrid.css" rel="stylesheet" />
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="/Resource/jqtree/TreeGrid.js"></script>
+<style>
+    #maincontent {
+        margin: 20px 10px;
+    }
+
+    .TreeGrid tr td:nth-child(2) {
+        width: 500px;
+        text-indent: 10px;
+    }
+</style>
+<div class="contentData">
+    <div id="maincontent"></div>
+</div>
+<script>
+    var config = {
+        id: "tg1",
+        width: "100%",
+        renderTo: "maincontent",
+        headerAlign: "left",
+        headerHeight: "30",
+        dataAlign: "left",
+        indentation: "30",
+        folderOpenIcon: "/Resource/jqtree/img/folderOpen.png",
+        folderCloseIcon: "/Resource/jqtree/img/folderClose.png",
+        defaultLeafIcon: "/Resource/jqtree/img/defaultLeaf.gif",
+        hoverRowBackground: "false",
+        folderColumnIndex: "1",
+        itemClick: "itemClickEvent",
+        columns: [{ headerText: "序号", dataField: "number", headerAlign: "center", dataAlign: "center", },
+                  { headerText: "阶段名称", dataField: "name", headerAlign: "center", dataAlign: "center", },
+                  { headerText: "阶段编码", dataField: "code", headerAlign: "center", dataAlign: "center", },
+                  { headerText: "排序", dataField: "sort", headerAlign: "center", dataAlign: "center" }
+        ],
+        data: [
+            { number: '1', name: "专项验收", code: '156465', sort: '4564', children: [{ number: '2', num: "2", name: '1单元验收', code: '054524', sort: '4564' }] },
+            { number: '3', name: "专项验收", code: '04242', sort: '4564', children: [{ number: '4', num: "2", name: '1单元验收', code: '74541', sort: '4564' }] },
+            { number: '3', name: "专项验收", code: '04242', sort: '4564', children: [{ number: '4', num: "2", name: '1单元验收', code: '74541', sort: '4564' }] },
+        ]
+    };
+    //创建一个组件对象
+    var treeGrid = new TreeGrid(config);
+    treeGrid.show();
+    //弹出层高度自适应
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.iframeAuto(index);
+</script>

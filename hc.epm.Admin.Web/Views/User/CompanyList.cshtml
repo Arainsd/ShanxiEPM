@@ -1,0 +1,115 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_Company>
+@{
+    ViewBag.Title = "单位管理";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> <a href="">用户管理</a> </span> > <span>@(ViewBag.belongText)单位</span>
+    </div>
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">单位名称 : </label>
+                    <input type="hidden" name="belong" id="belong" value="@ViewBag.belong" />
+                    <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入单位名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+
+
+        </form>
+    </div>
+    <div class="main mt5">
+
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>                       
+                        <th width="6%" class="table-center">序号</th>
+                        <th width="12%" class="table-left">单位编码</th>
+                        <th class="table-left">单位名称</th>
+                        <th width="12%" class="table-left">单位电话</th>
+                        <th width="12%" class="table-left">父单位编码</th>
+                        <th width="15%" class="table-left">父单位名称</th>   
+                        <th width="10%" class="table-center">用户管理</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>                               
+                                <td class="table-center">@index</td>
+                                <td class="table-left">@item.Code</td>
+                                <td class="table-left">@item.Name</td>
+                                <td class="table-left">@item.Phone</td>
+                                <td class="table-left">@item.PreCode</td>
+                                <td class="table-left">@item.PreName</td>
+                                <td class="table-center">
+                                    <a href="/User/Index?companyId=@item.SId&belong=@ViewBag.Belong" class="text-link" target="mainFrame" data-itemid="@item.SId" title="用户管理">用户管理</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="table-center">
+                                暂无数据
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div id="page"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    if(@ViewBag.Total==0){
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        laypage.render({
+            elem: 'page',
+            count: @ViewBag.Total,
+            curr:@ViewBag.pageIndex,
+            layout: ['prev', 'page', 'next', 'skip','count', ],
+            jump:function(obj,first){
+                if (!first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/User/companyList?pageIndex=" + curr +"&" + search;
+                }
+            }
+        });
+        //表格全选
+        layui.use('form', function () {
+            var $ = layui.jquery, form = layui.form;
+
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+        });
+    })
+</script>

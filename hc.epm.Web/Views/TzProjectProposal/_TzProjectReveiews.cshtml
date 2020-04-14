@@ -1,0 +1,139 @@
+﻿<!--项目评审信息-->
+@using hc.epm.DataModel.Business;
+@model Epm_TzProjectReveiews
+@{
+    ViewBag.Title = "项目评审信息";
+}
+
+<div class="boxs">
+    @*项目评审信息*@
+    <div class="module-div">
+        <h4>负责人信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <td class="table_title">评审时间：</td>
+                    <td class="td-div">
+                        <div>@(Convert.ToDateTime(Model.ReveiewDate).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                    <td class="table_title">主持人：</td>
+                    <td class="td-div">
+                        <div>@Model.HostUser</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">评审地点：</td>
+                    <td class="td-div">
+                        <div>@Model.Address</div>
+                    </td>
+                    <td class="table_title">评审结论：</td>
+                    <td class="td-div">
+                        @*<div>@Model.ConclusionName</div>*@
+                        @if (Model.ConclusionCode == "XMPSJL1")
+                        {
+                            <div>同意</div>
+                        }
+                        @if (Model.ConclusionCode == "XMPSJL2")
+                        {
+                            <div>原则同意</div>
+                        }
+                        @if (Model.ConclusionCode == "XMPSJL3")
+                        {
+                            <div>不同意</div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title" style="width:197px;">其他信息：</td>
+                    <td class="td-div" colspan="3">
+                        <div>
+                           <span class="OtherInfo"></span>
+                            <input type="hidden" id="OtherInfo" value="@Model.OtherInfo" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title" style="width:197px;">特邀专家：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.InvitedExperts</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title" style="width:197px;">参会人员：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.Attendees</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title" style="width:197px;">项目完善内容：</td>
+                    <td class="td-div" colspan="3" style="height:100px;">
+                        <div>@Model.PerfectContent</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @*附件信息*@
+    <div class="module-div">
+        <h4>附件信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <th>序号</th>
+                    <th>附件名称</th>
+                    <th>附件类型</th>
+                    <th>操作</th>
+                </tr>
+                @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                {
+                    foreach (var item in Model.TzAttachs)
+                    {
+
+                        <tr id="${obj.GuidId}">
+                            <td><span class="font-black">@item.Sort</span></td>
+                            <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                            <td><span class="font-black">@item.TypeName</span></td>
+                            <td class="td-div" style="text-align:center">
+                                <a class="fileDel downloadFile" href="javascript:void(0)" data-id="@item.Id" data-url="@item.FilePath" data-name="@item.Name" data-typeno="@item.TypeNo" data-typename="@item.TypeName" style="color:#337ab7;">下载</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">暂无附件</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    //其他信息
+    var OtherInfoName="";
+    var OtherInfo = $("#OtherInfo").val().split(",");
+    for (var i = 0; i < OtherInfo.length; i++) {
+
+        if (OtherInfo.indexOf(OtherInfo[i]) != -1) {
+            if (OtherInfo[i] == "XMPSXX1") {
+                OtherInfoName = OtherInfoName + "项目市场必要性" + '、';
+            }
+            else if (OtherInfo[i] == "XMPSXX2") {
+                OtherInfoName = OtherInfoName + "可研销量实现性" + '、';
+            }
+            else if (OtherInfo[i] == "XMPSXX3") {
+                OtherInfoName = OtherInfoName + "经济指标可行性" + '、';
+            }
+            else if (OtherInfo[i] == "XMPSXX4") {
+                OtherInfoName = OtherInfoName + "法律风险可以规避" + '、';
+            }
+            else if (OtherInfo[i] == "XMPSXX5") {
+                OtherInfoName = OtherInfoName + "安全环保问题可以解决" + '、';
+            }
+        }
+    }
+    var str = OtherInfoName.substring(0, OtherInfoName.length - 1);
+    $(".OtherInfo").text(str);
+</script>

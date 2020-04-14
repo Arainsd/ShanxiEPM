@@ -1,0 +1,232 @@
+﻿@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@using hc.epm.ViewModel
+@model SpecialAcceptanceView
+@{
+    ViewBag.Title = "查看专项验收";
+}
+<style>
+    .datalist tr td {
+        padding: 2px;
+    }
+
+        .datalist tr td input[type="text"] {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+    .selectpicker {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<div class="contentData">
+    <div class="tab">
+        <div class="long-text">
+            <label>&nbsp;项目名称&nbsp;:</label>
+            <input type="text" id="ProjectName"  value="@Model.ProjectName" disabled/>
+            <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            <input type="hidden" disabled data-id="@Model.Id" id="Id" />
+            <input type="hidden" id="ProjectId" value="@Model.ProjectId"/>
+        </div>
+        <div class="long-text">
+            <label>&nbsp;验收标题&nbsp;:</label>
+            <input type="text" disabled value="@Model.Title" />
+        </div>
+        <div class="short-text">
+            <label>专项验收&nbsp;:</label>
+            <select disabled class="selectbg">
+                <option selected>@Model.TypeName</option>
+            </select>
+        </div>
+        <div class="intro">
+            <div><label>&nbsp;验收内容&nbsp;:</label></div>
+            <div>
+                <textarea class="sub-description" disabled>@Model.Content</textarea>
+            </div>
+        </div>
+        <div class="long-text">
+            <label>&nbsp;验收次数&nbsp;:</label>
+            <input type="text" disabled value="@Model.Num" />
+        </div>
+        <div class="long-text">
+            <label>&nbsp;验收单位&nbsp;:</label>
+            <input type="text" disabled value="@Model.RecCompanyName" />
+        </div>
+        <div class="long-text">
+            <label>&nbsp;验收人员&nbsp;:</label>
+            <input type="text" disabled value="@Model.RecUserName" />
+        </div>
+        <div class="short-text">
+            <label>&nbsp;验收时间&nbsp;:</label>
+            <input type="text" id="time-single1" value="@(Model.RecTime == null ? "" : Convert.ToDateTime(Model.RecTime).ToString("yyyy-MM-dd"))" disabled>
+        </div>
+        <div class="disable-drop short-text">
+            <label>&nbsp;状态&nbsp;:</label>
+            <select disabled>
+                <option>@(((ApprovalState)Model.State).GetText())</option>
+            </select>
+        </div>
+        <div class="contract">
+            <div><label>&nbsp;验收项目&nbsp;:</label></div>
+            <table class="datalist" style="width:88%">
+                <thead>
+                    <tr>
+                        <th width="15%">类型</th>
+                        <th width="30%">项目名称</th>
+                        <th width="25%">结果</th>
+                        <th width="30%">备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.AcceptanceDetailList.Any())
+                    {
+                        foreach (var item in Model.AcceptanceDetailList)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DropDownList("MonitorType", null, new { @class = "form-control selectpicker  show-tick" })
+                                    <input type="hidden" class="Droplist" value="@item.Type" />
+                                </td>
+                                <td>
+                                    <input type="text" value="@item.Name" disabled />
+                                </td>
+                                <td>
+                                    <input type="radio" name="@item.Id" value="0" disabled />不合格&nbsp; &nbsp; &nbsp;
+                                    <input type="radio" name="@item.Id" value="1" disabled />合格&nbsp; &nbsp; &nbsp;
+                                    <input type="radio" name="@item.Id" value="2" disabled />良好&nbsp; &nbsp; &nbsp;
+                                    <input type="hidden" class="radioBox" value="@item.Result" />
+                                </td>
+                                <td>
+                                    <input type="text" value="@item.Remark" disabled />
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="upload" style="margin-bottom:0px;">
+            <div><label>&nbsp;附件上传&nbsp;:</label></div>
+        </div>
+        <div style="width:100%;" id="fileListFile">
+            <ul class="fileShow" id="fileDetail"></ul>
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+        </div>
+        <div class="button-group btn-center">
+            @if (Model.State == int.Parse(ApprovalState.WaitAppr.GetValue().ToString()))
+            {
+                <button type="button" class="ApprSuccess checkright" data-module="SpecialAcceptance" data-right="Check">审核</button>
+                <button type="button" class="ApprFailure checkright" data-module="SpecialAcceptance" data-right="UnCheck">驳回</button>
+            }
+          
+            else if (Model.State == int.Parse(ApprovalState.ApprFailure.GetValue().ToString()))
+            {
+                <button type="button" class="Discarded checkright" data-module="SpecialAcceptance" data-right="Invalid">废弃</button>
+            }
+            <button type="button" class="Communite">沟通</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    layui.use(['layer', 'laydate', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage; laydate = layui.laydate
+        //验收项目下拉框取得默认值
+        var DroplistItem = $(".Droplist").parent();
+        DroplistItem.each(function (index,item) {
+            $(item).find(".selectpicker").val($(item).find(".Droplist").val())
+            $(item).find(".selectpicker").attr("disabled","disabled")
+        })
+        //验收项目单选按钮取得默认值
+        var radioItem = $(".radioBox").parent().find("input[type='radio']");
+        radioItem.filter(function (index, item) {
+            return $(item).val() == $(item).nextAll(".radioBox").val()
+        }).attr("checked", "checked")
+
+        var fileDataArrayFile = [];
+        var fileDataJsonFile = [];
+        //获取附件
+        $.post("/Files/GetFileList", { tableName: 'Epm_SpecialAcceptance', id: '@Model.Id' }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    data.Data.forEach(function (item, index, arr) {
+                        if (item.ImageType == null) {
+                            var odiv = '<li id="' + item.GuidId + '">';
+                            odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + substrParams(item.Name,20)+ '</a></div>';
+                            odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                            odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+                    })
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+        //上传附件
+
+        //审核
+        $(".ApprSuccess").click(function () {
+            layer.confirm("是否审核通过",{ icon:3},function(value){
+                var Id = $("#Id").data("id")
+                var State = @(int.Parse(ApprovalState.ApprSuccess.GetValue().ToString()));
+                var params = { Id , State };
+                $.post("/SpecialAcceptance/Audit",params,function(result){
+                    if(result.Flag){
+                        layer.msg("操作成功",{ time:1000,icon:1})
+                        window.location.reload()
+                        return false
+                    }
+                    layer.alert(result.Message,{icon:2})
+
+                })
+            })
+        })
+        //沟通
+        $(".Communite").click(function () {
+            var projectId = $("#ProjectId").val();
+            window.location.href = "/Question/Add?businType=Special&projectId=" + projectId+ "&BusinessId=@Model.Id";
+        })
+        //驳回
+        $(".ApprFailure").click(function () {
+
+            layer.prompt({ formType : 2 ,value:"", title:"请输入驳回的理由"},function(value, index, elem){
+                var Id = $("#Id").data("id")
+                var State = @(int.Parse(ApprovalState.ApprFailure.GetValue().ToString()));
+                var AuditRemark = value;
+                var params = { Id , State ,AuditRemark};
+                $.post("/SpecialAcceptance/Audit",params,function(result){
+                    if(result.Flag){
+                        layer.msg("操作成功",{ time:1000,icon:1})
+                        window.location.reload();
+                        return false
+                    }
+                    layer.alert(result.Message,{icon:2})
+
+                })
+            })
+        })
+        //废弃
+        $(".Discarded").click(function(){
+
+            layer.confirm("是否废弃",{icon:3},function(){
+                var id = $("#Id").data("id")
+                $.post("/SpecialAcceptance/Discard",{id},function(result){
+                    if(result.Flag){
+                        layer.msg("操作成功",{icon:1})
+                        window.location.reload();
+                        return false
+                    }
+                    layer.alert(result.Message,{icon:2})
+                })
+            })
+        })
+
+
+    })
+</script>

@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "竣工验收结果";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+      .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+            /*margin-left: 1036px;*/
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="" value="" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">验收标题 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="" value="" placeholder="请输入验收标题 ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">审批状态 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <select class="form-control">
+                                    <option value="value">全部</option>
+                                    <option value="value">暂存</option>
+                                    <option value="value">待上传</option>
+                                    <option value="value">待审批</option>
+                                    <option value="value">已审批</option>
+                                    <option value="value">已驳回</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">提出时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="submit" id="btnsel" class="col-lg-offset-11">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">项目名称</th>
+                    <th width="100">验收标题</th>
+                    <th width="100">验收内容</th>
+                    <th width="100">验收单位</th>
+                    <th width="100">验收人员</th>
+                    <th width="150">验收时间</th>
+                    <th width="150">状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>宜君服务区加油站</td>
+                    <td>123</td>
+                    <td>a31232134d</td>
+                    <td>陕西销售公司/机关职能部门</td>
+                    <td>常超超</td>
+                    <td>2019-09-20</td>
+                    <td>暂存</td>
+                    <td>
+                        <a href="/ProjectManagement/FinalAccepationEdit">编辑</a>
+                        <a href="/ProjectManagement/FinalAccepationDetail">查看</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>宜君服务区加油站</td>
+                    <td>356t456</td>
+                    <td>fdger3453</td>
+                    <td>陕西销售公司/机关职能部门</td>
+                    <td>常超超</td>
+                    <td>2019-09-20</td>
+                    <td>待上传</td>
+                    <td>
+                        <a href="/ProjectManagement/FinalAccepationAdd">结果上传</a>
+                        <a href="/ProjectManagement/FinalAccepationDetail">查看</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>宜君服务区加油站</td>
+                    <td>2354325646</td>
+                    <td>fg45t634</td>
+                    <td>陕西销售公司/机关职能部门</td>
+                    <td>常超超</td>
+                    <td>2019-09-20</td>
+                    <td>待审核</td>
+                    <td>
+                        <a href="/ProjectManagement/FinalAccepationDetail">查看</a>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+<script>
+    $("#add").click(function () {
+        window.location.href = "/ProjectManagement/FinalAccepationAdd";
+    })
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+
+                    var btnsel = $("form").serialize();
+                    window.location.href = "/ProjectApprovalRecordList/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+
+    $("body").on("click", ".Detail", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/ProjectApprovalRecordList/Detail?id=" + id;
+    });
+</script>

@@ -1,0 +1,405 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel
+@using System.Collections.Generic;
+@model List<UserListView>
+
+@{
+    ViewBag.Title = "人才库管理列表";
+    var type = @ViewBag.companyType;
+}
+
+@{
+    var name = "";
+    if (type == "SSGYS" || type == "Supplier")
+    {
+        name = "供应商管理";
+    }
+    else if (type == "SSFWS")
+    {
+        name = "服务商管理";
+    }
+    else
+    {
+        name = "承包商管理";
+    }
+}
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .form-sub {
+        margin-bottom: 25px;
+        margin-top: 25px;
+    }
+
+        .form-sub > button, .wrap-but > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969 !important;
+            color: #fff !important;
+        }
+
+    #comBack {
+        display: block !important;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+
+    .import, .download {
+        display: block !important;
+    }
+
+    .box {
+        margin-bottom: 10px;
+    }
+
+        .box a {
+            padding: 0 5px;
+            line-height: 20px;
+        }
+</style>
+<div class="contentData">
+    <div class="box" style="width: 1200px; padding: 0; margin: auto; height: 30px; background-color:#f5f5f5;"><img src="/Resource/images/ic_home.png" /> 您的位置：<a href="javascript:void(0)" target="_self" onclick="jump()">@name</a> > <a>人员管理列表</a></div>
+
+    <div class="form-select c">
+        <form action="" method="get" class="layui-form">
+            <div>
+                <div><label>用户名 : </label><input type="text" name="name" placeholder="请输入用户名" autocomplete="off" value="@ViewBag.name" /></div>
+                <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                <input type="hidden" name="companyType" id="companyType" value="@ViewBag.companyType" />
+                @*<div>
+                        <label class="lableStar">所属单位 : </label><input type="text" name="companyName" placeholder="请输入所属单位" autocomplete="off" value="@ViewBag.companyName" />
+
+                    </div>*@
+                <div>
+                    <label class="lableStar">岗位 : </label><input type="text" name="postName" placeholder="请输入岗位" autocomplete="off" value="@ViewBag.postName" />
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add" style="float:left;">新 增</button>
+                <button type="button" id="import" style="float:left;" class="import">批量导入</button>
+                <button type="button" id="download" style="float:left;" class="download">批量导出</button>
+                <button type="button" id="detail" data-right="Delete" style="float:left;">批量删除</button>
+                <button type="button" id="comBack">返 回</button>
+                <button type="submit">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <div><input type="checkbox" id="allcheck" /></div>
+                    </th>
+                    <th class="table-center">序号</th>
+                    <th class="table-center">用户名称</th>
+                    <th class="table-center">所属单位</th>
+                    <th class="table-center">电话</th>
+                    <th class="table-center">岗位</th>
+                    <th class="table-center">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.UserId" />
+                            </td>
+                            <td><input type="checkbox" value="@item.UserId" /></td>
+                            <td class="table-center">@index</td>
+                            <td>@item.UserName</td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.Phone</td>
+                            <td>@(item.Post == "请选择" ? "" : item.Post)</td>
+                            <td class="table-center">
+                                <a href="javascript:;" style="color:#0099FF;" class="editor-link" data-itemid="@item.UserId" title="编辑" data-module="UserManage" data-right="Modify">编辑</a>
+                                <a href="javascript:;" style="color:#0099FF;" class="delete-link" data-itemid="@item.UserId" title="删除" data-module="UserManage" data-right="Delete">删除</a>
+                                <a href="javascript:;" style="color:#0099FF;" class="detail-link" data-itemid="@item.UserId" title="查看" data-module="UserManage" data-right="Info">查看</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr><td colspan="7" table-center>暂无数据</td></tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<div id="convertcom" style="display:none;margin-top:50px;padding:0 120px;">
+    <div class="upwrap">
+        <div class="layui-form-item" style="height:68px;">
+            <div style="font-size:16px;float:left;">附件上传：</div>
+
+            <div style="float:left;">
+                <div class="btn-upload">
+                    <input type="button" class="btn" style="z-index: 1;width: 115px;" value="导入人员信息" id="btnUploadFile1" />
+                    <span style="color:red;margin-left:20px;cursor:pointer;" id="downtemplateFile">下载附件模板xls</span>
+                </div>
+                <div class="btn-upload" id="filewrap">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-small save" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small" />
+        </div>
+    </div>
+    <div class="fawrap" style="display:none">
+        <div class="layui-form-item" style="height:68px;">
+            <div style="float:left;">
+                <div class="btn-upload" style="text-align:center;">
+                    <p>成功<span class="su" style="color:red;"></span>&nbsp;&nbsp;条数据，失败<span class="fa" style="color:red;"></span>&nbsp;&nbsp;条数据。</p><br /><br />
+                    <p>点击查看上传结果:<span class="upfi" style="text-decoration:underline;color:blue;cursor:pointer;display:none;"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small" />
+        </div>
+    </div>
+    <!--附件上传触发-->
+    <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+
+</div>
+<script>
+
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        filepath = formFile;
+        var odiv = `
+                 <div class ="file-style"><a href="javascript:void(0)">${fileObj.name}</a></div>
+                  `
+        $("#filewrap").append(odiv)
+
+    }
+    function jump() {
+        var companyType = "@ViewBag.companyType";
+        if (companyType == "SSGYS" || companyType == "Supplier") {
+            window.location.href = "/Company/SupplierIndex";
+        } else if (companyType == "SSFWS") {
+            window.location.href = "/Company/serviceproviderindex";
+
+        } else {
+            window.location.href = "/Company/contractorindex";
+
+        }
+    }
+    //若无数据隐藏分页组件
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/User/UserList?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //导入
+        $("#import").click(function () {
+            $(".upwrap").show();
+            $(".fawrap").hide();
+            var _this = $(this);
+            layer.open({
+                type: 1,
+                title: '导入人员信息',
+                area: ['600px', '300px'],
+                content: $('#convertcom'),
+                skin: 'demo-class',
+                yes: function (index, layero) {
+
+                }
+            });
+        });
+        $("#convertcom #close").click(function () {
+            var CompanyId = "@ViewBag.CompanyId";
+            window.location.href = "/User/UserList?CompanyId=" + CompanyId;
+        });
+        var downloadpath;
+        $("#save").click(function () {
+            var loading = layer.msg('正在导入', { icon: 16, shade: 0.3, time: 0 });
+            var CompanyId = "@ViewBag.CompanyId";
+            $.ajax({
+                url: "/User/ImportUserToDB?companyId=" + CompanyId,
+                type: "POST",
+                data: filepath,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                   if (data.Flag == '0') {
+                        var failureCount = data.failureCount;
+                        var successCount = data.successCount;
+                        layer.close(loading);
+                        $("#convertcom .upwrap").hide();
+                        $("#convertcom .fawrap").show();
+                        $("#convertcom .fawrap .su").text(successCount);
+                        $("#convertcom .fawrap .fa").text(failureCount);
+                        $("#convertcom .fawrap .upfi").text(data.fileName);
+                        downName = data.fileName;
+                        downloadpath = data.download;
+                        if (failureCount > 0) {
+                            $("#convertcom .fawrap .upfi").show();
+                            window.location.href = "/Download/DownLoadHB?path=" + data.download + "&fileName=" + data.fileName;
+                        }
+                    } else {
+                        layer.msg(data.Message, { time: 2000, icon: 2 });
+                        return;
+                    }
+                }
+
+            });
+        });
+        $("#convertcom .fawrap .upfi").click(function () {
+            window.location.href = "/Download/DownLoadHB?path=" + downloadpath + "&fileName=" + downName;
+        });
+        //导出
+        $("#download").click(function () {
+            var CompanyId = "@ViewBag.CompanyId";
+            $.ajax({
+                url: "/User/ExportToExcel?CompanyId=" + CompanyId,
+                type: "POST",
+                //data: CompanyId,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    var download = layer.msg('导出成功', { icon: 1, shade: 0.3, time: 3000 });
+                    window.location.href = "/Download/DownLoadHB?path=" + data.Other + "&fileName=" + data.Data;
+                },
+                error: function (e) {
+                    alert("导出失败")
+                }
+
+            })
+        })
+    });
+    $("#cancel").click(function () {
+        var CompanyId = "@ViewBag.CompanyId";
+        window.location.href = "/User/UserList?CompanyId=" + CompanyId;
+    })
+    //下载附件模板
+    $("#downtemplateFile").click(function () {
+        window.location.href = "@(ViewBag.PathUserUrl)";
+    })
+    //全选反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $("#tbody input[type='checkbox']").prop("checked", isChecked);
+    });
+    // 单独选项控制全选
+    $("#tbody input[type='checkbox']").click(function () {
+        var allLength = $("#tbody input[type='checkbox']").length;
+        var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+
+    //删除
+    $("#detail").click(function () {
+        var hfId = "";
+        var idData = [];
+        var chkItems = $('#tbody input[type="checkbox"]:checked');
+        chkItems.each(function (index, item) {
+            hfId += $(this).val() + ',';
+            idData.push($(this).val());
+        });
+
+        if (idData.length == 0) {
+            layer.msg('请先选择要删除的数据！', { time: 1000, icon: 2 });
+            return;
+        };
+
+        if (hfId.length != 0) {
+            parent.layer.confirm('确认要删除所选择的项？', { icon: 3 }, function () {
+                $.post("Delete", { ids: hfId }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("操作成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        layer.alert(data.Message, { time: 1000, icon: 2 });
+                    }
+                }, "json");
+            });
+        }
+
+    });
+    //返回
+    $("body").on("click", "#comBack", function () {
+        var companyType = "@ViewBag.companyType";
+        if (companyType == "SSGYS") {
+            window.location.href = "/Company/SupplierIndex";
+        } else if (companyType == "SSFWS") {
+            window.location.href = "/Company/serviceproviderindex";
+
+        } else {
+            window.location.href = "/Company/contractorindex";
+
+        }
+    });
+    //查看
+    $("body").on("click", ".detail-link", function () {
+        var id = $(this).attr("data-itemid");
+        window.location.href = "/User/UserDetail?id=" + id;
+    });
+    //编辑
+    $("body").on("click", ".editor-link", function () {
+        var id = $(this).attr("data-itemid");
+        window.location.href = "/User/UpdateUser?id=" + id;
+    });
+    //增加
+    $("#add").click(function () {
+        var CompanyId = "@ViewBag.CompanyId";
+        window.location.href = "/User/AddUser?CompanyId=" + CompanyId;
+    });
+    //删除
+    var idData = [];
+    $("body").on("click", ".delete-link", function () {
+        var ids = $(this).attr("data-itemid");
+        //var ids = JSON.stringify(idData.push(id));
+        if (ids != "") {
+            parent.layer.confirm("确认要删除这条数据？", { icon: 3 }, function () {
+                $.post("Delete", { ids: ids }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("删除成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        } else {
+            parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+        }
+    });
+</script>

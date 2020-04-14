@@ -1,0 +1,258 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_TzPeopleChgApply>
+@{
+    ViewBag.Title = "建设工程项目管理人员变更申请流程列表";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 23%;
+    }
+
+    .control-label-div {
+        width: 77%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+        
+    #reply {
+        margin-right:660px;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">申请单位 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @if (!ViewBag.IsAgencyUser)
+                                {
+                                    <input type="text" class="form-control" name="companyName" value="@ViewBag.companyName" placeholder="请输入申请单位">
+                                    <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                                }
+                                else {
+                                    <input type="text" class="form-control" id="seleId" name="companyName" value="@ViewBag.companyName" placeholder="请输入申请单位">
+                                    <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" id="projectName" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">施工单位 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" id="workUnit" name="workUnit" value="@ViewBag.workUnit" placeholder="请输入施工单位">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">申请时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <button type="button" id="add">新增</button>
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;">
+            <thead>
+                <tr>
+                    <th width="55">序号</th>
+                    <th width="250">标题</th>
+                    <th width="125">申请单位</th>
+                    <th width="125">申请日期</th>
+                    <th width="200">项目名称</th>
+                    <th width="125">建设地址</th>
+                    <th width="125">施工单位</th>
+                    <th width="100">负责人</th>
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.Title</td>
+                            <td>@item.CompanyName</td>
+                            <td>@(Convert.ToDateTime(item.ApplyDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.ConstructionAddress</td>
+                            <td>@item.WorkUnit</td>
+                            <td>@item.Leader</td>
+                            <td>
+                                <a class="edit" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">编辑</a>
+                                <a class="detail" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">查看</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="16" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<script>
+    //新增
+    $("#add").on("click", function () {
+        window.location.href = "/TzPeopleChgApply/Add";
+    });
+    //查看
+    $("body").on("click", ".detail", function () {
+        var id = $(this).parents("tr").find(".inputId").data("id");
+        window.location.href = "/TzPeopleChgApply/Detail?id="+id
+    });
+    //修改
+    $("body").on("click", ".edit", function () {
+        var id = $(this).parents("tr").find(".inputId").data("id");
+        window.location.href = "/TzPeopleChgApply/Edit?id=" + id
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzPeopleChgApply/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //申请单位
+        $("#seleId").on("click", function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择建设单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#seleId").val(obj.data[0].Name);
+                        $("#companyId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+
+        })
+
+    });
+</script>

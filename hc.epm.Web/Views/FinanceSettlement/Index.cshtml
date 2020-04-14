@@ -1,0 +1,215 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_TzProjectApprovalInfo>
+
+@{
+    ViewBag.Title = "财务决算";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .form-sub {
+        overflow: hidden;
+    }
+
+        .form-sub > #reply {
+            float: left;
+        }
+
+        .form-sub > #btnsel {
+            float: right;
+        }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="name" value="@ViewBag.name" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <button type="submit" id="btnsel" class="checkright" data-module="FinanceAccount" data-right="Browse">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">项目名称</th>
+                    <th width="100">项目性质</th>
+                    <th width="100">批复金额</th>
+                    <th width="100">财务决算</th>
+                    <th width="100">提交人</th>
+                    <th width="100">时间</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.NatureName</td>
+                            <td>@item.TotalInvestment.ToString("0.00")</td>
+                            <td>@item.FinanceAccounts.ToString("0.00")</td>
+                            <td>@item.FinanceUserName</td>
+                            <td>@(item.FinanceTime == null?"": (Convert.ToDateTime(item.FinanceTime).ToString("yyyy-MM-dd")))</td>
+                            <td><a class="edit checkright" data-id="@item.Id" style="cursor:pointer;color:#0099FF;padding: 6px;" data-module="FinanceAccount" data-right="Modify">编辑</a></td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="8" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+                <tr></tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+<script>
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/FinanceSettlement/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+
+        $(".edit").click(function () {
+            var id = $(this).data("id");
+            layer.open({
+                type: 2,
+                title: "财务决算",
+                shadeClose: false, //点击遮罩关闭层
+                area: ['500px', '400px'],
+                content: '/comm/FinanceSettlementPopup?id=' + id,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj.flag) {
+                        parent.layer.close(index);//关闭窗口
+                        var data = obj.data[0];
+                        $.post("Add", data, function (res) {
+                            if (res.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/FinanceSettlement/Index";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    } else {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+</script>

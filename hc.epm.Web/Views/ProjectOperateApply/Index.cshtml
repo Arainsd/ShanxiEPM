@@ -1,0 +1,246 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_TzProjectPolit>
+@{
+    ViewBag.Title = "项目试运行申请列表";
+}
+<style>
+    .se-in {
+    border-radius:3px;
+    border:1px solid #aaa;
+    height:35px!important;
+    }
+    .ss {
+        background-color:#6a6969 !important;
+        color:#fff !important;
+    }
+</style>
+<link href="~/Resource/css/select2.css" rel="stylesheet" />
+
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label>项目名称 : </label><input type="text" name="projectName" class="se-in" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                </div>
+              
+                <div>
+                    <label>申请人 : </label> <input type="text" name="userName" class="se-in" value="@ViewBag.userName" placeholder="请输入申请人">
+                </div>
+                <div>
+                    <label>申请时间 : </label>
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" onClick="WdatePicker({ el: 'startTime' })" value="@ViewBag.startTime" placeholder="请选择申请时间">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+                <div style="margin-left:-13px;">
+                    <label>分公司名称 : </label>
+                    @Html.DropDownList("companyIds", ViewBag.CompanyName as SelectList, null, new { @class = "" })
+                </div>
+        
+            </div>
+            <div class="form-sub">
+                @*<button type="button" id="add" class="checkright ss" data-module="ProjectOperateApply" data-right="Add">申 请</button>*@
+                <button type="submit" id="btnsel" class="checkright ss" data-module="ProjectOperateApply" data-right="Browse">查 询</button>
+                <button type="button" id="reply" class="checkright ss" data-module="TzStartsApply" data-right="Check">批复</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <div><input type="checkbox" id="allcheck" /></div>
+                    </th>
+                    <th width="50">序号</th>
+                    <th width="150">项目名称</th>
+                    <th width="100">申请公司名称</th>
+                    <th width="80">申请人</th>
+                    <th width="150">申请时间</th>
+                    <th width="100">当前状态</th>
+                    <th width="100">当前审批人</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                                <input type="hidden" class="workFlowId" data-id="@item.WorkFlowId" data-sid="@item.WorkFlowId" />
+                            </td>
+                            <td>
+                                @if (item.State != null)
+                                {
+                                    <input type="checkbox" value="@item.SId" data-state="@((PreProjectApprovalState)item.State)" />
+                                }
+                                 @if (item.State == null)
+                                 {
+                                    <input type="checkbox" value="" data-state="@((PreProjectApprovalState)item.State)" />
+                                 }
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.CreateUserName</td>
+                            <td>@item.CreateTime</td>
+                            <td>
+                                @if (item.State != null)
+                                {
+                                    <span>@(((PreProjectState)item.State).GetText())</span>
+                                }
+                                else {
+                                    <span></span>
+                                }
+
+                            </td>
+                            <td>@item.OperateUserName</td>
+                            <td>
+                                @if (item.State != null)
+                                {
+                                    if (((PreProjectApprovalState)item.State).GetText() == "待提交" || ((PreProjectApprovalState)item.State).GetText() == "已驳回")
+                                     {
+                                        <a class="Edit checkright" style="cursor:pointer;color:#0000FF;" data-module="ProjectOperateApply" data-right="Modify">编辑</a>
+                                    }
+                                     
+                                }
+                       
+                                <a class="Detail checkright" style="cursor:pointer;color:#0000FF;" data-module="ProjectOperateApply" data-right="Info">查看</a>
+                                
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="9" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script src="~/Resource/scripts/select2.js"></script>
+<script>
+
+    $("body").on("click","#add",function(){
+        window.location.href="/ProjectOperateApply/AddApply";
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/ProjectOperateApply/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+
+    ////查看
+    //$(".Detail").on("click", function () {
+    //    var id = $(this).parents("tr").find($(".workFlowId")).data("id");
+    //    layer.open({
+    //        type: 2,
+    //        title: GetLayerTitle("审批详情"),
+    //        shadeClose: false, //点击遮罩关闭层
+    //        area: ['1200px', '750px'],
+    //        content: 'http://10.202.1.72:8900/workflow/request/ViewRequest.jsp?requestid=' + id,
+    //        end: function () {
+
+    //        }
+    //    });
+    //});
+
+    //全选反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $("#tbody input[type='checkbox']").prop("checked", isChecked);
+    });
+    // 单独选项控制全选
+    $("#tbody input[type='checkbox']").click(function () {
+        var allLength = $("#tbody input[type='checkbox']").length;
+        var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.open("/ProjectOperateApply/Detail?id=" + id);
+    });
+
+    //编辑
+    $(".Edit").on("click",function(){
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.open("/ProjectOperateApply/Edit?id=" + id);
+    })
+    //批复
+    $("#reply").click(function () {
+        var flag = true,
+            state = "ApprovalSuccess", //已批复状态
+            ids = "",
+            chkItems = $('#tbody input[type="checkbox"]:checked');
+
+        if (chkItems.length > 0) {
+            chkItems.each(function (index, item) {
+                if ($(this).data("state") != "WaitApproval") {
+                    layer.msg('请选择状态为待审核的项目！', { time: 3000, icon: 2 });
+                    flag = false;
+                    return false;
+                }
+                else {
+                    ids += $(this).val();
+                    ids += ",";
+                }
+            });
+
+            ids = ids.substr(0, ids.lastIndexOf(","));
+
+            if (flag) {
+                parent.layer.confirm('确认要批复所选择的项目？', { icon: 3 }, function () {
+                    $.post("UpdateState", { ids: ids, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("批复成功", { time: 2000, icon: 1 });
+                            location.reload();
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                });
+            }
+        }
+        else {
+            layer.msg('请选择要批复的项目！', { time: 3000, icon: 2 });
+        }
+
+    });
+</script>
+

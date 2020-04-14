@@ -1,0 +1,83 @@
+﻿@using hc.epm.DataModel.Basic;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@using hc.epm.ViewModel;
+@model CompanyView
+@{
+    ViewBag.Title = "单位详情";
+}
+<div class="contentData">
+    <div class="tab">
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;单位名称&nbsp;:</label><input type="text" value="@Model.Name" disabled />
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;单位类型&nbsp;:</label>
+            <select disabled class="bg">
+                <option value="">@(Model.Type.ToEnumReq<RoleType>().GetText())</option>
+            </select>
+        </div>
+        <div class="short-text">
+            <label><span class="star">*</span>&nbsp;单位层级&nbsp;:</label>
+            @if (Model.Type == "Owner" && Model.PId == 0)
+            {
+                <select class="bg" disabled>
+                    <option value="总公司">总公司</option>
+                </select>
+            }
+            else {
+                <select class="bg" disabled>
+                    <option value="分公司">分公司</option>
+                </select>
+            }
+        </div>
+        <div class="long-text">
+            @if (Model.Type == "Owner" && Model.PId == 0)
+            {
+               
+            }
+            else {
+                <label><span class="star">*</span>&nbsp;直属公司&nbsp;:</label>
+                <input type="text" value="@Model.PreName" disabled />
+            }
+           
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;单位电话&nbsp;:</label>
+            <input type="text" disabled value="@Model.Phone" />
+        </div>
+        <div class="region">
+            <label><span class="star">*</span>&nbsp;所在地区&nbsp;:</label>
+            <select class="bg" disabled style="width:500px">
+                <option selected>@Model.RegionName</option>
+            </select>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;单位地址&nbsp;:</label>
+            <input type="text" disabled value="@Model.AddressInfo" />
+        </div>
+        <div class="intro">
+            <div><label><span class="star">*</span>&nbsp;单位简介&nbsp;:</label></div>
+            <div>
+                <textarea class="sub-description" disabled>@Model.Remark</textarea>
+            </div>
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;单位联系人&nbsp;:</label>
+            <input type="text" disabled value="@Model.LinkMan" />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;联系人电话&nbsp;:</label>
+            <input type="text" disabled value="@Model.LinkPhone" />
+        </div>
+
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;Logo&nbsp;:</label>
+            <img id="logo" src="" style="width:100px;height:100px" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#logo').attr('src', FileURL + '@Model.Logo');
+</script>

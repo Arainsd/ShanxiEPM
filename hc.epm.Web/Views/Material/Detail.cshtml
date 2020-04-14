@@ -1,0 +1,255 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel
+@model MaterialView
+@{
+    ViewBag.Title = "查看工器具机械验收";
+}
+<style type="text/css">
+    .datalist tr td {
+        padding: 2px;
+    }
+
+        .datalist tr td input[type="text"] {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+    .selectpicker {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+@if (Model.Epm_Material == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+    <div class="contentData">
+        <div class="tab">
+            <div class="long-text">
+                <label>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" name="" value="@Model.Epm_Material.ProjectName" placeholder="请选择" disabled />
+                <input type="hidden" id="ProjectId" value="@Model.Epm_Material.ProjectId" />
+                <input type="hidden" data-id="@Model.Epm_Material.Id" id="Id" />
+            </div>
+            @*<div class="long-text">
+                <label>&nbsp;验收地址&nbsp;:</label>
+                <input type="text" name="" disabled value="@Model.Epm_Material.CheckAddress" />
+            </div>*@
+            <div class="short-text">
+                <label>&nbsp;验收日期&nbsp;:</label>
+                <input type="text" value="@(Model.Epm_Material.CheckTime == null ? "" : Convert.ToDateTime(Model.Epm_Material.CheckTime).ToString("yyyy-MM-dd"))" disabled>
+                <i onClick="WdatePicker({ el:'time-single1' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;验收单位&nbsp;:</label>
+                <input type="text" name="" placeholder="请选择" disabled value="@Model.Epm_Material.CheckCompanyName" />
+            </div>
+            <div class="long-text">
+                <label>&nbsp;验收人&nbsp;:</label>
+                <input type="text" name="" placeholder="请选择" disabled value="@Model.Epm_Material.CheckUserName" />
+            </div>
+            @*<div class="intro">
+                <div><label>&nbsp;验收内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" disabled>@Model.Epm_Material.CheckContent</textarea>
+                </div>
+            </div>*@
+            <div class="long-text">
+                <label>&nbsp;供应商&nbsp;:</label>
+                <input type="text" name="" value="@Model.Epm_Material.SupplierName" class="name" placeholder="请选择" disabled />
+            </div>
+            <div class="short-text" style="display:none;">
+                <label>&nbsp;是否合格&nbsp;:</label>
+                <input type="hidden" class="IsQualified" name="IsQualified" value="@Model.Epm_Material.IsQualified" />
+                <select id="IsQualified" name="IsQualified" disabled style="background-color:#EBEBE4">
+                    @if (Model.Epm_Material.IsQualified == true)
+                {
+                        <option value="true" selected>是</option>
+                        <option value="false">否</option>
+                    }
+                    else if (Model.Epm_Material.IsQualified == false)
+                    {
+                        <option value="true">是</option>
+                        <option value="false" selected>否</option>
+                    }
+                </select>
+            </div>
+            <div class="contract">
+                <div><label>&nbsp;工器具机械&nbsp;:</label></div>
+                <table class="datalist" style="width:80%;">
+                    <thead>
+                        <tr>
+                            <th width="20%">名称</th>
+                            <th width="10%">型号</th>
+                            <th width="15%">数量</th>
+                            <th width="10%">单位</th>
+                            <th width="25%">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.MaterialDetails.Any())
+                        {
+                            foreach (var item in Model.MaterialDetails)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="text" value="@item.Name" disabled />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.Model" disabled />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.Qty" disabled />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.Unit" disabled />
+                                        <input type="hidden" class="DroplistId" value="@item.CrtCompanyId" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@item.Remark" disabled />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="upload" style="margin-bottom:0px;">
+                <div><label>&nbsp;附件上传&nbsp;:</label></div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow" id="fileDetail"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>*@
+            <div class="button-group btn-center">
+                @if (Model.Epm_Material.State == int.Parse(ConfirmState.WaitConfirm.GetValue().ToString()))
+                {
+                    <button type="button" class="ApprSuccess checkright" data-module="Material" data-right="Check">确认</button>
+                    <button type="button" class="ApprFailure checkright" data-module="Material" data-right="UnCheck">驳回</button>
+                }
+                else if (Model.Epm_Material.State == int.Parse(ConfirmState.ConfirmFailure.GetValue().ToString()))
+                {
+                    @*<button type="button" class="Discarded checkright" data-module="Material" data-right="Invalid">废弃</button>*@
+                }
+                <button type="button" class="Communite">沟通</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        layui.use(['layer', 'laydate', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage; laydate = layui.laydate;
+
+            //验收项目下拉框取得默认值
+            var DroplistItemNo = $(".DroplistNo").parent();
+            DroplistItemNo.each(function (index, item) {
+                $(item).find(".type").val($(item).find(".DroplistNo").val())
+                $(item).find(".type").attr("disabled", "disabled")
+            })
+            var DroplistItemId = $(".DroplistId").parent();
+            DroplistItemId.each(function (index, item) {
+                $(item).find(".company").val($(item).find(".DroplistId").val())
+                $(item).find(".company").attr("disabled", "disabled")
+            })
+
+
+            @*//获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Material', id: '@Model.Epm_Material.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + item.Size + '</div>';
+                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span class="fileComplete" style="margin-left:20px;"></span>';
+                                odiv += '<input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '">';
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+                        })
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //下载附件
+            $("body").on("click", ".downloadFile", function () {
+                var group = $(this).parent().find(".hiddenArea").data("group");
+                var path = $(this).parent().find(".hiddenArea").data("url");
+                var fileName = $(this).parent().find(".hiddenArea").data("filename");
+                window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+            });*@
+            //审核
+            $(".ApprSuccess").click(function () {
+                layer.confirm("是否审核通过", { icon: 3 }, function (value) {
+                    var Id = $("#Id").data("id");
+                    $.post("/Material/Audit?id=" + Id, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 });
+                            location.href = "/Material/Index";
+                            return false;
+                        }
+                        layer.alert(result.Message, { icon: 2 });
+                    });
+                });
+            });
+            //沟通
+            $(".Communite").click(function () {
+                var projectId = $("#ProjectId").val();
+                window.location.href = "/Question/Add?businType=Equipment&projectId=" + projectId + "&BusinessId=" + $("#Id").data("id");
+            });
+            //驳回
+            $(".ApprFailure").click(function () {
+                var Id = $("#Id").data("id");
+                parent.layer.prompt({
+                    formType: 2,
+                    title: '请输入驳回理由',
+                    yes: function (index, layero) {
+                        // 获取文本框输入的值
+                        var value = layero.find(".layui-layer-input").val();
+                        if (value) {
+                            $.post("/Material/Reject?id=" + Id, function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                    location.href = "/Material/Index";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        } else {
+                            parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                        }
+                    }
+                });
+            });
+
+            //废弃
+            $(".Discarded").click(function () {
+                layer.confirm("确定废弃？", { icon: 3 }, function () {
+                    var id = $("#Id").data("id");
+                    $.post("/Material/Discard?id=" + id, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { icon: 1 })
+                            window.location.reload();
+                            return false
+                        }
+                        layer.alert(result.Message, { icon: 2 })
+                    });
+                });
+            });
+        });
+    </script>
+}

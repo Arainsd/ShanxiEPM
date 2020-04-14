@@ -1,0 +1,915 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model Epm_ReformRecord
+
+@{
+    ViewBag.Title = "库站改造编辑";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #666666;
+        color: #fff;
+    }
+
+    .fy_jine {
+        display: none;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>项目名称：</span>
+                        </td>
+                        <td colspan="3">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="ProjectName" name="ProjectName" value="@Model.ProjectName" />
+                                <input type="hidden" name="ProjectId" value="@Model.Id" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>库站名称：</span>
+                        </td>
+                        <td colspan="3">
+                            <div class="form-group">
+                                <input class="form-control input_unit" type="text" id="StationName" name="StationName" value="@Model.StationName" readonly />
+                                <input class="btn-pro" type="button" id="StationClick" value="选择库站" />
+                                <input type="hidden" id="StationId" name="StationId" value="@Model.StationName" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>地市公司：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" id="CompanyName" name="CompanyName" class="form-control" readonly value="@ViewBag.CompanyName" />
+                                <input type="hidden" id="CompanyId" name="CompanyId" value="@ViewBag.CompanyId" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>改造类型：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("RemarkType", ViewBag.StationReformType as SelectList, null, new { @class = "form-control" })
+                                <input type="hidden" id="RemarkTypeName" name="RemarkTypeName" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>限上/限下：</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.LimitType == "1")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" value="1" checked />限上
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" value="2" />限下
+                                </label>
+                            }
+                            else if (Model.LimitType == "2")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" value="1" />限上
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" value="2" checked />限下
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" value="1" checked />限上
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" value="2" />限下
+                                </label>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span>资金来源：</span>
+                        </td>
+                        <td class="apply_time td-div">
+                            <div class="form-group">
+                                @if (Model.SourceFund == "ZIJLY1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY1" checked />投资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY2" />费用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY3" />两者兼有
+                                    </label>
+                                }
+                                else if (Model.SourceFund == "ZIJLY2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY1" />投资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY2" checked />费用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY3" />两者兼有
+                                    </label>
+                                }
+                                else if (Model.SourceFund == "ZIJLY3")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY1" />投资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY2" />费用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY3" checked />两者兼有
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY1" checked />投资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY2" />费用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="SourceFund" value="ZIJLY3" />两者兼有
+                                    </label>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title tz_jine">
+                            <span>投资金额：</span>
+                        </td>
+                        <td class="td-div tz_jine">
+                            <div class="form-group">
+                                <input type="text" name="Investment" class="form-control input_unit" value="@Model.Investment.ToString("0.00")" placeholder="请输入投资金额" /><span>万元</span>
+                            </div>
+                        </td>
+                        <td class="table_title fy_jine">
+                            <span>费用金额：</span>
+                        </td>
+                        <td class="td-div fy_jine">
+                            <div class="form-group">
+                                <input type="text" name="CostAmount" class="form-control input_unit" value="@Model.CostAmount.ToString("0.00")" placeholder="请输入费用金额" /><span>万元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>立项批复文号：</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="ItemNumber" class="form-control" value="@Model.ItemNumber" placeholder="请输入立项批复文号" />
+                        </td>
+                        <td class="table_title">立项批复时间：</td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="ItemTime" name="ItemTime" onClick="WdatePicker({ el: 'ItemTime', onpicked: function () { } })" value="@(Convert.ToDateTime(Model.ItemTime).ToString("yyyy-MM-dd"))" placeholder="年/月/日" />
+                                <i onClick="WdatePicker({ el: 'ItemTime' })" style="position:absolute;top:15px;right:15px" class="iconfont ">&#xe7e2;</i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>立项批复单位：</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="ItemUnit" class="form-control" value="@Model.ItemUnit" placeholder="请输入立项批复单位" />
+                        </td>
+                        <td class="table_title">
+                            <span>立项批复金额：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="ItemMoney" class="form-control input_unit" value="@Model.ItemMoney.ToString("0.00")" placeholder="请输入立项批复金额" /><span>万元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>初设批复文号：</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="InitialNumber" class="form-control" value="@Model.InitialNumber" placeholder="请输入初设批复文号" />
+                        </td>
+                        <td class="table_title">初设批复金额：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="InitialMoney" class="form-control input_unit" value="@Model.InitialMoney.ToString("0.00")" placeholder="请输入初设批复金额" /><span>万元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>改造起始时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="RemarkStartTime" name="RemarkStartTime" onClick="WdatePicker({ el: 'RemarkStartTime', onpicked: function () { } })" value="@(Convert.ToDateTime(Model.RemarkStartTime).ToString("yyyy-MM-dd"))" placeholder="年/月/日" />
+                                <i onClick="WdatePicker({ el: 'RemarkStartTime' })" style="position:absolute;top:15px;right:15px" class="iconfont ">&#xe7e2;</i>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>改造终止时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="RemarkEndTime" name="RemarkEndTime" onClick="WdatePicker({ el: 'RemarkEndTime', onpicked: function () { } })" value="@(Convert.ToDateTime(Model.RemarkEndTime).ToString("yyyy-MM-dd"))" placeholder="年/月/日" />
+                                <i onClick="WdatePicker({ el: 'RemarkEndTime' })" style="position:absolute;top:15px;right:15px" class="iconfont ">&#xe7e2;</i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>改造金额：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="RemarkMoney" class="form-control input_unit" value="@Model.RemarkMoney.ToString("0.00")" placeholder="请输入改造金额" /><span>万元</span>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>加管编码：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="PipetteCoding" class="form-control" value="@Model.PipetteCoding" placeholder="请输入加管编码" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">决策人：</td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="DecisionMaker" name="DecisionMaker" placeholder="请选择决策人" value="@Model.DecisionMaker" style="display:inline-block;width:65%" readonly />
+                                <input type="button" id="ProjectLeader" class="btn form-control" style="position: relative; z-index: 1;width: 26%;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择人员" />
+                                <input class="form-control" type="hidden" id="DecisionMakerId" name="DecisionMakerId" value="@Model.DecisionMakerId" />
+                            </div>
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf">需要选择主要决策人</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">负责人：</td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="LeaderPerson" name="LeaderPerson" placeholder="请选择负责人" value="@Model.LeaderPerson" style="display:inline-block;width:65%" readonly />
+                                <input type="button" id="ProjectDecisioner" class="btn form-control" style="position: relative; z-index: 1;width: 26%;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择人员" />
+                                <input class="form-control" type="hidden" id="LeaderPersonId" name="LeaderPersonId" value="@Model.LeaderPersonId" />
+                            </div>
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf">需要选择主要负责人</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">运营人：</td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="Operator" name="Operator" placeholder="请选择运营人" value="@Model.Operator" style="display:inline-block;width:65%" readonly />
+                                <input type="button" id="Writer" class="btn form-control" style="position: relative; z-index: 1;width: 26%;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择人员" />
+                                <input class="form-control" type="hidden" id="OperatorId" name="OperatorId" value="@Model.OperatorId" />
+                            </div>
+                        </td>
+                        <td class="td-div">
+                            <div class="color_red text_lf"> 需要选择主要运营人</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>改造效果</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span>原成品油销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="InitialSalesOfRefinedOil" class="form-control input_unit" value="@Model.InitialSalesOfRefinedOil.ToString("0.00")" placeholder="请输入原成品油销量" /><span>吨/日</span>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>改造后成品油销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="RemarkSalesOfRefinedOil" class="form-control input_unit" value="@Model.RemarkSalesOfRefinedOil.ToString("0.00")" placeholder="请输入改造后成品油销量" /><span>吨/日</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>原气销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="InitialSalesOfGas" class="form-control input_unit" value="@Model.InitialSalesOfGas.ToString("0.00")" placeholder="请输入原气销量" /><span>千方/日</span>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>改造后气销量：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="RemarkSalesOfGas" class="form-control input_unit" value="@Model.RemarkSalesOfGas.ToString("0.00")" placeholder="请输入改造后气销量" /><span>千方/日</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>内部收益率：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="IRR" class="form-control input_unit" value="@Model.IRR.ToString("0.00")" placeholder="请输入估计气日销量(CNG)金额" /><span>%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>工程内容：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" style="resize:none;" name="ProjectContent">@Model.ProjectContent</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>备注：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" style="resize:none;" name="Remark">@Model.Remark</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        @*附件上传改造 start ---- *@
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:300px;">附件类型</td>
+                        <td class="td-div" style="width: 570px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.StationReformFileType as SelectList, null, new { @class = "form-control" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title text_lf" colspan="3">
+                            <div class="btn-upload" style="display:inline-block">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                        </td>
+                        @*<td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>*@
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">附件归属</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzAttachs)
+                        {
+                            <tr id="${obj.GuidId}">
+                                <td><span class='sort'>@item.Sort</span></td>
+                                <td class="text_lf"><span>@item.Name</span></td>
+                                <td><span>@item.TypeName</span></td>
+                                <td>
+                                    @if (item.Uploadtype == 1)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                        </label>
+                                    }
+                                    else if (item.Uploadtype == 2)
+                                    {
+                                        if (item.FilesSize < 6291456)
+                                        {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                            </label>
+
+                                        }
+                                        else {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                            </label>
+                                        }
+                                    }
+                                </td>
+                                <td style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*附件上传改造 end ---- *@
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            <input type="hidden" name="State" id="State" />
+        </div>
+    </form>
+</div>
+
+<script>
+
+    //返回
+    $("#close").click(function () {
+        window.location.href = "/TzStationRemould/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    //附件上传改造 start ----
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                     </label>
+                                    `
+                        var html2 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                     </label>
+                                   `
+                        var html = (fileObj.size > 6291456) ? html1 : html2;
+
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span class ='sort'> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td>${html}</td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typeno="${obj.TypeNo}" data-typename="${obj.TypeName}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    var ZIJLYval = $('input:radio[name="SourceFund"]:checked').val();
+    RadioChange(ZIJLYval);
+    function RadioChange(ZIJLYval) {
+        if (ZIJLYval == "ZIJLY1") {
+            $(".tz_jine").show();
+            $(".fy_jine").hide();
+        }
+        else if (ZIJLYval == "ZIJLY2") {
+            $(".tz_jine").hide();
+            $(".fy_jine").show();
+        }
+        else if (ZIJLYval == "ZIJLY3") {
+            $(".tz_jine").show();
+            $(".fy_jine").show();
+        }
+    }
+    $("input[name='SourceFund']").change(function () {
+        ZIJLYval = $('input:radio[name="SourceFund"]:checked').val();
+        RadioChange(ZIJLYval);
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择库站
+        $("#StationClick").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择库站"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectOilStation',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#StationName").val(obj.data[0].Name);
+                        $("#StationId").val(obj.data[0].Id);
+                        $('#mainForm').data('bootstrapValidator').updateStatus('StationName', 'NOT_VALIDATED', null).validateField('StationName')
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //决策人
+        $("#ProjectLeader").click(function () {
+            var unitid = $("#CityPro").data("unitid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择决策人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#DecisionMaker").val(obj.data[0].Name);
+                        $("#DecisionMakerId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //负责人
+        $("#ProjectDecisioner").click(function () {
+            var unitid = $("#CityPro").data("unitid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择负责人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#LeaderPerson").val(obj.data[0].Name);
+                        $("#LeaderPersonId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //运营人
+        $("#Writer").click(function () {
+            var unitid = $("#CityPro").data("unitid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择运营人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#Operator").val(obj.data[0].Name);
+                        $("#OperatorId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                var fileDataArray = [];
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    var uploadtype = 0;
+                    var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+
+                    if (uploadtype1 == true) {
+                        uploadtype = 1;
+                    }
+                    if (uploadtype1 == false) {
+                        uploadtype = 2;
+                    }
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $(item).find("#updata").data("typeno"),
+                        TypeName: $(item).find("#updata").data("typename"),
+                        Sort: index + 1,
+                        Uploadtype: uploadtype
+                    })
+                });
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+
+                $("#RemarkTypeName").val($("#RemarkType option:selected").text());
+
+                //点击提交表单验证，点击暂存表单不验证
+                if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (!bv.isValid()) {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        return;
+                    }
+                }
+
+                var data = $('#mainForm').serialize();
+
+                $.post("Add", data, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                            window.location.href = "/TzStationRemould/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                    }
+                });
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+    });
+
+    //验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            ProjectName: {
+                validators: {
+                    notEmpty: {
+                        message: '项目名称不能为空'
+                    }
+                }
+            },
+            StationName: {
+                validators: {
+                    notEmpty: {
+                        message: '库站名称不能为空'
+                    }
+                }
+            },
+            //CompanyName: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '地市公司不能为空'
+            //        }
+            //    }
+            //},
+            RemarkSalesOfRefinedOil: {
+                validators: {
+                    notEmpty: {
+                        message: '改造后成品油销量不能为空'
+                    }
+                }
+            },
+            RemarkSalesOfGas: {
+                validators: {
+                    notEmpty: {
+                        message: '改造后气销量不能为空'
+                    }
+                }
+            },
+            ItemMoney: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '立项批复金额格式输入错误'
+                    },
+
+                }
+            },
+            Investment: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '投资金额格式输入错误'
+                    },
+
+                }
+            },
+            CostAmount: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '费用金额格式输入错误'
+                    },
+
+                }
+            },
+            InitialMoney: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '初设批复金额格式输入错误'
+                    },
+
+                }
+            },
+            RemarkMoney: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '改造金额格式输入错误'
+                    },
+
+                }
+            },
+            InitialSalesOfRefinedOil: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '原成品油销量格式输入错误'
+                    },
+
+                }
+            },
+            RemarkSalesOfRefinedOil: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '改造后成品油销量格式输入错误'
+                    },
+
+                }
+            },
+            InitialSalesOfGas: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '原气销量格式输入错误'
+                    },
+
+                }
+            },
+            RemarkSalesOfGas: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '改造后气销量格式输入错误'
+                    },
+
+                }
+            },
+            IRR: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '内部收益率格式输入错误'
+                    },
+
+                }
+            },
+        }
+    });
+</script>

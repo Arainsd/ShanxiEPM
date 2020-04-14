@@ -1,0 +1,226 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;"><em class="required">*</em>编号 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="No" id="No" placeholder="请输入编号" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" style="padding-left: 0px;"><em class="required">*</em>接口名称 : </label>
+                    <div class="col-lg-4 col-sm-4 left-position">
+                        <input type="text" name="Name" id="Name" placeholder="请输入短信接口名称" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;padding-left: 0px;"><em class="required">*</em>接口URL : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="URL" id="URL" placeholder="请输入短信接口URL" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>接口AppId : </label>
+                    <div class="col-lg-4 col-sm-4 left-position">
+                        <input type="text" name="AppId" id="AppId" placeholder="请输入接口AppId" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;padding-left: 0px;"><em class="required">*</em>接口Key : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="AppKey" id="AppKey" placeholder="请输入短信接口Key" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>AppSecret : </label>
+                    <div class="col-lg-4 col-sm-4 left-position">
+                        <input type="text" name="AppSecret" id="AppSecret" placeholder="请输入AppSecret" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;padding-left: 0px;"><em class="required">*</em>接口费用 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="Cost" id="Cost" placeholder="请输入短信接口费用" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>字数限制 : </label>
+                    <div class="col-lg-4 col-sm-4 left-position">
+                        <input type="text" name="CharacterLimit" id="CharacterLimit" placeholder="请输入字数限制" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label" style="padding-left: 0px;"><em class="required">*</em>返回值说明 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="ReturnValDes" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="ReturnValDes" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;">启用/禁用 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label">是否确认 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12 col-sm-12" style="overflow:hidden;top:80px;">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    //自定义验证规则
+    window.onload = function () {
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+
+                No: {
+                    validators: {
+                        notEmpty: {
+                            message: '编号不能为空'
+                        },
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '短信接口名称不能为空'
+                        },
+                    }
+                },
+                URL: {
+                    validators: {
+                        notEmpty: {
+                            message: '短信接口URL不能为空'
+                        }
+                    },
+                    regexp: {
+                        regexp: /(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/,
+                        message: '短信接口URL格式不正确'
+                    }
+                },
+                AppId: {
+                    validators: {
+                        notEmpty: {
+                            message: '接口AppId不能为空'
+                        },
+                    }
+                },
+                AppSecret: {
+                    validators: {
+                        notEmpty: {
+                            message: 'AppSecret不能为空'
+                        },
+                    }
+                },
+                AppKey: {
+                    validators: {
+                        notEmpty: {
+                            message: '短信接口Key不能为空'
+                        },
+                    }
+                },
+                Cost: {
+                    validators: {
+                        notEmpty: {
+                            message: '短信接口费用不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{1,2})?$/,
+                            message: '短信接口费用格式不正确(请输入整数或两位小数)'
+                        }
+                    }
+                },
+                CharacterLimit: {
+                    validators: {
+                        notEmpty: {
+                            message: '字数限制不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+$/,
+                            message: '字数限制格式不正确'
+                        }
+                    }
+                },
+                ReturnValDes: {
+                    validators: {
+                        notEmpty: {
+                            message: '接口返回值说明不能为空'
+                        },
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //   监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $("#save").attr("disabled", "disabled");
+                $("#save").val("请等待")
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        var layerIndex = parent.layer.msg("短信接口设置添加成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(layerIndex);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>

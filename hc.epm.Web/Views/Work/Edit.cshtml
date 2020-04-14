@@ -1,0 +1,430 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_DangerousWork
+@{
+    ViewBag.Title = "修改危险作业";
+}
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label for="ProjectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" name="ProjectName" id="ProjectName" value="@Model.ProjectName" autocomplete="off" readonly />
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                <i class="pic iconfont" id="ProjectName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            @*<div class="long-text">
+                <label for="TaskName"><span class="star">*</span>&nbsp;作业名称&nbsp;:</label>
+                <input type="text" name="TaskName" id="TaskName" autocomplete="off" value="@Model.TaskName" />
+            </div>*@
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;作业时间&nbsp;:</label>
+                <input type="text" id="StartTime" name="StartTime" autocomplete="off" onClick="WdatePicker({ el: 'StartTime', isShowToday: false})" value="@(Model.StartTime == null ? "" : Convert.ToDateTime(Model.StartTime).ToString("yyyy-MM-dd"))" onfocus="WdatePicker({minDate:'%y-%M-#{%d+1}', isShowToday: false})">
+                <i onClick="WdatePicker({ el: 'StartTime', isShowToday: false })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            @*<div class="short-text">
+                <label><span class="star">*</span>&nbsp;结束时间&nbsp;:</label>
+                <input type="text" id="EndTime" name="EndTime" autocomplete="off" onClick="WdatePicker({ el: 'EndTime' })" value="@(Model.EndTime == null ? "" : Convert.ToDateTime(Model.EndTime).ToString("yyyy-MM-dd"))" onfocus="WdatePicker({minDate:'%y-%M-#{%d+1}'})">
+                <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>*@
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;作业分类&nbsp;:</label>
+                @Html.DropDownList("WorkType", null, new { @class = "form-control selectpicker  show-tick" })
+                <input type="hidden" name="TaskTypeNo" id="TaskTypeNo" value="@Model.TaskTypeNo" />
+                <input type="hidden" name="TaskTypeName" id="TaskTypeName" value="@Model.TaskTypeName" />
+            </div>
+            <div class="intro">
+                <div><label for="TaskContent"><span class="star">*</span>&nbsp;作业内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="TaskContent" name="TaskContent">@Model.TaskContent</textarea>
+                </div>
+            </div>
+            @*<div class="long-text" style="margin-top:30px;">
+                <label for="TaskArea"><span class="star"></span>&nbsp;作业区域&nbsp;:</label>
+                <input type="text" name="TaskArea" id="TaskArea" autocomplete="off" value="@Model.TaskArea" />
+            </div>*@
+            <div class="long-text">
+                <label><span class="star"></span>&nbsp;施工单位&nbsp;:</label>
+                <input type="text" name="workCompanyName" id="workCompanyName" value="@Model.workCompanyName" />
+                <input type="hidden" name="WorkCompanyId" id="WorkCompanyId" value="@Model.WorkCompanyId" />
+                <i class="pic iconfont" id="workCompanyName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            @*<div class="long-text">
+                <label><span class="star"></span>&nbsp;防护措施&nbsp;:</label>
+                <input type="text" name="Protective" id="Protective" autocomplete="off" value="@Model.Protective" />
+            </div>*@
+            <div class="upload" style="margin-bottom:0px;">
+                <div><label><span class="star">*</span>&nbsp;附件上传&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                </div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+            <div class="button-group btn-center">
+                @if (Model.State == int.Parse(ApprovalState.Enabled.GetValue().ToString()))
+                {
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+                }
+                else if (Model.State == (int)ApprovalState.ApprFailure)
+                {
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                    <button type="button" class="discard checkright" data-module="DangerousWork" data-right="Invalid">废弃</button>
+                    <button type="button" class="Quesion">沟通</button>
+                }
+            </div>
+            <input type="hidden" name="State" id="State" />
+            <input type="hidden" name="EndTime" id="EndTime" />
+        </div>
+    </form>
+</div>
+<script>
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var filename = fileObj.name;
+        //上传附件不能含有特殊字符
+        var regEn = /[`~!@{@Html.Raw("@");}#$%^&*()_+<>?:"{},\/;'[\]]/im,
+            regCn = /[！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+        if (regEn.test(filename) || regCn.test(filename)) {
+            layer.alert("附件名称不能包含特殊字符", { icon: 2 });
+            return false;
+        }
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileListFile .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+                $("#loadFile").val("");
+            }
+        });
+    }
+
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+        //表单验证
+        var validator = $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                ProjectName: {
+                    required: true,
+                    maxlength: 200
+                },
+                //TaskName: {
+                //    required: true,
+                //    maxlength: 200
+                //},
+
+                StartTime: {
+                    required: true,
+                    date: true
+                },
+                //EndTime: {
+                //    required: true,
+                //    date: true
+                //},
+
+                TaskContent: {
+                    required: true,
+                    maxlength: 500
+                },
+                //TaskArea: {
+                //    maxlength: 254
+                //},
+                WorkType: {
+                    required: true,
+                }
+            },
+            messages: {
+                ProjectName: {
+                    required: "项目名称不能为空",
+                    maxlength: "项目名称不能超过200字符"
+                },
+                //TaskName: {
+                //    required: "作业名称不能为空",
+                //    maxlength: "作业名称不能大于200字符"
+                //},
+
+                StartTime: {
+                    required: "开始时间不能为空",
+                    date: "日期格式错误"
+                },
+                //EndTime: {
+                //    required: "结束时间不能为空",
+                //    maxlength: "日期格式错误",
+                //},
+
+                TaskContent: {
+                    required: "作业内容不能为空",
+                    maxlength: "作业内容不能超过500字符"
+                },
+                //TaskArea: {
+                //    maxlength: "作业区域不能超过254字符"
+                //},
+                WorkType: {
+                    required: "作业分类不能为空",
+                }
+            }
+
+        })
+
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_DangerousWork', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + item.Size + '</div>';
+                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel" data-val="' + item.GuidId + '">删除</span>';
+                                odiv += '<input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '">';
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+
+                            var obj = {};
+                            obj.Name = item.Name;
+                            obj.GuidId = item.GuidId;
+                            obj.Size = item.Size;
+                            obj.Group = item.Group;
+                            obj.Url = item.Url;
+                            obj.TableColumn = item.TableColumn;
+                            obj.ImageType = item.ImageType;
+                            fileDataArray.push(obj);
+                        });
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+            //选择项目
+            $("#ProjectName,#ProjectName_icon").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProjectAll',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj && obj.flag && obj.data) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            layer.close(index);
+                            //alert("id:" + obj.data[0].id + " name:" + obj.data[0].name);
+                        } else if (!obj.flag) {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+
+            //选择施工单位
+            //$(".WorkCompanyName").click(function () {
+            //    var projectName = $("#ProjectName").val();
+            //    var projectId = $("#ProjectId").val();
+            //    if (projectId == "" || projectName == "") {
+            //        parent.layer.msg("请先选择项目", { time: 1000, icon: 2 });
+            //        return false;
+            //    }
+            //    layer.open({
+            //        type: 2,
+            //        title: GetLayerTitle("选择施工单位"),
+            //        shadeClose: false, //点击遮罩关闭层
+            //        area: ['800px', '600px'],
+            //        content: '/Comm/SelectProjectCustomer?selectType=1&projectId=' + projectId + "&companyType=土建,包装,安装",
+            //        btn: ["确定", "取消"],
+            //        yes: function (index, layero) {
+            //            var iframeWin = window[layero.find('iframe')[0]['name']];
+            //            var obj = iframeWin.getSelectData();
+            //            if (obj && obj.flag && obj.data) {
+            //                $("#workCompanyName").val(obj.data[0].Name);
+            //                $("#WorkCompanyId").val(obj.data[0].Id);
+            //                layer.close(index);
+            //            } else if (!obj.flag) {
+            //                parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+            //                return false;
+            //            }
+            //        },
+            //        btn2: function (index, layero) {
+            //            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            //            parent.layer.close(index);//关闭窗口
+            //        },
+            //        cancel: function (index, layero) {
+            //        },
+            //    });
+            //});
+            $("#workCompanyName").click(function () {
+                var _this = $(this);
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择验收单位"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    skin: 'frame_button',
+                    btnAlign: 'c',
+                    content: '/Comm/SelectCustomerByNameOrType',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = frames['layui-layer-iframe' + index].getSelectData();
+                        if (obj.flag === false) {
+                            layer.alert(obj.msg, { icon: 2 });
+                        } else {
+                            $("#workCompanyName").val(obj.data[0].Name);
+                            $("#WorkCompanyId").val(obj.data[0].Id);
+                        }
+                        layer.close(index);
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+        });
+
+        //作业类型选择
+        $('#WorkType').change(function () {
+            var TaskTypeNo = $('#WorkType').val();
+            var TaskTypeName = $('#WorkType option:selected').text();
+            $("#TaskTypeNo").val(TaskTypeNo)
+            $("#TaskTypeName").val(TaskTypeName)
+        });
+        //数据提交或保存
+        $(".btnSub").click(function btnSub() {
+            $("#EndTime").val($("#StartTime").val());
+            var state = $(this).data("state");
+            $("#State").val(state)
+            if ($(".fileShow li").length == 0) {
+                layer.alert("请先上传附件", { icon: 2 });
+                return false;
+            }
+            if (!validator.form()) {
+                return;
+            }
+            var data = $("#mainForm").serialize();
+            data = decodeURIComponent(data, true)
+            $.ajax({
+                url: "/Work/Edit",
+                type: "post",
+                data: data,
+                success: function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/Work/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+        });
+
+        //废弃
+        $(".discard").click(function () {
+            var id = '@Model.Id';
+            if (id != "") {
+                parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                    $.post("Discard", { id: id }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Work/Index";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            }
+        });
+
+        //沟通
+        $(".Quesion").click(function () {
+            var projectId = $("#ProjectId").val();
+            window.location.href = "/Question/Add?businType=DangerousWork&projectId=" + projectId + "&BusinessId=@Model.Id";
+        });
+    });
+</script>

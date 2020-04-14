@@ -1,0 +1,287 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@using hc.epm.ViewModel;
+@model Epm_Draw
+@{
+    ViewBag.Title = "查看图纸";
+}
+<style>
+    .tab .upload {
+    height:30px;
+    }
+   
+    .pa-file {
+    position: relative;
+    padding-right: 40px;
+    margin: 30px 20px 20px 120px;
+    font-size: 16px;
+    }
+     .pa-file li {
+         display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+        .pa-file li > .downloadFile {
+            flex: none;
+            width: 350px;
+            white-space: nowrap;
+            overflow: hidden ;
+            text-overflow: ellipsis;
+        }
+        .pa-file li > .filesize {
+            flex: none;
+            width: 60px;
+        }
+     .fileShow {
+        width:100%;
+        position:absolute;
+        top:-58px;
+    }
+
+</style>
+@if (Model != null)
+{
+    <body>
+        <div class="contentData">
+            <div class="tab">
+                <div class="long-text">
+                    <label>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" disabled value="@Model.ProjectName" id="ProjectName" name="ProjectName" />
+                    <input type="hidden" id="Id" name="Id" class="hidden" value="@Model.Id" />
+                    <input type="hidden" id="ProjectId" value="@Model.ProjectId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label>&nbsp;版本号&nbsp;:</label>
+                    <input type="text" disabled value="@Model.VersionOrder" />
+                </div>
+                <div class="short-text disable-drop">
+                    <label>&nbsp;版本标识&nbsp;:</label>
+                    <select disabled>
+                        <option>@Model.VersionName</option>
+                    </select>
+                </div>
+                <div class="disable-drop short-text">
+                    <label>&nbsp;状态&nbsp;:</label>
+                    <select disabled>
+                        <option>@(((ApprovalState)Model.State).GetText())</option>
+                    </select>
+                </div>
+                <div class="intro">
+                    <div><label>&nbsp;备注&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" disabled>@Model.Remark</textarea>
+                    </div>
+                </div>
+
+                <div class="long-text">
+                    <label>&nbsp;上传人&nbsp;:</label>
+                    <input type="text" disabled value="@Model.SubmitUserName" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label>&nbsp;上传单位&nbsp;:</label>
+                    <input type="text" disabled value="@Model.SubmitCompanyName" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="short-text">
+                    <label>&nbsp;上传时间&nbsp;:</label>
+                    <input type="text" id="uploadtime" disabled value="@(Model.SubmitDate == null ? "" : Convert.ToDateTime(Model.SubmitDate).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el:'uploadtime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;工艺安装图&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile1" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;建筑图&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile2" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;钢结构&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile3" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;结构&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile4" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;电气安装图&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile5" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;装饰及包装图&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile6" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;暖通及排水图&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile7" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;自动化控制&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile8" class="pa-file">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="button-group btn-center">
+                    @if (Model.State == (int)ApprovalState.WaitAppr)
+                    {
+                        <button type="button" class="audit checkright" data-module="Draw" data-right="Check">审核</button>
+                        <button type="button" class="reject checkright" data-module="Draw" data-right="UnCheck">驳回</button>
+                    }
+                    <button type="button" class="exchange">沟通</button>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+            </div>
+            <div class="key">
+            </div>
+        </div>
+        <script>
+            var id = $(".hidden").data("itemid");
+            $.post("/Files/GetFileList", { tableName: 'Epm_Draw', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" title="'+item.Name+'" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div class="filesize">' + item.Size + '</div>';
+                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '</li>';
+                                $('#fileListFile' + item.TableColumn + ' .fileShow').append(odiv);
+                            }
+                        });
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //下载附件
+            $("body").on("click", ".downloadFile", function () {
+                var group = $(this).parent().find(".hiddenArea").data("group");
+                var path = $(this).parent().find(".hiddenArea").data("url");
+                var fileName = $(this).parent().find(".hiddenArea").data("filename");
+                window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+            });
+            layui.use(['layer', 'element'], function () {
+                var layer = layui.layer, element = layui.element, $ = layui.jquery;
+
+                //修改
+                $('.edit').on('click', function () {
+                    location.href = "/Draw/Edit?id=" + "@Model.Id";
+                });
+                //审核
+                $('.audit').on('click', function () {
+                    var id = $("#Id").val();
+                    var state = "ApprSuccess";
+                    if (id != "") {
+                        parent.layer.confirm("确认要审核所选择的项？", { icon: 3 }, function () {
+                            $.post("Reject", { id: id, state: state }, function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("审核成功", { time: 2000, icon: 1 });
+                                    location.href = "/Draw/Index";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        }, function () {
+                            return;
+                        })
+                    }
+                });
+
+                //驳回
+                $(".reject").click(function () {
+                    var state = "ApprFailure";
+                    parent.layer.prompt({
+                        formType: 2,
+                        title: '请输入驳回理由',
+                        yes: function (index, layero) {
+                            // 获取文本框输入的值
+                            var value = layero.find(".layui-layer-input").val();
+                            if (value) {
+                                $.post("Reject", { id: '@Model.Id', reason: value, state: state }, function (data) {
+                                    if (data.Flag) {
+                                        parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                        location.href = "/Draw/Index";
+                                    } else {
+                                        parent.layer.alert(data.Message, { icon: 2 });
+                                    }
+                                }, "json");
+                            } else {
+                                parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                            }
+                        }
+                    });
+                });
+
+                //废弃
+                $('.discard').on('click', function () {
+                    var state = "Discarded";
+                    if (id != "") {
+                        parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                            $.post("Archive", { id: '@Model.Id', state: state }, function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                                    window.location.href = "/Draw/Index?pageIndex=1";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        }, function () {
+                            return;
+                        })
+                    }
+                });
+                //沟通
+                $('.exchange').on('click', function () {
+                    var projectId = $("#ProjectId").val();
+                    window.location.href = "/Question/Add?businType=Draw&projectId=" + projectId + "&BusinessId=@Model.Id";
+                });
+                //没有附件时用“暂无附件代替”
+                //$(".fileShow").each(function(index,item) {
+                //    if ($(item).find("li").length == 0) {
+                //        $(item).append('<li><span style="color:red;">暂无附件</span></li>')
+                //    } 
+                //});
+            });
+        </script>
+    </body>
+}
+else
+{
+    <body>
+        <div class="contentData">
+            <div class="tab">
+                该数据不存在或已被删除！
+            </div>
+        </div>
+    </body>
+}

@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "开发配置页面";
+}
+
+<h1>
+    开发配置页面,其他人请勿操作，以免系统爆炸，伤及他人
+</h1>
+<h2>最新ID:@ViewBag.NewId</h2>
+<p>
+    <input type="button" value="将系统权限枚举转换到数据库" id="btnRight" />注意：已有权限不变，不存在的会新增
+</p>
+<p>
+    <input type="button" value="导入所有枚举配置项" id="btnSet" />会将系统所有枚举配置项导入到数据库，已存在的项不会修改，未存在的会新增
+</p>
+
+<script>
+    $(function () {
+        $("#btnRight").click(function () {
+            $.post("Dev", { action: "right" }, function (data) {
+                if (data) {
+                    alert("权限导入成功");
+                }
+            });
+        });
+        $("#btnSet").click(function () {
+            $.post("Dev", { action: "setting" }, function (data) {
+                if (data) {
+                    alert("配置导入成功");
+                }
+            });
+        });
+        var start = new Date().getTime();;
+        console.log(start);
+        var r = 0;
+        for (var i = 0; i < 10000; i++) {
+            for (var j = 0; j < 100; j++) {
+                r += 1;
+            }
+        }
+        var end = new Date().getTime();
+        console.log(end);
+        var res = end - start;
+        console.log(res);
+
+        start = new Date().getTime();;
+        console.log(start);
+        r = 0;
+        for (var i = 0; i < 100; i++) {
+            for (var j = 0; j < 10000; j++) {
+                r += 1;
+            }
+        }
+        end = new Date().getTime();
+        console.log(end);
+        res = end - start;
+        console.log(res);
+    });
+</script>

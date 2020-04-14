@@ -1,0 +1,953 @@
+﻿
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@using hc.epm.DataModel.Business;
+@model Epm_TzSupplyMaterialApply
+@{
+    ViewBag.Title = "甲供物资申请";
+}
+<style>
+    .fr-ta {
+        width: 100%;
+    }
+
+    .ou-ta div {
+        width: 100px;
+    }
+
+    .tab-conten input[type=text], .tab-conten select, .totalamont {
+        width: 120px;
+        height: 32px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid #c5c5c5;
+        box-sizing: border-box;
+    }
+
+    .tab-conten input[type=number] {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid #c5c5c5;
+        box-sizing: border-box;
+    }
+
+    .fr-ta input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-icon i {
+        font-size: 24px;
+    }
+
+        .tab-icon i:hover {
+            cursor: pointer;
+        }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>申请信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="ApplyTitle" value="@Model.ApplyTitle" class="form-control " placeholder="工程甲供物资订单审批流程-常超超-2019-09-09" />
+                                <input id="" type="hidden" name="Id" value="@Model.Id" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ApplyUserName</div>
+                            <input type="hidden" name="ApplyUserName" value="@Model.ApplyUserName" />
+                            <input type="hidden" name="ApplyUserId" value="@Model.ApplyUserId" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                          
+                        </td>
+                        <td class="td-div">
+                            <div>@(Model.SupApplyTime == null ? "": Model.SupApplyTime.ToString("yyyy-MM-dd"))</div>
+                            <input type="hidden" name="SupApplyTime" value="@Model.SupApplyTime" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ApplyDepartment</div>
+                            <input type="hidden" name="ApplyDepartment" value="@Model.ApplyDepartment" />
+                            <input type="hidden" name="ApplyDepartmentId" value="@Model.ApplyDepartmentId" />
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分公司</span>
+                        </td>
+                        <td class="td-div">
+                            @*@Html.Raw(Html.DropDownList("CompanyId", ViewBag.CompanyName as SelectList, null, new { @class = "form-control" }))*@
+                            <div>@Model.ApplyCompanyName</div>
+                            <input type="hidden" name="ApplyCompanyId" id="ApplyCompanyId" value="@Model.ApplyCompanyId"/>
+                            <input type="hidden" name="ApplyCompanyName" id="ApplyCompanyName" value="@Model.ApplyCompanyName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="ProjectName" id="ProjectName" class="form-control" style="display:inline-block;width:88%;" placeholder="请选择项目" value="@Model.ProjectName" readonly />
+                                <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selproject" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择项目" />
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">库站名称</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="StationName" type="text" name="StationName" value="@Model.StationName" class="form-control" readonly placeholder="根据项目名称自动获取" />
+                                <input id="StationId" type="hidden" name="StationId" value="@Model.StationId" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">批复文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ApprovalNo" type="text" name="ApprovalNo" value="@Model.ApprovalNo" class="form-control" readonly placeholder="根据项目名称自动获取" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同名称</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="ContractName" id="ContractName" value="@Model.ContractName" class="form-control" placeholder="请输入合同名称" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">合同编号</span>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="ContractCode" id="ContractCode" value="@Model.ContractCode" class="form-control" placeholder="请输入合同编号" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">合同报审序号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ContractNumber" type="text" name="ContractNumber" value="@Model.ContractNumber" class="form-control " placeholder="" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">erp订单号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ErpCode" type="text" name="ErpCode" value="@Model.ErpCode" class="form-control " placeholder="请输入erp订单号" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ArrivalContacts" value="@Model.ArrivalContacts" class="form-control " placeholder="请输入到货联系人" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ArrivalContactsTel" value="@Model.ArrivalContactsTel" class="form-control " placeholder="请输入到货联系电话" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="ArrivalAddress" value="@Model.ArrivalAddress" class="form-control " placeholder="请输入到货联系地址" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>供应商信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">供应商名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="Supplier" id="Supplier" value="@Model.Supplier" class="form-control" style="display:inline-block;width:88%;" placeholder="请选择供应商名称" readonly />
+                                <input type="hidden" name="SupplierId" id="SupplierId" value="@Model.SupplierId" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selSupplier" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择供应商" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">邮编</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupplierZipCode" value="@Model.SupplierZipCode" class="form-control " placeholder="请输入邮编" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">供应商联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupplierContacts" value="@Model.SupplierContacts" class="form-control " placeholder="请输入收件人" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="SupplierTel" type="text" name="SupplierTel" value="@Model.SupplierTel" class="form-control " placeholder="请输入联系电话" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">供应商地址</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="SupplierAddress" type="text" name="SupplierAddress" value="@Model.SupplierAddress" class="form-control " placeholder="请输入收件地址" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>物资信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr style="text-align:right;height:20px;">
+                        <td colspan="4" class="tab-icon">
+                            <i class="layui-icon tab-add" title="添加" style="color:darkseagreen">&#xe608;</i>
+                            <i class="layui-icon tab-delete" title="删除" style="color:cornflowerblue">&#xe640;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <table class="fr-ta" style="word-break:break-all;word-wrap:break-word;">
+                                <thead>
+                                    <tr class="ou-ta">
+                                        <th>
+                                            <div style="width:20px;"><input type="checkbox" id="allcheck" /></div>
+                                        </th>
+                                        <th><div style="width:40px;">序号</div></th>
+                                        <th><div>物资种类</div></th>
+                                        <th><div>品名</div></th>
+                                        <th><div>规格</div></th>
+                                        <th><div>单价</div></th>
+                                        <th><div>数量</div></th>
+                                        <th><div>金额</div></th>
+                                        <th><div>供应商名称</div></th>
+                                        <th><div>备注</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="addtab">
+                                    @{
+                                        var index = 0;
+                                    }
+                                    @if (Model.TzSupMatApplyList != null && Model.TzSupMatApplyList.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzSupMatApplyList)
+                                        {
+                                            index++;
+                                            <tr class="tab-conten" id="">
+                                                <td><input type="checkbox" /></td>
+                                                <td class="Sort">@index</td>
+                                                <td>
+                                                    <select class="sumatmanage"></select>
+                                                    <input id="SupMatManagement" type="hidden" name="SupMatManagement" value="@item.SupMatManagement" class="SupMatManagement" />
+                                                </td>
+                                                <td>
+                                                    <select class="ProductName">
+                                                        <option value="@item.ProductName">@item.ProductName</option>
+                                                    </select>
+                                                    <input class="ProductName1" type="hidden" value="@item.ProductName" />
+                                                </td>
+                                                <td>
+                                                    <select class="Specification">
+                                                        <option value="@item.Specification">@item.Specification</option>
+                                                    </select>
+                                                    <input class="Specification1" type="hidden" value="@item.Specification" />
+                                                </td>
+                                                <td>
+                                                    <span class="UnitPrice">@item.UnitPrice</span>
+                                                    <input type="hidden" name="SupMatManagementId" class="SupMatManagementId" value="@item.SupMatManagementId" />
+                                                </td>
+                                                <td><input type="number" class="Number" value="@item.Number"  onkeyup="this.value=this.value.replace(/\D|^0/g,'')"  onafterpaste="this.value=this.value.replace(/\D|^0/g,'')"/></td>
+                                                <td><input type="number" class="Money" disabled value="@item.Money" /></td>
+                                                <td><span class="SupplierName">@item.SupplierName</span></td>
+                                                <td><input type="text" class="Remark" value="@item.Remark" /></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                                <tr style="background-color:#e4e4e4;">
+                                    <td colspan="2">合计</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="text" name="TotleNum" class="totalamont" id="allNumber" style="color:red;border:none;" readonly value="@Model.TotleNum"/></td>
+                                    <td><input type="text" name="TotleMoney" class="totalamont" id="totalamont" style="color:red;border:none;" readonly value="@Model.TotleMoney.ToString("0.00")"/></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>下一步信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" name="LeadershipName" id="LeadershipName" class="form-control" style="display:inline-block;width:66%;" placeholder="请选择分管领导" value="@Model.LeadershipName" readonly />
+                                <input type="hidden" name="LeadershipId" id="LeadershipId" value="@Model.LeadershipId" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selLeader" class="btn" style="position: relative; z-index: 1;width: 150px;font-size: 16px;" value="选择分管领导" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            @if (Model.State == 20)
+            {
+                <input type="button" id="Discarded" value="作&nbsp;&nbsp;&nbsp;废" class="layui-btn layui-btn-big " />
+            }
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+        <!--附件上传触发-->
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+        <input type="hidden" id="tzSupMatApplyList" name="tzSupMatApplyList" />
+    </form>
+</div>
+<script>
+    //物资种类初始化数据函数封装
+    function GetSupMatList() {
+        var id = $("#SupplierId").val();
+        $.post("GetSupMatManagementList", { id: id }, function (data) {
+            var Html = "";
+            for (var i = 0; i < data.length; i++) {
+                Html = `<option value="${data[i].no}">${data[i].name}</option>`;
+                $(".addtab .sumatmanage").append(Html);
+                materialHtml += Html;
+            }
+            var _this = $(".addtab .sumatmanage");
+            _this.parent().parent().find(".UnitPrice").text("");
+            _this.parent().parent().find(".SupMatManagementId").val("");
+            _this.parent().parent().find(".SupplierName").text("");
+            _this.parent().parent().find(".ProductName").text("");
+            _this.parent().parent().find(".Specification").text("");
+
+
+            for (i = 0; i < _this.length; i++) {
+                var indexDom = _this.eq(i);
+
+                //物资种类
+                var SupMatManagement = indexDom.parent().parent().find(".SupMatManagement").val();
+                indexDom.parent().parent().find(".sumatmanage option[value='" + SupMatManagement + "']").attr("selected", "selected"); //初始化绑定变更岗位
+
+                ProductFun(indexDom);//加载品名
+                //品名
+                var ProductName1 = indexDom.parent().parent().find(".ProductName1").val();
+                indexDom.parent().parent().find(".ProductName option[value='" + ProductName1 + "']").attr("selected", "selected");
+
+                //规格
+                var Specification1 = indexDom.parent().parent().find(".Specification1").val();
+                indexDom.parent().parent().find(".Specification option[value='" + Specification1 + "']").attr("selected", "selected");
+
+
+            }
+
+        });
+    }
+    //封装函数
+    function ProductFun(dom) {
+        var _this = dom;
+        var name = _this.parent().parent().find(".sumatmanage option:selected").text();
+        var productName;
+        _this.parent().parent().find(".ProductName").empty();
+        var SupplierId = $("#SupplierId").val();
+        $.post("GetSupMatProductName", { name: name, SupplierId: SupplierId }, function (data) {
+            var html = ""
+            for (var i = 0; i < data.length; i++) {
+                html+= `<option>${data[i].name}</option>`
+            }
+            _this.parent().parent().find(".ProductName").append(html);
+            var _that = _this.parent().parent().find(".ProductName");
+            SpecificFun(_that)
+        });
+
+    }
+    function SpecificFun(dom) {
+        var _this = dom;
+        var name = _this.parent().parent().find(".sumatmanage option:selected").text();
+        var productName = _this.parent().parent().find(".ProductName option:selected").text();
+        _this.parent().parent().find(".Specification").empty();
+        var SupplierId = $("#SupplierId").val();
+        $.post("GetSupMatSpecification", { name: name, productName: productName, SupplierId: SupplierId }, function (data) {
+            var html = ""
+            for (var i = 0; i < data.length; i++) {
+                html += `<option value="${data[i].name}">${data[i].name}</option>`
+            }
+            _this.parent().parent().find(".Specification").append(html);
+            var _val = _this.parent().parent().find(".Specification");
+            PriceFun(_val)
+        });
+
+    }
+
+    function PriceFun(dom) {
+        var _this = dom;
+
+        var name = _this.parent().parent().find(".sumatmanage option:selected").text();
+        var productName = _this.parent().parent().find(".ProductName option:selected").text();
+        var specification = _this.parent().parent().find(".Specification option:selected").text();
+        var SupplierId = $("#SupplierId").val();
+        _this.parent().parent().find(".UnitPrice").text("");
+        _this.parent().parent().find(".SupMatManagementId").val("");
+        _this.parent().parent().find(".SupplierName").text("");
+        $.post(
+            "GetSupMatManagementModel",
+            {
+                name: name,
+                productName: productName,
+                specification: specification,
+                SupplierId: SupplierId
+            },
+            function (data) {
+                if (data.UnitePrice == null) {
+                    data.UnitePrice = "";
+                }
+                _this.parent().parent().find(".UnitPrice").text(data.UnitePrice);
+                _this.parent().parent().find(".SupMatManagementId").val(data.Id);
+                _this.parent().parent().find(".SupplierName").text(data.SupplierName);
+            });
+
+    }
+    window.onload = function () {
+        GetSupMatList();//页面加载初始化数据
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],
+            fields: {
+                ArrivalContacts: {
+                    validators: {
+                        notEmpty: {
+                            message: '到货联系人不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '联系人不能超过50字符'
+                        },
+                    }
+                },
+                ContractName: {
+                    validators: {
+                        notEmpty: {
+                            message: '合同名称不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '合同名称不能超过100字符'
+                        },
+                    }
+                },
+                ArrivalContactsTel: {
+                    validators: {
+                        notEmpty: {
+                            message: '到货联系人电话不能为空'
+                        },
+                        regexp: {
+                            regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                            message: "到货联系人电话格式错误"
+                        }
+                    }
+                },
+                ArrivalAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '到货地址不能为空'
+                        },
+                    }
+                },
+                ProjectName: {
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        },
+                    }
+                },
+                //ApprovalNo: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '批文号不能为空'
+                //        },
+                //        stringLength: {
+                //            max: 50,
+                //            message: '批文号不能超过50字符'
+                //        },
+                //    }
+                //},
+                SupplierName: {
+                    validators: {
+                        notEmpty: {
+                            message: '供应商名称不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '供应商名称不能超过500字符'
+                        },
+                    }
+                },
+                SupplierZipCode: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[1-9]\d{5}$/,
+                            message: "供应商邮编格式错误"
+                        }
+                    }
+                },
+                ErpCode: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[0-9a-zA-Z]{1,50}$/,
+                            message: 'erp订单号由数字、字母组成'
+                        }
+                    }
+                },
+                SupplierContacts: {
+                    validators: {
+                        notEmpty: {
+                            message: '供应商联系人不能为空'
+                        }
+                    }
+
+                },
+                SupplierTel: {
+                    validators: {
+                        notEmpty: {
+                            message: '供应商联系电话不能为空'
+                        },
+                        regexp: {
+                            regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                            message: "到货联系人电话格式错误"
+                        }
+                    }
+                },
+                SupplierAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '供应商地址不能为空'
+                        },
+
+                    }
+                },
+                LeadershipName: {
+                    validators: {
+                        notEmpty: {
+                            message: '分管领导不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '负责人不能超过50字符'
+                        },
+                    }
+                },
+            }
+        });
+    }
+    var materialHtml = "";//公用变量，点击添加表格时仍旧使用
+    //添加人员变更
+    $(".tab-add").click(function () {
+        var index;
+        index = $('.addtab').find('tr:last-child').find('.Sort').text();
+        if (index == "") {
+            index = 0;
+            index++;
+        } else {
+            index++;
+        }
+        //$(".addtab tr").find(".SupplierName").text("");
+        var tabhtml = `
+                        <tr class ="tab-conten">
+                                        <td><input type="checkbox" /></td>
+                                        <td class ="Sort">${index}</td>
+                                        <td>
+
+                                             <select class ="sumatmanage">${materialHtml}</select>
+                                        </td>
+                                        <td>
+                                            <select class ="ProductName"></select>
+                                        </td>
+                                        <td>
+                                            <select class ="Specification"></select>
+                                        </td>
+                                       <td>
+                                       <span class ="UnitPrice"></span>
+                                         <input type="hidden" name="SupMatManagementId" class ="SupMatManagementId"/>
+                                       </td>
+                                        <td><input type="number" class ="Number"  onkeyup="this.value=this.value.replace(/\D|^0/g,'')"  onafterpaste="this.value=this.value.replace(/\D|^0/g,'')"/></td>
+                                        <td><input type="number" class ="Money" disabled /></td>
+                                        <td><span class ="SupplierName"></span></td>
+                                        <td><input type="text" class ="Remark" /></td>
+                                    </tr>
+            `
+        $(".addtab").append(tabhtml);
+    });
+    //删除人员变更
+    $(".tab-delete").click(function () {
+        $(".tab-conten").find("input[type='checkbox']:checked").each(function () {
+            n = $(this).parents("tr").index();  // 获取checkbox所在行的顺序
+            $(".addtab").find("tr:eq(" + n + ")").remove();
+        });
+        $(".tab-conten").each(function (index) {
+            $(this).find(".Sort").text(index + 1);//重新赋值序号
+        });
+        //删除时金额触发计算
+        if ($(".tab-conten").length == 0) {
+            $("#totalamont").val("");
+        } else {
+            $("body .UnitPrice").change();
+        }
+    });
+    //人员变更全选和反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $(".addtab input[type='checkbox']").prop("checked", isChecked);
+    });
+
+    // 单独选项控制全选
+    $(".addtab input[type='checkbox']").click(function () {
+        var allLength = $(".addtab input[type='checkbox']").length;
+        var checkedLength = $(".addtab input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+
+    //金额计算：数量*单价
+    var moneyArr = [];
+    $("body").on("keyup click", ".Number,.UnitPrice", function () {
+        var money = 0;//总金额
+        var allnum = 0;
+        $(".tab-conten").each(function (index, item) {
+            var number = $(item).find($(".Number")).val();
+            var price = $(item).find($(".UnitPrice")).text();
+            var amount = number * price;
+            $(item).find(".Money").val(amount);//金额赋值
+            money += Number($(item).find($(".Money")).val());//总金额
+            allnum += Number($(item).find($(".Number")).val());//总数量
+        });
+        $("#totalamont").val(money.toFixed(2));//保留两位;
+        $("#allNumber").val(allnum);
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/TzSupplyMaterialApply/Index";
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //选择分管领导
+        $("#selLeader").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分管领导"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#LeadershipName").val(obj.data[0].Name);
+                        $("#LeadershipId ").val(obj.data[0].Id);
+                        $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                        .updateStatus('LeadershipName', 'NOT_VALIDATED', null)
+                        .validateField('LeadershipName');
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+
+        //选择供应商
+        $("#selSupplier").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择供应商"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectServiceCustomer',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#Supplier").val(obj.data[0].Name);
+                        $("#SupplierId").val(obj.data[0].Id);
+                        var id = $("#SupplierId").val();
+                        //根据供应商id加载物资种类
+                        $(".addtab tr").eq(0).siblings().empty();
+
+                        $("#SupplierTel").val(obj.data[0].Phone);
+                        $("#SupplierAddress").val(obj.data[0].AddressName);
+
+                        $(".addtab .sumatmanage").empty();
+                        materialHtml = "";
+                        GetSupMatList();
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //选择项目
+        $("#selproject").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectTzProjectProposal',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].ProjectName);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        $("#StationName").val(obj.data[0].StationName)
+                        $("#StationId").val(obj.data[0].StationId)
+                        $("#ApprovalNo").val(obj.data[0].ApprovalNo)
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //根据物资种类加载品名
+        $("body").on("click", ".sumatmanage", function () {
+            var _this = $(this);
+            ProductFun(_this);
+        });
+
+        //根据物资种类和品名加载规格
+        $("body").on("click", ".ProductName", function () {
+            var _this = $(this);
+            SpecificFun(_this);
+        });
+        //根据物资种类、品名和规格加载单价
+        $("body").on("click", ".Specification", function () {
+            var _this = $(this);
+            PriceFun(_this);
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            $(".save").addClass("layui-btn-disabled");
+            $(".save").attr("disabled", "disabled");
+
+            var tzSupMatApplyList = [];
+            $(".tab-conten").each(function (index, item) {
+
+                tzSupMatApplyList.push({
+                    SupMatManagement: $(item).find(".sumatmanage option:selected").text(),
+                    SupMatManagementId: $(item).find(".SupMatManagementId").val(),
+                    ProductName: $(item).find(".ProductName option:selected").text(),
+                    Specification: $(item).find(".Specification option:selected").text(),
+                    Number: $(item).find(".Number").val(),
+                    UnitPrice: $(item).find(".UnitPrice").text(),
+                    Money: $(item).find(".Money").val(),
+                    Remark: $(item).find(".Remark").val(),
+                });
+            });
+            $("#tzSupMatApplyList").val(JSON.stringify(tzSupMatApplyList));//赋值
+
+            //分公司
+            $("#CompanyName").val($("#CompanyId option:selected").text());
+
+
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            //暂存按钮必须填写物资信息
+            if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+                if (!bv.isValid()) {
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                    return;
+                }
+            } else if ($(this).data("state") == "@(PreProjectState.WaitSubmitted.GetValue().ToString())") {
+                if ($("#ProjectId").val() == "") {
+                    layer.msg("项目名称不能为空", { time: 1000, icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                    return;
+                }
+                if (tzSupMatApplyList.length == 0) {
+                    layer.msg("物资信息不能为空", { time: 1000, icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                    return;
+                }
+            }
+
+            var search = $("form").serialize();
+            $.post("Edit", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        window.location.href = "/TzSupplyMaterialApply/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                }
+            });
+
+        });
+        //关闭
+        $("#close").click(function () {
+            window.location.href = "/TzSupplyMaterialApply/Index";
+          
+        });
+        //作废
+        $("#Discarded").click(function () {
+            var ids = $("#Id").val();
+            var state = "Discarded";
+            parent.layer.confirm('确认作废吗？', { icon: 3 }, function () {
+                $.post("UpdateState", { ids: ids, state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("作废成功", { time: 2000, icon: 1 });
+                        window.location.href = "/TzSupplyMaterialApply/Index";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+
+            });
+        });
+    });
+</script>

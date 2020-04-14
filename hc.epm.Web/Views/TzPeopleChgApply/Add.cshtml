@@ -1,0 +1,646 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .fr-ta {
+        width: 100%;
+    }
+
+    .ou-ta div {
+        width: 125px;
+    }
+
+    .tab-conten input[type=text] {
+        width: 125px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid;
+        box-sizing: border-box;
+    }
+
+    .fr-ta input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+    .tab-icon i {
+        font-size: 24px;
+    }
+
+        .tab-icon i:hover {
+            cursor: pointer;
+        }
+
+    .tab-conten select {
+        height: 35px;
+        width: 170px;
+    }
+    .add-icon {
+    color: darkseagreen;
+}
+
+.file-wrap {
+    height: 35px;
+    width: 300px;
+    margin-top: 5px;
+    margin-left: 34px;
+    border: 1px solid #D9D8D8;
+    line-height: 35px;
+    border-radius: 5px;
+}
+
+.fileShow {
+    height: auto;
+    overflow: hidden;
+}
+
+    .fileShow li {
+        width: 50%;
+        float: left;
+        text-align: left;
+        padding-left: 34px;
+        color: blue;
+        height: 30px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+
+        .fileShow li span {
+            display: inline-block;
+            height: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .fileShow li i {
+            color: black;
+        }
+
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>基础信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div">
+                            <span>@ViewBag.Title</span>
+                            <input id="" type="hidden" name="Title" value="@ViewBag.Title" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+                        </td>
+                        <td class="td-div">
+                            <span>@ViewBag.Applicant</span>
+                            <input type="hidden" name="Applicant" value="@ViewBag.Applicant" />
+                            <input type="hidden" name="ApplicantID" value="@ViewBag.ApplicantID" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div">
+                            <span>@ViewBag.CompanyName</span>
+                            <span>@ViewBag.Department</span>
+                            <input type="hidden" name="CompanyName" value="@ViewBag.CompanyName" />
+                            <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                            <input type="hidden" name="Department" value="@ViewBag.Department" />
+                            <input type="hidden" name="DepartmentID" value="@ViewBag.DepartmentID" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@(Convert.ToDateTime(ViewBag.ApplyDate).ToString("yyyy-MM-dd"))</div>
+                            <input type="hidden" name="ApplyDate" value="@(Convert.ToDateTime(ViewBag.ApplyDate).ToString("yyyy-MM-dd"))" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="ProjectName" id="ProjectName" class="form-control" style="display:inline-block;width:88%;" placeholder="请选择项目" readonly/>
+                                <input type="hidden" name="ProjectId" id="ProjectId" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selproject" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择项目" />
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">建设地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="ConstructionAddress" type="text" name="ConstructionAddress" class="form-control"  placeholder="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工（监理）单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="WorkUnit" id="WorkUnit" class="form-control" style="display:inline-block;width:66%;" placeholder="" readonly/>
+
+                                <input type="hidden" name="WorkUnitId" id="WorkUnitId" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selectCompany" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择单位" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">负责人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="Leader" id="Leader" class="form-control" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>人员变更情况</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr style="text-align:right;height:20px;">
+                        <td colspan="4" class="tab-icon">
+                            <i class="layui-icon tab-add" title="添加" style="color:darkseagreen">&#xe608;</i>
+                            <i class="layui-icon tab-delete" title="删除" style="color:cornflowerblue">&#xe640;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <table class="fr-ta" style="word-break:break-all;word-wrap:break-word;">
+                                <thead>
+                                    <tr class="ou-ta">
+                                        <th>
+                                            <div style="width:20px;"><input type="checkbox" id="allcheck" /></div>
+                                        </th>
+                                        <th><div style="width:40px;">序号</div></th>
+                                        <th><div>变更岗位</div></th>
+                                        <th><div>变更前人员</div></th>
+                                        <th><div style="width:200px;">变更前职业证书名称</div></th>
+                                        <th><div>变更后人员</div></th>
+                                        <th><div style="width:200px;">变更后职业证书名称</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="addtab">
+                                    <tr class="tab-conten">
+                                        <td><input type="checkbox" /></td>
+                                        <td class="number">1</td>
+                                        <td>
+                                            <select class="ChgPost"></select>
+                                        </td>
+                                        <td>
+                                            <select class="ChgPeopleBefore"></select>
+                                        </td>
+                                        <td class="ChgCertiNameBefore"></td>
+                                        <td>
+                                            <select class="ChgPeopleAfter"></select>
+                                        </td>
+                                        <td class="ChgCertiNameAfter"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">附件</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile" class="btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                            </div>
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow"></ul>
+                            </div>
+                        </td>
+                   
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">部门负责人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DepLeaderName" id="DepLeaderName" class="form-control" value="" style="display:inline-block;width:66%;" placeholder="" readonly/>
+
+                                <input type="hidden" name="DepLeaderId" id="DepLeaderId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="1" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择负责人" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="LeaderName" id="LeaderName" class="form-control" value="" style="display:inline-block;width:66%;" placeholder="" readonly/>
+
+                                <input type="hidden" name="LeaderId" id="LeaderId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="2" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择领导" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>签字意见</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <script type="text/plain" id="editor" style="width:100%;height:200px;">
+                            </script>
+                            <input type="hidden" name="SignIdea" id="SignIdea" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big button-base bg-save save" />
+            <input type="button" id="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-big button-base bg-cancel cancel" />
+            <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" />
+            <!--附件数据-->
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+            <!--状态数据-->
+            <input type="hidden" name="State" id="State" value="@PreProjectApprovalState.WaitApproval"/>
+            <!--人员变更数据-->
+            <input type="hidden" name="tzPeopleChgApplyItem" id="tzPeopleChgApplyItem" />
+
+        </div>
+    </form>
+</div>
+<script>
+    //封装函数
+    function ChgPost(dom) {
+        var _this = dom;
+        var id = $("#WorkUnitId").val();
+        var postName = _this.parent().parent().find(".ChgPost option:selected").text();
+        _this.parent().parent().find(".ChgPeopleBefore").empty();
+        _this.parent().parent().find(".ChgPeopleAfter").empty();
+        $.post("/TzPeopleChgApply/GetUserListByPost", { id: id, postName: postName }, function (data) {
+            var html = ""
+            for (var i = 0; i < data.length; i++) {
+                var Professional = data[i].ProfessionalQualificationValue == null ? "无" : data[i].ProfessionalQualificationValue
+                html += `<option value="${Professional}">${data[i].UserName}</option>`
+                _this.parent().parent().find(".ChgCertiNameBefore").text(Professional);
+                _this.parent().parent().find(".ChgCertiNameAfter").text(Professional);
+            }
+            _this.parent().parent().find(".ChgPeopleBefore").append(html);
+            _this.parent().parent().find(".ChgPeopleAfter").append(html);
+
+            var _that = _this.parent().parent().find(".ChgPeopleBefore");
+            var _val = _this.parent().parent().find(".ChgPeopleAfter");
+            ChgPeopleBefore(_that);
+            ChgPeopleAfter(_val);
+
+        });
+    }
+
+    function ChgPeopleBefore(dom) {
+        var _this = dom;
+        var postName = _this.parent().parent().find(".ChgPeopleBefore option:selected").val();
+        _this.parent().parent().find(".ChgCertiNameBefore").text(postName);
+    }
+    function ChgPeopleAfter(dom) {
+        var _this = dom;
+        var postName = _this.parent().parent().find(".ChgPeopleAfter option:selected").val();
+        _this.parent().parent().find(".ChgCertiNameAfter").text(postName);
+    }
+    //富文本编辑器实例化
+    UE.getEditor('editor', {
+        toolbars: [[//工具条
+           'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+        'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+        'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+        'strikethrough', 'superscript', 'subscript', 'removeformat',
+        'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+        'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+        'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]]
+    });
+    //编辑器内容同步input
+    editor = UE.getEditor("editor", {
+        //initialFrameHeight: 40
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+    $('#btnUploadFile').click(function () {
+        document.getElementById("loadFile").click();
+    });
+    var fileDataArray = [];
+    function uploadFile() {
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.FilePath = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = "RYBGFJ";
+                    fileDataArray.push(obj);
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;"/><span>' + obj.Name + '</span><i class="layui-icon fileDel" data-val="' + obj.GuidId + '">&#x1006;</i></li>';
+                        $('.fileShow').append(odiv);
+                    }
+                    fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJson);
+                }
+
+            }
+
+        });
+    }
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().remove();
+        var toremove = '';
+        var id = $(this).data("val");
+        //删除初始文件对应的值
+        fileDataArray = fileDataArray.filter(function (item, index, arr) {
+            return item.GuidId != id
+        })
+        fileDataJsonFile = JSON.stringify(fileDataArray);
+        $("#fileDataJsonFile").val(fileDataJsonFile);
+    });
+
+    //添加人员变更
+    $(".tab-add").click(function () {
+        var index;
+        index = $('.addtab').find('tr:last-child').find('.number').text();
+        if (index == "") {
+            index = 0;
+            index++;
+        } else {
+            index++;
+        }
+        var tabhtml = `
+                    <tr class ="tab-conten">
+                        <td><input type="checkbox" /></td>
+                         <td class ="number">${index}</td>
+                        <td>
+                            <select class ="ChgPost">${materialHtml}</select>
+                        </td>
+                        <td>
+                            <select class ="ChgPeopleBefore"></select>
+                        </td>
+                        <td class ="ChgCertiNameBefore"></td>
+                        <td>
+                            <select class ="ChgPeopleAfter"></select>
+                        </td>
+                        <td class ="ChgCertiNameAfter"></td>
+                     </tr>
+            `
+        $(".addtab").append(tabhtml);
+        var index = $(".addtab tr").length;
+        var _index = index - 1;
+        var Dom = $(".addtab tr").eq(_index).find(".ChgPost");
+       ChgPost(Dom);//调用函数
+    });
+    //删除人员变更
+    $(".tab-delete").click(function () {
+        $(".tab-conten").find("input[type='checkbox']:checked").each(function () {
+            n = $(this).parents("tr").index();  // 获取checkbox所在行的顺序
+            $(".addtab").find("tr:eq(" + n + ")").remove();
+        });
+        $(".tab-conten").each(function (index) {
+            $(this).find(".number").text(index + 1);//重新赋值序号
+        });
+    });
+    //人员变更全选和反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $(".addtab input[type='checkbox']").prop("checked", isChecked);
+    });
+
+    // 单独选项控制全选
+    $(".addtab input[type='checkbox']").click(function () {
+        var allLength = $(".addtab input[type='checkbox']").length;
+        var checkedLength = $(".addtab input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+    var materialHtml;//公用变量，点击添加表格时仍旧使用
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //选择项目
+        $("#selproject").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectProjectAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //选择单位
+        $("#selectCompany").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectServiceAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#WorkUnit").val(obj.data[0].Name);
+                        $("#WorkUnitId").val(obj.data[0].Id);
+
+                        var id = obj.data[0].Id;
+                        //根据单位Id获取岗位信息列表
+                        $(".addtab .ChgPost").empty();
+                        $.post("/TzPeopleChgApply/GetPostById", { id: id }, function (data) {
+                            var Html = "";
+                            for (var i = 0; i < data.length; i++) {
+                                Html = `<option value="${data[i].no}">${data[i].name}</option>`;
+                                $(".addtab .ChgPost").append(Html);
+                                materialHtml += Html;
+                            }
+                            var _this = $(".addtab .ChgPost");
+                            for (i = 0; i < _this.length; i++) {
+                                var index = _this.eq(i);
+                                ChgPost(index);
+                            }
+                        });
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //选择部门负责人
+        $(".selectUser").click(function () {
+            var _this = $(this);
+            var title = _this.data("type") == "1" ? "选择部门负责人" : "选择分管领导";
+            layer.open({
+                type: 2,
+                title: GetLayerTitle(title),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?companyId=@ViewBag.UnitID',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        if (_this.data("type") == "1") {
+                            $("#DepLeaderName").val(obj.data[0].Name);
+                            $("#DepLeaderId ").val(obj.data[0].Id);
+                        } else if (_this.data("type") == "2") {
+                            $("#LeaderName").val(obj.data[0].Name);
+                            $("#LeaderId ").val(obj.data[0].Id);
+                        }
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        // 根据单位Id和岗位信息获取人员信息
+        $("body").on("change", ".ChgPost", function () {
+            var _this = $(this);
+            ChgPost(_this);
+
+        });
+        $("body").on("change", ".ChgPeopleBefore", function () {
+            var _this = $(this);
+            ChgPeopleBefore(_this);
+          
+        });
+        $("body").on("change", ".ChgPeopleAfter", function () {
+            var _this = $(this);
+            ChgPeopleAfter(_this);
+
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            var tzPeopleChgApplyItem = [];
+            $(".tab-conten").each(function (index, item) {
+                tzPeopleChgApplyItem.push({
+                    Number: index + 1,
+                    ChgPost: $(item).find($(".ChgPost option:selected")).text(),
+                    ChgPeopleBefore: $(item).find($(".ChgPeopleBefore option:selected")).text(),
+                    ChgPeopleAfter: $(item).find($(".ChgPeopleAfter option:selected")).text(),
+                    ChgCertiNameBefore: $(item).find($(".ChgCertiNameBefore")).text(),
+                    ChgCertiNameAfter: $(item).find($(".ChgCertiNameAfter")).text()
+                });
+            });
+            $("#tzPeopleChgApplyItem").val(JSON.stringify(tzPeopleChgApplyItem));//赋值
+            var search = $("form").serialize();
+            //变更人员信息验证
+            if ($(".addtab").children("tr").length == 0) {
+                layer.alert("人员变更信息不能为空", { icon: 2 })
+                return;
+            }
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/TzPeopleChgApply/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+        });
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/TzPeopleChgApply/Index";
+    });
+</script>

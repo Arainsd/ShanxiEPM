@@ -1,0 +1,191 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model VisaView
+@{
+    ViewBag.Title = "查看签证";
+}
+<body>
+@if (Model == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label>项目名称&nbsp;:</label>
+                    <input type="text" name="ProjectName" id="ProjectName" value="@Model.ProjectName" disabled />
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label>&nbsp;签证类型&nbsp;:</label>
+                    <input id="VisaTypeName" name="VisaTypeName" value="@Model.VisaTypeName" type="text" disabled />
+                </div>
+                <div class="long-text">
+                    <label for="VisaTitle">标题&nbsp;:</label>
+                    <input type="text" id="VisaTitle" name="VisaTitle" value="@Model.VisaTitle" disabled />
+                </div>
+                <div class="long-text">
+                    <label for="VisaNo">签证号&nbsp;:</label>
+                    <input type="text" id="VisaNo" name="VisaNo" value="@Model.VisaNo" disabled />
+                </div>
+                <div class="intro">
+                    <div><label for="VisaContent">内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="VisaContent" name="VisaContent" disabled>@Model.VisaContent</textarea>
+                    </div>
+                </div>
+                @*<div class="long-text">
+                    <label for="VisaAmount">金额&nbsp;:</label>
+                    <input type="text" id="VisaAmount" name="VisaAmount" value="@Model.VisaAmount.ToString("0.######")" disabled />&nbsp;&nbsp;&nbsp;万元
+                </div>
+                <div class="short-text">
+                    <label for="VisaStartTime">签证开始时间&nbsp;:</label>
+                    <input type="text" id="VisaStartTime" name="VisaStartTime" onClick="WdatePicker({ el: 'VisaStartTime' })" value="@(Model.VisaStartTime == null ? "" : Convert.ToDateTime(Model.VisaStartTime).ToString("yyyy-MM-dd"))" disabled>
+                    <i onClick="WdatePicker({ el: 'VisaStartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="short-text">
+                    <label for="VisaEndTime">签证结束时间&nbsp;:</label>
+                    <input type="text" id="VisaEndTime" name="VisaEndTime" onClick="WdatePicker({ el: 'VisaEndTime' })" value="@(Model.VisaEndTime == null ? "" : Convert.ToDateTime(Model.VisaEndTime).ToString("yyyy-MM-dd"))" disabled>
+                    <i onClick="WdatePicker({ el: 'VisaEndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="intro">
+                    <div><label for="VisaResean">原因&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="VisaResean" name="VisaResean" disabled>@Model.VisaResean</textarea>
+                    </div>
+                </div>*@
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow" id="fileDetail"></ul>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    @if (Model.State == (int)ApprovalState.WaitAppr)
+                    {
+                        <button type="button" class="Audit checkright" data-module="Visa" data-right="Check">审核</button>
+                        <button type="button" class="Reject checkright" data-module="Visa" data-right="UnCheck">驳回</button>
+                    }
+                    else if (Model.State == (int)ApprovalState.ApprFailure)
+                    {
+                        @*<button type="button" class="Discard checkright" data-module="Visa" data-right="Invalid">废弃</button>*@
+                    }
+                    <button type="button" class="Quesion">沟通</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        layui.use(['layer', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Visa', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + item.Size + '</div>';
+                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '">';
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+                        });
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //下载附件
+            $("body").on("click", ".downloadFile", function () {
+                var group = $(this).parent().find(".hiddenArea").data("group");
+                var path = $(this).parent().find(".hiddenArea").data("url");
+                var fileName = $(this).parent().find(".hiddenArea").data("filename");
+                window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+            });
+            //废弃
+            $(".Discard").click(function () {
+
+                var id = '@Model.Id';
+                var state = "Discarded";
+                if (id != "") {
+                    parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                        $.post("UpdateState", { id: id, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                                window.location.href = "/Visa/Index";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+
+            //驳回
+            $(".Reject").click(function () {
+                var id = '@Model.Id';
+                var state = "ApprFailure";
+                parent.layer.prompt({
+                    formType: 2,
+                    title: '请输入驳回理由',
+                    yes: function (index, layero) {
+                        // 获取文本框输入的值
+                        var value = layero.find(".layui-layer-input").val();
+                        if (value) {
+                            $.post("UpdateState", { id: id, reason: value, state: state }, function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                    window.location.href = "/Visa/Index";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        } else {
+                            parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                        }
+                    }
+                });
+            });
+            //审核
+            $(".Audit").click(function () {
+                var id = '@Model.Id';
+                var state = "ApprSuccess";
+                parent.layer.confirm("确认审核通过？", { icon: 3 }, function () {
+                    $.post("UpdateState", { id: id, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("审核成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Visa/Index";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            });
+
+            //沟通
+            $(".Quesion").click(function () {
+                var projectId = $("#ProjectId").val();
+                window.location.href = "/Question/Add?businType=Visa&projectId=" + projectId + "&BusinessId=@Model.Id";
+            });
+        });
+    </script>
+}
+</body>

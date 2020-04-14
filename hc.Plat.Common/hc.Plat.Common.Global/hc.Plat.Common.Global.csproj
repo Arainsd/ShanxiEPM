@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1129932D-C687-465C-8BC4-F7759326B8AF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hc.Plat.Common.Global</RootNamespace>
+    <AssemblyName>hc.Plat.Common.Global</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\ServicePush\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APIAESTool.cs" />
+    <Compile Include="ApplicationContext.cs" />
+    <Compile Include="ClientProxyExType.cs" />
+    <Compile Include="CommonCondition.cs" />
+    <Compile Include="CommonFunction.cs" />
+    <Compile Include="ContextPropagationBehavior.cs" />
+    <Compile Include="ContextPropagationBehaviorElement.cs" />
+    <Compile Include="ContextReceiver.cs" />
+    <Compile Include="ContextSender.cs" />
+    <Compile Include="DesTool.cs" />
+    <Compile Include="exEntityCateBS.cs" />
+    <Compile Include="exEntityCateTreeJUI.cs" />
+    <Compile Include="exEntityClassifyTreeJUI.cs" />
+    <Compile Include="exEntityClassNewTreeJUI.cs" />
+    <Compile Include="exEntityClassTreeJUI.cs" />
+    <Compile Include="exEntityModeTreeJUI.cs" />
+    <Compile Include="exEntityOrgTreeJUI.cs" />
+    <Compile Include="exEntityRegionalTreeJUI.cs" />
+    <Compile Include="exEntityServiceItemTreeJUI.cs" />
+    <Compile Include="exEntitySiteColumnTreeJUI.cs" />
+    <Compile Include="exEntityTreeJUI.cs" />
+    <Compile Include="exType.cs" />
+    <Compile Include="GenUniqueCode.cs" />
+    <Compile Include="GlobalConstString.cs" />
+    <Compile Include="HttpHelper.cs" />
+    <Compile Include="ImageHelper.cs" />
+    <Compile Include="KeyCreate.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="NetTools.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimerTask.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="UtilitySendMessage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Log4Net.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\hc.Plat.Message\taobao-sdk-net-auto_1455552377940-20160707-source\TopSdk.csproj">
+      <Project>{9c11cae5-5188-4e71-825b-68fc3135728a}</Project>
+      <Name>TopSdk</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

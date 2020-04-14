@@ -1,0 +1,181 @@
+﻿@*@using hc.epm.Common;
+    @using hc.Plat.Common.Extend;
+    @using hc.epm.ViewModel;
+    @model TzResearchAllView*@
+
+@{
+    ViewBag.Title = "考勤设置";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<link href="~/Resource/css/multiple-select.css" rel="stylesheet" />
+<style>
+    .table_title {
+        width: 20%;
+    }
+
+    .input_unit {
+        width: 45% !important;
+    }
+
+        /*下拉多选框*/
+        .input_unit input {
+            float: left;
+            margin-right: 4px;
+        }
+
+    .timeGroup {
+        width: 22%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>考勤设置</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="AddClick">
+                    <tr>
+                        <td class="table_title">考勤人员类型：</td>
+                        <td class="td-div">
+                            <select class="selectpicker show-tick input_unit form-control" id="softwareType" name="softwareType" multiple="multiple" data-live-search="false">
+                                <option value="value">1111</option>
+                                <option value="value">2222</option>
+                                <option value="value">3333</option>
+                                <option value="value">4444</option>
+                                @*@if (SoftwareList.Any())
+                                    {
+                                        foreach (var item in SoftwareList)
+                                        {
+                                            var proSoftIds = Model.ProSoftCates.Select(p => p.CateId).ToArray();
+                                            if (proSoftIds.Contains(item.ID))
+                                            {
+                                                <option value="@item.ID" selected="selected">@item.CateName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ID">@item.CateName</option>
+                                            }
+                                        }
+                                    }*@
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">考勤人员次数：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input class="form-control input_unit" type="number" name="num" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="dateTr">
+                        <td class="table_title">考勤时间段：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">未在规定时间是否可以打卡：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="1" value="" checked />是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="1" value="" />否
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="Save" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big " />
+            <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+
+    </form>
+</div>
+
+<script type="text/javascript" src="~/Resource/scripts/multiple-select.js"></script>
+<script type="text/javascript" src="/Resource/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function () {
+        $("input[name='num']").blur(function () {
+            var num = $(this).val(),
+                nums = $(".dateTr").size(),
+                html = `<tr class="dateTr">
+                        <td class="table_title"></td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <div class="timeGroup">
+                                    <input type="text" class ="form-control" id="startTime" name="startTime" value="" onfocus=this.blur() onClick='WdatePicker({ onpicked: function (dp) { }});' placeholder="起始时间">
+                                    <i class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="" onfocus=this.blur() onClick='WdatePicker({ onpicked: function (dp) { } });' placeholder="终止时间">
+                                    <i class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                <i class ="layui-icon tab-delete" title="删除" style="color:cornflowerblue">&#xe640; </i>
+                            </div>
+                        </td>
+                    </tr>`;
+            if (num > nums) {
+                for (var i = 0; i < num - nums; i++) {
+                    $(".dateTr").last().after(html);
+                }
+            } else if (num < nums) {
+                $(".dateTr:last(" + (nums - num) + ")").remove();
+            }
+        });
+
+        //删除考勤时间段
+        $(".AddClick").on("click", ".tab-delete", function () {
+            $(this).parents("tr").remove();
+            var trNum = $(".dateTr").size();
+            $("input[name='num']").val(trNum);
+        });
+
+    });
+
+    //初始化下拉多选
+    $('#softwareType').multipleSelect({
+        placeholder: "",
+        minimumCountSelected: 20,
+        selectAll: false,
+        allSelected: ''
+    });
+
+
+    //下拉多选数据提交
+    var SoftwareName = [],
+        softwareName;
+    $.each($("#softwareType option:selected"), function (index, item) {
+        var $that = $(item);
+        SoftwareName.push($that.text());
+    });
+    softwareName = SoftwareName.join(",");
+
+</script>

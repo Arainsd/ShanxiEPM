@@ -1,0 +1,115 @@
+﻿@using hc.epm.ViewModel;
+@model List<InspectView>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label>项目名称 : </label>
+                    <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName">
+                </div>
+                <div><label>得失分单位 : </label> <input type="text" id="GainLossCompanyName" name="GainLossCompanyName" value="@ViewBag.GainLossCompanyName"></div>
+                @*<div><label>得失分个人 : </label> <input type="text" id="GainLossUserName" name="GainLossUserName" value="@ViewBag.GainLossUserName"></div>*@
+            </div>
+            <div class="form-sub">
+                <button type="submit" class="" data-module="SecurityCheck" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="150">项目名称</th>
+                    <th width="100">检查时间</th>
+                    <th width="80">检查人</th>
+                    <th width="150">得失分单位</th>
+                    <th width="100">单位分值</th>
+                    @*<th width="80">得失分个人</th>
+                        <th width="80">个人分值</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.InspectItemIdStr" data-gainId="@item.GainLossCompanyId" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@(item.InspectDate == null ? "" : Convert.ToDateTime(item.InspectDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.InspectUserName</td>
+                            <td>@item.GainLossCompanyName</td>
+                            <td><a href="javascript:;" style="color: blue;text-decoration-line: underline;" class="Detail checkright" data-module="Change" data-right="Info">@(item.Score.Value.ToString("#.##") + "/" + item.ScoreMax)</a></td>
+                            @*<td>@item.GainLossUserName</td>
+                                <td><a href="javascript:;" style="color: blue;text-decoration-line: underline;" class="Detail checkright" data-module="Change" data-right="Info">@(item.Score + "/" + item.ScoreMax)</a></td>*@
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="10" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+<script>
+
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Monitor/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //查看
+    $("tbody").on("click", ".Detail", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        var gainLossCompanyId = $(this).parents("tr").find($(".inputId")).data("gainid");
+
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("得失分明细列表"),
+            shadeClose: false, //点击遮罩关闭层
+            area: ['1000px', '600px'],
+            content: '/Monitor/IndexItem?inspectItemId=' + id + "&gainLossCompanyId=" + gainLossCompanyId,
+            btn2: function (index, layero) {
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);//关闭窗口
+            },
+            cancel: function (index, layero) {
+            },
+        });
+    });
+
+</script>

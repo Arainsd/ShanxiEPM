@@ -1,0 +1,131 @@
+﻿@using hc.epm.DataModel.Business;
+@model IEnumerable<Epm_OilStation>
+@{
+    ViewBag.Title = "请选择加油站";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>加油站名称 : </label><input type="text" id="name" name="name" value="@ViewBag.name">
+                <input type="hidden" name="selectType" value="@ViewBag.SelectType" />
+            </div>
+            <div class="form-sub">
+                <button type="submit" style="float:left; cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="40">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="50">序号</th>
+                <th>名称</th>
+                <th width="200">编号</th>
+                <th style="display:none;">地址</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = 0;
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.SId" data-name="@item.Name" data-code="@item.Code"/>
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td>@item.Name</td>
+                        <td>@item.Code</td>
+                        <td style="display:none;">@item.Address</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/Comm/SelectOilStation?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize();
+                    }
+                }
+            });
+        });
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    Name: $(this).data('name') || '',
+                    Code: $(this).data('code') || '',
+                });
+            });
+
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择加油站！';
+            } else {
+                var selectType = '@ViewBag.SelectType';
+                if (selectType === '1' && result.data.length > 1) {
+                    result.flag = false;
+                    result.msg = '一次只能选择一条加油站信息！！';
+                }
+            }
+            return result;
+        }
+    </script>
+}

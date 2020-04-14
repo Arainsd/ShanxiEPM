@@ -1,0 +1,178 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@model List<Epm_ProjectWorkMainPoints>
+@{
+    ViewBag.Title = "ProjectMainPoint";
+
+    //if (Model == null)
+    //{
+    //    return;
+    //}
+}
+<style type="text/css">
+    .datalist td {
+        color: #666666 !important;
+    }
+
+    #maincontent tr td:nth-child(1) {
+        text-align: left;
+        padding-left: 20px;
+    }
+
+    .wminput {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 0 19px;
+        height: 35px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+        width: 300px;
+    }
+
+    .wmselect {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 0 30px 0 15px;
+        height: 35px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+        width: 300px;
+    }
+</style>
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Edit">基本信息</li>
+        <li id="ApprovalConstitute">总批复构成</li>
+        <li id="ProjectISP">工程供应商</li>
+        <li id="ProjectMainPoint" class="active">工程要点</li>
+        <li id="MilestonePlan">工程节点</li>
+        <li id="TimeManage">工期管理</li>
+        <li id="IsCrossingsManage">外部手续</li>
+    </ul>
+    <div class="tab">
+        <div id="maincontent">
+            @if (Model.Any())
+            {
+                var DicValues = Model.GroupBy(p => new { p.DicKey, p.DicValue }).OrderBy(p => p.Key.DicKey).Select(p => p.Key.DicValue).ToList();
+                foreach (var val in DicValues)
+                {
+                    <table class="datalist" style="margin-bottom:10px;">
+                        <tbody>
+                            <tr class="accept_type" data-type="monitor">
+                                <td title="点击可折叠/展开" style="background-color:#D9D8D8;">@(val)工程内容</td>
+                            </tr>
+                            @{
+                                var list = Model.Where(p => p.DicValue == val).OrderBy(p => p.Sort).ToList();
+                                foreach (var item in list)
+                                {
+                                    <tr name="monitor" style="padding-bottom:30px;display:none;">
+                                        <td class="accept_detail">
+                                            <div style="width:150px;height:35px;line-height:35px;float:left;text-align:right;padding-right:10px;">@item.WorkMain :</div>
+                                            @if (!string.IsNullOrWhiteSpace(item.WorkMainValues))
+                                            {
+                                                var arrs = item.WorkMainValues.Split(';');
+                                                <select name="Val" id="Val" class="wmselect">
+                                                    <option value="">请选择</option>
+                                                    @foreach (var arr in arrs)
+                                                    {
+                                                        var a = arr.Split(',');
+                                                        if (a[0].ToString() == item.Val)
+                                                        {
+                                                            <option value="@a[0].ToString()" selected>@a[1].ToString()</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@a[0].ToString()">@a[1].ToString()</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" value="@item.Val" id="Val" name="Val" class="wminput" maxlength="50" />
+                                            }
+                                            <span style="width:50px;">@(item.Unit)</span>
+                                            <input type="hidden" value="@item.SId" id="id" name="id" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+        <form>
+            <input type="hidden" name="ProjectMainPoints" id="ProjectMainPoints" />
+        </form>
+        <div class="button-group btn-center">
+            <button type="button" class="saveBut checkright" data-module="ProjectInfoManage" data-right="SetMainPoints" id="saveBut">保存</button>
+        </div>
+    </div>
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    $(function () {
+        $("#Edit").click(function () {
+            window.location.href = 'Edit?projectId=@ViewBag.ProjectId';
+        });
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = "ApprovalConstitute?projectId=@ViewBag.ProjectId"
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#TimeManage").click(function () {
+            window.location.href = 'TimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'ProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+
+        $(".accept_type").bind("click", function () {
+            var type = $(this).data("type");
+            var obj = $(this).siblings("[name=" + type + "]");
+            if (obj.is(':visible')) {
+                obj.hide();
+            } else {
+                $("tr[name=" + type + "]").hide();
+                obj.show();
+            }
+        });
+
+        //数据提交
+        $("body").on("click", "#saveBut", function () {
+            var ProjectMainPoints = [];
+            $(".accept_detail").each(function (index, item) {
+                ProjectMainPoints.push({
+                    Id: $(item).children("#id").val(),
+                    Val: $(item).children("#Val").val()
+
+                });
+            });
+            var data = JSON.stringify(ProjectMainPoints);
+            $("#ProjectMainPoints").val(data);
+            var search = $("form").serialize();
+            $.post("ProjectMainPointPost?projectId=@ViewBag.ProjectId", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+    });
+</script>

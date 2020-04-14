@@ -1,0 +1,324 @@
+﻿
+@{
+    ViewBag.Title = "评审材料上报";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData">
+    <form class="form-horizontal">
+
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div">
+                            <div>汉城加油站项目立项申请</div>
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>新建</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>汉城加油站</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>2019-09-23</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>西安市汉城路81号</div>
+                        </td>
+                        <td class="table_title">估计金额</td>
+                        <td class="td-div">
+                            <div>2000万元</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司</td>
+                        <td colspan="3" align="left">
+                            <div>西安分公司</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>负责人</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">地市项目负责人</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="" name="" data-unitid="" style="display:inline-block;width:80%" disabled/>
+                                <input type="button" id="CityPro1" class="btn form-control" style="position: relative; z-index: 1;width: 60px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                                <input class="form-control" type="hidden" id="" name="" />
+                            </div>
+                        </td>
+                        <td class="table_title">地市项目决策人</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="" name="" data-unitid="" style="display:inline-block;width:80%" disabled/>
+                                <input type="button" id="CityPro2" class="btn form-control" style="position: relative; z-index: 1;width: 60px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                                <input class="form-control" type="hidden" id="" name="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">编写负责人</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="" name="" data-unitid="" style="display:inline-block;width:80%" disabled/>
+                                <input type="button" id="Redact" class="btn form-control" style="position: relative; z-index: 1;width: 60px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                                <input class="form-control" type="hidden" id="" name="" />
+                            </div>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            <select class="form-control" id="fileType">
+                                @*id="fileType"后面要根据数据库的字段改*@
+                                <option value="value">可研报告或论证材料</option>
+                                <option value="value">法律意见书</option>
+                                <option value="value">草拟合同</option>
+                                <option value="value">附表</option>
+                                <option value="value">附图</option>
+                                <option value="value">各类文件复印件</option>
+                            </select>
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+        </div>
+    </form>
+</div>
+
+<script>
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#fileType").val();
+                    obj.TypeName = $("#fileType").find("option:checked").text()
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = `
+                                     <tr>
+                                        <td><span class ="font-black">1</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td><span class ="font-black">${obj.TypeName}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}">
+                                        </td>
+                                    </tr>
+                           `
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //地市项目负责人
+        $("#CityPro1").click(function () {
+            var unitid = $("#CityPro").data("unitid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择地市项目负责人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?SelectUser=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#DataId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //地市项目决策人
+        $("#CityPro2").click(function () {
+            var unitid = $("#CityPro").data("unitid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择地市项目决策人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?SelectUser=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#DataId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //编写负责人
+        $("#Redact").click(function () {
+            var unitid = $("#CityPro").data("unitid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择编写负责人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?SelectUser=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#DataId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TypeNo: $("#fileType").val(),
+                    TypeName: $("#fileType").find("option:checked").text(),
+                    Sort: index + 1
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            console.log(fileDataArray)
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/ProjectManagement/ProjectManagementList";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+        });
+    });
+
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/ProjectManagementList";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+    });
+
+
+</script>

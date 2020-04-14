@@ -1,0 +1,198 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model List<ChangeView>
+@{
+    ViewBag.Title = "变更列表";
+}
+
+<div class="contentData">
+    <div class="form-select c">
+        <form action="" method="get">
+            <div>
+                <div>
+                    <label>项目名称 : </label>
+                    <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName" maxlength="100">
+                    <input type="hidden" name="ProjectId" id="ProjectId">
+                </div>
+                <div><label>变更名称 : </label><input type="text" name="Name" id="Name" value="@ViewBag.name" maxlength="100"></div>
+                <div>
+                    <label>变更状态 : </label>
+                    @Html.DropDownList("state", ViewBag.State as SelectList)
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add" class="" data-module="EngineeringChange" data-right="Add">新 增</button>
+                <button type="submit" class="" data-module="EngineeringChange" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="40">序号</th>
+                    <th>项目名称</th>
+                    <th>变更名称</th>
+                    <th width="110">原项目款<br />(万元)</th>
+                    <th width="110">调增额<br />(万元)</th>
+                    <th width="110">调减额<br />(万元)</th>
+                    <th width="110">变更金额<br />(万元)</th>
+                    <th width="85">开始时间</th>
+                    <th width="85">结束时间</th>
+                    <th width="100">状态</th>
+                    <th width="110">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName<input type="hidden" value="@item.ProjectId" /></td>
+                            <td>@item.ChangeName</td>
+                            <td>@item.TotalAmount.ToString("0.######")</td>
+                            <td>@(item.AddAmount == null ? "" : item.AddAmount.ToString("0.######"))</td>
+                            <td>@item.ReduceAmount.ToString("0.######")</td>
+                            <td>@item.ChangeAmount.ToString("0.######")</td>
+                            <td>@(item.ChangeStartTime == null ? "" : Convert.ToDateTime(item.ChangeStartTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.ChangeEndTime == null ? "" : Convert.ToDateTime(item.ChangeEndTime).ToString("yyyy-MM-dd"))</td>
+                            <td class="state">@(((ApprovalState)item.State).GetText())</td>
+                            @if (@item.State == int.Parse(ApprovalState.Enabled.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="EngineeringChange" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Edit checkright" data-module="EngineeringChange" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="EngineeringChange" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.WaitAppr.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="EngineeringChange" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.ApprSuccess.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="EngineeringChange" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.ApprFailure.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="EngineeringChange" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Edit checkright" data-module="EngineeringChange" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Discard checkright" data-module="EngineeringChange" data-right="Invalid">废弃</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.Discarded.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="EngineeringChange" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="EngineeringChange" data-right="Delete">删除</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+
+<script>
+    //若无数据隐藏分页组件
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Change/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //新增
+    $("#add").on("click", function () {
+        window.location.href = "/Change/Add";
+    });
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Change/Detail?id=" + id;
+    });
+    //修改
+    $(".Edit").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Change/Edit?id=" + id;
+    });
+    //删除
+    $(".Delete").on("click", function () {
+        var id = "";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                $.post("Delete", { id: id }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("删除成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        } else {
+            parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+        }
+    });
+    //废弃
+    $(".Discard").click(function () {
+        var id = "";
+        var state = "Discarded";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                $.post("UpdateState", { id: id, state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        }
+    });
+</script>

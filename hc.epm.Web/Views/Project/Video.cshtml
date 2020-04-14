@@ -1,0 +1,147 @@
+﻿@using hc.epm.DataModel.Basic;
+@using System.Collections.Generic;
+@model List<Base_VideoManage>
+@{
+    ViewBag.Title = "视频集成";
+}
+<style>
+    .tab {
+        overflow: hidden;
+    }
+
+    .vi-al {
+        width: 100%;
+        height: 100%;
+    }
+
+        .vi-al li {
+            float: left;
+            height: 300px;
+            width: 45%;
+            box-sizing: border-box;
+            margin-left: 3%;
+        }
+
+    video {
+        height: 88%;
+        width: 100%;
+    }
+
+    .title {
+        width: 100%;
+        height: 12%;
+        color: blue;
+        text-align: left;
+        display: inline-block;
+        line-height: 3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 16px;
+    }
+    .no-da {
+        font-size:18px;
+    }
+</style>
+@*<script src="https://open.ys7.com/sdk/js/2.0/ezuikit.js"></script>*@
+<script src="~/Resource/scripts/ezuikit.js">ezuikit.js</script>
+
+<div class="contentData">
+    <ul class="tab-list" style="margin-bottom:38px;">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage">工期管理</li>
+        <li id="DetailMilestonePlan">工程节点</li>
+        <li id="ScheduleInfo">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video" class="active">视频集成</li>
+    </ul>
+    <div class="tab">
+      
+        <ul class="vi-al">
+            @{
+                int index = -1;
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+
+                foreach (var item in Model)
+                {
+                    index++;
+                    <li>
+                        <video id="myPlayer_@index" controls playsInline webkit-playsinline autoplay>
+                            <source src="@item.UrlAddress" type="rtmp/flv" />
+                        </video>
+                        <span class="title">@item.CameraName</span>
+                    </li>
+
+                }
+            }
+            else {
+                <li class="no-da">暂无数据...</li>
+            }
+        
+        </ul>
+
+    </div>
+</div>
+<script>
+
+    //初始播放视频
+    var len = $(".vi-al li").length;//取视频个数
+    if (len > 0) {
+        for (var i = 0; i < len; i++) {
+            var player0 = new EZuikit.EZUIPlayer('myPlayer_' + i);//萤石云初始化
+        }
+    }
+  
+
+    $("#Detail").click(function () {
+        window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailApprovalConstitute").click(function () {
+        window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailProjectMainPoint").click(function () {
+        window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailTimeManage").click(function () {
+        window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailMilestonePlan").click(function () {
+        window.location.href = 'DetailMilestonePlan?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailProjectISP").click(function () {
+        window.location.href = 'DetailProjectISP?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailProjectData").click(function () {
+        window.location.href = 'DetailProjectData?projectId=@ViewBag.ProjectId';
+    });
+    $("#ScheduleInfo").click(function () {
+        window.location.href = 'ScheduleInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#ContractInfo").click(function () {
+        window.location.href = 'ContractInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#ChangeInfo").click(function () {
+        window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#VisaInfo").click(function () {
+        window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#QuestionInfo").click(function () {
+        window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailCrossingsManage").click(function () {
+        window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+    });
+    $("#video").click(function () {
+        window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+    });
+</script>

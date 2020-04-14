@@ -1,0 +1,197 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Msg
+@model Msg_EmailTemplete
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;"><em class="required">*</em>编号 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="No" id="No" placeholder="请输入编号" autocomplete="off" class="form-control" value="@Model.No" />
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>模板名称 : </label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="Name" id="Name" placeholder="请输入模板名称" autocomplete="off" class="form-control" value="@Model.Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>适用环节 : </label>
+                <div class="col-lg-4 col-sm-4">
+                    @Html.DropDownList("Step", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>标题内容 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="TitleCon" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="TitleCon" placeholder="请输入内容">@Model.TitleCon</textarea>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>模板内容 : </label>
+                <div class="col-lg-10 col-sm-10">               
+                    <script type="text/plain" id="editor" style="height:200px">
+                        @Html.Raw(Model.TemplateCon)
+                    </script>
+                    <input type="text" name="TemplateCon" id="TemplateCon" class="form-control" style="width:0px;height:0px;border:0px;" />
+                 </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>参数说明 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="ParameterDes" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="ParameterDes" placeholder="请输入内容">@Model.ParameterDes</textarea>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;">启用/禁用 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label">是否确认 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12" style="overflow:hidden;top:80px;">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    //富文本编辑器实例化
+    var ue = UE.getEditor('editor');
+    //编辑器内容同步input
+    editor = UE.getEditor("editor", {
+        //initialFrameHeight: 40
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#TemplateCon").val(UE.getEditor("editor").getContent());
+            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+             .updateStatus('TemplateCon', 'NOT_VALIDATED', null)
+             .validateField('TemplateCon');
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Step: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择适用环节'
+                        },
+                        callback: function () {
+                            return $('.Step').val() !== '';
+                        }
+                    }
+                },
+                No: {
+                    validators: {
+                        notEmpty: {
+                            message: '编号不能为空'
+                        },
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '模板名称不能为空'
+                        },
+                    }
+                },
+                TitleCon: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题内容不能为空'
+                        }
+                    }
+                },
+                TemplateCon: {
+                    validators: {
+                        notEmpty: {
+                            message: '模板内容不能为空'
+                        }
+                    }
+                },
+                ParameterDes: {
+                    validators: {
+                        notEmpty: {
+                            message: '参数说明不能为空'
+                        }
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //   监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post("/EmailTemplete/Edit", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");
+                        $("#save").val("请等待")
+                        var index2 = parent.layer.msg("邮件模版修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(index2);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>

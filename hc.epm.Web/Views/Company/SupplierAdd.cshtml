@@ -1,0 +1,342 @@
+﻿
+@{
+    ViewBag.Title = "供应商管理新增";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>
+                                供应商名称：
+                            </span>
+                        </td>
+                        <td colspan="3">
+                            <div class="form-group">
+                                <input id="Name" type="text" name="Name" class="form-control " value="" placeholder="请输入供应商名称" />
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">供应商电话：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" id="Phone" name="Phone" class="form-control" value="" placeholder="请输入供应商电话" />
+                            </div>
+                        </td>
+                        <td class="table_title">供应商传真：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" id="FaxPhone" name="FaxPhone" class="form-control" value="" placeholder="请输入供应商传真" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">邮箱地址：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" id="Email" name="Email" class="form-control" value="" placeholder="请输入邮箱地址" />
+                            </div>
+                            
+                        </td>
+                        <td class="table_title">所在地区</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <select id="Province" class="form-control" style="width:33%;float:left">
+                                    <option value="">---请选择省---</option>
+                                </select>
+                                <select id="City" name="City" class="form-control" style="width:33%;float:left"></select>
+                                <select id="Area" name="Area" class="form-control" style="width:33%;float:left"></select>
+                                <input type="hidden" name="Address" id="Address" />
+                                <input type="hidden" name="AddressName" id="AddressName" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">是否黑名单：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="IsBlacklist" value="true" />是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="IsBlacklist" value="false" checked />否
+                                </label>
+                            </div>
+                        </td>
+                        <td class="table_title"><i class="color_red_x">*</i>供应商类型：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("CompanyType", ViewBag.CompanyType as SelectList, null, new { @class = "form-control" })
+                                <input type="hidden" name="CompanyTypeName" id="CompanyTypeName" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"><i class="color_red_x">*</i>供应商级别：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("CompanyRank", ViewBag.CompanyRank as SelectList, null, new { @class = "form-control" })
+                                <input type="hidden" name="CompanyRankName" id="CompanyRankName" />
+                            </div>
+                        </td>
+                        <td class="table_title">详细地址：</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" id="AddressInfo" name="AddressInfo" class="form-control" placeholder="请输入详细地址" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">简介：</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="请输入简介" rows="3" name="Remark" id="Remark"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.threeBusType as SelectList, null, new { @class = "form-control sel" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile" class="btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择附件" />
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" lay-submit lay-filter="sub" id="save" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+    </form>
+</div>
+
+<script>
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+    });
+
+    $('#btnUploadFile').click(function () {
+        document.getElementById("loadFile").click();
+    });
+
+    function uploadFile() {
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (obj.TypeName != "请选择") {
+                        if (data[i].ImageType == null) {
+                            var imgUrl = getFileImg(obj.Name);
+                            var odiv = `
+                                      <tr id="${obj.GuidId}">
+                                        <td><span > `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" class ="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typeno="${ obj.TypeNo}" data-typename="${ obj.TypeName}">
+                                             </td>
+                                        </tr>
+                           `
+                            index++;
+                            $('.fileShow-append').append(odiv);
+                        }
+                    } else {
+                        layer.alert("请选择附件类型", { icon: 2 });
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    //获取区域列表（省）
+    function getRegionList() {
+        $.post("/Project/RegionList", { parentCode: "0" }, function (data) {
+            if (data.Flag) {
+                for (var i = 0; i < data.Data.length; i++) {
+                    $("#Province").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].Fullname + "</option>")
+                };
+            }
+        });
+    }
+    $("#Province").change(function () {
+        var value = this.value
+        $.post("/Project/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                $("#City").empty();
+                $("#City").append("<option value=''>---请选择市---</option>")
+                $("#Area").empty();
+                $("#Area").append("<option value=''>---请选择县---</option>")
+                for (var i = 0; i < data.Data.length; i++) {
+                    $("#City").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                };
+            }
+        });
+    });
+    //获取区域列表（县）
+    $("#City").change(function () {
+        value = this.value;
+        $.post("/Project/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                $("#Area").empty();
+                $("#Area").append("<option value=''>---请选择县---</option>");
+                for (var i = 0; i < data.Data.length; i++) {
+                    $("#Area").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                };
+
+            }
+        });
+    });
+    //地区选择第三级选定后将地址信息保存至区域字段隐藏域
+    $("#Area").change(function () {
+        value = this.value;
+        var proName = $("#Province option:selected").text();
+        var cityName = $("#City option:selected").text();
+        var areaName = $("#Area option:selected").text();
+        $("#Address").val($("#Province").val() + "," + $("#City").val() + "," + value);
+        $("#AddressName").val(proName + cityName + areaName);
+    });
+    getRegionList();//加载地区列表
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //数据提交
+        $("#save").click(function () {
+            //循环dom取附件数据
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find(".updata").data("name"),
+                    GuidId: $(item).find(".updata").data("guid"),
+                    Size: $(item).find(".updata").data("size"),
+                    ImageType: $(item).find(".updata").data("imagetype"),
+                    Group: $(item).find(".updata").data("group"),
+                    Url: $(item).find(".updata").data("url"),
+                    TableColumn: $(item).find(".updata").data("typeno"),
+                });
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            //类型
+            if ($("#CompanyType option:selected").val() != "") {
+                $("#CompanyTypeName").val($("#CompanyType option:selected").text());
+            }
+            //级别
+            if ($("#CompanyRank option:selected").val() != "") {
+                $("#CompanyRankName").val($("#CompanyRank option:selected").text());
+            }
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            var search = $("#mainForm").serialize();
+            if (bv.isValid()) {
+                $.post("SupplierAdd", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/Company/SupplierIndex";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+
+        });
+    });
+    $("#close").click(function () {
+        window.location.href = "/Company/SupplierIndex";
+    });
+    //表单验证
+    $('#mainForm').bootstrapValidator ({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            Phone: {
+                validators: {
+                    regexp: {
+                        regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                        message: "供应商电话格式错误"
+                    }
+                }
+            },
+            Name: {
+                validators: {
+                    notEmpty: {
+                        message: '供应商名称不能为空'
+                    }
+                }
+            },
+            Email: {
+                validators: {
+                    emailAddress: {
+                        regexp:  /^[a-zA-Z0-9_.-]+@{@Html.Raw("@");}[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/,
+                        message: '邮箱地址格式有误',
+                    },
+                }
+            },
+        }
+    
+    });
+        
+    
+</script>

@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "SelectTzGasReform";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style>
+    .active {
+        background-color:#009688;
+        color:white;
+        border:none;
+    }
+    .init{
+         background-color:#D9D8D8;
+    }
+    .tab-list {
+        height:40px;
+        width:300px;
+    }
+    .tabli {
+        float:left;
+        width:145px;
+        text-align:center;
+        height:100%;
+        line-height:40px;
+        box-sizing:border-box;
+        border:1px solid;
+    }
+
+        .tabli:hover {
+            cursor:pointer;
+        }
+</style>
+<ul class="tab-list">
+    <li class="tabli" id="jspro">加油站项目</li>
+    <li class="tabli active" id="gcpro" style="margin-left:8px;">库站改造项目</li>
+</ul>
+<div class="tab-view">
+    <div class="view">
+        @Html.Action("SelectTzGasStation")
+    </div>
+    <div class="view" style="display:none;">
+        @Html.Action("SelectReformRecord")
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tab-list').find('.tabli').click(function () {
+            var index = $(this).index();
+            $(this).addClass("active").removeClass("init");
+            $(this).siblings().removeClass("active").addClass("init");
+            $(".tab-view").children().eq(index).show();
+            $(".tab-view").children().eq(index).siblings().hide();
+        })
+    })
+</script>

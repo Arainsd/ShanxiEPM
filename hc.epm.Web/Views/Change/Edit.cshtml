@@ -1,0 +1,425 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model ChangeView
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "修改变更";
+}
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label for="PrejectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="ProjectName" name="ProjectName" value="@Model.ProjectName" autocomplete="off" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                </div>
+                <input type="hidden" name="id" value="@Model.Id">
+                <div class="long-text">
+                    <label for="ChangeNo"><span class="star">*</span>&nbsp;变更名称&nbsp;:</label>
+                    <input type="text" id="ChangeName" name="ChangeName" value="@Model.ChangeName" />
+                </div>
+                <div class="intro">
+                    <div><label for="ChangeContent"><span class="star"></span>&nbsp;变更内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="ChangeContent" name="ChangeContent">@Model.ChangeContent</textarea>
+                    </div>
+                </div>
+                <div class="intro" style="margin-top:30px;">
+                    <div><label for="ChangeReason"><span class="star"></span>&nbsp;变更原因&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="ChangeReason" name="ChangeReason">@Model.ChangeReason</textarea>
+                    </div>
+                </div>
+                <div class="long-text" style="margin-top:30px;">
+                    <label for="ChangeNo"><span class="star"></span>&nbsp;变更号&nbsp;:</label>
+                    <input type="text" id="ChangeNo" name="ChangeNo" value="@Model.ChangeNo" autocomplete="off" />
+                </div>
+                <div class="long-text">
+                    <label for="TotalAmount"><span class="star">*</span>&nbsp;项目总金额&nbsp;:</label>
+                    <input type="text" id="TotalAmount" name="TotalAmount" value="@Model.TotalAmount.ToString("0.######")" readonly style="background: #ebebe5;" />&nbsp;&nbsp;&nbsp;万元
+                </div>
+                <div class="long-text">
+                    <label for="AddAmount"><span class="star"></span>&nbsp;调增额&nbsp;:</label>
+                    <input type="text" id="AddAmount" name="AddAmount" value="@Model.AddAmount.ToString("0.######")" />&nbsp;&nbsp;&nbsp;万元
+                </div>
+                <div class="long-text">
+                    <label for="ReduceAmount"><span class="star"></span>&nbsp;调减额&nbsp;:</label>
+                    <input type="text" id="ReduceAmount" name="ReduceAmount" value="@Model.ReduceAmount.ToString("0.######")" />&nbsp;&nbsp;&nbsp;万元
+                </div>
+                <div class="long-text">
+                    <label for="ChangeAmount"><span class="star">*</span>&nbsp;变更金额&nbsp;:</label>
+                    <input type="text" id="ChangeAmount" name="ChangeAmount" value="@Model.ChangeAmount.ToString("0.######")" readonly style="background: #ebebe5;" />&nbsp;&nbsp;&nbsp;万元
+                </div>
+                <div class="short-text">
+                    <label><span class="star"></span>&nbsp;开始时间&nbsp;:</label>
+                    <input type="text" id="ChangeStartTime" name="ChangeStartTime" onClick="WdatePicker({ el: 'ChangeStartTime' })" value="@(Model.ChangeStartTime == null ? "" : Convert.ToDateTime(Model.ChangeStartTime).ToString("yyyy-MM-dd"))" readonly="readonly" autocomplete="off">
+                    <i onClick="WdatePicker({ el: 'ChangeStartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="short-text">
+                    <label><span class="star"></span>&nbsp;截止时间&nbsp;:</label>
+                    <input type="text" id="ChangeEndTime" name="ChangeEndTime" onClick="WdatePicker({ el: 'ChangeEndTime' })" value="@(Model.ChangeEndTime == null ? "" : Convert.ToDateTime(Model.ChangeEndTime).ToString("yyyy-MM-dd"))" readonly="readonly" autocomplete="off">
+                    <i onClick="WdatePicker({ el: 'ChangeEndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star">*</span>&nbsp;附件上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                        <input type="file" id="loadFile" name="loadFile" style="display:none;" onchange="uploadFile()">
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow"></ul>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    @if (Model.State == (int)ApprovalState.Enabled)
+                    {
+                        <button type="button" class="saveBut" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                        <button type="button" class="saveBut" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+
+                    }
+                    else if (Model.State == (int)ApprovalState.ApprFailure)
+                    {
+                        <button type="button" class="saveBut" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                        <button type="button" class="Discard checkright" data-module="Change" data-right="Invalid">废弃</button>
+                    }
+                    <button type="button" class="exchange">沟通</button>
+                    <input type="hidden" name="State" id="State" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        var fileDataArray = [];
+        function uploadFile() {
+            if (document.getElementById("loadFile").files.length == 0) {
+                return;
+            }
+            var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+            var formFile = new FormData();
+            formFile.append("file", fileObj);
+            var path = formFile;
+
+            $.ajax({
+                url: "/Upload/UploadHB",
+                type: "POST",
+                data: path,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = {};
+                        obj.Name = data[i].Name;
+                        obj.GuidId = data[i].GuidId;
+                        obj.Size = data[i].Size;
+                        obj.ImageType = data[i].ImageType;
+                        obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                        obj.Url = data[i].ResponseObject.FDFS_NAME;
+                        fileDataArray.push(obj);
+
+                        if (data[i].ImageType == null) {
+                            var imgUrl = getFileImg(obj.Name);
+                            var odiv = '<li id="' + obj.GuidId + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                            odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                            odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                            odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+                    }
+                    fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJson);
+                    $("#loadFile").val("");
+                }
+            });
+        }
+
+        $(function () {
+            $('#btnUploadFile').click(function () {
+                document.getElementById("loadFile").click();
+            });
+
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent());
+                    if (element.parent(".long-text")) {
+                        element.parent(".long-text").append(error)
+                        return
+                    }
+                },
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true
+                    },
+                    ChangeName: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    ChangeContent: {
+                        maxlength: 500
+                    },
+                    ChangeReason: {
+                        maxlength: 500
+                    },
+                    ChangeNo: {
+                        maxlength: 50
+                    },
+                    TotalAmount: {
+                        required: true,
+                        number: true
+                    },
+                    ChangeAmount: {
+                        required: true,
+                        number: true
+                    },
+                    AddAmount: {
+                        number: true
+                    },
+                    ReduceAmount: {
+                        number: true
+                    },
+                    //ChangeStartTime: {
+                    //    required: true,
+                    //    date: true
+                    //},
+                    //ChangeEndTime: {
+                    //    required: true,
+                    //    date: true
+                    //}
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空"
+                    },
+                    ChangeName: {
+                        required: "变更名称不能为空",
+                        maxlength: "变更名称不能大于100个字符"
+                    },
+                    ChangeContent: {
+                        maxlength: "变更内容不能大于500个字符"
+                    },
+                    ChangeReason: {
+                        maxlength: "变更原因不能大于500个字符"
+                    },
+                    ChangeNo: {
+                        maxlength: "变更原因不能大于50个字符"
+                    },
+                    TotalAmount: {
+                        required: "项目总金额不能为空"
+                    },
+                    ChangeAmount: {
+                        required: "变更金额不能为空"
+                    },
+                    //ChangeStartTime: {
+                    //    required: "开始时间不能为空"
+                    //},
+                    //ChangeEndTime: {
+                    //    required: "截止时间不能为空"
+                    //},
+                    AddAmount: {
+                        number: "调增额必须为数字"
+                    },
+                    ReduceAmount: {
+                        number: "调减额必须为数字"
+
+                    },
+                }
+            });
+            //判断开始时间和结束时间
+            $("#ChangeStartTime,#ChangeEndTime").blur(function () {
+                var strStartTime = $("#ChangeStartTime").val();
+                var endTime = $("#ChangeEndTime").val();
+                var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+                var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+                if (startNum > endNum) {
+                    layer.alert("截止时间不能小于开始时间!", { icon: 2 });
+                    $("#ChangeEndTime").val("");
+                    $("#mainForm").valid()//重新验证inputName
+                      .updateStatus('ChangeEndTime', 'NOT_VALIDATED', null)
+                      .validateField('ChangeEndTime');
+                    return false;
+                }
+            });
+
+            $("#AddAmount,#ReduceAmount").blur(function () {
+                var addAmount = $("#AddAmount").val();  //调增额
+                var reduceAmount = $("#ReduceAmount").val(); //调减额
+
+                if (addAmount == "" && reduceAmount == "") {
+                    $("#ChangeAmount").val(0);
+                } else if (addAmount == "" && reduceAmount != "") {
+                    $("#ChangeAmount").val(parseFloat(0 - reduceAmount));
+                } else if (addAmount != "" && reduceAmount == "") {
+                    $("#ChangeAmount").val(parseFloat(addAmount));
+                }
+                else {
+                    $("#ChangeAmount").val(accMinus(addAmount, reduceAmount));
+                }
+            });
+            function accMinus(arg1, arg2) {
+                var r1, r2, m;
+                try { r1 = arg1.toString().split(".")[1].length } catch (e) { r1 = 0 }
+                try { r2 = arg2.toString().split(".")[1].length } catch (e) { r2 = 0 }
+                m = Math.pow(10, Math.max(r1, r2));
+                return parseInt(arg1 * m - arg2 * m) / m;
+            }
+
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    var state = $(this).data("state");
+                    $("#State").val(state);
+                    var addAmount = $("#AddAmount").val();  //调增额
+                    var reduceAmount = $("#ReduceAmount").val(); //调减额
+                    if (addAmount == "" && reduceAmount == "") {
+                        layer.alert("需要填写调增额和调减额中的任意一个", { icon: 7 });
+                        return;
+                    }
+                    if ($(".fileShow li").length == 0) {
+                        layer.alert("请先上传附件", { icon: 2 });
+                        return false;
+                    }
+                    var search = $("form").serialize();
+                    $.post("Edit", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Change/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+            });
+        })
+
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //在建项目
+            $("#ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProjectAll',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj && obj.flag && obj.data) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else if (!obj.flag) {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Change', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + item.Size + '</div>';
+                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel" data-val="' + item.GuidId + '">删除</span>';
+                                odiv += '<input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '">';
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+
+                            var obj = {};
+                            obj.Name = item.Name;
+                            obj.GuidId = item.GuidId;
+                            obj.Size = item.Size;
+                            obj.Group = item.Group;
+                            obj.Url = item.Url;
+                            obj.TableColumn = item.TableColumn;
+                            obj.ImageType = item.ImageType;
+                            fileDataArray.push(obj);
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArray= fileDataArray.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+        });
+
+        //废弃
+        $(".Discard").click(function () {
+
+            var id = '@Model.Id';
+            var state = "Discarded";
+            if (id != "") {
+                parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                    $.post("UpdateState", { id: id, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Change/Index";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            }
+        });
+
+        //下载附件
+        $("body").on("click", ".downloadFile", function () {
+            var group = $(this).parent().find(".hiddenArea").data("group");
+            var path = $(this).parent().find(".hiddenArea").data("url");
+            var fileName = $(this).parent().find(".hiddenArea").data("filename");
+            window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+        });
+        //沟通
+        $(".exchange").click(function () {
+            var projectName = $("#ProjectName").val();
+            var projectId = $("#ProjectId").val();
+            window.location.href = "/Question/Add?businType=Change&projectName=" + projectName + "&projectId=" + projectId + "&BusinessId=@Model.Id";
+        });
+    </script>
+</body>

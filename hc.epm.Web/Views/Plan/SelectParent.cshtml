@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "父级计划";
+    Layout = null;
+}
+<link href="~/Resource/css/layui.css" rel="stylesheet" />
+<div class="form-wrap">
+    <div class="container" style="padding-top:30px">
+        <ul id="PlanTree"></ul>
+    </div>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/plugins/layui-2.1.2/layui.js"></script>
+<script type="text/javascript">
+
+    layui.use(['tree', 'layer'], function () {
+        var layer = layui.layer, $ = layui.jquery;
+        var projectId = parent.$("#ProjectId").val();
+        $.post("GetPlanDetailsTree", { pId: "0", projectId:projectId }, function (data) {
+            var terr = layui.tree({
+                elem: '#PlanTree', //指定元素，生成的树放到哪个元素上
+                check: '', //勾选风格
+                skin: 'as', //设定皮肤
+                drag: false,//点击每一项时是否生成提示信息
+                checkboxName: 'cb[]',//复选框的name属性值
+                checkboxStyle: "",//设置复选框的样式，必须为字符串，css样式怎么写就怎么写
+                click: function (item) { //点击节点回调
+                },
+                onchange: function () {//当当前input发生变化后所执行的回调
+                },
+                nodes: [ //节点
+                    data
+                ],
+                click: function (data) {
+                    var parentName = data.name;
+                    var checkboxValue = data.checkboxValue;
+                    parent.$("#ParentId").val(checkboxValue)
+                    parent.$("#ParentName").val(parentName)
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                }
+            });
+        });
+    });
+</script>
+

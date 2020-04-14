@@ -1,0 +1,158 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@model List<Epm_Monitor>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label>项目名称 : </label>
+                    <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName">
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@ViewBag.ProjectId">
+                </div>
+                <div><label>检查标题 : </label> <input type="text" id="Title" name="Title" value="@ViewBag.title"></div>
+                <div>
+                    <label>状态 : </label>
+                    @Html.DropDownList("state", ViewBag.CheckState as SelectList)
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add" class="checkright" data-module="SecurityCheck" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="SecurityCheck" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="120">项目名称</th>
+                    <th width="130">检查标题</th>
+                    <th width="100">检查单位</th>
+                    <th width="80">检查人员</th>
+                    <th width="100">检查时间</th>
+                    <th width="80">状态</th>
+                    <th width="110">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-projectid="@item.ProjectId" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.Title</td>
+                            <td>@item.MonitorCompanyName</td>
+                            <td>@item.MonitorUserName</td>
+                            <td>@(item.MonitorTime == null ? "" : Convert.ToDateTime(item.MonitorTime).ToString("yyyy-MM-dd"))</td>
+                            @if (item.State == int.Parse(RectificationState.WaitRectification.GetValue().ToString()))
+                            {
+                                <td class="state">@RectificationState.WaitRectification.GetText()</td>
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SecurityCheck" data-right="Info">查看</a>
+                                    @if (ViewBag.CurCompanyId == item.RectifCompanyId)
+                                    {
+                                        <a href="javascript:" class="submitAQ checkright" data-module="SecurityCheck" data-right="Rectif">整改</a>
+                                    }
+                                </td>
+                            }
+                            else if (item.State == int.Parse(RectificationState.Rectificationed.GetValue().ToString()))
+                            {
+                                <td class="state">@RectificationState.Rectificationed.GetText()</td>
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SecurityCheck" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (item.State == int.Parse(RectificationState.RectificationSuccess.GetValue().ToString()))
+                            {
+                                <td class="state">@RectificationState.RectificationSuccess.GetText()</td>
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SecurityCheck" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (item.State == int.Parse(RectificationState.RectificationOk.GetValue().ToString()))
+                            {
+                                <td class="state">@RectificationState.RectificationOk.GetText()</td>
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SecurityCheck" data-right="Info">查看</a>
+                                    @if (ViewBag.CurCompanyId == item.RectifCompanyId)
+                                    {
+                                        <a href="javascript:" class="submitAQ checkright" data-module="SecurityCheck" data-right="Rectif">整改</a>
+                                    }
+                                </td>
+                            }
+                            else if (item.State == int.Parse(RectificationState.WorkFinish.GetValue().ToString()))
+                            {
+                                <td class="state">@RectificationState.WorkFinish.GetText()</td>
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SecurityCheck" data-right="Info">查看</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="10" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+<script>
+
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Monitor/IndexAQ?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //新增
+    $("#add").on("click", function () {
+        window.location.href = "/Monitor/AddAQ";
+    });
+    //查看
+    $("tbody").on("click", ".Detail", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Monitor/DetailAQ?id=" + id;
+    });
+    //上传整改结果
+    $("tbody").on("click", ".submitAQ", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Monitor/UploadRectifyResult?id=" + id;
+    });
+</script>

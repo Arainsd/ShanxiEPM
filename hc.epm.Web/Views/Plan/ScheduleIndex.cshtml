@@ -1,0 +1,183 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@model List<Epm_Plan>
+@{
+    ViewBag.Title = "计划进度列表";
+}
+<link href="/Resource/jqtree/TreeGrid.css" rel="stylesheet" />
+
+<style>
+      .TreeGrid tr td:nth-child(1),.TreeGrid tr td:nth-child(2),.TreeGrid tr td:nth-child(3),.TreeGrid tr td:nth-child(9),.TreeGrid tr td:nth-child(10) {
+        width:110px!important;
+    }
+     .TreeGrid tr td:nth-child(4),.TreeGrid tr td:nth-child(10),.TreeGrid tr td:nth-child(11) {
+        width:60px!important;
+    }
+       .TreeGrid tr td:nth-child(5) {
+        width:100px!important;
+    }
+         
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <div class="NAME">
+                    <label>项目名称 : </label> <input type="text" value="@ViewBag.ProjectName" id="ProjectName" name="ProjectName" readonly>
+                    <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:-30px;">&#xe76a;</i>
+                    <input type="hidden" value="@ViewBag.ProjectId" id="ProjectId" name="ProjectId" />
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="submit">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <div id="maincontent" class="maincontent"></div>
+    </div>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="/Resource/jqtree/TreeGrid.js"></script>
+<script>
+
+    function customLook(row, col) {
+        return'<a href="javascript:;" class="detail checkright" data-module="Plan" data-right="Info">查看</a> <a href="javascript:;" class="exchange">沟通</a> '
+    };
+    $(function(){
+        var data=@Html.Raw(@ViewBag.planViewList);
+        //var icon='<i class="layui-icon layui-icon-face-smile" style="font-size: 30px; color: #1E9FFF;"></i>' ;
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            if(data==null || data.length==0){
+                layer.alert("该项目下没有项目进度!", {icon:5})
+            }
+        });
+        var config = {
+            id: "tg1",
+            width: "1200px",
+            renderTo: "maincontent",
+            headerAlign: "left",
+            headerHeight: "30",
+            dataAlign: "left",
+            indentation: "30",
+            folderOpenIcon: "/Resource/jqtree/img/folderOpen.png",
+            folderCloseIcon: "/Resource/jqtree/img/folderClose.png",
+            defaultLeafIcon: "/Resource/jqtree/img/defaultLeaf.gif",
+            hoverRowBackground: "false",
+            folderColumnIndex: "0",
+            itemClick: "itemClickEvent",
+            columns: [
+
+                        { headerText: "计划名称", dataField: "Name", headerAlign: "left", dataAlign: "left" },
+                        { headerText: "项目名称", dataField: "ProjectName", headerAlign: "left", dataAlign: "left" },
+                        { headerText: "计划开始时间", dataField: "StartTime", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "计划结束时间", dataField: "EndTime", headerAlign: "center", dataAlign: "center" },
+                        { headerText: "工期(天)", dataField: "BuildDays", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "负责人", dataField: "Name", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "施工单位", dataField: "BuildCompanyName", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "工程节点", dataField: "MilepostName", headerAlign: "center", dataAlign: "center" },
+                        { headerText: "实际开始日期", dataField: "FactStartTime", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "实际结束日期", dataField: "FactEndTime", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "是否完成", dataField: "IsFinish", headerAlign: "center", dataAlign: "center" },
+                        { headerText: "完成比例(%)", dataField: "FinishScale", headerAlign: "center", dataAlign: "center" },
+                        { headerText: "未完成原因", dataField: "ToResean", headerAlign: "center", dataAlign: "center"},
+                        { headerText: "操作", headerAlign: "center", dataAlign: "center", width: "", handler: "customLook" }
+            ],
+            data:data,
+        };
+        //创建一个组件对象
+        var treeGrid = new TreeGrid(config);
+        treeGrid.show();
+
+        $("tbody tr:not('.header')").each(function (index, item) {
+            if($(item.children[10]).text()==1){
+                $(item.children[10]).text("完成");
+            }else if($(item.children[10]).text()==0){
+                $(item.children[10]).text("未完成");
+            }else{
+                $(item.children[10]).text("");
+            }
+        });
+
+        //格式化时间
+        var tr = $("tbody tr").slice(1);
+        for (var i = 0; i < tr.length; i++) {
+            var tdArr = tr.eq(i).find("td");
+            var text1 = tdArr.eq(2).text();
+            var text2 = tdArr.eq(3).text();
+            var text3 = tdArr.eq(8).text();
+            var text4 = tdArr.eq(9).text();
+            if(text1.indexOf("00:00:00")!=1){
+                text1 = text1.substring(0,10)
+                tdArr.eq(2).text(text1)
+            }
+            if(text2.indexOf("00:00:00")!=1){
+                text2 = text2.substring(0,10)
+                tdArr.eq(3).text(text2)
+            }
+            if(text3.indexOf("00:00:00")!=1){
+                text3 = text3.substring(0,10)
+                tdArr.eq(8).text(text3)
+            }
+            if(text4.indexOf("00:00:00")!=1){
+                text4 = text4.substring(0,10)
+                tdArr.eq(9).text(text4)
+            }
+        }
+    });
+
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, element = layui.element, $ = layui.jquery;
+            //查看
+            $("tbody").on('click', ".detail", function () {
+                var id = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+                location.href = "/Plan/Detail?id=" + id;
+            });
+            //沟通
+            $('tbody').on('click',".exchange" , function () {
+                var projectName = $(this).parents("tr").find("td").eq(1).text();
+                var projectId = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+                window.location.href = "/Question/Add?businType=Schedule&projectName=" + projectName + "&projectId=" + projectId;
+            });
+            //在建项目
+            $("#ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj.flag) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+
+        });
+
+</script>
+
+
+
+
+
+
+

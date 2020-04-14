@@ -1,0 +1,305 @@
+﻿@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model MonitorView
+@{
+    ViewBag.Title = "查看质量检查";
+}
+<style type="text/css">
+    .tab .upload li {
+        width: 100px;
+    }
+
+    .tab .uploadImg li {
+        width: 100px;
+    }
+
+    .setbut {
+        width: 120px !important;
+    }
+
+    .supportType {
+        margin-left: 20px;
+        color: #999999;
+    }
+</style>
+<link href="/Resource/jqtree/TreeGrid.css" rel="stylesheet" />
+<div class="contentData">
+    <div class="tab-view">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label for="PrejectName">&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="ProjectName" name="ProjectName" value="@Model.Monitor.ProjectName" readonly="readonly" disabled />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="projectId" id="projectId" value="@Model.Monitor.ProjectId" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.Monitor.Id" />
+                </div>
+                <div class="long-text">
+                    <label for="Title">&nbsp;检查标题&nbsp;:</label>
+                    <input type="text" id="Title" name="Title" disabled value="@Model.Monitor.Title" />
+                </div>
+                <div class="intro">
+                    <div><label for="Content">&nbsp;检查说明&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" disabled>@Model.Monitor.Content</textarea>
+                    </div>
+                </div>
+                <div class="contract">
+                    <div><label>&nbsp;检查项目&nbsp;:</label></div>
+                    <table class="datalist" style="width:88%">
+                        <thead>
+                            <tr>
+                                <th width="30%">资料名称</th>
+                                <th width="25%">结果</th>
+                                <th width="30%">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.MonitorDetails != null && Model.MonitorDetails.Count() > 0)
+                            {
+                                foreach (var item in Model.MonitorDetails)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        @if (item.MonitorResultNo == "0")
+                                        {
+                                            <td>不合格</td>
+                                        }
+                                        else if (item.MonitorResultNo == "1")
+                                        {
+                                            <td>合格</td>
+                                        }
+                                        else if (item.MonitorResultNo == "2")
+                                        {
+                                            <td>良好</td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
+                                        <td>@item.Remark</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="long-text">
+                    <label for="Result">&nbsp;检查结果&nbsp;:</label>
+                    <select style="width:230px;background-color:#EBEBE4" name="Result" id="Result" disabled>
+                        <option value="0">请选择</option>
+                        <option value="1">通过</option>
+                        <option value="2">需整改</option>
+                    </select>
+                    <input type="hidden" name="result" id="result" value="@Model.Monitor.Result" />
+                </div>
+                @if (Model.MonitorDetailBIM != null && Model.MonitorDetailBIM.Any())
+                {
+                    var first = Model.MonitorDetailBIM.First();
+                    <div class="long-text">
+                        <label>&nbsp;关联BIM&nbsp;:</label>
+                        <input type="text" id="SelectBIM" name="SelectBIM" value="已关联构件" disabled style="color:blue;" />
+                        <input type="hidden" id="bimId" value="@first.BIMId" />
+                        <i class="pic iconfont SelectBIM_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    </div>
+                }
+                else
+                {
+                    <div class="long-text">
+                        <label>&nbsp;关联BIM&nbsp;:</label>
+                        <input type="text" value="未关联构件" disabled />
+                        <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    </div>
+                }
+                <div class="long-text MonitorCompanyName">
+                    <label>&nbsp;检查单位&nbsp;:</label>
+                    <input type="text" id="MonitorCompanyName" name="MonitorCompanyName" disabled value="@Model.Monitor.MonitorCompanyName">
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="MonitorCompanyId" id="MonitorCompanyId" value="@Model.Monitor.MonitorCompanyId" />
+                </div>
+                <div class="long-text MonitorUserName">
+                    <label>&nbsp;检查人&nbsp;:</label>
+                    <input type="text" id="MonitorUserName" name="MonitorUserName" value="@Model.Monitor.MonitorUserName" disabled>
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="MonitorUserId" id="MonitorUserId" value="@Model.Monitor.MonitorUserId" />
+                </div>
+                <div class="short-text">
+                    <label>&nbsp;检查日期&nbsp;:</label>
+                    <input type="text" id="MonitorTime" name="MonitorTime" onClick="WdatePicker({ el: 'MonitorTime' })" disabled value="@(Model.Monitor.MonitorTime == null ? "" : Convert.ToDateTime(Model.Monitor.MonitorTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'MonitorTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="upload">
+                    <div><label>&nbsp;检查资料&nbsp;:</label></div>
+                    <div style="width:100%;margin:3px 20px 20px 0px;" id="fileListFile">
+                        <ul id="fileDetail" style="margin-top:0!important;width:100%"></ul>
+                    </div>
+                </div>
+                
+                @if (Model.MonitorRectifRecord != null)
+                {
+                    <hr />
+                    <div class="short-text suggest" style="display:none">
+                        <label>&nbsp;要求完成时间&nbsp;:</label>
+                        <input type="text" id="Deadline" name="Deadline" onClick="WdatePicker({ el: 'Deadline' })" disabled value="@(Model.MonitorRectifRecord.Deadline == null ? "" : Convert.ToDateTime(Model.MonitorRectifRecord.Deadline).ToString("yyyy-MM-dd"))">
+                        <i onClick="WdatePicker({ el: 'Deadline' })" class="pic iconfont" width="20" height="30" style="cursor:pointer;">&#xe7e2;</i>
+                    </div>
+                    <div class="intro suggest" style="display:none">
+                        <div><label for="Rectification">&nbsp;整改建议&nbsp;:</label></div>
+                        <div>
+                            <textarea class="sub-description" id="Remark" name="Remark" disabled>@Model.MonitorRectifRecord.Remark</textarea>
+                        </div>
+                    </div>
+                    <div class="short-text">
+                        <label>&nbsp;整改状态&nbsp;:</label>
+                        <select class="bg" disabled>
+                            <option selected value="0">@(((RectificationState)Model.MonitorRectifRecord.State).GetText()) </option>
+                        </select>
+                    </div>
+                    <div class="short-text">
+                        <label>&nbsp;整改完成日期&nbsp;:</label>
+                        <input type="text" id="FinishDate" name="FinishDate" onClick="WdatePicker({ el: 'FinishDate' })" value="@(Model.MonitorRectifRecord.FinishDate == null ? "" : Convert.ToDateTime(Model.MonitorRectifRecord.FinishDate).ToString("yyyy-MM-dd"))" disabled>
+                        <i onClick="WdatePicker({ el: 'Deadline' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                    </div>
+                    <div class="intro">
+                        <div><label for="Content">&nbsp;整改内容&nbsp;:</label></div>
+                        <div>
+                            <textarea class="sub-description content" style="background-color:#EBEBE4!important" disabled>@Model.MonitorRectifRecord.Content</textarea>
+                        </div>
+                    </div>
+                    <div class="upload">
+                        <div><label>&nbsp;整改资料&nbsp;:</label></div>
+                        <div style="width:100%;margin:3px 20px 20px 0px;" id="fileListFile">
+                            <ul id="fileDetai" style="margin-top:0!important;width:100%"></ul>
+                        </div>
+                    </div>
+
+                    <div class="button-group btn-center">
+                        @if (Model.MonitorRectifRecord.State == int.Parse(RectificationState.Rectificationed.GetValue().ToString()))
+                        {
+                            <button type="button" class="pass checkright" data-module="QualityCheck" data-right="Check" data-state="@RectificationState.RectificationSuccess">确认</button>
+                            <button type="button" class="unpass checkright" data-module="QualityCheck" data-right="UnCheck" data-state="@RectificationState.RectificationOk">驳回</button>
+                        }
+                        <input type="hidden" value="@Model.MonitorRectifRecord.Id" id="RecordId"/>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    //检查结果
+    if ($("#result").val() == 0) {
+        $("#Result option:selected").text("请选择");
+        $(".suggest").hide();
+    } else if ($("#result").val() == 1) {
+        $("#Result option:selected").text("通过");
+        $(".suggest").hide();
+    } else if ($("#result").val() == "2") {
+        $("#Result option:selected").text("需整改");
+        $(".suggest").show();
+    }
+
+    //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Monitor', id: '@Model.Monitor.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '" style="width:100%">';
+                                odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                                odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                                odiv += '</li>';
+                                $('#fileDetail').append(odiv);
+                            }
+                        })
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+    //获取附件
+    $.post("/Files/GetFileList", { tableName: 'Epm_MonitorRectifRecord', id: '@Model.MonitorRectifRecord.Id' }, function (data) {
+        if (data.Flag) {
+            if (data.Data.length > 0) {
+                data.Data.forEach(function (item, index, arr) {
+                    if (item.ImageType == null) {
+                        var odiv = '<li id="' + item.GuidId + '" style="width:100%">';
+                        odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + item.Name + '</a></div>';
+                        odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                        odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                        odiv += '</li>';
+                        $('#fileDetai').append(odiv);
+                    }
+                })
+            }
+        } else {
+            parent.layer.alert(data.Message, { icon: 2 });
+        }
+    });
+    //确认整改
+    $("tbody").on("click", ".verify", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Monitor/UploadRectifyResult?id=" + id + "&type=" + 1;
+    });
+
+
+    layui.use(['layer', 'element'], function () {
+        var layer = layui.layer, element = layui.element, $ = layui.jquery;
+        //BIM模型展示
+        $("#SelectBIM,.SelectBIM_icon").click(function () {
+            var bimId = $("#bimId").val();
+            var monitorId = $("#Id").val();
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("查看BIM模型"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1300px', '800px'],
+                content: '/Monitor/RelationBIM?bimId=' + bimId,
+                btn: ["返回"],
+                success: function (layero, index) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    iframeWin.init(monitorId, bimId);
+                },
+                yes: function (index, layero) {
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //通过
+        $(".pass").click(function () {
+            var id = $("#RecordId").val(), state = $(".pass").data("state"), Remark = $(".content").text();
+            $.post("ChangeState", { id: id, state: state, Remark: Remark }, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 })
+                    window.location.href = "/QualityMonitor/indexZL"
+                    return false
+                }
+                layer.msg(result.Message, { time: 1000, icon: 2 })
+            })
+        })
+        $(".unpass").click(function () {
+            var id = $("#RecordId").val(), state = $(".unpass").data("state"), Remark = $(".content").text();
+            $.post("ChangeState", { id: id, state: state, Remark: Remark }, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 })
+                    window.location.href = "/QualityMonitor/indexZL"
+                    return false
+                }
+                layer.msg(result.Message, { time: 1000, icon: 2 })
+            })
+        })
+
+    })
+</script>
+
+
+
+
+

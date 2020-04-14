@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+}
+<link rel="stylesheet" href="/Resource/css/base.css" />
+<style type="text/css">
+    select {
+        height: 30px;
+        width: 200px;
+    }
+
+</style>
+    <div style="position:absolute;margin:5px 0 0 5px;z-index:999;">
+        @Html.DropDownList("BimList", null, new { @class = "form-control selectpicker  show-tick" })
+    </div>
+    <div id="webglContainer" style="height:700px;margin:10px auto;position:relative;"></div>
+    <div class="loading" style="height:100%; width:100%; margin:0 auto;display:none;">
+        <div>
+            <img src="~/Resource/images/moxing.jpg" style="width:100%;height:100%" />
+        </div>
+        <div style='position:absolute;top:470px;left:10px;color:red'><h3 style='font-size:12px;'>正在轻量化中...</h3></div>
+    </div>
+
+<script type="text/javascript" src="/Resource/scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/Resource/scripts/global.js"></script>
+<script type="text/javascript" src="/Resource/scripts/3dEngine.js"></script>
+<script type="text/javascript">
+    var positionObjList = [];//选择构件、坐标信息数据
+    var IdsList = [];//选中构件ID数据
+    var BIMId = $("#BimList option:selected").val();
+    //下拉框切换
+    $(".selectpicker").change(function () {
+        BIMId = $("#BimList option:selected").val();
+
+        if (BIMId != "") {
+            positionObjList = [];
+            IdsList = [];
+            ClearScene();
+            initBim(BIMId); //加载模型
+        } else {
+            $(".loading").show();
+            $(".loading").prev().hide();
+        }
+    });
+
+    //初始化画布
+    EngineInit("webglContainer");
+    if (BIMId != "") {
+        initBim(BIMId); //加载模型
+    } else {
+        $(".loading").show();
+    }
+    function initBim(BIMId) {
+        $("#BimList").attr("disabled", "disabled");
+        $.post("/Comm/GetBimUrl", { id: BIMId }, function (data) {
+            if (data == "" || data == null) {
+                $(".loading").show();
+                $(".loading").prev().hide();
+            } else {
+                $(".loading").hide();
+                $(".loading").prev().show();
+
+                var models = [{ id: BIMId, file: BimFileURL + data }];   //获取到对应的数据
+                var FileURL = models[0].file;
+                AddModel(FileURL, BIMId);
+
+                SetClickMode(3);//点击模式设置
+                SetModelAlpha(BIMId, 0.4);//透明度，取值范围0.0-1.0
+            }
+        });
+    }
+
+    //模型加载完成回调
+    function OnLoadModelEnd(id) {
+        //加载模型初始化选中构件
+        var selectIds = parent.$("#ComponentIds").val();
+        if (selectIds != "") {
+            var InitializedData = JSON.parse(selectIds);//来自问题沟通页面构件信息
+            if (InitializedData.length > 0 && InitializedData[0].ComponentId.indexOf(id) != -1) {
+                for (var i = 0; i < InitializedData.length; i++) {//从数据中获取构件ID和坐标
+                    IdsList.push(InitializedData[i].ComponentId);
+                    positionObjList.push(InitializedData[i]);
+                    SetActorColor(InitializedData[i].ComponentId, 0, 0, 255);//构件批量着色
+                }
+            }
+        }
+
+        //加载施工进度
+        if ('@ViewBag.isLook' != "0") {
+            $("#BimList").removeAttr("disabled");
+        }
+    }
+
+    var componentId = "";
+    var position = "";
+    //获取点击构件Id
+    //先执行 获取点击坐标事件，再执行获取点击构件ID事件
+    function OnSelectionChanged(id) {
+        componentId = id;
+        if (position && IdsList.indexOf(componentId) == -1) {
+            SetActorColor(id, 0, 0, 255);//构件批量着色
+            IdsList.push(componentId);
+            var obj = new Object();
+            obj.ComponentId = componentId;
+            obj.Position = position;
+            positionObjList.push(obj);
+            componentId = "";
+            position = "";
+        } else {
+            SetActorColor(id, 255, 255, 255);
+            if (IdsList.indexOf(componentId) != -1) {
+                var removeObj = {};
+                $.each(positionObjList, function (index, obj) {
+                    if (obj.ComponentId == componentId) {
+                        removeObj = obj;
+                        return;
+                    }
+                });
+                positionObjList.pop(obj);
+                IdsList.pop(componentId);
+            }
+        }
+    }
+    //获取点击坐标
+    function OnClickPosition(p) {
+        position = p;
+    }
+
+    //获取点击构件id集合
+    function getIds() {
+        var result = {
+            flag: true,
+            data: [],
+            msg: ""
+        };
+        if (positionObjList.length == 0) {
+            result.msg = "请关联BIM模型构件";
+            result.flag = false;
+            result.data = ""
+        } else {
+            result.msg = "";
+            result.flag = true;
+            $.each(positionObjList, function (index, obj) {
+                result.data.push({
+                    ComponentId: obj.ComponentId,
+                    ComponentPosition: obj.Position,
+                    BIMId: BIMId
+                });
+            });
+        }
+        return result;
+    }
+</script>

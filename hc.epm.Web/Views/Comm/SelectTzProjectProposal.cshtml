@@ -1,0 +1,196 @@
+﻿@using hc.epm.DataModel.Business;
+@model List<Epm_TzProjectProposal>
+@{
+    ViewBag.Title = "请选择项目";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+    
+    #showSelectUserName {
+        line-height: 28px;
+        color: #000000;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>项目名称 : </label><input type="text" id="name" name="name" value="@ViewBag.name">
+                <input type="hidden" name="selectType" value="@ViewBag.SelectType" />
+            </div>
+            <div class="form-sub">
+                <button type="submit" style="float:left; cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="userNameWrap">
+    <label id="showSelectUserName"></label>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="10%">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="10%">序号</th>
+                <th width="40%">项目名称</th>
+                <th width="30%">分公司名称</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = 0;
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.SId" data-name="@item.ProjectName" data-stationname="@item.StationName" data-approvalno="@item.ApprovalNo" data-stationid="@item.StationId"/>
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td>@item.ProjectName</td>
+                        <td>@item.StationName</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/Comm/SelectTzProjectProposal?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize();
+                    }
+                }
+            });
+        });
+
+        if (@ViewBag.SelectType == "2")
+        {
+
+            setSelectProjects();
+
+            $('#tbody :checkbox[name="checkbox"]').change(function (index) {
+                var obj = {};
+                var IsChecked = $(this).is(':checked');
+                obj.id = $(this).val() || '';
+                obj.name = $(this).data('name') || '';
+                obj.approvalNo = $(this).data('approvalno') || '';
+                parent.getProjectData(IsChecked, obj);
+                var selectProjectIds = parent.getSelectedProjectData();
+                if (selectProjectIds.projectNames !== "") {
+                    $('#showSelectUserName').html("已选中：" + selectProjectIds.projectNames);
+                }
+                else {
+                    $('#showSelectUserName').html(selectProjectIds.projectNames);
+                }
+            });
+        }
+
+
+        //全选
+        $("#selectAll").click(function () {
+            var isChecked = $("#selectAll").prop("checked");
+            $("#tbody input[type='checkbox']").prop("checked", isChecked);
+            $('#tbody :checkbox[name="checkbox"]').change();
+        });
+        // 单独选项控制全选
+        $("#tbody input[type='checkbox']").click(function () {
+            var allLength = $("#tbody input[type='checkbox']").length;
+            var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+            if (allLength == checkedLength) {
+                $("#selectAll").prop("checked", true);
+                $('#tbody :checkbox[name="checkbox"]').change();
+            } else {
+                $("#selectAll").prop("checked", false);
+                $('#tbody :checkbox[name="checkbox"]').change();
+            }
+        });
+
+        function setSelectProjects() {
+            var selectProjectIds = parent.getSelectedProjectData();
+            $.each($(':checkbox[name="checkbox"]'), function (index, item) {
+                if (selectProjectIds.projectIds.indexOf(item.value) !== -1) {
+                    item.checked = true;
+                }
+            })
+            if (selectProjectIds.ProjectNames !== "") {
+                $('#showSelectUserName').html("已选中：" + selectProjectIds.projectNames);
+            }
+            else {
+                $('#showSelectUserName').html(selectProjectIds.projectNames);
+            }
+        }
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    ProjectName: $(this).data('name') || '',
+                    StationName: $(this).data('stationname') || '',
+                    StationId: $(this).data('stationid') || '',
+                    ApprovalNo: $(this).data('approvalno') || '',
+                });
+            });
+
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择项目！';
+            } else {
+                var selectType = '@ViewBag.SelectType';
+                if (selectType === '1' && result.data.length > 1) {
+                    result.flag = false;
+                    result.msg = '一次只能选择一条项目信息！！';
+                }
+            }
+            return result;
+        }
+    </script>
+}

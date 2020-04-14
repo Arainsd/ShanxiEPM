@@ -1,0 +1,438 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_TzSupMatManagement>
+@{
+    ViewBag.Title = "甲供物资管理列表";
+}
+
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button, .wrap-but > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+
+    .file-style {
+        height: 55px;
+        line-height: 55px;
+    }
+
+        .file-style a {
+            color: blue;
+        }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">物资种类：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="materialCategory" value="@ViewBag.materialCategory" placeholder="请输入物资种类名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">品名：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="productName" value="@ViewBag.productName" placeholder="请输入品名">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">供应商名称：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="supplierName" value="@ViewBag.supplierName" placeholder="请输入供应商名称">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">状态：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <select class="form-control" name="State">
+                                    <option value="-1">请选择</option>
+                                    <option value="0">已启用</option>
+                                    <option value="1">已停用</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">规格：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="specification" value="@ViewBag.specification" placeholder="请输入规格">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">供应商地址：</label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="supplierAddress" value="@ViewBag.supplierAddress" placeholder="请输入供应商地址">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <div class="wrap-but">
+                    <button type="button" id="add" class="checkright" data-module="GoodsManage" data-right="Add">新增物资</button>
+                    <button type="button" id="import" class="checkright" data-module="GoodsManage" data-right="Import">导入</button>
+                    <button type="button" class="is-disable checkright" data-disabled="1" data-module="GoodsManage" data-right="Enable">启用</button>
+                    <button type="button" class="is-disable checkright" data-disabled="2" data-module="GoodsManage" data-right="Enable">禁用</button>
+                </div>
+                <button type="submit" id="btnsel" class="checkright" data-module="GoodsManage" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <input type="checkbox" id="allcheck" />
+                    </th>
+                    <th width="50">序号</th>
+                    <th width="200">物资种类</th>
+                    <th width="100">品名</th>
+                    <th width="100">规格</th>
+                    <th width="100">单价（元）</th>
+                    <th width="100">供应商名称</th>
+                    <th width="100">供应商地址</th>
+                    <th width="100">状态</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td width="50">
+                                <input type="checkbox" value="@item.SId" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.MaterialCategory</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.Specification</td>
+                            <td>@item.UnitePrice</td>
+                            <td>@item.SupplierName</td>
+                            <td>@item.SupplierAddress</td>
+                            <td>
+                                @if (item.State == 1)
+                                {
+                                    <span style="color:red;" class="state">已停用</span>
+                                }
+                                else if (item.State == 0)
+                                {
+                                    <span class="state">已启用</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+@*启用层*@
+<div id="convertcom" style="display:none;margin-top:50px;padding:0 120px;">
+    <div class="upwrap">
+        <div class="layui-form-item" style="height:68px;">
+            <div style="font-size:16px;float:left;">附件上传：</div>
+
+            <div style="float:left;">
+                <div class="btn-upload">
+                    <input type="button" class="btn" style="z-index: 1;width: 115px;" value="导入物资信息" id="btnUploadFile1" />
+                    <span style="color:red;margin-left:20px;cursor:pointer;" id="downtemplateFile">附件模板xls</span>
+                </div>
+                <div class="btn-upload" id="filewrap">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+        </div>
+    </div>
+    <div class="fawrap" style="display:none">
+        <div class="layui-form-item" style="height:68px;">
+            <div style="float:left;">
+                <div class="btn-upload" style="text-align:center;">
+                    <p>成功<span class="su" style="color:red;"></span>&nbsp;&nbsp;条数据，失败<span class="fa" style="color:red;"></span>&nbsp;&nbsp;条数据。</p><br /><br />
+                    <p>点击查看上传结果:<span class="upfi" style="text-decoration:underline;color:blue;cursor:pointer;display:none;"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small" />
+        </div>
+    </div>
+    <!--附件上传触发-->
+    <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+
+</div>
+<script>
+    var downloadpath, downName;//下载失败附件数据变量
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+    var filepath;//全局附件变量
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        filepath = formFile;
+        var str = fileObj.name.split(".");
+        var strName = str[1];
+        if (strName == "xls" || strName == "xlsx") {
+            var odiv = `
+                 <div class ="file-style"><a href="javascript:void(0)">${fileObj.name}</a></div>
+                  `
+            $("#filewrap").append(odiv)
+        } else {
+            layer.msg("必须导入表格", { time: 1000, icon: 2 });
+            return;
+        }
+
+
+    }
+    $("#add").click(function () {
+        window.location.href = '/TzSupMatManagement/Add';
+    });
+    $("#convertcom #close").click(function () {
+        window.location.href = '/TzSupMatManagement/Index';
+    });
+    //全选反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $("#tbody input[type='checkbox']").prop("checked", isChecked);
+    });
+
+    // 单独选项控制全选
+    $("#tbody input[type='checkbox']").click(function () {
+        var allLength = $("#tbody input[type='checkbox']").length;
+        var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzSupMatManagement/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //启用禁用
+        $("body").on("click", ".is-disable", function () {
+            var hfId = "";
+            var idData = [];
+            var stateDate = [];
+            var type = $(this).attr("data-disabled") == "1" ? "启用" : "禁用";
+            var state = $(this).attr("data-disabled") == "1" ? "0" : "1";
+            var chkItems = $('#tbody input[type="checkbox"]:checked');
+            chkItems.each(function (index, item) {
+                hfId += $(this).val() + ',';
+                idData.push($(this).val());
+                stateDate.push($(this).data("state"))//1禁用，0启用
+            });
+            if (idData.length == 0) {
+                layer.msg('请先选择要' + type + '的数据！', { time: 1000, icon: 2 });
+                return;
+            };
+            if (type == "启用") {
+                if (stateDate.indexOf(0) > -1) {
+                    layer.msg('请选择全部状态为"已停用"的数据！', { time: 1000, icon: 2 });
+                    return;
+                }
+            }
+            if (type == "禁用") {
+                if (stateDate.indexOf(1) > -1) {
+                    layer.msg('请选择全部状态为"已启用"的数据！', { time: 1000, icon: 2 });
+                    return;
+                }
+            }
+            if (hfId.length != 0) {
+                parent.layer.confirm('确认要' + type + '所选择的项？', { icon: 3 }, function () {
+                    $.post("/TzSupMatManagement/UpdateState", { ids: hfId, state: state }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.reload();
+                            });
+
+                        } else {
+                            layer.alert(data.msg, { time: 1000, icon: 2 });
+                        }
+                    }, "json");
+                })
+            }
+        });
+
+        //导入
+        $("#import").click(function () {
+            $(".upwrap").show();
+            $(".fawrap").hide();
+            var _this = $(this);
+            layer.open({
+                type: 1,
+                title: '导入物资信息',
+                area: ['600px', '300px'],
+                content: $('#convertcom'),
+                skin: 'demo-class',
+                yes: function (index, layero) {
+
+                }
+            });
+        });
+        $("#save").click(function () {
+            //判断附件不能为空
+            if ($("#filewrap .file-style").length < 1) {
+                layer.msg("请选择附件", { time: 2000, icon: 2 });
+                return;
+            }
+            var loading = layer.msg('正在导入', { icon: 16, shade: 0.3, time: 0 });
+            $.ajax({
+                url: "/TzSupMatManagement/SaveAndReadFile",
+                type: "POST",
+                data: filepath,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Flag == '0') {
+                        var failureCount = data.failureCount;
+                        var successCount = data.successCount;
+                        layer.close(loading);
+                        $("#convertcom .upwrap").hide();
+                        $("#convertcom .fawrap").show();
+                        $("#convertcom .fawrap .su").text(successCount);
+                        $("#convertcom .fawrap .fa").text(failureCount);
+                        $("#convertcom .fawrap .upfi").text(data.fileName);
+                        downName = data.fileName;
+                        downloadpath = data.download;
+                        if (failureCount > 0) {
+                            $("#convertcom .fawrap .upfi").show();
+                            window.location.href = "/Download/DownLoadHB?path=" + data.download + "&fileName=" + data.fileName;
+                        }
+                    } else {
+                        layer.msg(data.Message, { time: 2000, icon: 2 });
+                        return;
+                    }
+                }
+
+            });
+        });
+
+    });
+    $("#cancel").click(function () {
+        $(".layui-layer-close").click();
+        window.location.reload();
+    });
+    //下载附件模板
+    $("#downtemplateFile").click(function () {
+        window.location.href = "@(ViewBag.PathUrl)";
+    });
+    //失败数据点击下载
+    $("#convertcom .fawrap .upfi").click(function () {
+        window.location.href = "/Download/DownLoadHB?path=" + downloadpath + "&fileName=" + downName;
+    });
+</script>

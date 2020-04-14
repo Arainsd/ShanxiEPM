@@ -1,0 +1,1534 @@
+﻿
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TzStartTenderingAndSupplyView
+@{
+    if (Model == null)
+    {
+        return;
+    }
+    ViewBag.Title = "StartApply";
+}
+<style>
+    .file-wrap {
+        height: 35px;
+        width: 300px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .timer_p {
+        position: relative;
+    }
+
+    .timer_c {
+        position: absolute;
+        bottom: 16px;
+        left: 136px;
+    }
+
+    #start, #management {
+        display: inline-block;
+        padding: 6px 16px;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        color: #00ccff;
+        border-color: #00ccff;
+        background-color: #fff;
+        border-bottom: 1px solid #00ccff;
+    }
+
+    .topBox {
+        border-bottom: 2px solid #00ccff;
+    }
+
+    #start {
+        border-right: 0;
+        margin-right: 0;
+        background-color: #00ccff;
+        color: #fff;
+    }
+
+    #management {
+        border-left: 0;
+        margin-left: -3px;
+        border-right-color: #00ccff;
+    }
+
+    #content {
+        margin-bottom: 2px;
+    }
+
+    .long_text {
+        width: 1180px !important;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData" id="content">
+    <div class="topBox">
+        <button id="start" class="col-lg-pull-3">开工申请信息</button>
+        <button id="management">工期管理及外部手续</button>
+    </div>
+</div>
+<form class="form-horizontal" id="mainForm">
+    <div class="contentData" id="contentOne">
+
+        <div class="module-div">
+            <h4>申请人信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" id="ApplyTitle" name="ApplyTitle" class="form-control" style="display:inline-block;width:88%;" placeholder="XX项目开工申请" value="@Model.TzProjectStartApply.ApplyTitle" readonly />
+                                @*<div class="btn-upload">
+                                        <input type="button" id="selproject" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择项目" />
+                                    </div>*@
+                                <input type="hidden" name="Id" id="Id" value="@Model.TzProjectStartApply.Id" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+
+                        </td>
+                        <td class="td-div">
+                            <div>@ViewBag.ApplyUserName</div>
+                            <input type="hidden" name="ApplyUserName" value="@ViewBag.ApplyUserName" />
+                            <input type="hidden" name="ApplyUserId" value="@ViewBag.ApplyUserId" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            @if (ViewBag.StartApplyTime == null)
+                            {
+                                <div></div>
+                            }
+                            @if (ViewBag.StartApplyTime != null)
+                            {
+                                <div>@ViewBag.StartApplyTime</div>
+                                <input type="hidden" name="StartApplyTime" value="@ViewBag.StartApplyTime" />
+
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@ViewBag.ApplyDepartment</div>
+                            <input type="hidden" id="ApplyDepartment" name="ApplyDepartment" value="@ViewBag.ApplyDepartment" />
+                            <input type="hidden" id="ApplyDepartmentId" name="ApplyDepartmentId" value="@ViewBag.ApplyDepartmentId" />
+
+                            <input type="hidden" name="ApplyCompanyId" value="@ViewBag.ApplyCompanyId" />
+                            <input type="hidden" name="ApplyCompanyName" value="@ViewBag.ApplyCompanyName" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ApplyTel" type="text" name="ApplyTel" value="@Model.TzProjectStartApply.ApplyTel" class="form-control" placeholder="请输入联系电话" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="ProjectName">@Model.TzProjectStartApply.ProjectName</div>
+                            <input type="hidden" name="ProjectName" id="ProjectName" value="@Model.TzProjectStartApply.ProjectName" />
+                            <input type="hidden" name="ProjectId" id="ProjectId" class="ProjectId" value="@Model.TzProjectStartApply.ProjectId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">设计规模或能力</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="请输入设计规模或能力" name="DesignScale" rows="4" class="form-control">@Model.TzProjectStartApply.DesignScale</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目建设书批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="BuildNumber" value="@Model.TzProjectStartApply.BuildNumber" class="form-control " placeholder="请输入项目建设书批准文号" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">估算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="InvestmentEstimateAmount" value="@Model.TzProjectStartApply.InvestmentEstimateAmount" class="form-control " placeholder="请输入估算投资" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">可研报告批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="FeasibilityReport" value="@Model.TzProjectStartApply.FeasibilityReport" class="form-control " placeholder="请输入可研报告批准文号" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或初步设计批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ReplyNumber" class="form-control" placeholder="请输入立项批复或初步设计批准文号" value="@Model.TzProjectStartApply.ReplyNumber " />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">批复投资或概算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" value="@Model.TzProjectStartApply.ReplyInvestmentAmount" name="ReplyInvestmentAmount" class="form-control " placeholder="请输入投资金额" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">资金来源</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.Raw(Html.DropDownList("FundsSourceType", null, new { @class = "form-control" }))
+                                <input type="hidden" id="FundsSource" name="FundsSource" value="@Model.TzProjectStartApply.FundsSource" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">当前计划投资情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="请输入当前计划投资情况" name="CurrentPlanned" rows="4" class="form-control">@Model.TzProjectStartApply.CurrentPlanned</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" name="PlanStartTime" placeholder="" id="PlanStartTime" class="form-control input_unit" style="width:43%;" onClick="WdatePicker({ onpicked: function (dp) { $('#PlanEndTime').val(''); }})" value="@(Model.TzProjectStartApply.PlanStartTime == null ? "" : Convert.ToDateTime(Model.TzProjectStartApply.PlanStartTime).ToString("yyyy-MM-dd"))" />-
+                                <i onClick="WdatePicker({ el: 'PlanStartTime' })" class="iconfont" style="right:215px;">&#xe7e2;</i>
+                                <input type="text" name="PlanEndTime" placeholder="" id="PlanEndTime" class="form-control input_unit" style="width:43%;" onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'PlanStartTime\')}', })" value="@(Model.TzProjectStartApply.PlanEndTime == null ? "" : Convert.ToDateTime(Model.TzProjectStartApply.PlanEndTime).ToString("yyyy-MM-dd"))" />
+                                <i onClick="WdatePicker({ el: 'PlanEndTime' })" class="iconfont " style="right:48px;">&#xe7e2;</i>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期（天）</span>
+                        </td>
+                        <td class="td-div">
+                            <div><span class="BuildCycles">@Model.TzProjectStartApply.BuildCycle</span></div>
+                            <input type="hidden" id="BuildCycle" name="BuildCycle" value="@Model.TzProjectStartApply.BuildCycle" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程项目概况及主要工程内容和主要工程量</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ProjectSummary" rows="4" class="form-control">@Model.TzProjectStartApply.ProjectSummary</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构及人员到位情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ProjectManagement" rows="4" class="form-control">@Model.TzProjectStartApply.ProjectManagement</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设总体部署（或施工组织设计）编制情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="BuildDeploy" rows="4" class="form-control">@Model.TzProjectStartApply.BuildDeploy</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">设计单位及图纸落实情况（主要设计单位、施工图交付计划情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="DesignUnits" rows="4" class="form-control">@Model.TzProjectStartApply.DesignUnits</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ConstructionName" type="text" name="ConstructionName" value="@Model.TzProjectStartApply.ConstructionName" class="form-control " placeholder="请输入施工单位" />
+                                <input id="ConstructionUnitId" type="hidden" name="ConstructionUnitId" value="@Model.TzProjectStartApply.ConstructionUnitId" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">项目经理</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ProjectManager" type="text" name="ProjectManager" value="@Model.TzProjectStartApply.ProjectManager" class="form-control " placeholder="请输入项目经理" />
+                                <input id="ProjectManagerId" type="hidden" name="ProjectManagerId" value="@Model.TzProjectStartApply.ProjectManagerId" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（施工）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="ConstructionScore" value="@Model.TzProjectStartApply.ConstructionScore" class="form-control " placeholder="请输入考试成绩" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位落实及施工队伍、机具进场情况（主要施工单位、合同签订情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ConstructionSituation" rows="4" class="form-control">@Model.TzProjectStartApply.ConstructionSituation</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupervisionUnit" value="@Model.TzProjectStartApply.SupervisionUnit" class="form-control " placeholder="请输入监理单位" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">监理工程师</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupervisionEngineer" value="@Model.TzProjectStartApply.SupervisionEngineer" class="form-control " placeholder="请输入监理工程师" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（监理）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="SupervisionScore" value="@Model.TzProjectStartApply.SupervisionScore" class="form-control " placeholder="请输入考试成绩" />
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位、质量监督部门落实情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="SupervisionSituation" rows="4" class="form-control">@Model.TzProjectStartApply.SupervisionSituation</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工前期准备情况（包括征地、拆迁、四通一平等）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="ConstructionReady" rows="4" class="form-control">@Model.TzProjectStartApply.ConstructionReady</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">主要设备、材料订货、到货情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="MainEquipment" rows="4" class="form-control">@Model.TzProjectStartApply.MainEquipment</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">环境影响、劳动安全卫生、消防等审批手续办理情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea placeholder="" name="Environment" rows="4" class="form-control">@Model.TzProjectStartApply.Environment</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">@*<i class="color_red_x">*</i>*@摄像头序列号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="CameraSerialNumber" type="text" name="CameraSerialNumber" value="@Model.TzProjectStartApply.CameraSerialNumber" class="form-control " placeholder="" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">@*<i class="color_red_x">*</i>*@验证码</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="VerificationCode" type="text" name="VerificationCode" value="@Model.TzProjectStartApply.VerificationCode" class="form-control " placeholder="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">@*<i class="color_red_x">*</i>*@URL地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="UrlAddress" type="text" name="UrlAddress" value="@Model.TzProjectStartApply.UrlAddress" class="form-control " placeholder="" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构（项目经理部或油库项目组）设立的文件、机构组成和职责分工各一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload1" name="XMGLJGWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMGLJGWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XMGLJGWJ")
+                                                {
+                                                    <li>
+                                                        <span>@item.Name</span>
+                                                        <i class="layui-icon fileDels" data-val="">&#x1006;</i>
+                                                        <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或项目初步设计批复文件复印件一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件2-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload2" name="LXPFWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LXPFWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "LXPFWJ")
+                                                {
+                                                    <li>
+                                                        <span>@item.Name</span>
+                                                        <i class="layui-icon fileDels" data-val="">&#x1006;</i>
+                                                        <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">经审批的施工组织设计或工程建设总体部署一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件3-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload3" name="SGSJWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SGSJWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "SGSJWJ")
+                                                {
+                                                    <li>
+                                                        <span>@item.Name</span>
+                                                        <i class="layui-icon fileDels" data-val="">&#x1006;</i>
+                                                        <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工进场人员名单及《安全教育合格证》（复印件）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件4-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload4" name="AQJYZWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="AQJYZWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "AQJYZWJ")
+                                                {
+                                                    <li>
+                                                        <span>@item.Name</span>
+                                                        <i class="layui-icon fileDels" data-val="">&#x1006;</i>
+                                                        <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">分公司与供应厂商确定的主要设备材料交付时间表一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件5-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload5" name="GYSWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GYSWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "GYSWJ")
+                                                {
+                                                    <li>
+                                                        <span>@item.Name</span>
+                                                        <i class="layui-icon fileDels" data-val="">&#x1006;</i>
+                                                        <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件6-->
+                            <div class="">
+                                <p class="file-wrap" id="btnUpload6" name="HSEWJ">
+                                    <i class="layui-icon add-icon">&#xe654;</i>
+                                    <span>点击上传</span>
+                                </p>
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="HSEWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "HSEWJ")
+                                                {
+                                                    <li>
+                                                        <span>@item.Name</span>
+                                                        <i class="layui-icon fileDels" data-val="">&#x1006;</i>
+                                                        <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程形象进度计划表附于此页</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <script id="editor2" name="ProjectPlan" type="text/plain" style="width:900px;margin:0 auto;">
+                                @Html.Raw(Model.TzProjectStartApply.ProjectPlan)
+                            </script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>下一步信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="LeadershipName" id="LeadershipName" class="form-control" style="display:inline-block;width:66%;" placeholder="请选择分管领导" value="@Model.TzProjectStartApply.LeadershipName" readonly />
+                                <input type="hidden" name="LeadershipId" id="LeadershipId" value="@Model.TzProjectStartApply.LeadershipId" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selLeader" class="btn" style="position: relative; z-index: 1;width: 150px;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择分管领导" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save next" style="margin-top:60px;text-align:center;">
+            <button type="button" id="save" class="btnNext layui-btn layui-btn-big " style="background-color:#6a6969">下一步</button>
+            <input type="button" id="return" lay-submit lay-filter="sub" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big comBack" />
+        </div>
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+
+    </div>
+
+    <div class="contentData" id="contentTwo" style="display:none">
+
+        <div class="module-div">
+            <h4>工期管理</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black"> 实际停业时间：</span>
+                            <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.TzProjectStartApply.ProjectId" />
+                            @{
+                                if (Model.timeAndCrossings != null)
+                                {
+                                    <input type="hidden" name="Id" id="Id" value="@Model.timeAndCrossings.Id" />
+                                }
+                            }
+
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="ShutdownTime" name="ShutdownTime" onClick="WdatePicker({ el: 'ShutdownTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ShutdownTime', 'NOT_VALIDATED', null).validateField('ShutdownTime') } })" value="@(Model.timeAndCrossings.ShutdownTime == null ? "" : Convert.ToDateTime(Model.timeAndCrossings.ShutdownTime).ToString("yyyy-MM-dd"))">
+                                <i onClick="WdatePicker({ el: 'ShutdownTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划开工时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="PlanWorkStartTime" name="PlanWorkStartTime" onClick="WdatePicker({ el: 'PlanWorkStartTime', onpicked: function (dp) { $('#PlanWorkEndTime').val(''); } })" value="@(Model.timeAndCrossings.PlanWorkStartTime == null ? "" : Convert.ToDateTime(Model.timeAndCrossings.PlanWorkStartTime).ToString("yyyy-MM-dd"))">
+                                <i onClick="WdatePicker({ el: 'PlanWorkStartTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划完工时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="PlanWorkEndTime" name="PlanWorkEndTime" onClick="WdatePicker({ el: 'PlanWorkEndTime', onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'PlanWorkStartTime\')}' })" value="@(Model.timeAndCrossings.PlanWorkEndTime == null ? "" : Convert.ToDateTime(Model.timeAndCrossings.PlanWorkEndTime).ToString("yyyy-MM-dd"))">
+                                <i onClick="WdatePicker({ el: 'PlanWorkEndTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">工期（天）：</span>
+                        </td>
+                        @{
+                            if (Model.timeAndCrossings != null)
+                            {
+                                <td class="td-div apply_time">
+                                    <div><span class="TimeLimits">@Model.timeAndCrossings.TimeLimit</span></div>
+                                    <input id="TimeLimit" type="hidden" name="TimeLimit" class="TimeLimit" placeholder="" style="width:50%;" readonly value="@Model.timeAndCrossings.TimeLimit" />
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="td-div apply_time">
+                                    <div><span class="TimeLimits"></span></div>
+                                    <input id="TimeLimit" type="hidden" name="TimeLimit" class="TimeLimit" placeholder="" style="width:50%;" readonly value="" />
+                                </td>
+                            }
+
+                        }
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">计划开业时间：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="PlanOpeningTime" name="PlanOpeningTime" onClick="WdatePicker({ el: 'PlanOpeningTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('PlanOpeningTime', 'NOT_VALIDATED', null).validateField('PlanOpeningTime') } })" value="@(Model.timeAndCrossings.PlanOpeningTime == null ? "" : Convert.ToDateTime(Model.timeAndCrossings.PlanOpeningTime).ToString("yyyy-MM-dd"))">
+                                <i onClick="WdatePicker({ el: 'PlanOpeningTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划停业时长（天）：</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input id="PlanShutdowLimit" type="text" name="PlanShutdowLimit" placeholder="" class="form-control " style="width:100%;" value="@Model.timeAndCrossings.PlanShutdowLimit" />
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append fileShow-append1" id="SCFJ">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.timeAndCrossingsType as SelectList, null, new { @class = "form-control sel" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile7" name="SCFJ" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#6a6969!important;color:white;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @if (Model.timeAndCrossings != null)
+                    {
+                        if (Model.timeAndCrossings.TzAttachs != null && Model.timeAndCrossings.TzAttachs.Count() > 0)
+                        {
+                            foreach (var item in Model.timeAndCrossings.TzAttachs)
+                            {
+                                if (item.TypeNo != "SHOUXU")
+                                {
+                                    <tr id="${obj.GuidId}">
+                                        <td><span class="font-black sort">@item.Sort</span></td>
+                                        <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                        <td><span class="font-black">@item.TypeName</span></td>
+                                        <td class="td-div" style="text-align:center">
+                                            <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" class="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>外部手续</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title"><i class="color_red">*</i>  外部手续：</td>
+                        <td class="td-div" colspan="3">
+                            @{
+                                if (Model.timeAndCrossings.IsCrossings == true)
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsCrossings" value="true" class="manage" checked /> 办理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsCrossings" value="false" class="nulls" /> 无
+                                    </label>
+                                }
+                                else if (Model.timeAndCrossings.IsCrossings == false)
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsCrossings" value="true" class="manage" /> 办理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsCrossings" value="false" class="nulls" checked /> 无
+                                    </label>
+                                }
+                                else {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsCrossings" value="true" class="manage" checked /> 办理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="IsCrossings" value="false" class="nulls" /> 无
+                                    </label>
+                                }
+                            }
+
+                        </td>
+                    </tr>
+
+                    <tr class="wHeadtr">
+                        <td class="table_title">
+                            <span class="font-black">外部手续附件：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile8" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color: #6a6969;color: #fff;" value="选择附件" />
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="upRemove">
+                        <td colspan="4">
+                            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                                <tbody class="fileShow-append fileShow-append2" id="JHMX">
+                                    <tr class="headtr">
+                                        <th class="table_title" style="width: 219px;">序号</th>
+                                        <th class="td-div">附件名称</th>
+                                        <th class="td-div">操作</th>
+                                    </tr>
+                                    @{
+                                        int index = 0;
+                                    }
+                                    @if (Model.timeAndCrossings != null)
+                                    {
+                                        if (Model.timeAndCrossings.TzAttachs != null && Model.timeAndCrossings.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.timeAndCrossings.TzAttachs)
+                                            {
+                                                index++;
+
+                                                if (item.TypeNo == "SHOUXU")
+                                                {
+                                                    <tr>
+                                                        <td><span class="font-black sort">@item.Sort</span></td>
+                                                        <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                                        <td class="td-div" style="text-align:center">
+                                                            <a class="fileDe2" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                                            <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save prent" style="margin-top:60px;text-align:center;" id="prent">
+            <input type="button" id="" lay-submit lay-filter="sub" value="上一步" class="layui-btn layui-btn-big back" />
+            <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="returns" lay-submit lay-filter="sub" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big comBack" />
+        </div>
+        <input type="file" id="loadFile1" name="loadFile1" style="display:none" onchange="uploadFile1()" fileListId="" />
+        <input type="file" id="loadFile2" name="loadFile2" style="display:none" onchange="uploadFile2()" fileListId="" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <input type="hidden" name="fileDataJsonFileTimer" id="fileDataJsonFileTimer" />
+        <input type="hidden" name="fileDataJsonFileCrossings" id="fileDataJsonFileCrossings" />
+        <input type="hidden" name="State" id="State" />
+    </div>
+</form>
+
+
+<script src="~/ueditor/ueditor.config.js"></script>
+<script src="~/ueditor/ueditor.all.js"></script>
+<script>
+
+    window.onload = function () {
+
+        //返回
+        $(".comBack").click(function () {
+            layer.msg('您当前填写的信息不做保存，是否返回？', {
+                title: '系统提示',
+                time: 3000,
+                icon: 2,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    window.location.href = "/TzProjectStartApply/Index";
+                    layer.close(index);
+                }
+            })
+        });
+
+        //点击下一步
+        //对表单进行验证
+        var bv = $('#mainForm').data('bootstrapValidator');
+        bv.validate();
+
+        $('.next').on('click', ".btnNext", function () {
+            if ($("#ApplyTel").val().length > 0 || $("#LeadershipName").val() > 0) {
+                //点击下一步  切换tab
+                $("#contentTwo").show();
+                $("#contentOne").hide();
+                $("#start").css({ "background-color": "#fff", "color": "#00ccff" });
+                $("#management").css({ "background-color": "#00ccff", "color": "#fff" });
+            }
+        });
+
+        //点击上一步  切换tab
+        $("#prent").on('click', '.back', function () {
+            //var type = $("#Type").val();
+            $("#contentTwo").hide();
+            $("#contentOne").show();
+            $("#start").css({ "background-color": "#00ccff", "color": "#fff" });
+            $("#management").css({ "background-color": "#fff", "color": "#00ccff" })
+        });
+
+        //外部
+        $(".nulls").click(function () {
+            $(".wHeadtr").hide();
+            //$(".upRemove").hide();
+            var trs = $(".upRemove tr").not(".headtr");
+            trs.remove();
+        });
+        $(".manage").click(function () {
+            $(".wHeadtr").show();
+            $(".upRemove").show();
+
+        });
+
+    };
+
+    //开工申请 附件上传按钮
+    $('#btnUpload1,#btnUpload2,#btnUpload3,#btnUpload4,#btnUpload5,#btnUpload6').click(function () {
+        $("#loadFile").attr("fileListId", $(this).attr("name"));
+        document.getElementById("loadFile").click();
+    });
+    var JsonFile = [];
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        isFlagFile = false;
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.FilePath = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = column;
+                    JsonFile.push(obj);
+                    if (data[i].ImageType == null) {
+                        var odiv = `<li><span>${obj.Name}</span>
+                            <i class ="layui-icon fileDels" data-val="${obj.GuidId}">&#x1006; </i>
+                            <input type="hidden" class ="fileList"  data-column="${obj.TypeNo}" data-name="${obj.Name}" data-guid="" data-size="${obj.Size}" data-imagetype="${obj.ImageType}" data-url="${obj.FilePath}" data-group="${obj.Group}"/>
+                            </li>`;
+                        $("#" + column).append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    //工期管理附件上传
+    $('#btnUploadFile7').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile1 = true;
+    function uploadFile1() {
+        isFlagFile1 = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append1 tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span class="sort"> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" class="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append1').append(odiv);
+                    }
+                }
+                return isFlagFile1 = true;
+            }
+        });
+    }
+
+    //外部手续附件上传
+    $('#btnUploadFile8').click(function () {
+        document.getElementById("loadFile2").click();
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile2 = true;
+    function uploadFile2() {
+        if ($("#loadFile2")[0].files.length == 0) {
+            return;
+        }
+        isFlagFile2 = false;
+        var fileObj = $("#loadFile2")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append2 tr").length;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = `
+                                 <tr >
+                                        <td><span class ="font-black sort">` + index + `</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a href="javascript:void(0)" style="color:#337ab7;" class ="fileDe2 ">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}" data-tablecolumn="${obj.TableColumn}">
+                                        </td>
+                                    </tr>
+                           `
+                        $(".fileShow-append2").append(odiv);
+                    }
+                    index++;
+                }
+                return isFlagFile2 = true;
+            }
+
+        });
+    }
+
+    //富文本编辑器实例化
+    var ue = UE.getEditor('editor2', {
+        toolbars: [[//工具条
+          'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+       'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+       'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+       'strikethrough', 'superscript', 'subscript', 'removeformat',
+       'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+       'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+       'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]],
+        initialFrameHeight: 300
+    });
+    //编辑器内容同步input
+    editor = UE.getEditor("editor2", {
+
+    }).ready(function () {
+        var editor = UE.getEditor("editor2");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor2').find('iframe').contents();
+        var fn = function () {
+            $("#ProjectPlan").val(UE.getEditor("editor2").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+
+    //删除附件工期管理
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().parent("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+    //删除附件外部手续
+    $("body").on('click', '.fileDe2', function () {
+        $(this).parent().parent("tr").remove();
+        document.getElementById('loadFile2').value = null;
+        $(".fileShow-append2 tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    //开工申请 删除附件
+    $("body").on('click', '.fileDels', function () {
+        $(this).parents("li").remove();
+    });
+
+    //计划建设工期
+    $("#PlanStartTime,#PlanEndTime").blur(function () {
+        var strStartTime = $("#PlanStartTime").val();
+        var endTime = $("#PlanEndTime").val();
+        if (strStartTime == "" || endTime == "") {
+            $(".BuildCycles").text(0);
+            $("#BuildCycle").val(0);
+        }
+        else {
+            var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+            var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+            if (startNum > endNum) {
+                $(".BuildCycles").text(0);
+                $("#BuildCycle").val(0);
+            }
+            else {
+                //$("#BuildCycle").html(DateDiff(strStartTime, endTime) + 1);  //调用/计算两个日期天数差的函数，通用
+                $(".BuildCycles").text(DateDiff(strStartTime, endTime) + 1);
+                $("#BuildCycle").val(DateDiff(strStartTime, endTime) + 1);
+            }
+        }
+    });
+    //工期天数
+    $("#PlanWorkStartTime,#PlanWorkEndTime").blur(function () {
+        var workStrStartTime = $("#PlanWorkStartTime").val();
+        var workEndTime = $("#PlanWorkEndTime").val();
+        if (workStrStartTime == "" || workEndTime == "") {
+            $(".TimeLimits").text(0);
+            $("#TimeLimit").val(0);
+        }
+        else {
+            var workStartNum = parseInt(workStrStartTime.replace(/-/g, ''), 10);
+            var workEndNum = parseInt(workEndTime.replace(/-/g, ''), 10);
+            if (workStartNum > workEndNum) {
+                $(".TimeLimits").text(0);
+                $("#TimeLimit").val(0);
+            }
+            else {
+                $(".TimeLimits").text(DateDiff(workStrStartTime, workEndTime) + 1);
+                $("#TimeLimit").val(DateDiff(workStrStartTime, workEndTime) + 1);
+            }
+        }
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择项目
+        @*$("#selproject").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择人员"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectTzProjectProposal',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        var ApplyUserName = "@ViewBag.ApplyUserName";
+                        var StartApplyTime = "@ViewBag.StartApplyTime";
+                        $("#ApplyTitle").val(obj.data[0].ProjectName + '-' + ApplyUserName + '-' + StartApplyTime);
+                        $("#ProjectName").val(obj.data[0].ProjectName);
+                        $(".ProjectName").text(obj.data[0].ProjectName);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        //$('#mainForm').data('bootstrapValidator')//重新验证inputName
+                  //.updateStatus('ProjectName', 'NOT_VALIDATED', null)
+                  //.validateField('ProjectName');
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });*@
+        //选择分管领导
+        $("#selLeader").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分管领导"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#LeadershipName").val(obj.data[0].Name);
+                        $("#LeadershipId ").val(obj.data[0].Id);
+                        $('#mainForm').data('bootstrapValidator').updateStatus('LeadershipName', 'NOT_VALIDATED', null).validateField('LeadershipName');
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+    });
+
+
+
+
+    //数据提交
+    $("#contentTwo .save").click(function () {
+        //附件是否上传完成 isFlagFile
+        if (isFlagFile == true && isFlagFile1 == true && isFlagFile2 == true) {
+            $(".save").addClass("layui-btn-disabled");
+            $(".save").attr("disabled", "disabled");
+
+            var JsonFile = [];
+            var JsonFileTimer = [];
+            var JsonFileCrossings = [];
+            $("#contentTwo .fileShow-append1 tr:not(.headtr)").each(function (index, item) {
+                JsonFileTimer.push({
+                    Name: $(item).find(".updata").data("name"),
+                    GuidId: $(item).find(".updata").data("id"),
+                    Size: $(item).find(".updata").data("size"),
+                    Group: $(item).find(".updata").data("group"),
+                    FilePath: $(item).find(".updata").data("url"),
+                    TypeNo: $(item).find(".updata").data("typeno"),
+                    TypeName: $(item).find(".updata").data("typename"),
+                    Sort: index + 1,
+                })
+            });
+            $("#contentTwo .fileShow-append2 tr:not(.headtr)").each(function (index, item) {
+                JsonFileCrossings.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    ImageType: $(item).find("#updata").data("imagetype"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TypeNo: "SHOUXU",
+                    TypeName: $(item).find("#updata").data("typename"),
+                    Sort: index + 1,
+                });
+            });
+            $("#contentOne .fileShow li").each(function (index, item) {
+                JsonFile.push({
+                    Name: $(item).find(".fileList").data("name"),
+                    GuidId: $(item).find(".fileList").data("guid"),
+                    Size: $(item).find(".fileList").data("size"),
+                    ImageType: $(item).find(".fileList").data("imagetype"),
+                    Group: $(item).find(".fileList").data("group"),
+                    FilePath: $(item).find(".fileList").data("url"),
+                    TypeNo: $(item).find(".fileList").data("column"),
+                });
+            });
+
+            var fileDataJsonFile = JSON.stringify(JsonFile);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+
+            var fileDataJsonFileTimer = JSON.stringify(JsonFileTimer);
+            $("#fileDataJsonFileTimer").val(fileDataJsonFileTimer);
+
+            var fileDataJsonFileCrossings = JSON.stringify(JsonFileCrossings);
+            $("#fileDataJsonFileCrossings").val(fileDataJsonFileCrossings);
+
+            //资金来源
+            if ($("#FundsSourceType option:selected").val() != "") {
+                $("#FundsSource").val($("#FundsSourceType option:selected").text());
+            }
+
+            //点击提交表单验证，点击暂存表单不验证
+            if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+                if (!bv.isValid()) {
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                    return;
+                }
+            }
+
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("#mainForm").serialize();
+            $.post("Edit", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        window.location.href = "/TzProjectStartApply/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                }
+            });
+        }
+        else {
+            layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+        }
+    });
+    //表单验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            ShutdownTime: {
+                validators: {
+                    notEmpty: {
+                        message: '实际停业时间不能为空'
+                    }
+                }
+            },
+            PlanOpeningTime: {
+                validators: {
+                    notEmpty: {
+                        message: '计划开业时间不能为空'
+                    }
+                }
+            },
+            ApplyTitle: {
+                validators: {
+                    notEmpty: {
+                        message: '标题不能为空'
+                    },
+                    stringLength: {
+                        max: 100,
+                        message: '项目名称不能超过100字符'
+                    },
+                }
+            },
+            ApplyTel: {
+                validators: {
+                    notEmpty: {
+                        message: '联系电话不能为空'
+                    },
+                    regexp: {
+                        regexp: /^1(3|4|5|6|7|8|9)\d{9}$/,
+                        message: "联系电话格式错误"
+                    }
+                }
+            },
+            LeadershipName: {
+                validators: {
+                    notEmpty: {
+                        message: '分管领导不能为空'
+                    }
+                }
+            },
+            //CameraSerialNumber: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '摄像头序列号不能为空'
+            //        }
+            //    }
+            //},
+            //VerificationCode: {
+            //    validators: {
+            //        notEmpty: {
+            //            message: '验证码不能为空'
+            //        }
+            //    }
+            //}
+        }
+    });
+
+</script>
+
+
+

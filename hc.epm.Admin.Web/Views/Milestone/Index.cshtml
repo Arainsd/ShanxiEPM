@@ -1,0 +1,193 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@model IEnumerable<MilepostView>
+@{
+    ViewBag.Title = "里程碑";
+}
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">里程碑分类: </label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("parentId", ViewBag.ParentName as SelectList)
+                    </div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+
+        <div class="btns">
+            <a href="javascript:;" data-right="@AdminModule.MilepostConfig" id="add" class="checkright" style="display: inline;">新 增</a>
+            <a href="javascript:;" data-right="@AdminModule.MilepostConfig" id="delete" class="checkright" style="display: inline;">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" style="text-align:center;word-break:break-all;word-wrap:break-word">
+                <thead>
+                    <tr>
+                        <th width="4%" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th width="5%" class="table-center">序号</th>
+                        <th width="23%" class="table-center">分类</th>
+                        <th width="32%" class="table-center">里程碑</th>
+                        <th width="8%" class="table-center">是否启用</th>
+                        <th width="6%" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">
+                                    <input type="checkbox" lay-skin="primary" name="chName" />
+                                    <input type="hidden" name="id-@item.Id" id="id-@item.Id" value="@item.Id" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td>@item.ParentName</td>
+                                <td>@item.Name</td>
+                                <td class="table-center">
+                                    @if (item.State == 1)
+                                    {
+                                        <a href="javascript:;" class='checkright change-state' data-module="@AdminModule.MilepostConfig" data-itemid="@item.Id" data-value="@item.State" data-right="modify" data-type="2" title="启用/禁用"><i class='glyphicon glyphicon-ok-sign handle-blue'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='checkright change-state' data-module="@AdminModule.MilepostConfig" data-itemid="@item.Id" data-value="@item.State" data-right="modify" data-type="2" title="启用/禁用"><i class='glyphicon glyphicon-remove-sign handle-red'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class="checkright editor-link" data-itemid="@item.Id" title="编辑" data-module="@AdminModule.MilepostConfig" data-right="modify"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //表格全选
+        layui.use('form', function () {
+            var $ = layui.jquery, form = layui.form;
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[name="chName"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+        });
+        laypage.render({
+            elem: 'page',
+            count: @ViewBag.Total,
+            curr: @ViewBag.pageIndex,
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Milestone/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //修改
+        $(".editor-link").click(function () {
+            var id = $(this).data("itemid");
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("里程碑管理-编辑"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '600px'],
+                content: '/Milestone/Edit?id=' + id,
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+        //增加
+        $("#add").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("里程碑管理-添加"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '600px'],
+                content: '/Milestone/Add',
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Milestone/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                });
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+        //状态修改
+        $(".change-state").click(function () {
+            var id = $(this).data("itemid");
+            var stateValue = $(this).data("value");
+            if (stateValue == 0) {
+                var state = false;
+                mes = "是否启用所选择的项？"
+            } else if (stateValue == 1) {
+                var state = true;
+                mes = "是否禁用所选择的项？"
+            }
+            if (id != '') {
+                parent.layer.confirm(mes, { icon: 3 }, function () {
+                    $.post("ChangeState", { id: id, state: state }, function (data) {
+                        if (data.Flag) {
+                            window.location.href = "/Milestone/Index";
+                            parent.layer.msg("操作成功！", { time: 1000, icon: 1 });
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>

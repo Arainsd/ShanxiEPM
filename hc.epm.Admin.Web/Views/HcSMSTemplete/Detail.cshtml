@@ -1,0 +1,48 @@
+﻿@using hc.epm.UI.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@using hc.epm.DataModel.Msg
+@model Msg_SMSTemplete
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="form-wrap" style="min-height:500px;position: relative;">
+    <table class="layui-table" style="width:80%;margin:0 auto;margin-top:20px;table-layout: fixed">
+        <tbody>
+            <tr>
+                <td style="text-align:right;width:25%;">模版</td>
+                <td>@Model.No</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">模版名称</td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信适用环节</td>
+                <td>@(Model.Step.ToEnumReq<MessageStep>().GetText())</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信模板内容</td>
+                <td>@Model.TemplateCon</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信服务商模板编号</td>
+                <td>@Model.ServerNo</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">短信参数说明</td>
+                <td style="word-break: break-all">@Model.ParameterDes</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">启用/禁用</td>
+                <td>@(Model.IsEnable == true ? "启用" : "禁用")</td>
+            </tr>
+            <tr>
+                <td style="text-align:right">确认状态</td>
+                <td>@(Model.IsConfirm == true ? "已确认" : "未确认")</td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>

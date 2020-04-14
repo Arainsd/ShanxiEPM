@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "TestUE";
+}
+
+<form action="" method="post">
+    <script type="text/plain" id="editor" style="width:800px;height:240px;">
+        @Html.Raw(ViewBag.con)
+    </script>
+    <input type="hidden" name="content" id="content" />
+    <input type="submit" value="提交" />
+    @Html.Raw(ViewBag.con)
+</form>
+<script type="text/javascript">
+
+    //实例化编辑器
+    var ue = UE.getEditor('editor');
+    $('form').submit(function () {
+        $('#content').val(ue.getContent());
+    });
+</script>

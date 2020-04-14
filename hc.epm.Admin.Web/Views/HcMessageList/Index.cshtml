@@ -1,0 +1,120 @@
+﻿@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Msg
+@using System.Collections.Generic;
+@using hc.epm.UI.Common;
+@model IEnumerable<Msg_Message>
+@{
+    ViewBag.Title = "消息记录";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">标题 : </label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline"><input type="text" name="SmsCon" id="name" placeholder="标题" autocomplete="off" class="layui-input" value="@ViewBag.SmsCon" /></div>
+                    </div>
+                    <label class="layui-form-label">邮件发送时间 : </label>
+                    <div class="layui-input-inline"><input type="text" name="BenginDate" id="BenginDate" readonly="readonly" placeholder="请选择开始日期" onclick="WdatePicker()" autocomplete="off" class="layui-input" value="@ViewBag.BenginDate" /></div>
+                    <div class="layui-input-inline"><input type="text" name="EndDate" readonly="readonly" placeholder="请选择截止日期" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'BenginDate\')}' })" autocomplete="off" class="layui-input" value="@ViewBag.EndDate" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="60" style="text-align:center">序号</th>
+                        <th width="10%" style="text-align:left">发送企业</th>
+                        <th style="text-align:left">标题</th>
+                        <th width="15%" style="text-align:center">发送时间</th>
+                        <th width="100" style="text-align:center">状态</th>
+                        <th width="90" style="text-align:center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">@index</td>
+                                <td class="table-left">@item.SendeCompanyId</td>
+                                <td class="table-left">@Html.CutString(item.Title, 90)</td>
+                                <td class="table-left">@item.SendTime</td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class='change-state' data-itemid="@item.Id">@(item.State ? "已读" : "未读")</a>
+                                </td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class="details-link" data-itemid="@item.SId" title="详情"><i class='glyphicon glyphicon-list-alt handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/HcMessageList/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //详情
+    $(".details-link").click(function () {
+        var id = $(this).data("itemid");
+        if (id != "") {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("消息环节配置-详情"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '500px'],
+                content: '/HcMessageList/Detail?id=' + id
+            });
+        }
+    });
+</script>

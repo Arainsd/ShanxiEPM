@@ -1,0 +1,358 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@model List<Epm_ProjectConstitute>
+@{
+    ViewBag.Title = "ApprovalConstitute";
+}
+<style>
+    input[type="text"] {
+        padding-left: 15px;
+    }
+
+    .long-text-other input {
+        height: 35px;
+        margin-bottom: 15px;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+    }
+
+    .addother {
+        width: 100px;
+        height: 25px;
+        margin-left: 124px;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .inputone {
+        display: inline-block;
+        height: 30px;
+        width: 108px !important;
+        line-height: 30px;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+    }
+
+    .inputTwo {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+        margin-bottom: 15px;
+    }
+
+    .default {
+        background: #ebebe5;
+    }
+    .sr-inp {
+    padding-left:15px;
+    }
+</style>
+<div class="contentData">
+    <form>
+        <ul class="tab-list">
+            <li id="Edit">基本信息</li>
+            <li id="ApprovalConstitute" class="active">总批复构成</li>
+            <li id="ProjectISP">工程供应商</li>
+            <li id="ProjectMainPoint">工程要点</li>
+            <li id="MilestonePlan">工程节点</li>
+            <li id="TimeManage">工期管理</li>
+            <li id="IsCrossingsManage">外部手续</li>
+        </ul>
+        <div class="tab">
+            <span id="HApprovalConstitute" style="color:blue;margin-left:700px;cursor:pointer;">查看历史</span>
+            <input type="hidden" id="ConstituteLists" name="ConstituteLists" />
+            <div class="long-text sr-inp">
+                <label>&nbsp;合计&nbsp;:</label>
+                <input type="text" value="@(ViewBag.Amount==null?" ":ViewBag.Amount.ToString(" 0.######"))" id="AllAmout" readonly="readonly" style="background:#ebebe5;" />&nbsp;万元
+
+            </div>
+            <div class="long-text sr-inp">
+                <label>&nbsp;剩余金额&nbsp;:</label>
+                <input type="text" value="@(ViewBag.BalanceAmount==null?" ":ViewBag.BalanceAmount.ToString(" 0.######"))" id="BalanceAmount" name="BalanceAmount" readonly="readonly" style="background:#ebebe5;" />&nbsp;万元
+            </div>
+            <div class="long-text sr-inp">
+                <label>&nbsp;甲供设备&nbsp;:</label>
+                <input type="text" value="@(ViewBag.AProvideAmount==null? " ":ViewBag.AProvideAmount.ToString(" 0.######"))" id="AProvideAmount" name="AProvideAmount" readonly="readonly" style="background:#ebebe5;" />&nbsp;万元
+            </div>
+            <div class="container">
+                @if (Model != null && Model.Count() > 0)
+                {
+                    bool hasConstitute = false;
+                    foreach (var item in Model)
+                    {
+                        if (!item.IsAProvide.HasValue || !item.IsAProvide.Value)
+                        {
+                            hasConstitute = true;
+                            <div class="long-text long-text-other notAProvide">
+                                <input type="hidden" value="@item.ConstituteKey" id="ConstituteKey" name="ConstituteKey" />
+                                <input type="hidden" id="ConstituteValue" value="@item.ConstituteValue" class="amountName" />
+                                <label>&nbsp;@item.ConstituteValue &nbsp;:</label>
+                                <input type="text" class="default" readonly value="@(item.Amount == null ? " ":@item.Amount.Value.ToString(" 0.######"))" id="Amount" name="Amount" data-ischarging="@item.IsCharging.ToString()" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,'');}).call(this)" onblur="this.v();" />&nbsp;万元
+                                <span class="editNextRow" style="color:blue;margin-left:10px;cursor:pointer">修改</span>
+                                <span class="saveNextRow" style="color:blue;margin-left:10px;cursor:pointer;display:none;">保存</span>
+                                <input type="hidden" value="@item.IsCharging.ToString()" id="IsCharging" name="IsCharging" />
+                                <input type="hidden" value="@item.IsAProvide.ToString()" id="IsAProvide" name="IsAProvide" />
+                                <input type="hidden" value="@item.Sort" id="Sort" name="Sort" />
+                                <input type="hidden" value="@item.SId" id="Id" name="Id" />
+                            </div>
+                        }
+                    }
+                    if (hasConstitute)
+                    {
+                        <div class="addtwoCon" id="ConstituteDiv" style=""></div>
+                        <input type="button" value="添加" class="addother" id="addConstitute" /><br /><br />
+                    }
+                    bool hasAProvide = false;
+                    foreach (var item in Model)
+                    {
+                        if (item.IsAProvide.HasValue && item.IsAProvide.Value)
+                        {
+                            hasAProvide = true;
+                            <div class="long-text long-text-other AProvide">
+                                <input type="hidden" value="@item.ConstituteKey" id="ConstituteKey" name="ConstituteKey" />
+                                <input type="hidden" id="ConstituteValue" value="@item.ConstituteValue" class="amountName" />
+                                <label>&nbsp;@item.ConstituteValue &nbsp;:</label>
+                                <input type="text" class="default" readonly value="@(item.Amount == null ?" ":item.Amount.Value.ToString(" 0.######"))" id="Amount" name="Amount" data-ischarging="@item.IsCharging.ToString()" maxlength="10" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,'');}).call(this)" onblur="this.v();" />&nbsp;万元
+                                <span class="editNextRow" style="color:blue;margin-left:10px;cursor:pointer">修改</span>
+                                <span class="saveNextRow" style="color:blue;margin-left:10px;cursor:pointer;display:none;">保存</span>
+                                <input type="hidden" value="@item.IsCharging.ToString()" id="IsCharging" name="IsCharging" />
+                                <input type="hidden" value="@item.IsAProvide.ToString()" id="IsAProvide" name="IsAProvide" />
+                                <input type="hidden" value="@item.Sort" id="Sort" name="Sort" />
+                                <input type="hidden" value="@item.SId" id="Id" name="Id" />
+                            </div>
+                        }
+                    }
+                    if (hasAProvide)
+                    {
+                        <div class="addtwoCon" id="AProvideDiv"></div>
+                        <input type="button" value="添加" class="addother" id="addAProvide" /><br /><br />
+                    }
+                }
+            </div>
+            <div class="button-group btn-center">
+                <button type="button" class="saveBut " id="saveBut" data-module="ConProject" data-right="SetConstitute">保存</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    $(document).ready(function () {
+            $("#Edit").click(function () {
+            window.location.href = 'Edit?projectId=@ViewBag.ProjectId';
+        });
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = "ApprovalConstitute?projectId=@ViewBag.ProjectId"
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#TimeManage").click(function () {
+            window.location.href = 'TimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'ProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        //点击修改可以输入金额
+        $(".editNextRow").on("click", function () {
+            $(this).parent().find("input[type='text']").removeClass("default").removeAttr("readonly");
+            $(this).hide().parent().find(".saveNextRow").show();
+        });
+        //点击保存不可修改金额
+        $(".saveNextRow").on("click", function () {
+            $(this).parent().find("input[type='text']").addClass("default").attr({ readonly: 'true' });
+            $(this).hide().parent().find(".editNextRow").show();
+        });
+        $("body").on("click", ".dynamicAdd", function () {
+            $(this).parent().find("input[type='text']").addClass("default").attr({ readonly: 'true' });
+            $(this).hide();
+            $(this).parent().find(".dynamicEdit").show();
+        });
+        $("body").on("click", ".dynamicEdit", function () {
+            $(this).parent().find("input[type='text']").removeClass("default").removeAttr("readonly");
+            $(this).hide().parent().find(".dynamicAdd").show();
+        });
+
+        //计算甲供费用
+        $("body").on("change", ".container .AProvide input[name='Amount']", function () {
+            var AProvideAmount = [];
+            $(".container .AProvide input[name='Amount']").each(function (index, item) {
+                if ($(item).data("ischarging") == "True") {
+                    var itemAmount = $(item).val();
+                    AProvideAmount.push(itemAmount);
+                }
+            });
+            var sum = 0;
+            var AProvidesum = Number(sum);
+            for (var i = 0; i < AProvideAmount.length; i++) {
+                AProvidesum = accAdd(AProvidesum, Number(AProvideAmount[i]));
+            }
+            $("#AProvideAmount").val(AProvidesum)
+        });
+        //剩余金额
+        $("body").on("change", ".container .long-text input[name='Amount']", function () {
+            var BalanceAmount = [];
+            $(".container .long-text input[name='Amount']").each(function (index, item) {
+                if ($(item).data("ischarging") == "True") {
+                    var itemBAmount = $(item).val();
+                    BalanceAmount.push(itemBAmount);
+                }
+            });
+            var Balancesum = 0;
+            var Balance = Number(Balancesum);
+            for (var i = 0; i < BalanceAmount.length; i++) {
+                Balance = accAdd(Balance, Number(BalanceAmount[i]));
+            }
+            var BalanceAmountValue = accMinus(Number($("#AllAmout").val()), Balance);
+            $("#BalanceAmount").val(BalanceAmountValue);
+        });
+        function accAdd(arg1, arg2) {
+            var r1, r2, m;
+            try { r1 = arg1.toString().split(".")[1].length } catch (e) { r1 = 0 }
+            try { r2 = arg2.toString().split(".")[1].length } catch (e) { r2 = 0 }
+            m = Math.pow(10, Math.max(r1, r2));
+            return parseInt(arg1 * m + arg2 * m) / m;
+        }
+        function accMinus(arg1, arg2) {
+            var r1, r2, m;
+            try { r1 = arg1.toString().split(".")[1].length } catch (e) { r1 = 0 }
+            try { r2 = arg2.toString().split(".")[1].length } catch (e) { r2 = 0 }
+            m = Math.pow(10, Math.max(r1, r2));
+            return parseInt(arg1 * m - arg2 * m) / m;
+        }
+
+        //数据提交
+        $("#saveBut").click(function () {
+            $("#BluePrintValue").val($("select option:selected").text());
+            //获取列表数据
+            var ConstituteList = [];
+            $(".container .long-text").each(function (index, item) {
+                ConstituteList.push({
+                    Id: $(item).children("#Id").val(),
+                    ConstituteKey: $(item).children("#ConstituteKey").val(),
+                    ConstituteValue: $.trim($(item).children("#ConstituteValue").val()),
+                    Amount: $(item).children("#Amount").val().trim(),
+                    IsCharging: $(item).children("#IsCharging").val(),
+                    IsAProvide: $(item).children("#IsAProvide").val(),
+                    Sort: $(item).children("#Sort").val()
+                });
+            });
+            ConstituteLists = JSON.stringify(ConstituteList);
+            $("#ConstituteLists").val(ConstituteLists);
+            var ValueName = false;
+            var amountName = [];//所有费用名称集合
+            $(".amountName").each(function (index, item) {
+                if (amountName.indexOf($.trim($(item).val())) == -1) {
+                    amountName.push($.trim($(item).val()));
+                }
+                if ($.trim($(item).val()) == "") {
+                    ValueName = true;
+                }
+            });
+            //判断费用名称是否为空
+            if (ValueName) {
+                layer.alert("总批复及构成不能为空", { icon: 2 });
+                return;
+            }
+            //判断费用名称是否重复
+            if (amountName.length != ConstituteList.length) {
+                layer.alert("费用名称不能重复", { icon: 2 })
+                return false;
+            }
+            if ($("#BalanceAmount").val() < 0) {
+                layer.alert("项目款分配超额或不足", { icon: 2 });
+                return false;
+            }
+            var search = $("form").serialize();
+            $.post("ApprovalConstitute?projectId=@ViewBag.ProjectId", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/Project/Index";
+                        window.location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+        $("#addConstitute").click(function () {
+            var number = $(".notAProvide:last").find("input[type=hidden][name=Sort]").val();
+            var num = Number(number) + 1;
+            var input = '<div class ="long-text ConstituteStyle notAProvide">';
+            input += '<input type="hidden" value="" id="ConstituteKey" name="" />';
+            input += '<input type="text" value="" name="" class="inputone amountName" id="ConstituteValue"> &nbsp;:';
+            input += '<input type="text" value="" id="Amount" name="Amount" class="inputTwo" data-ischarging="True" maxlength="10" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,\'\');}).call(this)" onblur="this.v();"/>&nbsp; 万元';
+            input += '<span class="editNextRow dynamicEdit" style="color:blue;margin-left:10px;cursor:pointer;display:none;">修改</span>';
+            input += '<span class="saveNextRow dynamicAdd" style="color:blue;margin-left:10px;cursor:pointer;">保存</span>';
+            input += '<input type="hidden" value="true" id="IsCharging" name="IsCharging" />';
+            input += '<input type="hidden" value="false" id="IsAProvide" name="IsAProvide" />';
+            input += '<input type="hidden" value="' + num + '" id="Sort" name="Sort" />';
+            input += '<input type="hidden" value="1000000000000000000" id="Id" name="Id" />';
+            input += '<span class="saveNextRow deleteInput" style="color:blue;margin-left:10px;cursor:pointer;">删除</span>';
+            input += '</div>';
+            $('#ConstituteDiv').append(input);
+        });
+        $("#addAProvide").click(function () {
+            var number = $(".AProvide:last").find("input[type=hidden][name=Sort]").val();
+            var num = Number(number) + 1;
+            var input = '<div class ="long-text AProvide AProvideStyle">';
+            input += '<input type="hidden" value="" id="ConstituteKey" name="" />';
+            input += '<input type="text" value="" name="" class="inputone amountName" id="ConstituteValue"> &nbsp;:';
+            input += '<input type="text" value="" id="Amount" name="Amount" class="inputTwo" data-ischarging="True"  maxlength="10" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,\'\');}).call(this)" onblur="this.v();"/>&nbsp; 万元';
+            input += '<span class="editNextRow dynamicEdit" style="color:blue;margin-left:10px;cursor:pointer;display:none;">修改</span>';
+            input += '<span class="saveNextRow dynamicAdd" style="color:blue;margin-left:10px;cursor:pointer;">保存</span>';
+            input += '<input type="hidden" value="true" id="IsCharging" name="IsCharging" />';
+            input += '<input type="hidden" value="true" id="IsAProvide" name="IsAProvide" />';
+            input += '<input type="hidden" value="' + num + '" id="Sort" name="Sort" />';
+            input += '<input type="hidden" value="1000000000000000000" id="Id" name="Id" />';
+            input += '<span class="saveNextRow deleteInput" style="color:blue;margin-left:10px;cursor:pointer;">删除</span>';
+            input += '</div>';
+            $('#AProvideDiv').append(input);
+        });
+        //删除添加项
+        $("body").on("click", ".deleteInput", function () {
+            $(this).parent().remove();
+
+            var BalanceAmount = [];
+            $(".container .long-text input[name='Amount']").each(function (index, item) {
+                if ($(item).data("ischarging") == "True") {
+                    var itemBAmount = $(item).val();
+                    BalanceAmount.push(itemBAmount);
+                }
+            });
+            var Balancesum = 0;
+            var Balance = Number(Balancesum);
+            for (var i = 0; i < BalanceAmount.length; i++) {
+                Balance = accAdd(Balance, Number(BalanceAmount[i]));
+            }
+            var BalanceAmountValue = accMinus(Number($("#AllAmout").val()), Balance);
+            $("#BalanceAmount").val(BalanceAmountValue);
+        });
+        //历史批复构成
+        $("#HApprovalConstitute").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("历史批复及构成"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Project/HApprovalConstitute?projectId=@ViewBag.ProjectId',
+            });
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>

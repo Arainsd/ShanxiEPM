@@ -1,0 +1,454 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@{
+    ViewBag.Title = "新增竣工验收-项目信息页";
+    ViewBag.RecTime = DateTime.Now.ToString("yyyy-MM-dd");
+    Epm_Project item = ViewBag.ProjectData;
+
+    List<CompletionAcceptanceItemView> itemList = ViewBag.CompletionAcceptanceItemList;
+    var type = 0;
+    var list = itemList.Where(p => p.Type == "Epm_Question" && !string.IsNullOrEmpty(p.Id)).ToList();
+    if (list.Count > 0)
+    {
+        type = 1;
+    }
+}
+<style>
+    .ic_fail {
+        width: 18px;
+    }
+</style>
+<div class="contentData">
+    <div class="tab viewTab">
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+            <input type="text" value="@item.Name" disabled />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;项目主体&nbsp;:</label>
+            <input type="text" value="@item.ProjectSubjectName" disabled />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;项目类型&nbsp;:</label>
+            <input type="text" value="@item.SubjectName" disabled />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;开始时间&nbsp;:</label>
+            <input type="text" disabled value="@(item.PlanWorkStartTime == null ? "" : Convert.ToDateTime(item.PlanWorkStartTime).ToString("yyyy-MM-dd"))" />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;结束时间&nbsp;:</label>
+            <input type="text" disabled value="@(item.PlanWorkEndTime == null ? "" : Convert.ToDateTime(item.PlanWorkEndTime).ToString("yyyy-MM-dd"))" />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;项目负责人&nbsp;:</label>
+            <input type="text" disabled value="@item.ContactUserName" />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;负责人电话&nbsp;:</label>
+            <input type="text" disabled value="@item.ContactPhone" />
+        </div>
+        <div class="long-text">
+            <label><span class="star">*</span>&nbsp;项目地址&nbsp;:</label>
+            <input type="text" disabled value="@item.Address" />
+        </div>
+        <div class="intro">
+            <div><label><span class="star">*</span>&nbsp;项目简介&nbsp;:</label></div>
+            <div>
+                <textarea class="sub-description" disabled>@item.Description</textarea>
+            </div>
+        </div>
+        <div class="button-group btn-center">
+            <button type="button" class="btnNext">下一步</button>
+        </div>
+    </div>
+    <div class="viewTab" style="display:none">
+        @Html.Partial("_AcceptanceItem")
+    </div>
+    <div class="viewTab" style="display:none">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" name="ProjectName" value="@item.Name" readonly style="background: #ebebe5" />
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@item.Id" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;验收标题&nbsp;:</label>
+                    <input type="text" name="Title" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;验收时间&nbsp;:</label>
+                    <input type="text" id="RecTime" name="RecTime" onClick="WdatePicker({ el: 'RecTime', maxDate: '%y-%M-%d' })" value="@ViewBag.RecTime" readonly>
+                    <i onClick="WdatePicker({ el: 'RecTime', maxDate: '%y-%M-%d' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="intro" style="margin-bottom:20px">
+                    <div><label><span class="star">*</span>&nbsp;验收内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" name="Content" id="Content"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <label>&nbsp;验收类型&nbsp;:</label>
+                    <input type="checkbox" name="AcceptanceResult" id="AcceptanceResult" value="80" />  整改后通过
+                </div>
+                <div class="AcceptanceResult" style="display:none;">
+                    <label>&nbsp;整改单位&nbsp;:</label>
+                    <input type="button" value="添加整改单位" style="width:100px!important" id="unit" />
+                    <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:122px;width:79%">
+                        <thead>
+                            <tr>
+                                <th>整改单位</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody"></tbody>
+                    </table>
+                    <input type="hidden" name="Unit" id="Unit" value="" />
+                </div>
+                <div class="intro AcceptanceResult" style="display:none;">
+                    <div><label>&nbsp;整改内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" name="RectifContent" id="RectifContent"></textarea>
+                    </div>
+                </div>
+                <div class="long-text unit">
+                    <label><span class="star">*</span>&nbsp;验收单位&nbsp;:</label>
+                    <input type="text" value="@ViewBag.CompanyName" id="RecCompanyName" name="RecCompanyName" readonly style="background: #ebebe5" />
+                    <input type="hidden" value="@ViewBag.CompanyId" id="RecCompanyId" name="RecCompanyId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text personnel">
+                    <label><span class="star">*</span>&nbsp;验收人员&nbsp;:</label>
+                    <input type="text" name="RecUserName" id="RecUserName" value="@ViewBag.UserName" readonly style="background: #ebebe5" />
+                    <input type="hidden" name="RecUserId" id="RecUserId" value="@ViewBag.UserId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;<span class="star">*</span>验收单&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFileYSD" name="YSD" style="position: relative; z-index: 1;margin-top: 5px;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%; margin-top:5px;" id="fileListFile">
+                    <ul class="fileShow" id="YSD"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;display:none;">
+                    <div><label>竣工图&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFileJGT" name="JGT" style="position: relative; z-index: 1;margin-top: 5px;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%; margin-top:5px;" id="fileListFile">
+                    <ul class="fileShow" id="JGT"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;display:none;">
+                    <div><label style="width: 275px;margin-left: -157px;">审计金额（土建、包装、安装、加固）&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFileSJJE" name="SJJE" style="position: relative; z-index: 1;margin-top: 5px;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%; margin-top:5px;" id="fileListFile">
+                    <ul class="fileShow" id="SJJE"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;display:none;">
+                    <div><label style="width: 265px;margin-left: -147px;">外部申请材料上传定案表&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFileWBSQD" name="WBSQD" style="position: relative; z-index: 1;margin-top: 5px;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%; margin-top:5px;" id="fileListFile">
+                    <ul class="fileShow" id="WBSQD"></ul>
+                </div>
+
+                <div class="button-group btn-center">
+                    <button type="button" class="btnPrev">上一步</button>
+                    <input type="hidden" name="State" id="State" />
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                    <button type="button" class="btnSub" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <input type="hidden" value="@type" id="Type" />
+</div>
+<script>
+    var fileDataArray = [];
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile() {        
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        isFlagFile = false;
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = column;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        //$('#fileListFile .fileShow').append(odiv);
+                        $("#" + column).append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+                return isFlagFile = true;
+            }
+        });
+    }
+    $(function () {        
+        $('#btnUploadFileYSD,#btnUploadFileJGT,#btnUploadFileSJJE,#btnUploadFileWBSQD').click(function () {
+            $("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+
+        $("#AcceptanceResult").on("click", function () {
+            if ($("#AcceptanceResult").is(':checked')) {
+                $(".AcceptanceResult").show();
+            } else {
+                $(".AcceptanceResult").hide();
+            }
+        });
+    });
+    layui.use(['layer', 'laydate', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage; laydate = layui.laydate
+
+        //上一步,下一步
+        $('.button-group').on('click', ".btnNext", function () {
+            var type = $("#Type").val();
+            if (type == "1") {
+                $(this).parents(".viewTab").hide();
+                $(this).parents(".viewTab").next(".viewTab").show();
+            } else {
+                $(this).parents(".viewTab").hide();
+                $(this).parents(".viewTab").next().next(".viewTab").show();
+            }
+
+        })
+        $('.button-group').on('click', ".btnPrev", function () {
+            var type = $("#Type").val();
+            if (type == "1") {
+                $(this).parents(".viewTab").hide();
+                $(this).parents(".viewTab").prev(".viewTab").show();
+            } else {
+                $(this).parents(".viewTab").hide();
+                $(this).parents(".viewTab").prev().prev(".viewTab").show();
+            }
+        })
+        //表单验证
+        var validator = $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                ProjectName: {
+                    required: true,
+                },
+                Title: {
+                    required: true,
+                    maxlength: 50
+                },
+                Content: {
+                    required: true,
+                },
+                RecTime: {
+                    required: true,
+                    date: true
+                },
+                RecCompanyName: {
+                    required: true,
+                    maxlength: 200
+                },
+                RecUserName: {
+                    required: true,
+                    maxlength: 50
+                },
+            },
+            messages: {
+                ProjectName: {
+                    required: "项目名称不能为空",
+                },
+                Title: {
+                    required: "验收标题不能为空",
+                    maxlength: "验收标题不能大于50个字符"
+                },
+                Content: {
+                    required: "验收内容不能为空",
+                },
+                RecTime: {
+                    required: "验收日期不能为空",
+                    date: "日期格式错误"
+                },
+                RecCompanyName: {
+                    maxlength: "验收单位不能大于200个字符",
+                    required: "验收单位不能为空"
+                },
+                RecUserName: {
+                    required: "验收人员不能为空",
+                    maxlength: "验收人员不能大于50个字符"
+                }
+            }
+        })
+        var arr = [], object = {}, arrobj;
+        $(".btnSub").click(function () {
+            if ($("#mainForm").valid()) {
+                //附件是否上传完成 isFlagFile
+                if (isFlagFile) {
+                    $(".btnSub").addClass("disabled");
+                    $(".btnSub").attr("disabled", "disabled");
+
+                    var tr = $(".tbody tr");
+                    for (var i = 0; i < tr.length; i++) {
+                        var name = tr.eq(i).find("td").eq(0).text();
+                        var id = tr.eq(i).find("td").eq(1).find("a").data("val");
+                        object = { CompanyName: name, CompanyId: id }
+                        arr.push(object)
+                    }
+                    arrobj = JSON.stringify(arr);
+                    $("#Unit").val(arrobj);
+                    var State = $(this).data("state");
+                    $("#State").val(State);
+
+                    var fileDataJsonFile = $("#fileDataJsonFile").val();
+
+                    if (fileDataJsonFile.indexOf("YSD") == -1) {
+                        layer.alert("请上传验收单附件！", { icon: 7 });
+                        $(".btnSub").removeClass("disabled");
+                        $(".btnSub").removeAttr("disabled");
+                        return;
+                    }
+                    //if (fileDataJsonFile.indexOf("JGT") == -1) {
+                    //    layer.alert("请上传竣工图附件！", { icon: 7 });
+                    //    return;
+                    //}
+                    //if (fileDataJsonFile.indexOf("SJJE") == -1) {
+                    //    layer.alert("请上传审计金额（土建、包装、安装、加固）附件！", { icon: 7 });
+                    //    return;
+                    //}
+                    //if (fileDataJsonFile.indexOf("WBSQD") == -1) {
+                    //    layer.alert("请上传外部申请材料上传定案表附件！", { icon: 7 });
+                    //    return;
+                    //}
+                    var params = $("#mainForm").serialize();
+                    $.post("Add", params, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 });
+                            $(".btnSub").removeClass("disabled");
+                            $(".btnSub").removeAttr("disabled");
+                            window.location.href = "/CompletionAcceptance/Index"
+                            return false
+                        } else {
+                            layer.alert(layer.msg, { icon: 2 });
+                            $(".btnSub").removeClass("disabled");
+                            $(".btnSub").removeAttr("disabled");
+                        }
+                    });
+                }
+                else {
+                    layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+                }
+            }
+        })
+        //选择整改单位
+        $("#unit").click(function () {
+            var projectId = $("#ProjectId").val();
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProjectCustomer?&selectType=2&projectId=' + projectId,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    var array = [];
+                    var trs = $(".tbody tr");
+                    for (var i = 0; i < trs.length; i++) {
+                        var name = trs.eq(i).find("td").eq(0).text();
+                        array.push(name);
+                    }
+                    for (var i = 0; i < obj.data.length; i++) {
+                        if (array.indexOf(obj.data[i].Name) == -1) {
+                            var str = "";
+                            str += "<tr>";
+                            str += '<td>' + obj.data[i].Name + "</td>";
+                            str += '<td><a class=\"delete-Three\" data-val="' + obj.data[i].Id + '" style="cursor:pointer;">删除</a></td></tr>';
+                            $("tbody").append(str);
+                        } else {
+
+                        }
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        })
+        //删除整改单位
+        $("tbody").on("click", ".delete-Three", function () {
+            $(this).parent().parent().remove();
+        });
+        //删除附件
+        $("#YSD,#JGT,#SJJE,#WBSQD").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            var fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+    });
+</script>

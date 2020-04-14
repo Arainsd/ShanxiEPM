@@ -1,0 +1,204 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@model List<PlanView>
+@{
+    ViewBag.Title = "施工计划列表";
+}
+<style>
+    table input[type="text"] {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 25px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+    }
+
+    table .pic {
+        font-size: 20px;
+    }
+
+    tbody tr td:nth-child(3) {
+        position: relative;
+    }
+
+    tbody tr td:nth-child(4) {
+        position: relative;
+    }
+
+    table .picstart {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+
+    .picend {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <div class="NAME" style="width:100%;">
+                    <label>项目名称 : </label> <input type="text" value="@ViewBag.ProjectName" id="ProjectName" name="ProjectName" style="width:300px;">
+                    <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:-30px;">&#xe76a;</i>
+                    <input type="hidden" value="@ViewBag.ProjectId" id="ProjectId" name="ProjectId" />
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" class="add checkright" data-module="Plan" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="Plan" data-right="Browse">查询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th style="width:30px;">序号</th>
+                    <th style="width:500px;">计划名称</th>
+                    <th style="width:250px;">计划开工时间</th>
+                    <th style="width:250px;">计划完工时间</th>
+                    <th style="width:50px;">工期(天)</th>
+                    <th style="width:250px;">延期计划完工时间</th>
+                    <th style="width:250px;">实际完工时间</th>
+                    <th style="width:220px;">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index
+                            <input type="hidden" class="projectid" value="@item.Plan.ProjectId"/>
+                            <input type="hidden" class="Id" value="@item.Plan.SId"/>
+                            </td>
+                            <td>@item.Plan.Name</td>
+                            <td>@(item.Plan.StartTime == null ? "" : Convert.ToDateTime(item.Plan.StartTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.Plan.EndTime == null ? "" : Convert.ToDateTime(item.Plan.EndTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.Plan.BuildDays.ToString("#0")</td>
+                            <td>@(item.Plan.DelayTime == null ? "" : Convert.ToDateTime(item.Plan.DelayTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.Plan.EndDate == null ? "" : Convert.ToDateTime(item.Plan.EndDate).ToString("yyyy-MM-dd"))</td>
+                            <td>
+                                @if (@item.Plan.State == (int)ApprovalState.Enabled || @item.Plan.State == (int)ApprovalState.ApprFailure)
+                                {
+                                    <a href="javascript:;" class="Edit checkright" data-module="Plan" data-right="Modify" >修改</a>
+                                }
+                                @if (@item.Plan.EndDate == null && item.Plan.State == (int)ApprovalState.ApprSuccess)
+                                {
+                                    <a href="javascript:;" class="DelayPlan checkright" data-module="DelayApply" data-right="Add">延期申请</a>
+                                }
+                                @if (item.EpmPlanComponent != null && item.EpmPlanComponent.Count > 0)
+                                {
+                                    List<Epm_QuestionBIM> components = new List<Epm_QuestionBIM>();
+                                    Epm_QuestionBIM comp = null;
+                                    var bimid = "";
+                                    foreach (var plan in item.EpmPlanComponent)
+                                    {
+                                        bimid = plan.BIMId.ToString();
+                                        comp = new Epm_QuestionBIM();
+                                        comp.BIMId = plan.BIMId;
+                                        comp.BIMName = plan.BIMName;
+                                        comp.ComponentId = plan.ComponentId;
+                                        comp.ComponentPosition = "";
+                                        components.Add(comp);
+                                    }
+                                    var selectBim = Newtonsoft.Json.JsonConvert.SerializeObject(components);
+                                    <input type="hidden" id="ComponentIds" name="ComponentIds" value="@selectBim" data-bimid="@bimid" />
+                                    <a href="javascript:;" class="ShowComponent" style="color:blue;">已关联构件</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="8">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("tbody tr").each(function (index, item) {
+            $(item).find("input").attr("disabled", true);
+        });
+        //添加
+        $('.add').click(function () {
+            location.href = "/ConstructionPlan/Add";
+        });
+        //修改
+        $("tbody").on('click', ".Edit", function () {
+            var projectId = $(this).parents("tr").find(".projectid").val();
+            location.href = "/ConstructionPlan/Edit?projectId=" + projectId;
+        });
+        //查看
+        $("tbody").on('click', ".Detail", function () {
+            var projectId = $(this).parents("tr").find(".projectid").val();
+            location.href = "/ConstructionPlan/Detail?projectId=" + projectId;
+        });
+        //延期申请
+        $("tbody").on('click', ".DelayPlan", function () {
+            var projectId = $(this).parents("tr").find(".projectid").val();
+            var Id = $(this).parents("tr").find(".Id").val();
+            location.href = "/DelayPlan/Add?PlanId=" + Id + "&projectId=" + projectId;
+        });
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, element = layui.element, $ = layui.jquery;
+        //在建项目
+        $(".NAME").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProjectAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj.flag) {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        parent.layer.close(index);//关闭窗口
+                        var search = $("form").serialize();
+                        window.location.href = "/ConstructionPlan/Index?" + search;
+                    } else {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        $(".ShowComponent").click(function () {
+            var bimid = $(this).prev().data("bimid");
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("关联BIM模型"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '700px'],
+                content: '/Comm/RelationBIM?isLook=0&bimId=' + bimid + '&projectId=@ViewBag.ProjectId',
+            });
+        });
+    });
+</script>

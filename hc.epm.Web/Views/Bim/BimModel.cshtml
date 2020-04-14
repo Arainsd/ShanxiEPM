@@ -1,0 +1,439 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@model Epm_Bim
+@{
+    Layout = "~/Views/Shared/_LayoutBim.cshtml";
+    ViewBag.Title = "BimModel";
+}
+<style>
+    .dv {
+        position: absolute;
+        top: 230px;
+        right: 400px;
+        background-color: #D7E2EF;
+        padding: 15px;
+    }
+
+        .dv i {
+            color: #7A95AC;
+        }
+
+    .work {
+        background-color: #e4e4eb;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        text-align: center;
+        margin: -10px 0 0 0px;
+        padding-top: 5px;
+    }
+
+    .btn {
+        opacity: 0.8;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        width: 80px;
+        height: 30px;
+        color: #111;
+    }
+
+    .active {
+        color: #000000 !important;
+        background-color: #4ca0e2 !important;
+    }
+
+    .tabframe {
+        width: 400px;
+        height: 450px;
+        background: red;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        background: ghostwhite;
+        opacity: 0.8;
+         border: 1px solid #4ca0e2;
+    }
+
+        .tabframe .tab-title {
+            height: 40px;
+            background: #4ca0e2;
+        }
+
+            .tabframe .tab-title h4 {
+                line-height: 40px;
+                color: white;
+                padding-left: 3px;
+            }
+
+    .webglContainer canvas {
+        position: absolute;
+    }
+
+    .tab-list li {
+        display: inline-block;
+        margin-right: 0px;
+        width: 48px;
+        height: 38px;
+        line-height: 40px;
+        text-align: center;
+        color: #4ca0e2;
+        font-size: 14px;
+        font-weight: 200;
+        border: 1px solid white;
+        background-color: white;
+    }
+
+    .tabframe .tab-view {
+        height: 330px;   
+    }
+
+        .tabframe .tab-view .key {
+            height: 100%;
+        }
+
+            .tabframe .tab-view .key ul {
+                overflow-y: auto;
+                height: 100%;
+            }
+
+                .tabframe .tab-view .key ul li {
+                    height: 34px;
+                    width:100%;
+                }
+
+                    .tabframe .tab-view .key ul li span {
+                        display: inline-block;
+                        float: left;
+                        margin-top:12px;
+                        line-height: 12px;
+                    }
+
+                    .tabframe .tab-view .key ul li input {
+                        height: 20px;
+                    }
+
+    .liname {
+        width: 57%;
+        padding-left: 3px;
+    }
+
+    .livalue {
+        width: 40%;
+        text-align: right;
+    }
+
+    .tabframe p button {
+        background: #4ca0e2;
+        color: white;
+        width: 55px;
+        height: 30px;
+        border: 1px solid #4ca0e2;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    .custom .inputkey {
+        height: 25px;
+        width: 155px;
+    }
+
+    .custom .inputvalue {
+        height: 25px;
+        width: 155px;
+        margin-left: 5px;
+    }
+    .cuskey {
+        width:30%;
+        padding-left:3px;
+    }
+    .cusvalue {
+        width:30%;
+        text-align:right;
+    }
+    .cusname {
+        width:15%;
+        text-align:right;
+    }
+    .custime {
+        width:20%;
+        text-align:right;
+    }
+</style>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/scripts/3d.js"></script>
+<body>
+    <div>
+        <div id="webglContainer" style="height:900px;width:100%;margin:10px;position:relative">
+            @*<button id="btn" class="btn">全屏</button>*@
+            <!--基本信息选择--->
+            <div class="tabframe" style="display:none;">
+                <div class="tab-title">
+                    <h4>基本信息<i id="close" class="layui-icon" style="margin-left: 315px;font-size: 20px;">&#x1007;</i></h4>
+                </div>
+                <ul class="tab-list">
+                    <li id="property" class="active">属性</li>
+                    <li id="materials">材质</li>
+                    <li id="object">特性</li>
+                    <li id="type">类型</li>
+                    <li id="custom">自定义</li>
+                </ul>
+                <div class="tab-view">
+                    <div class="key property" style="display:block;">
+                        <ul></ul>
+                    </div>
+                    <div class="key materials">
+                        <ul></ul>
+                    </div>
+                    <div class="key object">
+                        <ul></ul>
+                    </div>
+                    <div class="key type">
+                        <ul></ul>
+                    </div>
+                    <div class="key custom">
+                        <ul></ul>
+                        <p>
+                            <span style="width:330px;height:100%;display:inline-block;padding-left:3px;"></span>
+                            <button id="butAdd">添加</button>
+                            <button id="butSave" style="display:none;">保存</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="BIMId" value="@Model.SId" id="BIMId" />
+        <input type="hidden" name="BIMAddress" value="@Model.BIMAddress" id="BIMAddress"/>
+        <input type="hidden" name="ProjectId" value="@ViewBag.ProjectId" id="ProjectId" />
+        <input type="hidden" name="componentId" value="" id="componentId" />
+
+        <div class='work' data-bimid="" style="position:absolute; display:none;">
+            <a href='javascript:;' style='color:blue; width: 60px; line-height: 25px;display:inline-block;text-decoration:none;text-shadow: 2px -2px 2px #666;'>提问</a>
+        </div>
+
+    </div>
+</body>
+<script>
+    var BIMId = $("#BIMId").val();
+    var BIMAddress = $("#BIMAddress").val();
+    var models = [{ id: BIMId, file: BimFileURL + BIMAddress }];//获取到对应的数据
+    var ModelFIle = models[0].file;
+
+    EngineInit("webglContainer"); //初始化画布
+    SetBackGroundColor(255, 255, 255,0);
+    AddModel(ModelFIle, BIMId); //添加模型
+
+    //模型加载完成回调
+    function OnLoadModelEnd(id) {
+        SetClickMode(3);
+        //SetModelAlpha(id, 0.4);//透明度，取值范围0.0-1.0
+
+        //保存图片
+        var imgurl = GetImage();
+        $.post("CreateImg", { img: imgurl, id: id }, function (data) { });
+
+        //设置标签
+        SetPositionAnchor(id);
+    }
+
+    //设置标签
+    function SetPositionAnchor(id) {
+        
+        //var clickpos = GetCenterPosById('1033905822024994816_447282');
+        //console.log(clickpos);//3157.9013671875,-47.87890625,-29078125,0.7853981633974483,0,0.7853981633974483,16468.1455078125,0.7853981633974483,0,0.7853981633974483,7886.345947265625,5650,8745
+
+        var ComponentJson =@Html.Raw(ViewBag.ComponentJson);
+        for (var i = 0; i < ComponentJson.length; i++) {
+            AddAnchor(ComponentJson[i].ComponentPosition, '/Resource/images/bq.png', 3, 3, ComponentJson[i].ComponentId, false);
+        }
+    }
+    //标签点击huijiao
+    function OnAnchorClick(tag) {
+        console.log(tag);
+    };
+
+    //获取坐标
+    var positionStr = "";
+    function OnClickPosition(position) {
+        positionStr = position;
+        //3157.9013671875,-47.87890625,-298.1455078125,0.7853981633974483,0,0.7853981633974483,1646.6454696193578,-3130.3899929737827,9415.35349693735
+    }
+    //获取构件ID
+    var componentId = "", selectId = "";
+    function OnSelectionChanged(id) {
+        SetActorColor(selectId, 255, 255, 255);//构件批量着色
+        componentId = selectId = id;
+        SetActorColor(selectId, 0, 0, 255);//构件批量着色
+    }
+
+    //提问
+    $("canvas").mouseup(function (e) {
+        var x = e.pageX;
+        var y = e.pageY;
+        if (componentId != "" && positionStr != "") {
+            $("#componentId").val(componentId);
+            $(".work").css({ "left": x - 5, "top": y + 3 }).data("bimid", componentId).data("position", positionStr).show();
+            componentId = position = "";
+
+            //清空基本信息页面数据
+            $(".tabframe").show();
+            $(".property ul").empty();
+            $(".materials ul").empty();
+            $(".object ul").empty();
+            $(".type ul").empty();
+            $(".custom ul").empty();
+
+            //获取基本信息页面数据
+            $.post("GetBimPropertyInfo",{bimId:$("#BIMId").val(),externalId:$("#componentId").val()}, function (data) {
+
+                //定义基本信息的拼接html变量
+                var propertyhtml="";
+                var materialshtml="";
+                var objecthtml="";
+                var typehtml="";
+                var customhtml="";
+
+                for(var i=0;i<data.length;i++){
+                    var str=data[i].propertyTypeName;
+                    if(str=="properties"){
+                        propertyhtml += '<li><span class="liname">'+data[i].propertyname+'</span><span class="livalue">'+data[i].value+'</span></li>'
+
+                    }else if(str=="materials"){
+                        materialshtml += '<li><span class="liname">'+data[i].propertyname+'</span><span class="livalue">'+data[i].value+'</span></li>'
+
+                    }else if(str=="object"){
+                        objecthtml += '<li><span class="liname">'+data[i].propertyname+'</span><span class="livalue">'+data[i].value+'</span></li>'
+
+                    }else if(str=="type"){
+                        typehtml += '<li><span class="liname">'+data[i].propertyname+'</span><span class="livalue">'+data[i].value+'</span></li>'
+
+                    }else if(str=="custom"){
+                        customhtml += '<li><span class="cuskey cus">'+data[i].propertyname+'</span><span class="cus cusvalue">'+data[i].value+'</span><span class="cusname cous">'+data[i].username+'</span><span class="custime cous">'+data[i].createdate+'</span></li>'
+
+                    }
+                }
+
+                //将基本信息数据追加到页面
+                $(".property ul").append(propertyhtml==""?"<li><span class=\"liname\">未找到相关属性!</span></li>":propertyhtml);
+                $(".materials ul").append(materialshtml==""?"<li><span class=\"liname\">未找到相关属性!</span></li>":materialshtml);
+                $(".object ul").append(objecthtml==""?"<li><span class=\"liname\">未找到相关属性!</span></li>":objecthtml);
+                $(".type ul").append(typehtml==""?"<li><span class=\"liname\">未找到相关属性!</span></li>":typehtml);
+                $(".custom ul").append(customhtml==""?"<li><span class=\"liname\">未找到相关属性!</span></li>":customhtml);
+
+            });
+        }
+    });
+    $(".work").on("mouseout", "a", function () {
+        $(".work").hide();
+    }).on("click", function () {
+        var projectId = $("#ProjectId").val();
+        var component = $(this).data("bimid");
+        var position = $(this).data("position");
+        location.href = "/Question/Add?businType=Question&projectId=" + projectId + "&componentIds=" + component + "&position=" + position;
+    });
+
+    ////全屏显示
+    //var canvasH, canvasW;
+    //var w = document.documentElement.offsetWidth || document.body.offsetWidth;
+    //var h = document.documentElement.offsetHeight || document.body.offsetHeight;
+    //$(".btn").on("click", function () {
+    //    setFullscreen($("canvas")[0]);
+    //    canvasW = $("canvas")[0].offsetWidth;
+    //    canvasH = $("#webglContainer")[0].offsetHeight;
+    //});
+    //function setFullscreen(element) {
+    //    var el = element instanceof HTMLElement ? element : document.documentElement;
+    //    var rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    //    if (rfs) {
+    //        rfs.call(el);
+    //    } else if (window.ActiveXObject) {
+    //        var ws = new ActiveXObject("WScript.Shell");
+    //        ws && ws.SendKeys("{F11}");
+    //    }
+    //}
+    ////监听退出全屏事件
+    //window.onresize = function () {
+    //    var elem = $("canvas")[0];
+    //    if (checkFull()) {
+    //        elem.style.height = h + "px";
+    //        elem.style.width = (w - 100) + "px";
+    //    } else {
+    //        elem.style.height = canvasH + "px";
+    //        elem.style.width = canvasW + "px";
+    //    }
+    //}
+    //function checkFull() {
+    //    var isFull = document.fullscreenEnabled || window.fullScreen || document.webkitIsFullScreen || document.msFullscreenEnabled;
+    //    if (isFull === undefined) { isFull = false; }
+    //    return isFull;
+    //}
+
+    //基本信息tab选项卡切换
+    $(".tab-list").on("click", "li", function () {
+        var index = $(this).index();
+        $(this).addClass("active");
+        $(this).siblings().removeClass("active");
+        $(".tab-view").children().eq(index).show();
+        $(".tab-view").children().eq(index).siblings().hide();
+    })
+    //点击添加按钮执行
+    $("#butAdd").on("click",function(){
+        var addinput = '<input type="text" value="" class="inputkey" placeholder="请输入属性名称" maxlength="15"/><input type="text" value="" class="inputvalue" placeholder="请输入属性值" maxlength="15"/>'
+        addinput += '';
+        $(this).parent().find("span").append(addinput);
+        $(this).hide();
+        $("#butSave").show();
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer;
+        //点击保存按钮执行
+        $("#butSave").on("click",function(){
+            var inputHtml="";
+            var _this=$(this);
+            var propertyKey=$(".inputkey").val();
+            var propertyValue=$(".inputvalue").val();
+            if($.trim(propertyKey)==""||$.trim(propertyValue)==""){
+                layer.alert("请输入属性信息!", { icon: 2 });
+                return;
+            }
+            var externalId=$("#componentId").val();
+            var currdate = new Date().Format("yyyy-MM-dd");
+            inputHtml += '<li><span class="cuskey cus">'+propertyKey+'</span><span class="cus cusvalue">'+propertyValue+'</span><span class="cusname cous">@ViewBag.UserName</span><span class="custime cous">'+currdate+'</span></li>';
+            $(".custom ul").append(inputHtml);
+            $(this).parent().find("span").empty();
+            $.post("AddCustom",{propertyKey:propertyKey,propertyValue:propertyValue,externalId:externalId},function (data) {
+                _this.hide();
+                $("#butAdd").show();
+            });
+        });
+
+        //点击关闭
+        $("#close").on("click",function(){
+            $(".tabframe").hide();
+        });
+    });
+
+    //实现拖动悬浮
+    var _move=false;//移动标记
+    var _x,_y;//鼠标离控件左上角的相对位置
+    $(".tabframe").click(function(){
+        //alert("click");//点击（松开后触发）
+    }).mousedown(function(e){
+        _move=true;
+        _x=e.pageX-parseInt($(".tabframe").css("left"));
+        _y=e.pageY-parseInt($(".tabframe").css("top"));
+        $(".tabframe").fadeTo(20, 0.5);//点击后开始拖动并透明显示
+    });
+    $(document).mousemove(function(e){
+        if(_move){
+            var x=e.pageX-_x;//移动时根据鼠标位置计算控件左上角的绝对位置
+            var y=e.pageY-_y;
+            $(".tabframe").css({top:y,left:x});//控件新位置
+        }
+    }).mouseup(function(){
+        _move=false;
+        $(".tabframe").fadeTo("fast", 1);//松开鼠标后停止移动并恢复成不透明
+    });
+
+</script>

@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>电子招投标云平台 后台管理系统V1.0</title>
+    <link rel="stylesheet" href="/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/Content/style.css" />
+    <link rel="stylesheet" href="/Content/index.css" />
+    <link rel="stylesheet" href="/Content/layui/css/layui.css" />
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="/Content/layui/layui.js"></script>
+    <script src="/Content/layui/lay/modules/form.js"></script>
+</head>
+<body>
+    <div class="wrap">
+        <!--header start-->
+        <div class="header">
+            <div class="header-left fl">
+                <img src="/Images/system-logo.png" alt="电子招投标云平台 后台管理系统" />
+            </div>
+            <div class="header-right fr c">
+                <div class="loginbar fr c">
+                    <div class="icon-user fl"><i class="icon-user"></i>欢迎您 : <b>系统管理员</b></div>
+                    <div class="icon-password fl"><i class="icon-password"></i><a style="cursor: pointer" onclick="">修改密码</a></div>
+                    <div class="icon-editor fl"><i class="icon-editor"></i><a style="cursor: pointer" onclick="">修改资料</a></div>
+                    <div class="icon-close fl"><i class="icon-close"></i><a style="cursor: pointer" onclick="">退出</a></div>
+                </div>
+                <ul class="menu fr c">
+                    <li><a href="javascript:;">后台首页</a></li>
+                    <li><a href="javascript:;">系统管理</a></li>
+                    <li><a href="javascript:;">会员管理</a></li>
+                    <li><a href="javascript:;">基础数据</a></li>
+                    <li><a href="javascript:;">消息管理</a></li>
+                    <li><a href="javascript:;">安全认证</a></li>
+                    <li><a href="javascript:;">专家库管理</a></li>
+                    <li><a href="javascript:;">费用管理</a></li>
+                </ul>
+            </div>
+        </div>
+        <!--header end-->
+        <!--content start-->
+        <div class="content c">
+            <!--content-left-->
+            <div class="content-left fl c">
+                <ul class="left-menu">
+                    <li class="level-one">
+                        <a href="javascript:;"><em class="icon-left icon-left-company"></em>注册企业</a>
+                    </li>
+                    <li class="level-one">
+                        <a href="javascript:;"><em class="icon-left icon-left-user"></em>会员功能管理<b class="icon-more-gray"></b></a>
+                        <ul class="level-two">
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>招标人功能管理</a></li>
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>招标代理功能管理</a></li>
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>投标人功能管理</a></li>
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>评标专家功能管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="level-one">
+                        <a href="javascript:;"><em class="icon-left icon-left-users"></em>会员角色权限<b class="icon-more-gray"></b></a>
+                        <ul class="level-two">
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>招标人角色</a></li>
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>代理机构角色</a></li>
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>投标单位角色</a></li>
+                            <li><a href="javascript:;"><em class="icon-left-point icon-point-gray"></em>评标专家角色</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--content-right-->
+            <iframe src="main-date.html" id="iframe" frameborder="0"></iframe>
+        </div>
+        <!--content end-->
+        <!--footer start-->
+        <div class="footer">
+            <div>Copyright © 2017 电子招投标云平台</div>
+        </div>
+        <!--footer end-->
+    </div>
+    <script>
+    $(function () {
+        $(".left-menu .level-one>a").click(function () {
+            if ($(this).siblings(".level-two").is(':hidden') || $(this).siblings().length == 0) {
+                $(this).addClass("level-two-active");
+                $(this).siblings(".level-two").show(800);
+                $(this).children("b").removeClass('icon-more-gray').addClass('icon-more');
+                $(this).parent().siblings(".level-one").children("a").removeClass("level-two-active");
+                $(this).parent().siblings(".level-one").children("ul").hide(800);
+                $(this).parent().siblings(".level-one").children("a").children("b").removeClass('icon-more').addClass('icon-more-gray');
+            } else {
+                $(this).siblings(".level-two").hide(800);
+                $(this).children("b").removeClass('icon-more').addClass('icon-more-gray')
+            }
+        });
+    })
+        //设置iframe标签大小
+    var width = $(window).width() - $('.content-left').width();
+         $('#iframe').width(width-10);
+         $('#iframe').height($('.content-left').height());
+    </script>
+
+</body>
+</html>

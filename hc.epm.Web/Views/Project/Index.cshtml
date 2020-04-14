@@ -1,0 +1,444 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<ProjectView>
+@{
+    ViewBag.Title = "在建项目列表";
+}
+<style>
+    .datalist tbody td:nth-child(3) span {
+        width: 30%;
+        display: inline-block;
+    }
+
+    .datalist tbody td:nth-child(3) b {
+        color: blue;
+    }
+
+    .layui-form {
+        height: 90px;
+        padding-top: 40px;
+    }
+
+    .layui-form-label {
+        width: 100px;
+    }
+
+    .layui-form-checkbox {
+        width: 90%;
+    }
+
+        .layui-form-checkbox[lay-skin=primary] span {
+            position: absolute;
+            float: left;
+            padding-left: 25px;
+        }
+    .opreate a {
+        color:#0099FF;
+        padding: 6px;
+    }
+
+</style>
+<div id="convert" style="width:360px;display:none">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">终结类型 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select name="modules" class="modules">
+                            <option value="@ProjectState.Failure.ToString()">终止</option>
+                            <option value="@ProjectState.Discard.ToString()">作废</option>
+                            <option value="@ProjectState.Invalid.ToString()">无效</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get" class="layui-form" style="padding-top:0px;">
+            <div>
+                <div><label>项目名称 : </label><input type="text" id="Name" name="Name" value="@ViewBag.name"></div>
+                <div>
+                    <label class="lableStar">开始时间 : </label><input type="text" id="startTime" name="startTime" onClick="WdatePicker({ el: 'startTime' })" value="@ViewBag.startTime">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div>
+                    <label class="lableStar">结束时间 : </label><input type="text" id="endTime" name="endTime" onClick="WdatePicker({ el: 'endTime' })" value="@ViewBag.endTime">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div class="layui-form-item" style="clear:none;">
+                    <label style="float:left;">项目经理 : </label>
+                    <div class="layui-unselect layui-form-select projectpm cs" style="width:51%;margin:0px;">
+                        <div class="layui-select-title" style="width:41%;">
+                            <input type="text" id="PMNames" readonly class="layui-input layui-unselect" style="border:1px solid #a9a9a9; margin-left:4px;margin-top:-10px;border-radius:0px;" value=""><i class="layui-edge" style="margin-top:-7px;"></i>
+                            <input type="hidden" id="PMIds" />
+                        </div>
+                        <dl class="layui-anim layui-anim-upbit" style="margin-left:2px;margin-top:-10px;border-radius:0px;width:100%;">
+                            @if (ViewBag.pmList.Count > 0)
+                            {
+                                for (int i = 0; i < ViewBag.pmList.Count; i++)
+                                {
+                                    <dd style="width:90%;"><input type="checkbox" name="pmchk" title="@ViewBag.pmList[i].UserName" value="@ViewBag.pmList[i].Id" lay-skin="primary"></dd>
+                                }
+                            }
+                        </dl>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="clear:none;">
+                    <label style="float:left;">项目状态 : </label>
+                    <div class="layui-unselect layui-form-select projectstate cs" style="width:51%;margin:0px;">
+                        <div class="layui-select-title" style="width:41%;">
+                            <input type="text" id="StateValues" readonly class="layui-input layui-unselect" style="border:1px solid #a9a9a9; margin-left:4px;margin-top:-10px;border-radius:0px;" value="@ViewBag.str"><i class="layui-edge" style="margin-top:-7px;"></i>
+                            <input type="hidden" id="StateKeys" />
+                        </div>
+                        <dl class="layui-anim layui-anim-upbit" style="margin-left:2px;margin-top:-10px;border-radius:0px;width:100%;">
+                            @if (ViewBag.ProjectState.Items.Count > 0)
+                            {
+                                for (int i = 0; i < ViewBag.ProjectState.Items.Count; i++)
+                                {
+                                    <dd style="width:90%;"><input type="checkbox" name="statechk" title="@ViewBag.ProjectState.Items[i].Text" value="@((int)((StringExtensionMethod.ToEnumReq<ProjectState>(ViewBag.ProjectState.Items[i].Value))))" lay-skin="primary"></dd>
+                                }
+                            }
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="form-sub" style="margin-top:70px;">
+                <input type="hidden" name="state" id="state" value="@ViewBag.state" />
+                <input type="hidden" name="pmName" id="pmName" value="@ViewBag.pmName" />
+                <button type="button" id="add" class="add checkright" data-module="ProjectInfoManage" data-right="Add">新 增</button>
+                <button type="submit" class="Edit checkright" id="btnsel" data-module="ProjectInfoManage" data-right="Browse">查询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th>项目编码</th>
+                    <th width="250">项目名称</th>
+                    <th>项目性质</th>
+                    <th>项目资金<br />(万元)</th>
+                    <th>项目经理</th>
+                    <th>所属分公司</th>
+                    <th width="70">状态</th>
+                    <th width="240">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.Code</td>
+                            <td style="text-align:left;padding-left:15px">
+                                <p>@item.Name</p>
+                            </td>
+                            <td>@item.ProjectNatureName</td>
+                            <td>@item.Amount.ToString("0.######")</td>
+                            <td>@item.PMName</td>
+                            <td>@item.CompanyName</td>
+                            <td>@(((ProjectState)item.State).GetText())</td>
+                            @if (@item.State == int.Parse(ProjectState.Construction.GetValue().ToString()))
+                            {
+                                <td class="opreate">
+                                    <a href="javascript:;" class="Detail checkright" data-module="ProjectInfoManage" data-right="Info">查看</a>
+                                    <a href="javascript:" class="Edit checkright" data-module="ProjectInfoManage" data-right="Modify">补充项目资料</a>
+                                    @*<a href="javascript:" class="Set" data-module="" data-right="" style="color:#0099FF;padding: 6px;">考勤设置</a>*@
+                                 
+                                    <a href="javascript:" class="End checkright" data-module="ProjectInfoManage" data-right="EndUp">终结</a>
+                                    <a href="javascript:" class="Archive checkright" data-module="ProjectInfoManage" data-right="Finish">结项</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ProjectState.Invalid.GetValue().ToString()))
+                            {
+                                <td class="opreate">
+                                    <a href="javascript:;" class="Detail  checkright" data-module="ProjectInfoManage" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Delete  checkright" data-module="ProjectInfoManage" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ProjectState.NoStart.GetValue().ToString()) && item.PMName == ViewBag.RealName)
+                            {
+                                <td class="opreate">
+                                    <a href="javascript:;" class="Detail  checkright" data-module="ProjectInfoManage" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="StartUp checkright" data-module="ProjectInfoManage" data-right="StartUp" data-companyname="@item.CompanyName">启动</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ProjectState.Failure.GetValue().ToString()))
+                            {
+                                <td class="opreate">
+                                    <a href="javascript:;" class="Detail  checkright" data-module="ProjectInfoManage" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="StartUp checkright" data-module="ProjectInfoManage" data-right="StartUp" data-companyname="@item.CompanyName">启动</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="opreate">
+                                    <a href = "javascript:;" class="Detail checkright" data-module="ProjectInfoManage" data-right="Info">查看</a>
+                                </td>
+                            }
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                                <input type="hidden" class="inputId" data-Sid="@item.TzProjectId" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script src="~/Resource/plugins/formSelects-v3.js" type="text/javascript"></script>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    initState();
+    initpmName();
+
+    //初始化绑定项目状态值
+    function initState() {
+        var state = $("#state").val();
+        var checkBoxArray = state.split(",");
+        for (var i = 0; i < checkBoxArray.length; i++) {
+            $("input[name='statechk']").each(function () {
+                if ($(this).val() == checkBoxArray[i]) {
+                    $(this).attr("checked", "checked");
+                }
+            })
+        }
+    }
+
+    //初始化绑定项目经理值
+    function initpmName() {
+        var pmName = $("#pmName").val();
+        var checkBoxArray = pmName.split(",");
+        for (var i = 0; i < checkBoxArray.length; i++) {
+            $("input[name='pmchk']").each(function () {
+                if ($(this).val() == checkBoxArray[i]) {
+                    $(this).attr("checked", "checked");
+                    $("#PMNames").val($(this).attr("title"));
+                }
+            })
+        }
+    }
+
+    //获取查询的项目经理和项目状态值
+    $("#btnsel").click(function () {
+        var arr = new Array();
+        $("input:checkbox[name='statechk']:checked").each(function (i) {
+            arr[i] = $(this).val();
+        });
+        var vals = arr.join(",");
+        $("#state").val(vals);
+
+
+        var arr1 = new Array();
+        $("input:checkbox[name='pmchk']:checked").each(function (i) {
+            arr1[i] = $(this).val();
+        });
+        var vals1 = arr1.join(",");
+        $("#pmName").val(vals1);
+
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Project/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+
+        //项目经理
+        $(".projectpm").on("click", ".layui-select-title", function (e) {
+            var $select = $(this).parents(".layui-form-select");
+            $(this).parents(".layui-form-select").not($select).removeClass("layui-form-selected");
+            $select.addClass("layui-form-selected");
+            e.stopPropagation();
+        }).on("click", ".layui-form-checkbox", function (e) {
+            e.stopPropagation();
+            var id_array = [], name_array = [];
+            $("input:checkbox[name='pmchk']:checked").each(function () {
+                id_array.push($(this).val());//向数组中添加元素
+                name_array.push($(this).attr("title"));
+            });
+            $("#PMNames").val(name_array.join(','));//将数组元素连接起来以构建一个字符串
+            $("#PMIds").val(id_array.join(','))
+        });
+        //状态
+        $(".projectstate").on("click", ".layui-select-title", function (e) {
+            var $select = $(this).parents(".layui-form-select");
+            $(this).parents(".layui-form-select").not($select).removeClass("layui-form-selected");
+            $select.addClass("layui-form-selected");
+            e.stopPropagation();
+        }).on("click", ".layui-form-checkbox", function (e) {
+            e.stopPropagation();
+            var id_array = [], name_array = [];
+            $("input:checkbox[name='statechk']:checked").each(function () {
+                id_array.push($(this).val());//向数组中添加元素
+                name_array.push($(this).attr("title"));
+            });
+            $("#StateValues").val(name_array.join(','));//将数组元素连接起来以构建一个字符串
+            $("#StateKeys").val(id_array.join(','))
+        });
+
+        //确认终结
+        $(".End").click(function () {
+            var id = $(this).parents("tr").find($(".inputId")).data("id");
+            layer.open({
+                type: 1,
+                title: '确认终结',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var state = $('.modules').val();
+                    $.ajax({
+                        url: '/Project/End',
+                        data: 'id=' + id + '&state=' + state,
+                        type: "post",
+                        dataType: "json",
+                        success: function (result) {
+                            layer.msg('操作成功', { icon: 1, time: 1000 });
+                            layer.close(index);//关闭窗口
+                            location.reload();
+                            //layer.msg(result);
+                        }
+                    });
+                }
+            });
+        });
+    });
+    //结项
+    $(".Archive").click(function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        $.ajax({
+            url: '/Project/Archive',
+            data: 'id=' + id,
+            type: "post",
+            dataType: "json",
+            success: function (result) {
+                if (result.Flag) {
+                    layer.confirm('确认结项？ ', { icon: 3 }, function () {
+                        $.ajax({
+                            url: '/Project/End',
+                            data: 'state=Success&id=' + id,
+                            type: "post",
+                            dataType: "json",
+                            success: function (result) {
+                                layer.msg('操作成功', { icon: 1, time: 1000 });
+                                location.reload();
+                            },
+                        })
+                    });
+                } else {
+                    layer.alert('必须先完成该项目"完工验收"才可操作!', { icon: 7 });
+                }
+            },
+        })
+
+    });
+
+    //启动
+    $(".StartUp").click(function () {
+        if ($(this).data("companyname")) {
+            var state = $('.modules').val();
+            var id = $(this).parents("tr").find($(".inputId")).data("id");
+            layer.confirm('确认启动该项目？ ', { icon: 3 }, function () {
+                $.ajax({
+                    url: '/Project/End',
+                    data: 'state=Construction&id=' + id,
+                    type: "post",
+                    dataType: "json",
+                    success: function (result) {
+                        layer.msg('操作成功', { icon: 1, time: 1000 });
+                        location.reload();
+                    },
+                });
+            });
+        } else {
+            parent.layer.alert("未制定分公司，请联系基础平台", { icon: 2 });
+        }
+    });
+
+    //添加
+    $("#add").on("click", function () {
+        window.location.href = "/Project/Add";
+    });
+
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Project/Detail?projectId=" + id;
+    });
+    //补充项目资料
+    $(".Edit").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Project/Edit?projectId=" + id;
+    });
+
+    //考勤设置
+    $(".Set").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Project/AttendanceSet?projectId=" + id;
+    });
+
+    //删除
+    $(".Delete").click(function () {
+        var id = "";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                $.post("Delete", { id: id }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                        var search = $("form").serialize();
+                        window.location.href = "/Project/Index?pageIndex=1";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            })
+        } else {
+            parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+        }
+    });
+
+</script>

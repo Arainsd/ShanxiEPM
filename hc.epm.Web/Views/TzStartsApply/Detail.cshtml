@@ -1,0 +1,439 @@
+﻿@using hc.epm.DataModel.Business;
+@model Epm_TzStartsApply
+@{
+    ViewBag.Title = "Detail";
+}
+
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 900px;
+        border-radius: 5px;
+        padding: 0 5px;
+        border: 1px solid;
+    }
+
+    .bold-name {
+        font-weight: 800;
+        width: 15%;
+    }
+
+    table td {
+        width: 25%;
+    }
+
+    .timer {
+        width: 210px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .timer-pic {
+        left: -24px;
+        position: relative;
+    }
+
+    .tera {
+        width: 900px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .add-icon {
+        color: darkseagreen;
+    }
+
+    .file-wrap {
+        height: 35px;
+        width: 210px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+    }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 10px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                /*overflow: hidden;*/
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .datalist tr td, .datalist tr th {
+        padding: 5px 10px;
+    }
+</style>
+<div class="contentData">
+    <form id="formData">
+        <div class="top-title">
+            <span class="ti">工程建设项目开工报告申请表</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr>
+                    <td class="bold-name">标题</td>
+                    <td style="text-align:center;" colspan="3">工程建设项目开工报告申请表标题</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请人</td>
+                    <td>@Model.Applicant</td>
+                    <td class="bold-name">所属单位</td>
+                    <td>@Model.Unit</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请日期</td>
+                    <td>@Model.ApplyDate</td>
+                    <td class="bold-name">所属部门</td>
+                    <td>@Model.Department</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">联系电话</td>
+                    <td>@Model.PhoneNumber</td>
+                    <td class="bold-name">报告文号</td>
+                    <td>@Model.Titanic</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">建设项目名称</td>
+                    <td style="text-align:center;" colspan="3">@Model.ProjectName</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">设计规模或能力</td>
+                    <td style="text-align:center;" colspan="3">@Model.DesignAbility</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">项目建议书批准文号</td>
+                    <td>@Model.ApprovalNumber</td>
+                    <td class="bold-name">估算投资(万元)</td>
+                    <td>@Model.BudgetInvestment1</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">可研报告批准文号</td>
+                    <td>@Model.EstimateInvestment</td>
+                    <td class="bold-name">估算投资(万元)</td>
+                    <td>@Model.BudgetInvestment2</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">立项批复或初步设计批准文号</td>
+                    <td>@Model.DesignApprovalNumber</td>
+                    <td class="bold-name">批复投资或概算投资(万元)</td>
+                    <td>@Model.ReplyInvestment</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">资金来源</td>
+                    <td>@Model.MoneySourceName</td>
+                    <td class="bold-name">当年计划投资情况</td>
+                    <td>@Model.ThatYearPlanInvestment</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">计划建设工期</td>
+                    <td>
+                        @(Convert.ToDateTime(Model.StartTime).ToString("yyyy-MM-dd"))
+                        至
+                        @(Convert.ToDateTime(Model.EndTime).ToString("yyyy-MM-dd"))
+                    </td>
+                    <td class="bold-name">计划建设工期(天)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程项目概况及主要工程内容和主要工程量</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="ProjectOverview" disabled>@Model.ProjectOverview</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">项目管理机构及人员到位情况</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="TheStaff" disabled>@Model.TheStaff</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程建设总体部署(或施工组织设计)编制情况</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="PrepareTheSituation" disabled>@Model.PrepareTheSituation</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">设计单位及图纸落实情况(主要设计单位、施工图交付计划情况)</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="CarryOutTheSituation" disabled>@Model.CarryOutTheSituation</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">施工单位</td>
+                    <td>@Model.ConstructionUnit</td>
+                    <td class="bold-name">项目经理</td>
+                    <td>@Model.ProjectManager</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">安全考试成绩(施工)</td>
+                    <td style="text-align:center;" colspan="3">@Model.ConstructionGrade</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">施工单位落实及施工队伍、机具进场情况(主要施工单位、合同签订情况)</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="InCase" disabled>@Model.InCase</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">监理单位</td>
+                    <td>@Model.SupervisionUnit</td>
+                    <td class="bold-name">监理工程师</td>
+                    <td>@Model.SupervisoryEngineer</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">安全考试成绩(监理)</td>
+                    <td style="text-align:center;" colspan="3">@Model.EngineerGrade</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">监理单位、质量监督部门落实情况</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="EngineerCarryOutTheSituation" disabled>@Model.EngineerCarryOutTheSituation</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">施工前期准备情况(包括征地、拆迁、四通一平等)</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="PrepareSituation" disabled>@Model.PrepareSituation</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">主要设备、材料订货、到货情况</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="AOGSituation" disabled>@Model.AOGSituation</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">环境影响、劳动安全卫生、消防等审批手续办理情况</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="Procedures" disabled>@Model.Procedures</textarea>
+                    </td>
+                </tr>
+
+                @*附件*@
+                <tr>
+                    <td class="bold-name">项目管理机构(项目经理部或油库项目组)设立的文件、机构组成和职责分工各有一份<br /><span style="color:red;">（最大5M/个）</span></td>
+                    <td colspan="3">
+                        <!--附件1-->
+                        <div class="">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="XMGLJGWJ">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            if (item.TypeNo == "XMGLJGWJ")
+                                            {
+                                                <li>
+                                                    <span><a class="downloadfile" data-url="@item.FilePath" data-filename="@item.Name">@item.Name</a></span>
+                                                    <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">立项批复或项目初步设计批复文件复印件一份<br /><span style="color:red;">（最大5M/个）</span></td>
+                    <td colspan="3">
+                        <!--附件2-->
+                        <div class="">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="LXPFWJ">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            if (item.TypeNo == "LXPFWJ")
+                                            {
+                                                <li>
+                                                    <span><a class="downloadfile" data-url="@item.FilePath" data-filename="@item.Name">@item.Name</a></span>
+                                                    <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">经审批的施工组织设计或工程建设总体部署一份<br /><span style="color:red;">（最大5M/个）</span></td>
+                    <td colspan="3">
+                        <!--附件3-->
+                        <div class="">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="SGSJWJ">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            if (item.TypeNo == "SGSJWJ")
+                                            {
+                                                <li>
+                                                    <span><a class="downloadfile" data-url="@item.FilePath" data-filename="@item.Name">@item.Name</a></span>
+                                                    <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">施工进场人员名单及《安全教育合格证》(复印件)<br /><span style="color:red;">（最大5M/个）</span></td>
+                    <td colspan="3">
+                        <!--附件1-->
+                        <div class="">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="AQJYZWJ">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            if (item.TypeNo == "AQJYZWJ")
+                                            {
+                                                <li>
+                                                    <span><a class="downloadfile" data-url="@item.FilePath" data-filename="@item.Name">@item.Name</a></span>
+                                                    <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分公司与供应厂商确定的主要设备材料交付时间表一份<br /><span style="color:red;">（最大5M/个）</span></td>
+                    <td colspan="3">
+                        <!--附件1-->
+                        <div class="">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="GYSWJ">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            if (item.TypeNo == "GYSWJ")
+                                            {
+                                                <li>
+                                                    <span><a class="downloadfile" data-url="@item.FilePath" data-filename="@item.Name">@item.Name</a></span>
+                                                    <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程建设项目，还应提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表<br /><span style="color:red;">（最大5M/个）</span></td>
+                    <td colspan="3">
+                        <!--附件1-->
+                        <div class="">
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="HSEWJ">
+                                    @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                    {
+                                        foreach (var item in Model.TzAttachs)
+                                        {
+                                            if (item.TypeNo == "HSEWJ")
+                                            {
+                                                <li>
+                                                    <span><a class="downloadfile" data-url="@item.FilePath" data-filename="@item.Name">@item.Name</a></span>
+                                                    <input type="hidden" class="fileList" data-column="@item.TypeNo" data-name="@item.Name" data-guid="" data-size="@item.Size" data-imagetype="" data-url="@item.FilePath" data-group="" />
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="bold-name">工程形象进度计划表附于此页</td>
+                    <td colspan="3">@Html.Raw(Model.Plan)</td>
+                </tr>
+                
+                <tr>
+                    <td class="bold-name">工程建设部门负责人</td>
+                    <td colspan="3">
+                        @Model.HeaderName
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分公司工程建主管领导审核</td>
+                    <td colspan="3">
+                        @Model.LeaderName
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="bold-name">签字意见</td>
+                    <td colspan="3">@Html.Raw(Model.SignIdea)</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </form>
+</div>
+<script>
+    //下载附件
+    $("body").on("click", ".downloadfile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("filename");
+        if (path.indexOf("http://") == -1) {
+            window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+        } else {
+            window.location.href = path;
+        }
+    });
+</script>

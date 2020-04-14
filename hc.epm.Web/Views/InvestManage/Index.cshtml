@@ -1,0 +1,204 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@model List<Epm_ReformRecord>
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    form label {
+        font-weight: 500;
+    }
+
+    .p-content {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label>项目名称 : </label><input type="text" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                </div>
+                <div>
+                    <label>地市公司 : </label>
+                    @if (!ViewBag.IsAgencyUser)
+                    {
+                        <input type="text" name="companyName" value="@ViewBag.companyName" placeholder="请输入地市公司">
+                        <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                    }
+                    else {
+                        <input type="text" name="companyName" id="seleId" value="@ViewBag.companyName" placeholder="请输入地市公司">
+                        <input type="hidden" name="companyId" id="companyId" value="@ViewBag.companyId" />
+                    }
+                </div>
+                <div>
+                    <label>地区公司 : </label>
+                    <select id="areaCompanyCode">
+                        <option value="10">陕西</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label>改造时间 : </label>
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); } })" placeholder="请选择改造起始时间">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-">&#xe7e2;</i>
+                </div>
+                <div style="margin-left:-95px;">
+                    <input type="text" class="timer se-in" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="请选择改造终止时间">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add">新建</button>
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="150">项目名称</th>
+                    <th width="100">站库名称</th>
+                    <th width="80">站库编码</th>
+                    <th width="150">地区公司</th>
+                    <th width="100">地市公司</th>
+                    <th width="100">改造起始时间</th>
+                    <th width="100">改造终止时间</th>
+                    <th width="100">改造金额（万元）</th>
+                    <th width="100">工程内容</th>
+                    <th width="100">项目状态</th>
+                    <th width="100">处理</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.StationName</td>
+                            <td>@item.StationCodeInvest</td>
+                            <td>@item.AreaCompanyName</td>
+                            <td>@item.CompanyName</td>
+                            <td>@( Convert.ToDateTime(item.RemarkStartTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@( Convert.ToDateTime(item.RemarkEndTime).ToString("yyyy-MM-dd"))</td>
+                            <td class="parse-float">@item.RemarkMoney</td>
+                            <td title="@item.ProjectContent"><div class="p-content">@item.ProjectContent</div></td>
+                            <td>
+                                @if (item.State == 0)
+                                {
+                                    <span style="color:#000000">待审批</span>
+                                }
+                                else if (item.State == 1)
+                                {
+                                    <span style="color:#008000">审批通过</span>
+
+                                }
+                                else if (item.State == 2)
+                                {
+                                    <span style="color:#FF0000">审批不通过</span>
+
+                                }
+                            </td>
+                            <td><a class="Detail" style="cursor:pointer;color:#0000FF;">查看</a></td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="13" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<script>
+    //去掉多余的0
+    $(".parse-float").each(function (index, item) {
+        if ($(item).text() != "") {
+            $(item).text(parseFloat($(item).text().trim()));
+        } else {
+            $(item).text("");
+        }
+        
+    });
+
+    $("#add").click(function () {
+        window.location.href = '/InvestManage/Add';
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/InvestManage/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //选择地市公司
+        $("#seleId").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分公司"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        debugger;
+                        $("#seleId").val(obj.data[0].Name);
+                        $("#companyId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+    $("body").on("click", ".Detail", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/InvestManage/Detail?id=" + id;
+    });
+
+</script>

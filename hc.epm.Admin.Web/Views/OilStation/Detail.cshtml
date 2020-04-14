@@ -1,0 +1,45 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model Epm_OilStation
+@{
+    ViewBag.Title = "加油站详情";
+}
+
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a>  </span> > <span> 加油站信息 </span> > <span> 加油站详情</span>
+    </div>
+    <div class="main mt5">
+        <table class="layui-table" style="table-layout: fixed">
+            <tbody>
+                <tr>
+                    <td width="120px" class="table-right">编号</td>
+                    <td width="250px" class="table-left">@Model.Code</td>
+                </tr>
+                <tr>
+                    <td width="80px" class="table-right">名称</td>
+                    <td width="250px" class="table-left">@Model.Name</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">简介</td>
+                    <td width="250px" class="table-left">@Model.Description</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">地址</td>
+                    <td width="250px" class="table-left">@Model.Address</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="layui-form-item row btn-save">
+            <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-save cancel" />
+        </div>
+    </div>
+</div>
+
+    <script>
+        //返回上一页面
+        $(".cancel").on("click", function () {
+            window.history.go(-1);
+        })
+    </script>

@@ -1,0 +1,89 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "上传进度测试";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UploadTest</title>
+</head>
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <button id="btnUploadFile" style="position: relative; z-index: 1;">上传</button>
+                    </div>
+                </div>
+                <div id="filelist">
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+           
+            var uploaderFile = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                //multipart_params: {},
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "rar,jpg,png,gif,doc,xlsx" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                //rename: false, // 是否重命名文件
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (up, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            $('#filelist').append('<div id="' + item.id + '">' + item.name + ' (' + plupload.formatSize(item.size) + ') <b></b></div>');
+                            uploaderFile.start();
+                        }
+                    },
+                    UploadProgress: function (up, file) {
+                        $("#" + file.id + " b:eq(0)").html('(<span>' + file.percent + "%</span>)");
+                    },
+                    FileUploaded: function (uploaderFile, file, responseObject) {
+                        //alert(responseObject.response);
+                        console.log(responseObject.response);
+                    },
+                    Error: function (up, err) {
+                        //layer.alert("错误：" + err.code + ": " + err.message);
+                        console.log("错误：" + err.code + ": " + err.message);
+                    }
+                }
+            });
+            uploaderFile.init();
+
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+        });
+    </script>
+</body>
+</html>

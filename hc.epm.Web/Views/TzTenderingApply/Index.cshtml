@@ -1,0 +1,326 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_TzTenderingApply>
+
+
+@{
+    ViewBag.Title = "招标申请";
+}
+
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+
+    #reply {
+        margin-right:660px;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">招标名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="TenderingName" value="@ViewBag.TenderingName" placeholder="请输入招标名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">联系人 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="userName" value="@ViewBag.userName" placeholder="请输入联系人">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">联系电话 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="phone" value="@ViewBag.phone" placeholder="请输入联系电话">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">提出时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">招标方式 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("BidType", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">审批状态 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("State", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub">
+                <button type="button" class="add checkright" data-module="TenderingApply" data-right="Add">发起招标申请</button>
+                <button type="button" id="reply" class="checkright" data-module="TenderingApply" data-right="Check">批复</button>
+                <button type="submit" id="btnsel" class="checkright" data-module="TenderingApply" data-right="Browse">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <div><input type="checkbox" id="allcheck" /></div>
+                    </th>
+                    <th width="50">序号</th>
+                    <th width="200">招标名称</th>
+                    <th width="100">招标方式</th>
+                    <th width="100">联系人</th>
+                    <th width="100">联系电话</th>
+                    <th width="100">提出时间</th>
+                    <th width="100">当前操作人</th>
+                    <th width="100">审批状态</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                            </td>
+                            <td><input type="checkbox" value="@item.SId" data-state="@((PreProjectState)item.State)" /></td>
+                            <td>@index</td>
+                            <td>@item.TenderingName</td>
+                            <td>@item.BidName</td>
+                            <td>@item.UndertakeContacts</td>
+                            <td>@item.UndertakeTel</td>
+                            <td>@( Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</td>
+                            @*<td>@item.OperateUserName</td>*@
+                            @{
+                                var username = "";
+                                if (item.State == (int)PreProjectState.WaitSubmitted || item.State == (int)PreProjectState.ApprovalFailure)
+                                {
+                                    username = item.CreateUserName;
+                                }
+                                else if (item.State == (int)PreProjectState.WaitApproval)
+                                {
+                                    username = item.OperateUserName;
+                                }
+                                <td>@username</td>
+                            }
+                            <td>@(((PreProjectState)item.State).GetText())</td>
+                            <td>
+                                @if (item.State == (int)PreProjectState.ApprovalFailure|| item.State == (int)PreProjectState.WaitSubmitted)
+                                {
+                                    <a class="edit checkright" style="cursor:pointer;color:#0099FF;padding: 6px;" data-module="TenderingApply" data-right="Modify">编辑</a>
+                                }
+                                else
+                                {
+                                    <a class="Detail checkright" style="cursor:pointer;color:#0099FF;padding: 6px;" data-module="TenderingApply" data-right="Info">查看</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="13" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+
+<script>
+    //上传
+    $(".add").on("click", function () {
+        window.open("/TzTenderingApply/Add");
+    });
+
+    //编辑
+    $(".edit").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.open("/TzTenderingApply/Edit?Id=" + id);
+    });
+
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.open("/TzTenderingApply/Detail?Id=" + id);
+    });
+
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var btnsel = $("form").serialize();
+                    window.location.href = "/TzTenderingApply/Index?pageIndex=" + curr + "&" + btnsel;
+                }
+            }
+        });
+    });
+
+    //全选反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $("#tbody input[type='checkbox']").prop("checked", isChecked);
+    });
+    // 单独选项控制全选
+    $("#tbody input[type='checkbox']").click(function () {
+        var allLength = $("#tbody input[type='checkbox']").length;
+        var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+    //批复
+    $("#reply").click(function () {
+        var flag = true,
+            state = "ApprovalSuccess", //已批复状态
+            ids = "",
+            chkItems = $('#tbody input[type="checkbox"]:checked');
+
+        if (chkItems.length > 0) {
+            chkItems.each(function (index, item) {
+                if ($(this).data("state") != "WaitApproval") {
+                    layer.msg('请选择状态为待审核的项目！', { time: 3000, icon: 2 });
+                    flag = false;
+                    return false;
+                }
+                else {
+                    ids += $(this).val();
+                    ids += ",";
+                }
+            });
+
+            ids = ids.substr(0, ids.lastIndexOf(","));
+
+            if (flag) {
+                parent.layer.confirm('确认要批复所选择的项目？', { icon: 3 }, function () {
+                    $.post("UpdateState", { ids: ids, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("批复成功", { time: 2000, icon: 1 });
+                            location.reload();
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                });
+            }
+        }
+        else {
+            layer.msg('请选择要批复的项目！', { time: 3000, icon: 2 });
+        }
+
+    });
+</script>

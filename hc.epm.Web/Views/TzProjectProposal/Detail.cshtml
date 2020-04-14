@@ -1,0 +1,429 @@
+﻿@using hc.epm.ViewModel;
+@using hc.Plat.Common.Extend;
+
+@model TzProjectProposalInfoView
+@{
+    ViewBag.Title = "投资详情";
+    bool isTalk = false;
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .table_title {
+        background-color: #f8f8f8;
+    }
+
+    .datalist td {
+        height: 46px;
+    }
+    /*项目阶段*/
+    .wrap {
+        width: 1200px;
+        height: 165px;
+        background-color: #f8f8f8;
+        margin: 0 auto;
+        margin-top: 2px;
+        padding: 20px;
+        border: 0;
+    }
+
+        .wrap > div {
+            margin-right: -2px;
+            display: inline-block;
+            float: left;
+            position: relative;
+        }
+
+            .wrap > div > span {
+                position: absolute;
+                display: inline-block;
+                top: 92px;
+                width: 100%;
+                left: 0;
+                text-align: center;
+                font-size: 15px;
+            }
+
+    .phases_first {
+        padding-left: 25px !important;
+    }
+
+    .phases_last {
+        padding-right: 25px !important;
+    }
+
+    .font_color1 {
+        color: #FF9F00;
+    }
+
+    .font_color2 {
+        color: #928888;
+    }
+
+    .gray_img {
+        margin-top: 1px;
+    }
+</style>
+
+@if (Model == null)
+{
+    Response.Write("项目信息不存在！");
+    Response.End();
+    return;
+}
+else
+{
+    //项目阶段
+    <div class="wrap">
+        <div>
+            @if (Model.TzProjectProposal != null)
+            {
+                var projectNature = new string[] { "CANGU", "HEZI", "HEZUO", "KONGG", "KUOJ", "QIANJ", "SHOUG", "ZUL" };
+                if (projectNature.Contains(Model.TzProjectProposal.Nature))
+                {
+                    isTalk = true;
+                }
+            <img src="~/Resource/images/phase_bright1.png" alt="" />
+            <span class="phases_first font_color1" style="color:#32B537">项目提出</span>
+            }
+            else
+            {
+            <img class="gray_img" src="~/Resource/images/phases_gray1.png" alt="" />
+            <span class="phases_first font_color2 gray_img">项目提出</span>
+            }
+        </div>
+        <div>
+            @if (Model.TzResearchAllView.TzResearchOfInvestment != null)
+            {
+            <img src="~/Resource/images/phase_bright2.png" alt="" />
+            <span class="font_color1" style="color:#32B537">项目勘探</span>
+            }
+            else
+            {
+            <img class="gray_img" src="~/Resource/images/phases_gray2.png" alt="" />
+            <span class="font_color2 gray_img">项目勘探</span>
+            }
+        </div>
+        <div>
+            @if (Model.TzProjectProposal.Nature != "JIG" && Model.TzProjectProposal.Nature != "GAIJ")
+            {
+                if (Model.TzProjectProposal.Nature == "XINJ")
+                {
+                    if (Model.TzLandNegotiation != null)
+                    {
+            <img src="~/Resource/images/phase_bright3.png" alt="" />
+            <span class="font_color1" style="color:#32B537">土地出让协议谈判</span>
+                    }
+                    else
+                    {
+            <img class="gray_img" src="~/Resource/images/phases_gray3.png" alt="" />
+            <span class="font_color2 gray_img">土地出让协议谈判</span>
+                    }
+                }
+                else if (isTalk)
+                {
+                    if (Model.TzFirstNegotiation != null)
+                    {
+            <img src="~/Resource/images/phase_bright3.png" alt="" />
+            <span class="font_color1" style="color:#32B537">初次谈判</span>
+                    }
+                    else
+                    {
+            <img class="gray_img" src="~/Resource/images/phases_gray3.png" alt="" />
+            <span class="font_color2 gray_img">初次谈判</span>
+                    }
+                }
+            }
+            else
+            {
+            <img class="gray_img" src="~/Resource/images/phases_gray3.png" alt="" />
+            <span class="font_color2 gray_img">初次/土地出让协议谈判</span>
+            }
+        </div>
+        <div>
+            @if (Model.TzFormTalkFile != null )
+            {
+            <img src="~/Resource/images/phase_bright4.png" alt="" />
+            <span class="font_color1" style="color:#32B537">评审材料</span>
+            }
+            else {
+            <img class="gray_img" src="~/Resource/images/phases_gray4.png" alt="" />
+            <span class="font_color2 gray_img">评审材料</span>
+            }
+        </div>
+        <div>
+            @if (Model.TzProjectReveiews != null )
+            {
+            <img src="~/Resource/images/phase_bright5.png" alt="" />
+            <span class="font_color1" style="color:#32B537">项目评审信息</span>
+            }
+            else
+            {
+            <img class="gray_img" src="~/Resource/images/phases_gray5.png" alt="" />
+            <span class="font_color2 gray_img">项目评审信息</span>
+            }
+        </div>
+        <div>
+            @if (Model.MeetingFileReport != null )
+            {
+            <img src="~/Resource/images/phase_bright6.png" alt="" />
+            <span class="font_color1" style="color:#32B537">上会材料</span>
+            }
+            else
+            {
+            <img class="gray_img" src="~/Resource/images/phases_gray6.png" alt="" />
+            <span class="font_color2 gray_img">上会材料</span>
+            }
+        </div>
+        <div>
+            @if (Model.TzProjectApprovalInfo != null )
+            {
+            <img src="~/Resource/images/phase_bright7.png" alt="" />
+            <span class="font_color1" style="color:#32B537">项目批复</span>
+            }
+            else
+            {
+            <img class="gray_img" src="~/Resource/images/phases_gray7.png" alt="" />
+            <span class="phases_last font_color2 gray_img">项目批复</span>
+            }
+        </div>
+    </div>
+
+    <div class="contentData">
+        <form class="form-horizontal">
+
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称：</td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectProposal.ProjectName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">项目性质：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.NatureName</div>
+                        </td>
+                        <td class="table_title">提出时间：</td>
+                        <td class="td-div">
+                            <div>@(Model.TzProjectProposal.ApplyTime == null ? "" : (Convert.ToDateTime(Model.TzProjectProposal.ApplyTime).ToString("yyyy-MM-dd")))</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.StationName</div>
+                        </td>
+
+                        <td class="table_title">项目类型：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProjectType</div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.CompanyName</div>
+                        </td>
+                        <td class="table_title">项目编码：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProjectCode</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.Position</div>
+                        </td>
+                        <td class="table_title">估计金额：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.PredictMoney.ToString("0.00") 万元</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">推荐人姓名：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.Recommender</div>
+                        </td>
+                        <td class="table_title">推荐人职务：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.RecommenderJob</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">推荐人单位：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.RecommenderDept</div>
+                        </td>
+                        <td class="table_title">申报人：</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.DeclarerUser</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="hand-wrap">
+                <p class="hand-title ProjectProposal"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>项目提出信息</span></p>
+                @if (Model.TzProjectProposal != null)
+                {
+                    @Html.Partial("_TzProjectProposal", Model.TzProjectProposal);
+                    var projectNature = new string[] { "CANGU", "HEZI", "HEZUO", "KONGG", "KUOJ", "QIANJ", "SHOUG", "ZUL" };
+                    if (projectNature.Contains(Model.TzProjectProposal.Nature))
+                    {
+                        isTalk = true;
+                    }
+                }
+                @if (Model.TzResearchAllView.TzResearchOfInvestment != null)
+                {
+                    <p class="hand-title Research"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>现场勘探信息</span></p>
+                    @Html.Partial("_TzResearch", Model.TzResearchAllView);
+                }
+                @if (Model.TzProjectProposal.Nature != "JIG" && Model.TzProjectProposal.Nature != "GIJ")
+                {
+                    if (Model.TzProjectProposal.Nature == "XINJ")
+                    {
+
+                        if (Model.TzLandNegotiation != null)
+                        {
+                            <p class="hand-title LandNegotiation"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>土地出让协议谈判信息</span></p>
+                            @Html.Partial("_TzLandNegotiation", Model.TzLandNegotiation);
+                        }
+
+                    }
+                    else if (isTalk)
+                    {
+
+                        if (Model.TzFirstNegotiation != null)
+                        {
+                            <p class="hand-title FirstNegotiation"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>项目谈判信息</span></p>
+                            @Html.Partial("_TzFirstNegotiation", Model.TzFirstNegotiation);
+                        }
+                    }
+                }
+
+
+                @if (Model.TzFormTalkFile != null)
+                {
+                    <p class="hand-title FormTalkFile"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>评审材料上报信息</span></p>
+                    @Html.Partial("_TzFormTalkFile", Model.TzFormTalkFile);
+                }
+
+                @if (Model.TzProjectReveiews != null)
+                {
+                    <p class="hand-title ProjectReveiews"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>项目评审信息</span></p>
+                    @Html.Partial("_TzProjectReveiews", Model.TzProjectReveiews);
+                }
+
+
+                @if (Model.MeetingFileReport != null)
+                {
+                    <p class="hand-title MeetingFileReport"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>会议决策信息</span></p>
+                    @Html.Partial("_MeetingFileReport", Model.MeetingFileReport);
+
+                }
+
+                @if (Model.TzProjectApprovalInfo != null)
+                {
+                    <p class="hand-title ProjectApprovalInfo"><span class="icon"><i class="layui-icon">&#xe619;</i></span> <span>项目批复信息</span></p>
+                    @Html.Partial("_TzProjectApprovalInfo", Model.TzProjectApprovalInfo);
+                }
+            </div>
+
+            <div class="btn-div">
+                @if (Model.IsColseed)
+                {
+                    <input type="button" id="Colseed" class="btn-back" value="关闭项目">
+                    <input type="hidden" value="@Model.TzProjectProposal.Id" id="ProjectId" />
+                }
+                <input type="button" id="back" class="btn-back" value="返回">
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+
+        var param = "@ViewBag.param";
+        
+        //初始化
+        (function init() {
+
+            $(".boxs").hide().eq(0).show();//默认第一个以外的div合拢
+
+            if (param !== "") {
+                $(".boxs").hide();
+                $("." + param).next("div").show();
+                $("." + param).find(".icon").html('<span class="icon"><i class="layui-icon">&#xe61a;</i>');
+            }
+
+        })();
+
+        $(".hand-wrap .hand-title").click(function () {
+            if ($(this).next("div").css('display') == "block") {
+                $(this).find(".icon").html('<span class="icon"><i class="layui-icon">&#xe619;</i>');
+                $(this).next("div").hide(100);
+            } else if ($(this).next("div").css('display') == "none") {
+                $(this).find(".icon").html('<span class="icon"><i class="layui-icon">&#xe61a;</i>');
+                $(this).next("div").show(100);
+            }
+        });
+
+        //返回
+        $("#back").click(function () {
+            if (param == "ProjectProposal") {//项目提出
+                window.location.href = "/TzProjectProposal/Index";
+            }
+            else if (param == "Research") {//现场踏勘
+                window.location.href = "/TzResearch/Index";
+            }
+            else if (param == "FirstNegotiation") {//项目谈判
+                window.location.href = "/TzFirstNegotiation/Index";
+            }
+
+            else if (param == "LandNegotiation") {//土地协议出让谈判
+                window.location.href = "/TzLandNegotiation/Index";
+            }
+            else if (param == "FormTalkFile") {//评审材料
+                window.location.href = "/TzFormTalkFile/Index";
+            }
+            else if (param == "ProjectReveiews") {//项目评审
+                window.location.href = "/TzProjectReveiews/Index";
+            }
+            else if (param == "MeetingFileReport") {//会议决策
+                window.location.href = "/TzMeetingFileReport/Index";
+            }
+            else if (param == "ProjectApprovalInfo") {//项目批复
+                window.location.href = "/TzProjectApprovalInfo/Index";
+            }
+        });
+
+        //关闭项目
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            $("#Colseed").on("click", function () {
+                parent.layer.confirm('确认要关闭该项目？', { icon: 3 }, function () {
+                    var projectId = $("#ProjectId").val();
+                    $.post("CloseProject", { projectId: projectId }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("关闭成功", { time: 2000, icon: 1 }, function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                });
+            });
+        });
+
+        //下载附件
+        $("body").on("click", ".downloadFile", function () {
+            var path = $(this).data("url");
+            var fileName = $(this).data("name");
+            window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+        });
+    </script>
+}

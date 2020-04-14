@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>数据详情</title>
+    <meta charset="utf-8" />
+    <link href="/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="/Content/layui/css/layui.css" rel="stylesheet" />
+    <link href="/Content/popup.css" rel="stylesheet" />
+    <link href="/Content/style.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="../Content/layui/layui.js"></script>
+    <script src="/Content/layui/lay/modules/form.js"></script>
+</head>
+<body>
+    <div class="form-wrap">
+        <form class="layui-form container">
+            <div class="layui-form-item row">
+                <div class="layui-inline col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    <label class="layui-form-label">单位名称 : </label>
+                    <div class="layui-input-inline"><span class="detail-data">陕西华春建设集团</span></div>
+                </div>
+                <div class="layui-inline col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    <label class="layui-form-label">简&nbsp;&nbsp;称 : </label>
+                    <div class="layui-input-inline"><span class="detail-data">华春建设</span></div>
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <div class="layui-inline col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    <label class="layui-form-label">单位类型 : </label>
+                    <div class="layui-input-inline"><span class="detail-data">集团</span></div>
+                </div>
+                <div class="layui-inline col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    <label class="layui-form-label">单位编码 : </label>
+                    <div class="layui-input-inline"><span class="detail-data">FSL160001</span></div>
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <div class="layui-inline col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    <label class="layui-form-label">上级单位名称 : </label>
+                    <div class="layui-input-inline"><span class="detail-data">华春集团</span></div>
+                </div>
+                <div class="layui-inline col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    <label class="layui-form-label">上级单位编码 : </label>
+                    <div class="layui-input-inline"><span class="detail-data">FL160001</span></div>
+                </div>
+            </div>
+            <div class="layui-form-item row btn-group">
+                <input type="button" name="submit" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                <input type="button" name="submit" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+        </form>
+
+</body>
+<script type="text/javascript">
+    //关闭弹出iframe层
+    $('.cancel').on("click", function () {
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    })
+</script>
+</html>

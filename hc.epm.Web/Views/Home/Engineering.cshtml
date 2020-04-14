@@ -1,0 +1,332 @@
+﻿
+@{
+    ViewBag.Title = "工程动态列表";
+}
+<style>
+    /*资讯列表*/
+    .centre {
+        margin: 0 360px;
+    }
+
+    .crumbs {
+        line-height: 70px;
+        background-color: #FBFBFB;
+        color: #656565;
+    }
+
+        .crumbs .fl {
+            margin-right: 8px;
+        }
+
+        .crumbs .home {
+            color: #1493ec;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+    .content {
+        width: 1200px;
+    }
+
+    div {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        /* Firefox */
+        -webkit-box-sizing: border-box;
+        /* Safari */
+    }
+    /*侧边导航栏*/
+    #sidebar {
+        width: 246px;
+        background-color: #fff;
+        margin-right: 14px;
+    }
+
+        #sidebar #mine {
+            height: 135px;
+            padding: 30px;
+            background: #1393EC url("/Resource/images/globe1.jpg") no-repeat 177px 2px;
+        }
+
+            #sidebar #mine span:nth-child(1) {
+                font-size: 24px;
+                color: #ffffff;
+                font-weight: 600;
+                display: block;
+            }
+
+            #sidebar #mine span:nth-child(2) {
+                margin: 5px 0 0 3px;
+                font-size: 18px;
+                color: #66baf6;
+                display: block;
+            }
+
+        #sidebar .lefttab {
+            margin-top: 20px;
+        }
+
+            #sidebar .lefttab a {
+                display: block;
+                box-sizing: border-box;
+                padding: 0 50px;
+                font-size: 16px;
+                height: 50px;
+                line-height: 50px;
+                color: #666666;
+                letter-spacing: .5px;
+            }
+
+    /*工程动态*/
+    .objectNews .list {
+        font-size: 14px;
+        padding-top: 10px;
+    }
+
+        .objectNews .list p {
+            line-height: 30px;
+        }
+
+        .objectNews .list .name {
+            font-size: 18px;
+            color: #333;
+        }
+
+    .objectNews .mess span:nth-child(3) {
+        margin-left: 100px;
+    }
+
+    .objectNews .mess span:nth-child(4) {
+        margin-right: 100px;
+    }
+
+    .objectNews p .text {
+        line-height: 18px;
+        width: 500px;
+        height: 55px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        margin-top: 7px;
+    }
+
+    .objectNews {
+        width: 940px;
+        padding: 0 44px 50px 26px;
+        background-color: #FFF;
+    }
+
+    .dynamic {
+        line-height: 78px;
+        border-bottom: 1px solid #EBF3F5;
+        font-size: 20px;
+        color: #666;
+    }
+
+        .hender span, .dynamic span {
+            display: inline-block;
+            height: 100%;
+            border-bottom: 2px solid #1592EC;
+        }
+
+    .objectNews .list {
+        height: 174px;
+        padding-top: 6px;
+    }
+
+    .objectNews li {
+        border-bottom: 1px solid #EBF3F5;
+        padding: 30px 0 20px 0;
+    }
+
+    .home img {
+        width: 246px;
+        margin-top: 24px;
+    }
+
+    #sidebar .lefttab li:nth-child(2) a {
+        color: #1393EE;
+        background-color: #ecf3f7;
+    }
+
+    .click {
+        color: #1393EE;
+        background-color: #ecf3f7;
+    }
+</style>
+<div class="centre">
+    <div class="crumbs">
+        <ul>
+            <li class="fl"><i class="iconfont home">&#xe602;</i></li>
+            <li class="fl">首页</li>
+            <li class="fl">></li>
+            <li class="fl">资讯中心</li>
+        </ul>
+    </div>
+    <div id="container" class="c content">
+        <div id="sidebar" class="fl">
+            <div id="mine">
+                <span>资讯中心</span>
+                <span>INFORMATION</span>
+            </div>
+            <ul class="lefttab">
+                <li><a href="javascript:;">最新资讯</a></li>
+                <li><a href="javascript:;">工程动态</a></li>
+                <li><a href="javascript:;">最新公告</a></li>
+            </ul>
+            <div class="home">
+                <img src="/Resource/images/home.jpg" />
+            </div>
+        </div>
+        <div id="main" class="fl c">
+            <div class="objectNews">
+                <div class="dynamic">
+                    <span>最新动态</span>
+                </div>
+                <div>
+                    <ul>
+                        <li class="c">
+                            <div class="fl"><img src="/Resource/images/latest.jpg" /></div>
+                            <div class="list fr">
+                                <p>项目名称 : <a href="#" class="name">人民日报政文：干部不要只看眼前的一亩三分地</a></p>
+                                <p>项目周期 : <span>2018-05-22 </span><span> &nbsp;至&nbsp; </span><span> 2018-05-23</span></p>
+                                <p class="mess">
+                                    <div class="fl" style="width:180px">
+                                        <span>工程主体 : </span>
+                                        <span>混泥土工程</span>
+                                    </div>
+                                    <div class="fl" style="width:120px">
+                                        <span>负责人 : </span>
+                                        <span>帅哥</span>
+                                    </div>
+                                    <div class="fl" style="width:270px">
+                                        <span>地址 : </span>
+                                        <span>陕西省西安市高新区西安软件园B座</span>
+                                    </div>
+                                </p>
+                                <p>
+                                    <span class="fl">项目介绍 : &nbsp;</span> <span class="text fl">
+                                        媒体日前梳理发现，今年全国两会后，省级常委人事变动不断，有从地方赴京任职者，也有从中央到地方任职者，还有多人在本省职位发生变动。无论是从对党员领导干部的培养角度出的发，还是出于对其监督与爱护，都有必要加大干部适度交流力度，坚持五湖四海的选人用人导向，培养出一批在多个地区、行业、部门有任职经验的复合型领导干部。
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="c">
+                            <div class="fl"><img src="/Resource/images/latest.jpg" /></div>
+                            <div class="list fr">
+                                <p>项目名称 : <a href="#" class="name">人民日报政文：干部不要只看眼前的一亩三分地</a></p>
+                                <p>项目周期 : <span>2018-05-22 </span><span> &nbsp;至&nbsp; </span><span> 2018-05-23</span></p>
+                                <p class="mess">
+                                    <div class="fl" style="width:180px">
+                                        <span>工程主体 : </span>
+                                        <span>混泥土工程</span>
+                                    </div>
+                                    <div class="fl" style="width:120px">
+                                        <span>负责人 : </span>
+                                        <span>帅哥</span>
+                                    </div>
+                                    <div class="fl" style="width:270px">
+                                        <span>地址 : </span>
+                                        <span>陕西省西安市高新区西安软件园B座</span>
+                                    </div>
+                                </p>
+                                <p>
+                                    <span class="fl">项目介绍 : &nbsp;</span> <span class="text fl">
+                                        媒体日前梳理发现，今年全国两会后，省级常委人事变动不断，有从地方赴京任职者，也有从中央到地方任职者，还有多人在本省职位发生变动。无论是从对党员领导干部的培养角度出的发，还是出于对其监督与爱护，都有必要加大干部适度交流力度，坚持五湖四海的选人用人导向，培养出一批在多个地区、行业、部门有任职经验的复合型领导干部。
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="c">
+                            <div class="fl"><img src="/Resource/images/latest.jpg" /></div>
+                            <div class="list fr">
+                                <p>项目名称 : <a href="#" class="name">人民日报政文：干部不要只看眼前的一亩三分地</a></p>
+                                <p>项目周期 : <span>2018-05-22 </span><span> &nbsp;至&nbsp; </span><span> 2018-05-23</span></p>
+                                <p class="mess">
+                                    <div class="fl" style="width:180px">
+                                        <span>工程主体 : </span>
+                                        <span>混泥土工程</span>
+                                    </div>
+                                    <div class="fl" style="width:120px">
+                                        <span>负责人 : </span>
+                                        <span>帅哥</span>
+                                    </div>
+                                    <div class="fl" style="width:270px">
+                                        <span>地址 : </span>
+                                        <span>陕西省西安市高新区西安软件园B座</span>
+                                    </div>
+                                </p>
+                                <p>
+                                    <span class="fl">项目介绍 : &nbsp;</span> <span class="text fl">
+                                        媒体日前梳理发现，今年全国两会后，省级常委人事变动不断，有从地方赴京任职者，也有从中央到地方任职者，还有多人在本省职位发生变动。无论是从对党员领导干部的培养角度出的发，还是出于对其监督与爱护，都有必要加大干部适度交流力度，坚持五湖四海的选人用人导向，培养出一批在多个地区、行业、部门有任职经验的复合型领导干部。
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="c">
+                            <div class="fl"><img src="/Resource/images/latest.jpg" /></div>
+                            <div class="list fr">
+                                <p>项目名称 : <a href="#" class="name">人民日报政文：干部不要只看眼前的一亩三分地</a></p>
+                                <p>项目周期 : <span>2018-05-22 </span><span> &nbsp;至&nbsp; </span><span> 2018-05-23</span></p>
+                                <p class="mess">
+                                    <div class="fl" style="width:180px">
+                                        <span>工程主体 : </span>
+                                        <span>混泥土工程</span>
+                                    </div>
+                                    <div class="fl" style="width:120px">
+                                        <span>负责人 : </span>
+                                        <span>帅哥</span>
+                                    </div>
+                                    <div class="fl" style="width:270px">
+                                        <span>地址 : </span>
+                                        <span>陕西省西安市高新区西安软件园B座</span>
+                                    </div>
+                                </p>
+                                <p>
+                                    <span class="fl">项目介绍 : &nbsp;</span> <span class="text fl">
+                                        媒体日前梳理发现，今年全国两会后，省级常委人事变动不断，有从地方赴京任职者，也有从中央到地方任职者，还有多人在本省职位发生变动。无论是从对党员领导干部的培养角度出的发，还是出于对其监督与爱护，都有必要加大干部适度交流力度，坚持五湖四海的选人用人导向，培养出一批在多个地区、行业、部门有任职经验的复合型领导干部。
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="page" style="text-align:right; margin-right:5px; margin-bottom:50px;">
+                    <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+                        <a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">上一页</a>
+                        <span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em></span>
+                        <a href="javascript:;" class="layui-laypage-next layui-disabled" data-page="2">下一页</a>
+                        <span class="layui-laypage-skip">
+                            到第<input type="text" min="1" value="1" class="layui-input">页
+                            <button type="button" class="layui-laypage-btn">确定</button>
+                        </span>
+                        <span class="layui-laypage-count">共 6 条</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //分页
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                jump: function (obj, first) {
+                    if (!first) {
+                        //得到了当前页，用于向服务端请求对应数据
+                        var curr = obj.curr;
+                        var search = $("form").serialize();
+                        window.location.href = "/DataConfig/Index?pageIndex=" + curr + "&" + search;
+                    }
+                }
+            });
+    });
+</script>

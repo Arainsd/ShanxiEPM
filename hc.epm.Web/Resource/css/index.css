@@ -1,0 +1,637 @@
+﻿/*--------------------------content------------------------*/
+.content {
+    width: 100%;
+    background: #fbfbfc;
+}
+
+.sowingMap img {
+    width: 100%;
+}
+
+.interApi {
+    width: 1200px;
+    height: 308px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.contentApi {
+    width: 788px;
+    height: 136px;
+    margin-left: 206px;
+    margin-top: 86px;
+}
+
+    .contentApi ul {
+        height: 100%;
+        width: 100%;
+    }
+
+        .contentApi ul li {
+            float: left;
+            width: 25%;
+            height: 100%;
+        }
+
+        .contentApi ul .center {
+            text-align: center;
+        }
+
+    .contentApi p {
+        margin-top: 18px;
+        font-weight: 800;
+    }
+
+.news {
+    margin: auto;
+    text-align: center;
+    background: #fbfbfc;
+    height: 86px;
+    width: 1200px;
+}
+
+    .news p {
+        font-size: 20px;
+        color: #0c90eb;
+        font-weight: 800;
+        padding-top: 50px;
+    }
+
+.line {
+    width: 436px;
+    margin: auto;
+}
+
+.line-2 {
+    width: 32px;
+    height: 4px;
+    border-top: 4px solid #cf3439;
+    float: left;
+}
+
+.line-1, .line-3 {
+    width: 202px;
+    height: 2px;
+    border-bottom: 2px solid #999999;
+    float: left;
+}
+
+.newsContent {
+    width: 1200px;
+    height: 570px;
+    margin: auto;
+    overflow: auto;
+}
+
+.newsContent {
+    height: 550px;
+}
+
+.newsleft {
+    font-size: 14px;
+    width: 50%;
+    height: 440px;
+    float: left;
+    overflow: auto;
+    margin-top: 50px;
+}
+
+.newsleft2 {
+    float: right;
+}
+
+    .newsleft2 .brief {
+        padding-left: 60px;
+    }
+
+        .newsleft2 .brief h {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .newsleft2 .brief span {
+            display: block;
+            font-size: 16px;
+            text-indent: 2em;
+            line-height: 26px;
+        }
+
+            .newsleft2 .brief span:nth-child(1) {
+                padding-top: 28px;
+            }
+
+        .newsleft2 .brief a {
+            color: #8abef3;
+        }
+
+.newsleft-top {
+    height: 50px;
+}
+
+    .newsleft-top ul {
+        height: 36px;
+        float: left;
+        line-height: 36px;
+    }
+
+        .newsleft-top ul li {
+            /*color: #0e90ee;*/
+            background: #fbfbfd;
+            float: left;
+            margin-right: 10px;
+            text-align: center;
+            width: 90px;
+            height: 34px;
+            border: 1px solid #0e90ee;
+        }
+
+            .newsleft-top ul li a {
+                color: #0c90eb;
+            }
+
+        .newsleft-top ul .firstColor a {
+            color: #fff;
+        }
+
+        .newsleft-top ul li:nth-child(1) {
+            color: #fff;
+            background: #cf3438;
+            float: left;
+            margin-right: 10px;
+            text-align: center;
+            width: 90px;
+            height: 34px;
+            border: 1px solid #cf3438;
+        }
+
+    .newsleft-top span {
+        height: 50px;
+        float: right;
+        line-height: 40px;
+        text-align: center;
+        margin-right: 40px;
+    }
+
+.newsleft-bottom ul {
+    display: none;
+    margin-left: 20px;
+}
+
+    .newsleft-bottom ul:nth-child(1) {
+        display: block;
+    }
+
+    .newsleft-bottom ul li {
+        height: 38px;
+        line-height: 38px;
+        list-style: disc !important;
+    }
+
+        .newsleft-bottom ul li p {
+            float: left;
+        }
+
+            .newsleft-bottom ul li p a:hover {
+                color: #47a1ed;
+            }
+
+        .newsleft-bottom ul li span {
+            float: right;
+            margin-right: 40px;
+        }
+
+.newsright {
+    width: 50%;
+    height: 440px;
+    margin-top: 50px;
+    background: #01AAED;
+    float: right;
+}
+
+.newsright2 {
+    float: left;
+}
+
+.newsright img {
+    height: 100%;
+    width: 100%;
+}
+/*.briefimg img{
+	height: 334px;
+}*/
+
+.cooperationContent {
+    width: 1200px;
+    height: 300px;
+    margin: auto;
+    overflow: auto;
+    margin-top: 40px;
+}
+
+    .cooperationContent ul {
+        padding: 0 15px;
+    }
+
+        .cooperationContent ul li {
+            float: left;
+            height: 86px;
+            width: 206px;
+            margin: 10px;
+            border: 2px solid #e6e6e6;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+            .cooperationContent ul li img {
+                vertical-align: middle;
+                margin-top: 20px;
+            }
+
+/*========================项目业登录页面===================================
+/*===============contentCate===================*/
+.contentCate {
+    width: 1200px;
+    height: 290px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.contentCate-sub {
+    padding-top: 15px;
+    height: 290px;
+    width: 100%;
+}
+
+    .contentCate-sub li {
+        position: relative;
+        cursor: pointer;
+        text-align: center;
+        float: left;
+        width: 200px;
+        height: 170px;
+        border: 1px solid #d8d8d8;
+        margin: 0 49px;
+        margin-top: 46px;
+    }
+
+        .contentCate-sub li i {
+            display: block;
+            height: 120px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .contentCate-sub li img {
+            margin-top: 30px;
+            height: 60px;
+            width: 74px;
+        }
+
+        .contentCate-sub li p {
+            color: #666666;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            background: #d8d8d8;
+        }
+
+        .contentCate-sub li:last-child {
+            border: none !important;
+            /*margin-top: 36px;*/
+        }
+
+            .contentCate-sub li:last-child img {
+                height: 86px;
+                width: 82px;
+                margin-left: 118px;
+                margin-bottom: 20px;
+            }
+
+        .contentCate-sub li span {
+            font-size: 20px;
+            color: red;
+            float: left;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            background: #fff;
+            opacity: 0.9;
+            line-height: 120px;
+            height: 120px;
+            width: 100%;
+            display: none;
+        }
+
+    .contentCate-sub .lastEight i {
+        box-sizing: border-box;
+        border: 1px solid #0d90eb;
+    }
+
+    .contentCate-sub .lastEight p {
+        background: #0d90eb;
+        color: #fbfdff;
+    }
+
+.todoList {
+    margin-top: 25PX;
+    width: 1200px;
+    height: 514px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.todoListleft {
+    width: 50%;
+    height: 514px;
+    float: left;
+    overflow: auto;
+}
+
+.todoListleft-title {
+    height: 62px;
+    width: 588px;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+    .todoListleft-title h3 {
+        position: relative;
+        width: 130px;
+        text-indent: 28px;
+        font-size: 20px;
+        font-weight: bold;
+        float: left;
+        height: 60px;
+        border-bottom: 2px solid #bdbbbb;
+        color: #bdbbbb;
+        line-height: 60px;
+    }
+
+        .todoListleft-title h3 i {
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 8px solid #3ab107;
+            position: absolute;
+            left: 50%;
+            bottom: -8px;
+        }
+
+    .todoListleft-title span {
+        float: right;
+        height: 100%;
+        line-height: 60px;
+    }
+
+.todoListleft ul {
+    margin-top: 14px;
+    height: 382px;
+    width: 588px;
+    border: 1px solid #d8d8d8;
+}
+
+    .todoListleft ul li {
+        height: 38px;
+        line-height: 38px;
+        cursor: pointer;
+    }
+
+        .todoListleft ul li:hover {
+            color: #0d90eb;
+        }
+
+    .todoListleft ul p {
+        text-indent: 4px;
+        float: left;
+    }
+
+    .todoListleft ul li span {
+        float: right;
+        width: 70px;
+        text-align: center;
+    }
+
+.todoListright {
+    width: 50%;
+    height: 514px;
+    float: right;
+    overflow: auto;
+    text-align: center;
+}
+
+.todoListright-title {
+    position: relative;
+    height: 62px;
+    width: 588px;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+    .todoListright-title h3 {
+        margin-left: 235px;
+        width: 130px;
+        font-size: 20px;
+        font-weight: bold;
+        height: 58px;
+        color: #0c90eb;
+        line-height: 58px;
+    }
+
+    .todoListright-title .line {
+        display: block;
+        bottom: 0;
+        left: 278px;
+        position: absolute;
+        width: 36px;
+        border-bottom: 2px solid #cf3439;
+    }
+
+.todoListright ul {
+    height: 382px;
+    width: 588px;
+    margin-top: 15px;
+}
+
+    .todoListright ul li {
+        float: left;
+        width: 84px;
+        height: 191px;
+        margin-left: 74px;
+    }
+
+    .todoListright ul .liother {
+        margin-left: 25px;
+    }
+
+    .todoListright ul li p {
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+.modelShow {
+    height: 810px;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.selectModel {
+    height: 82px;
+    width: 100%;
+}
+
+    .selectModel p {
+        padding-top: 30px;
+    }
+
+    .selectModel select {
+        width: 260px;
+        height: 30px;
+    }
+
+    .selectModel p span {
+        margin-left: 770px;
+    }
+
+.modelImg {
+    height: 728px;
+    width: 100%;
+}
+
+    .modelImg img {
+        width: 100%;
+        padding-top: 15px;
+    }
+
+.modelPart {
+    height: 464px;
+    width: 100%;
+    background: #fbfbfc;
+}
+
+.BIMmodel {
+    height: 464px;
+    width: 1200px;
+    margin: 0 auto;
+}
+
+    .BIMmodel .BIMmodelSub {
+        height: 102px;
+        width: 100%;
+    }
+
+.modelTitle {
+    font-size: 22px;
+    font-weight: bold;
+    color: #0c90eb;
+    float: left;
+    height: 100%;
+    line-height: 102px;
+}
+
+.more {
+    float: right;
+    height: 100%;
+    line-height: 102px;
+}
+
+.BIMmodelSwon {
+    overflow: hidden;
+    height: 362px;
+    width: 100%;
+}
+
+.divider {
+    background: #fbfbfc !important;
+    height: 362px !important;
+}
+
+.BIMmodelSwon .layui-carousel-arrow {
+    top: 30% !important;
+}
+
+.BIMmodelSwon ul li {
+    height: 100%;
+    width: 25%;
+    float: left;
+}
+
+    .BIMmodelSwon ul li img {
+        width: 242px;
+        height: 200px;
+    }
+
+    .BIMmodelSwon ul li:nth-child(1) img, .BIMmodelSwon ul li:nth-child(1) p {
+        margin-left: 0;
+    }
+
+    .BIMmodelSwon ul li:nth-child(2) img, .BIMmodelSwon ul li:nth-child(2) p {
+        margin-left: 19px;
+    }
+
+    .BIMmodelSwon ul li:nth-child(3) img, .BIMmodelSwon ul li:nth-child(3) p {
+        margin-left: 38px;
+    }
+
+    .BIMmodelSwon ul li:nth-child(4) img, .BIMmodelSwon ul li:nth-child(4) p {
+        margin-left: 58px;
+    }
+
+.BIMmodelSwon .layui-carousel-ind {
+    display: none;
+}
+
+.BIMmodelSwon ul li p {
+    width: 242px;
+    height: 50px;
+    text-align: center;
+    font-size: 16px;
+    background: #fff;
+}
+
+    .BIMmodelSwon ul li p span {
+        height: 70px;
+        line-height: 30px;
+    }
+
+        .BIMmodelSwon ul li p span i {
+            color: #91c4f3;
+        }
+/*==================================*/
+
+.Listproblems h3 {
+    color: #f7343b;
+    border-bottom: 2px solid #f7343b;
+    background: url(/Resource/images/list1_05.png) no-repeat 4px center;
+}
+
+    .Listproblems h3 i {
+        border-top: 8px solid #f7343b;
+    }
+
+.spervisionlog h3 {
+    border-bottom: 2px solid #0c90eb;
+    color: #0c90eb;
+    background: url(/Resource/images/list3_06.jpg) no-repeat 4px center;
+}
+
+    .spervisionlog h3 i {
+        border-top: 8px solid #0c90eb;
+    }
+
+.breadcrumb {
+    width: 1200px;
+    padding: 0;
+    margin: auto;
+    height: 30px;
+}
+
+    .breadcrumb ul li {
+        float: left;
+        line-height: 30px;
+        font-size: 15px;
+        font-weight: 500;
+    }
+        .breadcrumb ul li a {
+            padding: 0 5px;
+            font-size: 12px;
+        }

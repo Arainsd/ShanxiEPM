@@ -1,0 +1,191 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TrainView
+@{
+    ViewBag.Title = "查看质量培训";
+}
+
+<body>
+    <div class="contentData">
+        <div class="tab">
+            <div class="long-text">
+                <label for="PrejectName">&nbsp;项目名称&nbsp;:</label>
+                <input type="text" id="ProjectName" name="ProjectName" value="@Model.ProjectName" disabled />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+            </div>
+            <div class="long-text">
+                <label for="Title">&nbsp;培训标题&nbsp;:</label>
+                <input type="text" name="Title" id="Title" value="@Model.Title" disabled />
+
+            </div>
+            <div class="intro">
+                <div><label for="Content">&nbsp;培训内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" name="Content" id="Content" disabled>@Model.Content</textarea>
+                </div>
+            </div>
+            <div class="long-text">
+                <label for="TrainCompanyName">&nbsp;培训单位&nbsp;:</label>
+                <input type="text" name="TrainCompanyName" id="TrainCompanyName" value="@Model.TrainCompanyName" disabled />
+                <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" name="TrainCompanyId" id="TrainCompanyId" value="@Model.TrainCompanyId" />
+
+            </div>
+            <div class="long-text">
+                <label>&nbsp;培训人员&nbsp;:</label>
+                <input type="text" name="TrainUserName" id="TrainUserName" value="@Model.TrainUserName" disabled />
+                <i class="pic iconfont ee" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" name="TrainUserId" id="TrainUserId" value="@Model.TrainUserId" />
+            </div>
+            <div class="long-text">
+                <label>&nbsp;培训参与单位&nbsp;:</label>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:120px;width:88%">
+                    <thead>
+                        <tr>
+                            <th width="50">单位编码</th>
+                            <th width="50">单位名称</th>
+                            <th width="30">单位类型</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TrainCompany.Count > 0)
+                        {
+                            foreach (var item in Model.TrainCompany)
+                            {
+                                <tr>
+                                    <td>@item.CompanyCode</td>
+                                    <td>@item.CompanyName</td>
+                                    <td>@(((RoleType)(Enum.Parse(typeof(RoleType), item.CompanyType))).GetText())</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <input type="hidden" name="CompanyIds" id="CompanyIds" value="@Model.CompanyIds" />
+            </div>
+            <div class="short-text">
+                <label>&nbsp;开始时间&nbsp;:</label>
+                <input type="text" id="StartTime" onClick="WdatePicker({ el: 'StartTime' })" value="@(Model.StartTime == null ? "" : Convert.ToDateTime(Model.StartTime).ToString("yyyy-MM-dd"))" disabled>
+                <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="short-text">
+                <label>&nbsp;结束时间&nbsp;:</label>
+                <input type="text" id="EndTime" onClick="WdatePicker({ el: 'EndTime' })" value="@(Model.EndTime == null ? "" : Convert.ToDateTime(Model.EndTime).ToString("yyyy-MM-dd"))" disabled>
+                <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="upload" style="margin-bottom:0px;">
+                <div><label>&nbsp;附件上传&nbsp;:</label></div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow" id="fileDetail"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+            <div class="button-group btn-center">
+                @if (Model.State == (int)ConfirmState.WaitConfirm)
+                {
+                    <button type="button" class="Audit checkright" data-module="QualityTrain" data-right="Check">确认</button>
+                    <button type="button" class="Reject checkright" data-module="QualityTrain" data-right="UnCheck">驳回</button>
+                    <button type="button" class="exchange">沟通</button>
+                }
+                else if (Model.State == (int)ConfirmState.ConfirmFailure)
+                {
+                    <button type="button" class="Discard checkright" data-module="QualityTrain" data-right="Invalid">废弃</button>
+                    <button type="button" class="exchange">沟通</button>
+                }
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['layer', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_Train', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="' + FileDownLoadURL + item.FileGuid + '" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + Number(item.Size / 1024).toFixed(2) + 'kb</div>';
+                                odiv += '<div class="fileComplete"><img src="/Resource/images/default_ok.png" alt="完成" /></div>';
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            }
+                        })
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //废弃
+            $(".Discard").click(function () {
+                var id = '@Model.Id';
+                var state = "Discarded";
+                if (id != "") {
+                    parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                        $.post("UpdateState", { id: id, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                                window.location.href = "/Train/IndexZL";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+
+            //驳回
+            $(".Reject").click(function () {
+                var id = '@Model.Id';
+                var state = "";
+                var state = "ConfirmFailure";
+                parent.layer.prompt({
+                    formType: 2,
+                    value: '',
+                    title: '请输入驳回理由'
+                }, function (value, index, elem) {
+                    $.post("UpdateState", { id: id, reason: value, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Train/IndexZL";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            });
+            //确认
+            $(".Audit").click(function () {
+                var id = '@Model.Id';
+                var state = "Confirm";
+                if (id != "") {
+                    parent.layer.confirm("是否确认？", { icon: 3 }, function () {
+                        $.post("UpdateState", { id: id, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("确认成功", { time: 2000, icon: 1 });
+                                window.location.href = "/Train/IndexZL";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+            //沟通
+            $('.exchange').on('click', function () {
+                var projectName = $("#ProjectName").val();
+                var projectId = $("#ProjectId").val();
+                window.location.href = "/Question/Add?businType=QualityTrain&projectName=" + projectName + "&projectId=" + projectId + "&BusinessId=@Model.Id";
+            });
+        });
+    </script>
+</body>

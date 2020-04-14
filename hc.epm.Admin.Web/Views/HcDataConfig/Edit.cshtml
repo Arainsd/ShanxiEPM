@@ -1,0 +1,294 @@
+﻿@using hc.epm.DataModel.Business;
+@model Epm_DataConfig
+@{
+    ViewBag.Title = "资料修改";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal bv-form" id="mainForm">
+            <div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>资料编码：</label>
+                <div class="col-lg-9 col-sm-9">
+                    <input type="text" class="form-control" value="@Model.Code" name="Code" id="Code" placeholder="请输入资料编码" style="margin-left:-4px;" data-bv-field="Code"><i class="form-control-feedback" data-bv-icon-for="Code" style="display: none;"></i>
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Code" data-bv-result="NOT_VALIDATED" style="display: none;">标题不能为空</small>
+                    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>资料名称：</label>
+                <div class="col-lg-9 col-sm-9">
+                    <input type="text" class="form-control" value="@Model.Name" name="Name" id="Name" placeholder="请输入资料名称" style="margin-left:-4px;" data-bv-field="Name"><i class="form-control-feedback" data-bv-icon-for="Name" style="display: none;"></i>
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Name" data-bv-result="NOT_VALIDATED" style="display: none;">标题不能为空</small>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 mb25" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>资料说明 : </label>
+                <div class="col-lg-9 col-sm-9" style="padding-left: 10px; padding-right: 20px;">
+                    <textarea name="Description" id="Description" class="form-control" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" placeholder="请输入资料说明">@Model.Description</textarea><i class="form-control-feedback" data-bv-icon-for="Description" style="display: none;"></i>
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Description" data-bv-result="NOT_VALIDATED" style="display: none;">说明不能为空</small>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12">
+                <label class="col-lg-2 col-sm-2 control-label" style="margin-left:-3px;"><em class="required">*</em>是否启用 : </label>
+                <div class="col-lg-3 col-sm-3">
+                    <select class="form-control selectpicker  show-tick" id="State" name="State" tabindex="-98">
+                        @if (@Model.State == 1)
+                        {
+                            <option value="true" selected>启用</option>
+                            <option value="false">禁用</option>
+                        }
+                        else {
+                            <option value="false" selected>禁用</option>
+                            <option value="true">启用</option>
+                        }
+                    </select>
+                </div>
+                <label class="col-lg-3 col-sm-3 control-label"><em class="required">*</em>是否必填 : </label>
+                <div class="col-lg-3 col-sm-3">
+                    <select class="form-control selectpicker  show-tick" id="IsRequire" name="IsRequire" tabindex="-98">
+                        @if (@Model.IsRequire == true)
+                        {
+                            <option value="true" selected>是</option>
+                            <option value="false">否</option>
+                        }
+                        else {
+                            <option value="false" selected>否</option>
+                            <option value="true">是</option>
+                        }
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12">
+                <label class="col-lg-2 col-sm-2 control-label" style="margin-left:-3px;"><em class="required"></em>附件上传 : </label>
+                <div class="col-lg-9 col-sm-9" style="padding-left: 10px; padding-right: 20px;">
+                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                </div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin-bottom:10px;">
+                <label class="layui-form-label" style="font-weight:bold;margin-right:10px;"><em class="required">*</em>附件列表：</label>
+                <div style="width:100%;">
+                    <table class="layui-table" style="width:80%;text-align:center;word-wrap:break-word;word-break:break-all;">
+                        <thead>
+                            <tr>
+                                <th class="table-center">附件名称</th>
+                                <th width="90" class="table-center">附件格式</th>
+                                <th width="100" class="table-center">大小</th>
+                                <th width="90" class="table-center">上传时间</th>
+                                <th width="70" class="table-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fileList"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6" style="text-align:right;margin-bottom:10px">
+                    <input type="button" name="save" id="save" lay-submit="" lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save">
+                </div>
+                <div class="col-lg-6 col-sm-6" style="margin-bottom:10px">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="cancel layui-btn layui-btn-small button-base bg-cancel ">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Files/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var name = obj.Name;
+                        var type = name.split(".");
+                        var odiv = '<tr>';
+                        odiv += '<td style=\"text-align:center \">' + type[0] + '</td>';
+                        odiv += '<td>' + '.' + type[1] + '</td>';
+                        odiv += '<td>' + obj.Size + '</td>';
+                        odiv += '<td>' + new Date().toLocaleDateString() + '</td>';
+                        odiv += '<td style=\"text-align:center\"><a class=\"delete-file\" data-val=' + obj.GuidId + ' style="color:red;cursor:pointer">删除</a></td></tr>';
+                        $('#fileList').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+    });
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //获取图片附件
+        $.post("/Files/GetFileList", { tableName: 'Epm_DataConfig', id: '@Model.Id' }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    data.Data.forEach(function (item, index, arr) {
+                        var obj = {};
+                        obj.Name = item.Name;
+                        obj.GuidId = item.GuidId;
+                        obj.Size = item.Size;
+                        obj.Group = item.Group;
+                        obj.Url = item.Url;
+                        obj.TableColumn = item.TableColumn;
+                        obj.ImageType = item.ImageType;
+                        fileDataArray.push(obj);
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+
+                        if (item.ImageType == null) {
+                            var time = item.OperateTime;
+                            var date = new Date(parseInt(time.slice(6)));
+                            var result = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+
+                            var tyep = item.Name.split(".");
+                            var odiv = '<tr>';
+                            odiv += '<td style=\"text-align:center\"><a href="' + FileDownLoadURL + item.GuidId + '" class="downloadFile">' + tyep[0] + '</a></td>';
+                            odiv += '<td>' + '.' + tyep[1] + '</td>';
+                            odiv += '<td>' + plupload.formatSize(item.Size) + '</td>';
+                            odiv += '<td>' + result + '</td>';
+                            odiv += '<td style=\"text-align:center\"><a class=\"delete-file\" data-val=' + item.GuidId + ' style="color:red;cursor:pointer">删除</a><input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '"></td></tr>';
+                            $('#fileList').append(odiv);
+                        }
+                    });
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+
+        //删除附件
+        $("#fileList").on('click', 'a.delete-file', function () {
+            $(this).parents("tr").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+        //下载附件
+        $("body").on(".click", "tbody .downloadFile", function () {
+            var group = $(this).parents("tr").find(".hiddenArea").data("group");
+            var path = $(this).parents("tr").find(".hiddenArea").data("url");
+            var fileName = $(this).parents("tr").find(".hiddenArea").data("filename");
+            window.location.href = "/Files/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+
+        });
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Code: {
+                    validators: {
+                        notEmpty: {
+                            message: '资料编号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '资料编号长度不能超过50字符'
+                        },
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '资料名称不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '资料名称不能超过100字符'
+                        },
+                    }
+                },
+                Description: {
+                    validators: {
+                        notEmpty: {
+                            message: '资料说明不能为空'
+                        }
+                    }
+                },
+            }
+        });
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            var files = $("#fileDataJsonFile").val();
+            if (files == "" || files == null) {
+                parent.layer.alert("请上传附件", { icon: 2 });
+                return;
+            }
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("资料编辑成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.window.frames["mainFrame"].location.reload();
+                            console.log(data.name)
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return true;
+            } else {
+                parent.layer.alert("请检查必填项是否填写完整。", { icon: 1 });
+            }
+            return false;
+        });
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>

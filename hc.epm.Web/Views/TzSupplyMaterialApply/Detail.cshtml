@@ -1,0 +1,273 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@using hc.epm.DataModel.Business;
+@model Epm_TzSupplyMaterialApply
+@{
+    ViewBag.Title = "甲供物资申请详情";
+}
+
+
+<style>
+    .fr-ta {
+        width: 100%;
+    }
+
+    .ou-ta div {
+        width: 100px;
+    }
+
+    .tab-conten input[type=text], .tab-conten select, .totalamont {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid #c5c5c5;
+        box-sizing: border-box;
+    }
+
+    .tab-conten input[type=number] {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid #c5c5c5;
+        box-sizing: border-box;
+    }
+
+    .fr-ta input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-icon i {
+        font-size: 24px;
+    }
+
+        .tab-icon i:hover {
+            cursor: pointer;
+        }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>申请信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.ApplyTitle</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ApplyUserName</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ApplyTime</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.ApplyDepartment</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同编码</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ContractCode</div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同报审序号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ContractNumber</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.Supplier</div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.SupplierTel</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ProjectName</div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">批复文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ApprovalNo</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>物资信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <table class="fr-ta" style="word-break:break-all;word-wrap:break-word;">
+                                <thead>
+                                    <tr class="ou-ta">
+                                        <th><div style="width:40px;">序号</div></th>
+                                        <th><div>物资种类</div></th>
+                                        <th><div>品名</div></th>
+                                        <th><div>规格</div></th>
+                                        <th><div>单价</div></th>
+                                        <th><div>数量</div></th>
+                                        <th><div>金额</div></th>
+                                        <th><div>供应商名称</div></th>
+                                        <th><div>备注</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="addtab">
+                                    @{
+                                        var index=0;
+                                    }
+                                     @if (Model.TzSupMatApplyList != null && Model.TzSupMatApplyList.Count() > 0)
+                                     {
+                                         foreach (var item in Model.TzSupMatApplyList)
+                                         {
+                                             index++;
+                                            <tr class="tab-conten">
+                                                <td class="Sort">@index</td>
+                                                <td>@item.SupMatManagement</td>
+                                                <td>@item.ProductName</td>
+                                                <td>@item.Specification</td>
+                                                <td>@item.UnitPrice</td>
+                                                <td>@item.Number</td>
+                                                <td>@item.Money</td>
+                                                <td>@item.SupplierName</td>
+                                                <td>@item.Remark</td>
+                                            </tr>
+                                         }
+                                     }
+                                 
+
+                                </tbody>
+                                <tr style="background-color:#e4e4e4;">
+                                    <td colspan="2">合计</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="text" name="TotleNum" class="totalamont" id="allNumber" style="color:red;border:none;" readonly value="@Model.TotleNum" /></td>
+                                    <td><input type="text" name="TotleMoney" class="totalamont" id="totalamont" style="color:red;border:none;" readonly value="@Model.TotleMoney.ToString("0.00")" /></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>收件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+
+                    <tr>
+
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">收件人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ArrivalContacts</div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">收件电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.ArrivalContactsTel</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">收件地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.ArrivalAddress</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="module-div">
+            <h4>下一步信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.LeadershipName</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+    </form>
+</div>
+<script>
+
+
+    //返回
+    $("#close").click(function () {
+        window.location.href = "/TzSupplyMaterialApply/Index";
+    });
+
+
+</script>
+
+
+
+
+

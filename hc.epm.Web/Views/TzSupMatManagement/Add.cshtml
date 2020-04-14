@@ -1,0 +1,248 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+
+@{
+    ViewBag.Title = "甲供物资管理";
+}
+
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+<style>
+    .box {
+        margin-bottom: 20px !important;
+    }
+
+        .box a {
+            padding: 0 5px;
+            line-height: 20px;
+        }
+
+    .breadcrumb {
+        display: none;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <div class="box" style="width: 1200px; padding: 0; margin: auto; height: 30px; background-color:#f5f5f5;"><img src="/Resource/images/ic_home.png" /> 您的位置：<a href="javascript:void(0)" target="_self" onclick="jump()">甲供物资管理</a> > <a>新增</a></div>
+    <form class="form-horizontal" id="mainForm">
+
+        <div class="module-div">
+            <h4>供应商信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title"><i class="color_red_x">*</i>供应商</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="SupplierName" id="SupplierName" class="form-control" style="display:inline-block;width:80%;" placeholder="请选择供应商" readonly />
+                                <div class="btn-upload">
+                                    <input type="button" id="selSupplie" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择供应商" />
+                                    <input type="hidden" name="SupplierId" class="SupplierId" />
+                                    <input type="hidden" name="SupplierCode" class="SupplierCode" />
+                                </div>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">供应商联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="SupplierContacts">---</div>
+                            <input type="hidden" name="SupplierContacts" class="SupplierContacts" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">供应商电话</span>
+                        </td>
+                        <td class="td-div">
+                            @*<div class="SupplierTel" name="SupplierTel"></div>*@
+                            @*<input type="hidden" name="SupplierTel" class="SupplierTel" />*@
+                            <div class="form-group">
+                                <input id="SupplierTel" type="text" name="SupplierTel" class="form-control " />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">供应商地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            @*<div class="SupplierAddress">--</div>*@
+                            @*<input type="hidden" name="SupplierAddress" class="SupplierAddress" />*@
+                            <div class="form-group">
+                                <input id="SupplierAddress" type="text" name="SupplierAddress" class="form-control " />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>物资信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black"><i class="color_red_x">*</i>物资种类</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="MaterialCategory" class="form-control " placeholder="请输入物资种类" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black"><i class="color_red_x">*</i>单价</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="UnitePrice" class="form-control " placeholder="请输入单价" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black"><i class="color_red_x">*</i>品名</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ProductName" class="form-control " placeholder="请输入品名" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">规格</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="Specification" class="form-control " placeholder="请输入规格" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+        </div>
+
+    </form>
+</div>
+<script>
+    //表单验证
+    window.onload = function () {
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],
+
+            fields: {
+                SupplierName: {
+                    validators: {
+                        notEmpty: {
+                            message: '供应商不能为空'
+                        },
+
+                    }
+                },
+                MaterialCategory: {
+                    validators: {
+                        notEmpty: {
+                            message: '物资种类不能为空'
+                        }
+                    }
+                },
+                ProductName: {
+                    validators: {
+                        notEmpty: {
+                            message: '品名不能为空'
+                        }
+                    }
+                },
+
+                UnitePrice: {
+                    validators: {
+                        notEmpty: {
+                            message: '单价不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: "单价格式输入错误"
+                        },
+                    }
+                },
+
+            }
+        });
+    }
+    $("#close").click(function () {
+        window.location.href = '/TzSupMatManagement/Index';
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择供应商
+        $("#selSupplie").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择供应商"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectServiceCustomer',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#SupplierName").val(obj.data[0].Name);
+                        $(".SupplierId").val(obj.data[0].Id);
+                        $(".SupplierCode").val(obj.data[0].Code);
+                        $(".SupplierContacts").val(obj.data[0].LinkMan).text(obj.data[0].LinkMan);
+                        //$(".SupplierTel").val(obj.data[0].Phone).text(obj.data[0].Phone);
+                        //$(".SupplierAddress").val(obj.data[0].Address).text(obj.data[0].Address);
+
+                        $("#SupplierTel").val(obj.data[0].Phone);
+                        $("#SupplierAddress").val(obj.data[0].AddressName);
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $("#save").click(function () {
+            var search = $("#mainForm").serialize();
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/TzSupMatManagement/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+
+

@@ -1,0 +1,96 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model Base_User
+@{
+    ViewBag.Title = "用户详情";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<table class="layui-table detail-table">
+    <tbody>
+        <tr>
+            <td width="120px" class="table-right">用户编码</td>
+            <td width="250px" class="table-left">@Model.UserCode</td>
+            <td width="120px" class="table-right">用户名</td>
+            <td width="250px" class="table-left">@Model.UserName</td>
+        </tr>
+        <tr>
+            <td width="120px" class="table-right">性别</td>
+            @if (@Model.Sex)
+            {
+                <td width="250px" class="table-left">男</td>
+            }
+            else {
+                <td width="250px" class="table-left">女</td>
+            }
+            <td width="120px" class="table-right">账号</td>
+            <td width="250px" class="table-left">@Model.UserAcct</td>
+        </tr>
+        <tr>
+            <td width="120px" class="table-right">锁定状态</td>
+            @if (Model.IsLock == true)
+            {
+                <td width="250px" class="table-left">已锁定</td>
+            }
+            else {
+                <td width="250px" class="table-left">未锁定</td>
+            }
+            <td width="120px" class="table-right">所属企业</td>
+            <td width="250px" class="table-left" id="companyName"></td>
+        </tr>
+        <tr>
+            <td width="120px" class="table-right">联系电话</td>
+            <td width="250px" class="table-left">@Model.Phone</td>
+            <td width="120px" class="table-right">电子邮箱</td>
+            <td width="250px" class="table-left">@Model.Email</td>
+        </tr>
+        <tr>
+            <td width="120px" class="table-right">微信</td>
+            <td width="250px" class="table-left">@Model.WebChat</td>
+            <td width="120px" class="table-right">QQ</td>
+            <td width="250px" class="table-left">@Model.QQ</td>
+        </tr>
+        <tr>
+            <td width="120px" class="table-right">头像</td>
+            <td colspan="3" class="table-left"><div style="width:100%;" id="fileList"></div></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="layui-form-item row btn-save bottom-20">
+    <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-save cancel" />
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+        //获取企业名称
+        $.post("/HcUser/GetCompanyName", { id: '@Model.CompanyId' }, function (data) {
+            if (data.Flag == 0) {
+                $("#companyName").text(data.Data.Name);
+            } else {
+                parent.layer.alert(data.Message, { icon: 3 })
+            }
+        });
+        //获取图片附件
+        $.post("/Files/GetFileList", { tableName: 'Base_User', id: '@Model.SId' }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    for (var i = 0; i < data.Data.length; i++) {
+                        if (item.ImageType == null) {
+                            var odiv = '<img src="' + data.Data[i].Url + '" alt="Logo" id="ImgShow" style="width: 100px;height: 100px;" />';
+                            $('#fileList').html(odiv);
+                        }
+                    }
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+    });
+</script>
+

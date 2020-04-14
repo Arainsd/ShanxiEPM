@@ -1,0 +1,89 @@
+﻿<!--土地出让协议谈判详情-->
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model Epm_TzLandNegotiation
+
+<div class="boxs">
+    @*项目谈判信息*@
+    <div class="module-div">
+        <h4>项目谈判信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <td class="table_title">谈判时间：</td>
+                    <td class="td-div">
+                        <div>@(Convert.ToDateTime(Model.TalkTime).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                    <td class="table_title">谈判地点：</td>
+                    <td class="td-div">
+                        <div>@Model.TalkAdress</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">土地竞拍支付第一笔出让金：</td>
+                    <td class="td-div">
+                        <div>@Model.Fees.ToString("0.00") 万元</div>
+                    </td>
+                    <td class="table_title">第一笔出让金日期：</td>
+                    <td class="td-div">
+                        <div>@(Convert.ToDateTime(Model.FeesTime).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">我方谈判人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.OurNegotiationers</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">对方谈判人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.OtherNegotiationers</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">谈判结果：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.TalkResultName</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @*附件信息*@
+    <div class="module-div">
+        <h4>附件信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <th>序号</th>
+                    <th>附件名称</th>
+                    <th>附件类型</th>
+                    <th>操作</th>
+                </tr>
+                @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                {
+                    foreach (var item in Model.TzAttachs)
+                    {
+
+                        <tr id="${obj.GuidId}">
+                            <td><span class="font-black">@item.Sort</span></td>
+                            <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                            <td><span class="font-black">@item.TypeName</span></td>
+                            <td class="td-div" style="text-align:center">
+                                <a class="fileDel downloadFile" href="javascript:void(0)" data-id="@item.Id" data-url="@item.FilePath" data-name="@item.Name" data-typeno="@item.TypeNo" data-typename="@item.TypeName" style="color:#337ab7;">下载</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">暂无附件</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

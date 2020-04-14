@@ -1,0 +1,71 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel
+@model List<SuppListView>
+@{
+    ViewBag.Title = "SupplyList";
+}
+
+<div class="contentData">
+    <div class="list-tab" style="margin-top:20px;" id="supplywrap">
+        <table class="datalist" id="" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <td colspan="8" style="font-size:18px;">供应商<span style="color:red;" class="supplucount">@ViewBag.Total</span>个</td>
+                </tr>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">供应商名称</th>
+                    <th width="100">供应商电话</th>
+                    <th width="100">物资种类</th>
+                    <th width="100">品名</th>
+                    <th width="100">规格</th>
+                    <th width="100">采购数量</th>
+                    <th width="100">验收数量</th>
+                </tr>
+            </thead>
+
+            <tbody id="supply">
+                @{
+                    int index = 0;
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        int count = item.children.Count();
+                        <tr>
+                            <td rowspan="@count">@index</td>
+                            <td rowspan="@count">@item.SupplierName</td>
+                            <td rowspan="@count">@item.Phone</td>
+
+                            @for (var j = 0; j < item.children.Count(); j++)
+                            {
+                                var a = item.children[j];
+                                if (j > 0)
+                                {
+                                <tr><td>@a.SupMatManagement</td><td>@a.ProductName</td><td>@a.Specification</td><td>@a.Number</td><td>@a.AcceptNumber</td></tr>
+                                }
+                                else {
+                                <td>@a.SupMatManagement</td>
+                                <td>@a.ProductName</td>
+                                <td>@a.Specification</td>
+                                <td>@a.Number</td>
+                                <td>
+                                    @a.AcceptNumber
+                                </td>
+
+                                }
+
+
+                            }
+                            </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>

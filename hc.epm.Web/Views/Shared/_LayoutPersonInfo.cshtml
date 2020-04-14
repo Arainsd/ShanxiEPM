@@ -1,0 +1,286 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .container {
+        width: 1200px;
+        margin: 0 auto;
+    }
+
+    div {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        /* Firefox */
+        -webkit-box-sizing: border-box;
+        /* Safari */
+    }
+
+    #sidebar {
+        width: 20%;
+        min-height: 500px;
+    }
+
+        #sidebar #mine {
+            height: 135px;
+            padding: 30px;
+            background-image: url("/Resource/images/userbg_03.png");
+        }
+
+            #sidebar #mine span:nth-child(1) {
+                font-size: 25px;
+                color: #ffffff;
+                font-weight: 600;
+                display: block;
+            }
+
+            #sidebar #mine span:nth-child(2) {
+                margin: 5px 0 0 3px;
+                font-size: 18px;
+                color: #66baf6;
+                display: block;
+            }
+
+        #sidebar .lefttab {
+            margin-top: 20px;
+        }
+
+            #sidebar .lefttab a {
+                display: block;
+                box-sizing: border-box;
+                padding: 0 50px;
+                font-size: 16px;
+                height: 50px;
+                line-height: 50px;
+                letter-spacing: .5px;
+                color: #666666;
+            }
+
+    .active {
+        background: #ECF3F7 !important;
+        color: #48a1fe !important;
+    }
+
+    #main {
+        width: 79%;
+    }
+
+        #main .issue {
+            margin-left: 20px;
+        }
+
+        #main .search {
+            height: 85px;
+            line-height: 85px;
+            text-align: right;
+        }
+
+        #main table {
+            width: 100%;
+        }
+
+        #main .search input[type="text"] {
+            display: inline-block;
+            box-sizing: border-box;
+            border: 1px solid #999999;
+            padding: 0 20px;
+            width: 40%;
+            height: 40px;
+            font-size: 16px;
+            letter-spacing: .5px;
+        }
+
+        #main .search input[type="submit"] {
+            display: inline-block;
+            box-sizing: border-box;
+            border: 1px solid #48a1fe;
+            margin-left: -4px;
+            width: 85px;
+            height: 40px;
+            top: 1px;
+            background: #48a1fe;
+            font-size: 16px;
+            color: #ffffff;
+            letter-spacing: 2px;
+            line-height:40px;
+        }
+
+        #main thead {
+            background: #1493ec;
+            height: 50px;
+            line-height: 50px;
+        }
+
+            #main thead td {
+                text-align: center;
+                color: #ffffff;
+            }
+
+        #main tbody {
+            text-align: center;
+            margin: 20px;
+        }
+
+            #main tbody tr {
+                height: 45px;
+                line-height: 45px;
+            }
+
+
+                #main tbody tr td {
+                    color: #ADADAD;
+                }
+
+                    #main tbody tr td:nth-child(2) a {
+                        text-align: left;
+                        color: #666;
+                    }
+
+
+                    #main tbody tr td:nth-child(6) a {
+                        color: #666666;
+                    }
+
+        #main .update {
+            padding: 110px 0 0 230px;
+        }
+
+            #main .update > div {
+                height: 43px;
+                margin-bottom: 35px;
+            }
+
+                #main .update > div label,
+                #main .update > div input {
+                    box-sizing: border-box;
+                    display: inline-block;
+                    height: 100%;
+                    line-height: 43px;
+                }
+
+                #main .update > div label {
+                    font-size: 17px;
+                    color: #666666;
+                    width: 120px;
+                    text-align: right;
+                }
+
+                #main .update > div input {
+                    display: inline-block;
+                    color: #666666;
+                    box-sizing: border-box;
+                    padding: 20px;
+                    width: 330px;
+                    border-radius: 3px;
+                    border: 1px solid #dadada;
+                }
+
+                #main .update > div button {
+                    margin-top: 15px;
+                    margin-left: 220px;
+                    width: 110px;
+                    height: 100%;
+                    background: #1493EC;
+                    border: 1px solid #1493EC;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    letter-spacing: 1px;
+                    color: #ffffff;
+                }
+
+            #main .update .update-icon div:nth-child(1) {
+                width: 120px;
+                text-align: right;
+                padding-right: 20px;
+            }
+
+
+        #main .mine {
+            color: #333333;
+            font-size: 15px;
+        }
+
+            #main .mine .user {
+                height: 250px;
+                padding-top: 65px;
+                padding-left: 120px;
+            }
+
+            #main .mine .user-pic {
+                height: 120px;
+                width: 120px;
+                border-radius: 50%;
+                background: #5DA8AB;
+            }
+
+            #main .mine .user-infor {
+                margin-left: 30px;
+            }
+
+                #main .mine .user-infor li {
+                    height: 30px;
+                    line-height: 30px;
+                }
+
+            #main .mine .account-infor {
+                padding-left: 180px;
+            }
+
+                #main .mine .account-infor li {
+                    margin-bottom: 30px;
+                }
+
+                    #main .mine .account-infor li div {
+                        float: left;
+                        height: 43px;
+                        line-height: 43px;
+                    }
+
+                    #main .mine .account-infor li > div:nth-child(1) {
+                        width: 60px;
+                        text-align: justify;
+                    }
+
+                        #main .mine .account-infor li > div:nth-child(1) span {
+                            display: inline-block;
+                            /* Opera */
+                            padding-left: 100%;
+                        }
+
+                    #main .mine .account-infor li > div:nth-child(2) {
+                        width: 40px;
+                        padding-left: 10px;
+                    }
+
+                    #main .mine .account-infor li > div:nth-child(3) {
+                        padding-left: 25px;
+                        width: 330px;
+                        border: 1.2px solid #D8D8D8;
+                        border-radius: 3px;
+                    }
+
+    .account-infor li div:nth-child(3) {
+        background-color: #ddd;
+    }
+</style>
+
+@RenderSection("headerCss", required: false)
+
+<div id="" class="container c">
+    <div id="sidebar" class="fl">
+        <div id="mine">
+            <span>个人中心</span>
+            <span>PERSONAL</span>
+        </div>
+        <ul class="lefttab">
+            <li><a href="@Html.Raw(Url.Action("MyJob", "Home"))" class="@(ViewBag.SelectPage == "MyJob" ? "active" : "")">我的待办</a></li>
+            <li><a href="@Html.Raw(Url.Action("Message", "Home"))" class="@(ViewBag.SelectPage == "Message" ? "active" : "")">我的消息</a></li>
+            @*<li><a href="@Html.Raw(Url.Action("UpdatePwd", "Home"))" class="@(ViewBag.SelectPage == "UpdatePwd" ? "active" : "")">修改密码</a></li>*@
+            <li><a href="@Html.Raw(Url.Action("PersonInfo", "Home"))" class="@(ViewBag.SelectPage == "PersonInfo" ? "active" : "")">个人信息</a></li>
+        </ul>
+    </div>
+    <div id="main" class="fl c">
+        @RenderBody()
+    </div>
+</div>
+
+@RenderSection("scripts", required: false)

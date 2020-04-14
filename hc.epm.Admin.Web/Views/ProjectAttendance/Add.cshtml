@@ -1,0 +1,246 @@
+﻿@using hc.epm.ViewModel
+@using hc.epm.DataModel.Basic
+@model AttendanceView
+
+@{
+    ViewBag.Title = "考勤设置";
+    List<Base_TypeDictionary> dicList = ViewBag.list;
+}
+<style>
+    .form-control {
+        width: 315px !important;
+        display: inline-block !important;
+    }
+
+    .stylabel {
+        width: 190px;
+        font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .dateTr:not(:first-child) {
+        margin-top: 20px;
+    }
+
+    .align {
+        margin-left: 40px;
+        color: #a4a4a4;
+    }
+
+    .aligns {
+        margin-left: 16px;
+        color: #a4a4a4;
+    }
+</style>
+
+<div class="content-right date-wrap fl c">
+    <div class="main mt5">
+        <form class="form-horizontal" id="mainForm" style="margin-top:20px;">
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>考勤岗位：</label>
+                <div class="col-lg-10 col-sm-10 post">
+                    @if (dicList.Any())
+                    {
+                        foreach (var item in dicList)
+                        {
+                            if (Model != null && Model.AttendanceList != null && Model.AttendanceList.Contains(item.No))
+                            {
+                                <label class="stylabel" title="@item.Name"><input type="checkbox" name="Attendances" value="@item.No" checked /> @item.Name</label>
+                            }
+                            else
+                            {
+                                <label class="stylabel" title="@item.Name"><input type="checkbox" name="Attendances" value="@item.No" /> @item.Name</label>
+                            }
+                        }
+                    }
+                    <input type="hidden" name="Attendance" value="" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>考勤次数：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" class="form-control" name="num" id="num" placeholder="请输入考勤次数" value="@(Model.Num??2)" />
+                    <span class="align">(注：设置每天需打卡的次数，设置后请设置对应的打卡时间。)</span>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>考勤误差值：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" name="MarginError" id="MarginError" placeholder="" autocomplete="off" class="form-control" style="width: 20%!important" value="@(Model.MarginError ?? 0)" /> 分钟
+                    <span class="align">(注：设置考勤误差，在此范围内打卡为正常。)</span>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>考勤时间：</label>
+                <div class="col-lg-10 col-sm-10 AddClick">
+                    @if (Model.AttendanceTimeList != null)
+                    {
+                        foreach (var item in Model.AttendanceTimeList)
+                        {
+                            <div class="dateTr">
+                                <input type="text" name="AttendanceTimes" style="text-align: left;border-radius: 4px;" onchange="compute(this)" autocomplete="off" class="btn btn-default form-control AttendanceTime" value="@item" onclick="WdatePicker({ dateFmt: 'H:mm' })" placeholder="请选择时间" />
+                                <span class="align">允许的考勤时间：<span class="hint">时间-误差 ~ 时间+误差</span></span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="dateTr">
+                            <input type="text" name="AttendanceTimes" style="text-align: left;border-radius: 4px;" onchange="compute(this)" autocomplete="off" class="btn btn-default form-control AttendanceTime" value="" onclick="WdatePicker({ dateFmt: 'H:mm' })" placeholder="请选择时间" />
+                            <span class="align">允许的考勤时间：<span class="hint">时间-误差 ~ 时间+误差</span></span>
+                        </div>
+                        <div class="dateTr">
+                            <input type="text" name="AttendanceTimes" style="text-align: left;border-radius: 4px;" onchange="compute(this)" autocomplete="off" class="btn btn-default form-control AttendanceTime" value="" onclick="WdatePicker({ dateFmt: 'H:mm' })" placeholder="请选择时间" />
+                            <span class="align">允许的考勤时间：<span class="hint">时间-误差 ~ 时间+误差</span></span>
+                        </div>
+                    }
+                    <input type="hidden" name="AttendanceTime" value="" />
+                </div>
+            </div>             <div class="col-lg-12 col-sm-12 mb25" style="margin-top:57px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" id="save" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" value="关&nbsp;&nbsp;&nbsp;闭" class="cancel layui-btn layui-btn-small button-base bg-cancel ">
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+
+    // 将分钟数量转换为小时和分钟字符串
+    function ChangeHourMinutestr(mm) {
+        if (mm !== "0" && mm !== "" && mm !== null) {
+            return ((Math.floor(mm / 60)).toString().length < 2 ? "0" + (Math.floor(mm / 60)).toString() :
+            (Math.floor(mm / 60)).toString()) + ":" + ((mm % 60).toString().length < 2 ? "0" + (mm % 60).toString() : (mm % 60).toString());
+        }
+    }
+
+    //小时分钟转化为分钟
+    function ChangeStrToMinutes(str) {
+        var arrminutes = str.split(":");
+        if (arrminutes.length == 2) {
+            var minutes = parseInt(arrminutes[0]) * 60 + parseInt(arrminutes[1]);
+            return minutes;
+        }
+    }
+
+
+    //考勤时间失去焦点 计算
+    function compute(that) {
+
+        //获取考勤误差的值
+        var marginErr = $("#MarginError").val();//分钟
+        if (marginErr != "" && that.value != "") {
+
+            //小时分钟转化为分钟
+            var minutes = ChangeStrToMinutes(that.value),
+                minDate = ChangeHourMinutestr(Number(minutes) - Number(marginErr)),
+                maxDate = ChangeHourMinutestr(Number(minutes) + Number(marginErr));
+
+            $(that).next().find(".hint").html(minDate + "~" + maxDate);
+        }
+    }
+
+    $("#MarginError").blur(function () {
+        $(".AttendanceTime").change();
+    });
+
+    $(function () {
+
+        //获取考勤次数 生成考勤时间段
+        $("input[name='num']").blur(function () {
+            var num = $(this).val(),
+                nums = $(".dateTr").size(),
+                html = `<div class="dateTr">
+                            <input type="text" name="AttendanceTimes" style="text-align: left;border-radius: 4px;" onchange="compute(this.value)" autocomplete="off" class ="btn btn-default form-control AttendanceTime" value="" onclick="WdatePicker({ dateFmt: 'H:mm' })" placeholder="请选择时间" />
+                            <i class ="layui-icon tab-delete" title="删除" style="color:#000;font-size:20px;">&#xe640; </i>
+                        </div>`;
+            //<span class ="aligns">允许的考勤时间：<span class ="hint">时间-误差 ~时间+误差</span></span>
+            if (num > nums) {
+                for (var i = 0; i < num - nums; i++) {
+                    $(".dateTr").last().after(html);
+                }
+            } else if (num < nums) {
+                if (num < 2) {
+                    parent.layer.alert("考勤次数最少2次");
+                    $("input[name='num']").val("2");
+                    $(".dateTr").slice(2).remove();
+                } else {
+                    $(".dateTr").slice(num, nums).remove();
+                }
+            }
+        });
+
+        //删除考勤时间段
+        $(".AddClick").on("click", ".tab-delete", function () {
+            $(this).parents(".dateTr").remove();
+            var trNum = $(".dateTr").size();
+            $("input[name='num']").val(trNum);
+        });
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+            //提交按钮
+            $("#save").on("click", function () {
+                //获取选中的岗位的个数
+                var attendanceNum = $("input[name='Attendances']:checked").length;
+                if (attendanceNum <= 0) {
+                    layer.msg("请选择考勤岗位.", { time: 2000, icon: 2 });
+                    return;
+                }
+                //获取考勤误差的值
+                var marginError = $("#MarginError").val();
+                if (marginError == "") {
+                    layer.msg("考勤误差值不能为空。", { time: 2000, icon: 2 });
+                    return;
+                }
+
+                //整理岗位的数据
+                var attendanceArr = [];
+                $("input[name='Attendances']").each(function () {
+                    var isCheked = $(this).is(":checked");
+                    if (isCheked) {
+                        attendanceArr.push($(this).val());
+                    }
+                });
+                $("input[name='Attendance']").val(attendanceArr.join("|"));
+
+                //整理时间段的数据
+                var attendanceTimeArr = [];
+                $("input[name='AttendanceTimes']").each(function () {
+                    if ($(this).val() != "") {
+                        attendanceTimeArr.push($(this).val());
+                    }
+                });
+                $("input[name='AttendanceTime']").val(attendanceTimeArr.join("|"));
+
+                var data = $("#mainForm").serialize();
+                $.post("Add", data, function (data) {
+                    if (data.Flag) {
+                        layer.msg("添加成功", { time: 2000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            });
+
+        });
+    });
+</script>
+

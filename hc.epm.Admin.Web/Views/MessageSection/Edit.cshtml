@@ -1,0 +1,226 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Msg
+@model Msg_MessageSection
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;"><em class="required">*</em>环节名称 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("Name", null, new { @class = "form-control selectpicker  show-tick" })
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>编号 : </label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="No" id="No" placeholder="请输入编号" autocomplete="off" class="form-control" value="@Model.No" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>适用角色 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.RoleTypes.Contains("Owner"))
+                        {
+                            <input type="checkbox" class="styled" id="Owner" value="Owner" name="RoleTypes" checked=""><label for="Owner">业主</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Owner" value="Owner" name="RoleTypes"><label for="Owner">业主</label>
+                        }
+                    </div>
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.RoleTypes.Contains("Supervision"))
+                        {
+                            <input type="checkbox" class="styled" id="Supervision" value="Supervision" name="RoleTypes" checked=""><label for="Supervision">监理方</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Supervision" value="Supervision" name="RoleTypes"><label for="Supervision">监理方</label>
+                        }
+                    </div>
+
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.RoleTypes.Contains("Constructor"))
+                        {
+                            <input type="checkbox" class="styled" id="Constructor" value="Constructor" name="RoleTypes" checked=""><label for="Constructor">施工方</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Constructor" value="Constructor" name="RoleTypes"><label for="Constructor">施工方</label>
+                        }
+                    </div>
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.RoleTypes.Contains("Consultation"))
+                        {
+                            <input type="checkbox" class="styled" id="Consultation" value="Consultation" name="RoleTypes" checked=""><label for="Consultation">咨询方</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Consultation" value="Consultation" name="RoleTypes"><label for="Consultation">咨询方</label>
+                        }
+                    </div>
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.RoleTypes.Contains("Design"))
+                        {
+                            <input type="checkbox" class="styled" id="Design" value="Design" name="RoleTypes" checked=""><label for="Design">设计方</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Design" value="Design" name="RoleTypes"><label for="Design">设计方</label>
+                        }
+                    </div>
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.RoleTypes.Contains("Admin"))
+                        {
+                            <input type="checkbox" class="styled" id="Admin" value="Admin" name="RoleTypes" checked=""><label for="Admin">后台管理员</label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Admin" value="Admin" name="RoleTypes"><label for="Admin">后台管理员</label>
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>发送方式 : </label>
+                <div class="col-lg-9 col-sm-9">
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.MsgTypes.Contains("Message"))
+                        {
+                            <input type="checkbox" class="styled" id="Message" value="Message" name="MsgTypes" checked=""><label for="Message">站内信 </label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Message" value="Message" name="MsgTypes"><label for="Message">站内信 </label>
+                        }
+                    </div>
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.MsgTypes.Contains("Email"))
+                        {
+                            <input type="checkbox" class="styled" id="Email" value="Email" name="MsgTypes" checked=""><label for="Email">邮箱 </label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="Email" value="Email" name="MsgTypes"><label for="Email">邮箱 </label>
+                        }
+                    </div>
+                    <div class="checkbox checkbox-info checkbox-inline">
+                        @if (Model.MsgTypes.Contains("SMS"))
+                        {
+                            <input type="checkbox" class="styled" id="SMS" value="SMS" name="MsgTypes" checked=""><label for="SMS">短信 </label>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="styled" id="SMS" value="SMS" name="MsgTypes"><label for="SMS">短信 </label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label">启用/禁用 : </label>
+                <div class="col-lg-3 col-sm-3">
+                    @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+                <label class="col-lg-3 col-sm-3 control-label">是否确认 : </label>
+                <div class="col-lg-3 col-sm-3">
+                    @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12" style="overflow:hidden;top:80px;">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '环节名称不能为空'
+                        },
+                    }
+                },
+                No: {
+                    validators: {
+                        notEmpty: {
+                            message: '编号不能为空'
+                        },
+                    }
+                },
+                RoleTypes: {
+                    validators: {
+                        notEmpty: {
+                            message: '适用角色不能为空'
+                        },
+                    }
+                },
+                MsgTypes: {
+                    validators: {
+                        notEmpty: {
+                            message: '发送方式不能为空'
+                        }
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //   监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");
+                        $("#save").val("请等待")
+                        var index2 = parent.layer.msg("消息配置环节修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(index2);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>
+

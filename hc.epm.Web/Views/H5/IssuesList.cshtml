@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "遇见问题";
+    Layout = "~/Views/Shared/_LayoutPageH5.cshtml";
+}
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    a, a:hover, a:active, a:visited, a:link, a:focus {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    ul {
+        list-style: none;
+        margin-bottom: 0px !important;
+    }
+
+    .fenye li a:hover, .fenye li a:focus {
+        text-decoration: none;
+    }
+
+    /*.common {
+        line-height: 60px;
+        background-color: #fff;
+        padding: 0 15px;
+        border-bottom: 1px solid #F2F2F2;
+    }
+
+        .common a {
+            font-size: 1.4em;
+            color: #000;
+            font-weight: 500;
+            display: block;
+        }
+
+            .common a:hover, .common a:focus {
+                text-decoration: none;
+                color: #000;
+            }*/
+
+    .fydiv li a {
+        line-height: 30px;
+        color: #555;
+        font-size: 1.1em;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .bton {
+        padding-top: 50px;
+        text-align: center;
+    }
+
+        .bton .btn {
+            background-color: #167FF5;
+            width: 200px;
+            border-radius: 25px;
+        }
+</style>
+<link href="~/Resource/css/droploads.css" rel="stylesheet" />
+<div style="background-color:#F2F2F2;padding-top:5px" class="encounter">
+    @*<div>
+            <div class="common">
+                <a href="javascript:;">常见问题</a>
+            </div>
+            <ul class="bussback" style="background-color:#fff;padding:5px 15px"></ul>
+        </div>*@
+    <div class="fydiv" style="background-color:#fff;padding:5px 15px">
+        <ul class="fenye">
+            <li><a href="javascript:;">飞机无法进而为纷纷二日本五人本无人机诶我不热叫我女人健康别惹我</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+            <li><a href="javascript:;">content</a></li>
+        </ul>
+    </div>
+</div>
+
+<script src="~/Resource/scripts/zeptos.min.js"></script>
+<script src="~/Resource/scripts/droploads.js"></script>
+<script type="text/javascript">
+    $(".fenye").on("click", "li",function () {
+        location.href = "/H5/Problem"
+    })
+    // dropload
+    var dropload = $('.fydiv').dropload({
+        domUp: {
+            domClass: 'dropload-up',
+            domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+            domUpdate: '<div class="dropload-update">↑释放更新</div>',
+            domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>'
+        },
+        domDown: {
+            domClass: 'dropload-down',
+            domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+            domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+            domNoData: '<div class="dropload-noData">暂无数据</div>'
+        },
+        loadUpFn: function (me) {
+            $.ajax({
+                type: 'GET',
+                url: 'json/update.json',
+                dataType: 'json',
+                success: function (data) {
+                    var result = '';
+                    for (var i = 0; i < data.lists.length; i++) {
+                        result += '<a class="item opacity" href="' + data.lists[i].link + '">'
+                                        + '<img src="' + data.lists[i].pic + '" alt="">'
+                                        + '<h3>' + data.lists[i].title + '</h3>'
+                                        + '<span class="date">' + data.lists[i].date + '</span>'
+                                    + '</a>';
+                    }
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function () {
+                        $('.lists').html(result);
+                        // 每次数据加载完，必须重置
+                        dropload.resetload();
+                    }, 1000);
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!');
+                    // 即使加载出错，也得重置
+                    dropload.resetload();
+                }
+            });
+        },
+        loadDownFn: function (me) {
+            $.ajax({
+                type: 'GET',
+                url: 'json/more.json',
+                dataType: 'json',
+                success: function (data) {
+                    var result = '';
+                    for (var i = 0; i < data.lists.length; i++) {
+                        result += '<a class="item opacity" href="' + data.lists[i].link + '">'
+                                        + '<img src="' + data.lists[i].pic + '" alt="">'
+                                        + '<h3>' + data.lists[i].title + '</h3>'
+                                        + '<span class="date">' + data.lists[i].date + '</span>'
+                                    + '</a>';
+                    }
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function () {
+                        $('.lists').append(result);
+                        // 每次数据加载完，必须重置
+                        dropload.resetload();
+                    }, 1000);
+                },
+                error: function (xhr, type) {
+                    alert('Ajax error!');
+                    // 即使加载出错，也得重置
+                    dropload.resetload();
+                }
+            });
+        }
+    });
+</script>

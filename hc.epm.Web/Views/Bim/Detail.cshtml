@@ -1,0 +1,219 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@using hc.epm.ViewModel;
+@model Epm_Bim
+@{
+    ViewBag.Title = "查看模型";
+}
+
+@if (Model == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+<body>
+    <div class="contentData">
+        <div class="tab">
+            <div class="long-text">
+                <label>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" disabled value="@Model.ProjectName" id="ProjectName" name="ProjectName" />
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                <input type="hidden" id="BIMState" name="BIMState" value="@Model.BIMState" />
+                <input type="hidden" id="BIMAddress" name="BIMAddress" value="@Model.BIMAddress" />
+                <input type="hidden" id="BIMImg" name="BIMImg" value="@Model.BIMImg" />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;模型名称&nbsp;:</label>
+                <input type="text" disabled value="@Model.Name" />
+            </div>
+            <div class="intro">
+                <div><label>&nbsp;描述&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" disabled>@Model.Desciption</textarea>
+                </div>
+            </div>
+            <div class="short-text disable-drop">
+                <label>&nbsp;版本标识&nbsp;:</label>
+                <select disabled>
+                    <option>@Model.VersionName</option>
+                </select>
+            </div>
+            <div class="short-text">
+                <label>&nbsp;版本号&nbsp;:</label>
+                <input type="text" disabled value="@Model.VersionOrder" />
+            </div>
+            <div class="disable-drop short-text" style="display:none;">
+                <label>&nbsp;状态&nbsp;:</label>
+                <select disabled>
+                    <option>@(((ApprovalState)Model.State).GetText())</option>
+                </select>
+            </div>
+            <div class="intro">
+                <div><label>&nbsp;备注&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" disabled>@Model.Remark</textarea>
+                </div>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;上传人&nbsp;:</label>
+                <input type="text" disabled value="@Model.SubmitUserName" />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;上传单位&nbsp;:</label>
+                <input type="text" disabled value="@Model.SubmitCompanyName" />
+                <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="short-text">
+                <label>&nbsp;上传时间&nbsp;:</label>
+                <input type="text" id="uploadtime" disabled value="@(Model.SubmitDate == null ? "" : Convert.ToDateTime(Model.SubmitDate).ToString("yyyy-MM-dd"))">
+                <i onClick="WdatePicker({ el:'uploadtime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="upload">
+                <div><label>&nbsp;模型&nbsp;:</label></div>
+                <div style="width:100%;position:relative;margin:0px" id="drwafileList">
+                    <ul></ul>
+                    <div style="top:45%;left:35%;display:none;color:red" id="mx">
+                        @*<h3 style="font-size:24px">模型正在轻量化中...</h3>*@
+                    </div>
+                </div>
+            </div>
+            <div class="button-group btn-center">
+                @if (Model.State == int.Parse(ApprovalState.WaitAppr.GetValue().ToString()))
+                {
+                    <button type="button" class="audit checkright" data-module="Bim" data-right="Check">审核</button>
+                    <button type="button" class="reject checkright" data-module="Bim" data-right="UnCheck">驳回</button>
+                    <button type="button" class="exchange">沟通</button>
+                }
+                else if (Model.State == int.Parse(ApprovalState.ApprSuccess.GetValue().ToString()))
+                {
+                    <button type="button" class="exchange">沟通</button>
+                }
+                else if (Model.State == int.Parse(ApprovalState.ApprFailure.GetValue().ToString()))
+                {
+                    @*<button type="button" class="discard checkright" data-module="Bim" data-right="Invalid">废弃</button>*@
+                    <button type="button" class="exchange">沟通</button>
+                }
+            </div>
+        </div>
+        <div class="key">
+        </div>
+    </div>
+    <script>
+        var id = $("#Id").val();
+        var BIMState = $("#BIMState").val();
+        if (BIMState == '@BIMModelState.NotBIM.ToString()') {
+            $("#drwafileList").css("display", "none");
+        }
+        else if (BIMState == '@BIMModelState.BIMLightWeight.ToString()') {
+            var imgurl = "/Resource/images/moxing.jpg";
+            var odiv = "<li><img src='" + imgurl + "' style='width: 800px;height: 350px;cursor: pointer;'/></li>";
+            $("#drwafileList ul").append(odiv);
+            $("#mx").css("display", "block");
+            $("#mx").append('<h3 style="font-size:24px">模型正在轻量化中...</h3>');
+        }
+        else if (BIMState == '@BIMModelState.BIMLightWeightSuccess.ToString()') {
+            var BIMImg = $("#BIMImg").val();
+            if (BIMImg == "" || BIMImg == null) {
+                var imgurl = "/Resource/images/moxing.jpg";
+                var odiv = "<li data-id='@Model.SId' class='model'><img src='" + imgurl + "' style='width: 800px;height: 350px;cursor: pointer;'/></li>";
+                $("#drwafileList ul").append(odiv);
+            }
+            else {
+                var odiv = "<li data-id='@Model.SId' class='model'><img src='" + BIMImg + "' style='width: 800px;height: 350px;cursor: pointer;'/></li>";
+                $('#drwafileList ul').append(odiv);
+            }
+            $("#mx").css("display", "block");
+            $("#mx").append('<h3 style="font-size:24px">模型轻量化完成</h3>');
+        }
+
+        $("#drwafileList").on("click", ".model", function () {
+            var id = $(this).data("id");
+            window.open("/Bim/BimModel?id=" + id);
+        })
+
+
+        layui.use(['layer', 'element'], function () {
+            var layer = layui.layer, element = layui.element, $ = layui.jquery;
+
+            //审核
+            $('.audit').on('click', function () {
+                var state = "ApprSuccess";
+                if (id != "") {
+                    parent.layer.confirm("确认审核通过？", { icon: 3 }, function () {
+                        $.post("Reject", { id: id, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("审核成功", { time: 2000, icon: 1 });
+                                location.href = "/Bim/Index";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+            //驳回
+            $(".reject").click(function () {
+                var state = "ApprFailure";
+                parent.layer.prompt({
+                    formType: 2,
+                    title: '请输入驳回理由',
+                    yes: function (index, layero) {
+                        // 获取文本框输入的值
+                        var value = layero.find(".layui-layer-input").val();
+                        if (value) {
+                            $.post("Reject", { id: id, reason: value, state: state }, function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                    window.location.href = "/Bim/Index";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        } else {
+                            parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                        }
+                    }
+                });
+            });
+            //废弃
+            $('.discard').on('click', function () {
+                var state = "Discarded";
+                if (id != "") {
+                    parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                        $.post("Archive", { id: id, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                                window.location.href = "/Bim/Index?pageIndex=1";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+            //修改
+            $('.edit').on('click', function () {
+                location.href = "/Bim/Edit?id=" + "@Model.Id";
+            });
+            //沟通
+            $('.exchange').on('click', function () {
+                var projectId = $("#ProjectId").val();
+                window.location.href = "/Question/Add?businType=Model&projectId=" + projectId + "&BusinessId=@Model.Id";
+            });
+        });
+    </script>
+</body>
+}

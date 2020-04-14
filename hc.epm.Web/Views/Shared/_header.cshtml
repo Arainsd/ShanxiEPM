@@ -1,0 +1,118 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Global;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@{
+    var userInfo = Session[ConstStr_Session.CurrentUserEntity] as UserView;
+    var username = userInfo == null ? "noLogin" : userInfo.RealName;
+
+    ViewBag.ProjectId = Session[ConstString.COOKIEPROJECTID] as string;
+    var projectname = Session[ConstString.COOKIEPROJECTNAME] as string;
+    projectname = projectname == "" ? "" : "当前项目：" + projectname;
+}
+<div class="head">
+    <div class="subhead"> 
+        <div class="subheadRight">
+            @if (userInfo == null)
+            {
+                <p>请>@Html.ActionLink("登录", "Login", "Currency") &nbsp;&nbsp;/</p>
+                <p>您好游客！ 欢迎来到【投资工程管理系统】</p>
+            }
+            else {
+                <p>@Html.ActionLink("注销", "LogOut", "Currency") &nbsp;&nbsp;/</p>
+                <p>您好 @username！ 欢迎来到【投资工程管理系统】</p>
+            }
+        </div>
+        @*<div class="subheadLeft"><p id="Info">个人中心</p></div>*@
+        @*<div class="subheadLeft" id="subheadLeft">
+                <input type="text" placeholder="请选择项目" onfocus="this.placeholder=''" onblur="this.placeholder='请选择项目'" value="@projectname" /><a href=""><img src="~/Resource/images/headimg.jpg" /></a>
+                <div class="selectProject" id="selectProject" style="display:none">
+                    <ul>
+                        @if (userInfo != null && userInfo.Project.Count > 0)
+                        {
+                            int num = 0;
+                            <li><span dataid="">全部</span></li>
+                            foreach (var dic in userInfo.Project)
+                            {
+                                num++;
+                                if (num <= 10)
+                                {
+                                    <li><span dataid="@dic.Key">@(dic.Value.CutByByteLength(60,"..."))</span></li>
+                                }
+                                else {
+                                    break;
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>*@
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //$("#subheadLeft input").on("click", function () {
+        //    $("#selectProject").toggle();
+        //});
+        //$("#selectProject").on("click", "li", function () {
+        //    var id = $(this).children("span").attr("dataid");
+        //    var name = $(this).text();
+        //    if (id == "") {
+        //        name = "";
+        //        $("#subheadLeft input").val("");
+        //        $(".modelShow").hide();
+        //        $(".modelPart").show();
+        //    } else {
+        //        $("#subheadLeft input").val("当前项目：" + name);
+        //        $(".modelShow").show();
+        //        $(".modelPart").hide();
+        //        //SetShowBIM(id);
+        //    }
+        //    $("#selectProject").hide();
+        //    $.post("/Currency/SetCurrProject?projectid=" + id + "&projectname=" + name);
+        //});
+        //$("#selectProject").mouseleave(function () {
+        //    $(this).hide();
+        //});
+        @*//刷新显示模型
+        if ('@ViewBag.ProjectId' != "") {
+            $(".modelShow").show();
+            $(".modelPart").hide();
+            SetShowBIM('@ViewBag.ProjectId');
+        } else {
+            $(".modelShow").hide();
+            $(".modelPart").show();
+        }*@
+        //权限检查
+        CheckRight();
+    });
+    function CheckRight() {
+        var rightStr = ' @(MvcHtmlString.Create(Session[ConstString.RIGHTSSESSION].ToString()))';
+        var rights = {};
+        if (rightStr != "" && rightStr != "null") {
+            rights = JSON.parse(rightStr);
+        }
+        var rightOperate = $(".checkright");
+        $.each(rightOperate, function (index, item) {
+            var module = $(this).data("module");
+            var right = $(this).data("right");
+            var mr = module + "_" + right;
+            var isCheck = false;
+            for (var key in rights) {
+                var val = rights[key];
+                if (mr.toLowerCase() == val.toLowerCase()) {
+                    isCheck = true;
+                }
+            }
+            if (isCheck) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    $("#Info").click(function () {
+        window.location.href = "/Home/MyJob"
+    })
+</script>

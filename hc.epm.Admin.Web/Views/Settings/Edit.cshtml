@@ -1,0 +1,73 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_Settings
+@{
+    ViewBag.Title = "系统配置修改";
+}
+
+<div class="form-wrap">
+    <form class="layui-form " id="mainForm">
+        <div class="container">
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">编号 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Code" id="Code" placeholder="请输入编号" autocomplete="off" class="layui-input" lay-verify="required" value="@Model.Code" />
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline ">
+                    <label class="layui-form-label">名称 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Name" id="Name" placeholder="请输入名称" autocomplete="off" class="layui-input" lay-verify="required" value="@Model.Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline ">
+                    <label class="layui-form-label">值 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Value" id="Value" placeholder="请输入值" autocomplete="off" class="layui-input" lay-verify="required" value="@Model.Value" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item row" style="text-align:center;margin-top:30px">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+        </div>
+    </form>
+
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            $.post("Edit", data.field, function (data) {
+                if (data.Flag) {
+                    parent.layer.msg("系统配置修改成功", { time: 1000, icon: 1 }, function () {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                        parent.window.frames["mainFrame"].location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            return false;
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>

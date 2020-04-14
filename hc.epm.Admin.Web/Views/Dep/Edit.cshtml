@@ -1,0 +1,147 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_Dep
+@{
+    ViewBag.Title = "部门编辑";
+}
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row">
+        <form class="form-horizontal " id="mainForm">
+            <div class="col-lg-12 col-sm-12 mb25">
+                <div class="form-group col-lg-6 col-sm-6 ">
+                    <input type="hidden" name="CompanyId" id="CompanyId" value="@Model.CompanyId" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>编号：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" class="form-control" name="Code" id="Code" placeholder="请输入部门编号" value="@Model.Code" />
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>部门名称：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="Name" id="Name" placeholder="请输入部门名称" autocomplete="off" class="form-control" value="@Model.Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25">
+                <div class="form-group col-lg-6 col-sm-6 mb25">
+                    <label class="col-lg-4 col-sm-4 control-label">上级部门：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("PreId", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="form-group ">
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25">
+                <div class="form-group col-lg-6 col-sm-6 ">
+                    <label class="col-lg-4 col-sm-4 control-label">启用/禁用：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-lg-2 col-sm-2 control-label">确认状态：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25" style="margin-top:85px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        window.onload = function () {
+            //自定义验证规则
+            $('#mainForm').bootstrapValidator({
+                excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    Code: {
+                        validators: {
+                            notEmpty: {
+                                message: '编号不能为空'
+                            },
+                            stringLength: {
+                                max: 15,
+                                message: '编号不能超过15字符'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9]+$/i,
+                                message: "编号有数字和字母组成"
+                            }
+                        }
+                    },
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: '部门名称不能为空'
+                            },
+                            stringLength: {
+                                max: 20,
+                                message: '部门名称不能超过20字符'
+                            },
+                            regexp: {
+                                regexp: /^[a-zA-Z0-9\u4e00-\u9fa5-]+$/i,
+                                message: "部门名称由汉字字母数字及-组成"
+                            }
+                        }
+                    },
+                }
+            });
+        }
+        //编辑是上级部门不能选则自身，故将自身置为不可选
+        for (var i = 0; i < $("#PreId option").length; i++) {
+            if ($("#PreId option").eq(i).val() == '@Model.Id') {
+                $("#PreId option").eq(i).attr("disabled", "disabled")
+            }
+        }
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();//表单序列化
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");//禁止连续提交表单
+                        $("#save").val("请等待");
+                        var alertIndex = parent.layer.msg("部门类型修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(alertIndex);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+        });
+        //返回按钮事件
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>
+
+
+

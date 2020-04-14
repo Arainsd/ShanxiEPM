@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns="http://localhost/services/EquipmentService" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://webservice.hrm.weaver" targetNamespace="http://localhost/services/EquipmentService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://localhost/services/EquipmentService">
+      <xsd:element name="getEquipmentInfo">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="xsd:string" />
+            <xsd:element minOccurs="1" maxOccurs="1" name="in1" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getEquipmentInfoResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfEquipmentInfoBean" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getEquipmentType">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="in0" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="getEquipmentTypeResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="1" maxOccurs="1" name="out" nillable="true" type="ns1:ArrayOfEquipmentTypeBean" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+    <xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webservice.hrm.weaver">
+      <xsd:complexType name="ArrayOfEquipmentInfoBean">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="EquipmentInfoBean" nillable="true" type="ns1:EquipmentInfoBean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="EquipmentInfoBean">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="ETypeid" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="assetsCode" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="deptid" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="equipmentCode" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="equipmentCount" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="equipmentID" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="equipmentName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="equipmentStatus" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="equipmentUnit" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="hoscode" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="manufacturer" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="subid" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="throwingDate" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfEquipmentTypeBean">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="EquipmentTypeBean" nillable="true" type="ns1:EquipmentTypeBean" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="EquipmentTypeBean">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="EGrade" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="EName" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="EStatus" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="ETypeid" nillable="true" type="xsd:string" />
+          <xsd:element minOccurs="0" name="supEid" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getEquipmentInfoRequest">
+    <wsdl:part name="parameters" element="tns:getEquipmentInfo" />
+  </wsdl:message>
+  <wsdl:message name="getEquipmentTypeRequest">
+    <wsdl:part name="parameters" element="tns:getEquipmentType" />
+  </wsdl:message>
+  <wsdl:message name="getEquipmentTypeResponse">
+    <wsdl:part name="parameters" element="tns:getEquipmentTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="getEquipmentInfoResponse">
+    <wsdl:part name="parameters" element="tns:getEquipmentInfoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="EquipmentServicePortType">
+    <wsdl:operation name="getEquipmentInfo">
+      <wsdl:input name="getEquipmentInfoRequest" message="tns:getEquipmentInfoRequest" />
+      <wsdl:output name="getEquipmentInfoResponse" message="tns:getEquipmentInfoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getEquipmentType">
+      <wsdl:input name="getEquipmentTypeRequest" message="tns:getEquipmentTypeRequest" />
+      <wsdl:output name="getEquipmentTypeResponse" message="tns:getEquipmentTypeResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EquipmentServiceHttpBinding" type="tns:EquipmentServicePortType">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getEquipmentInfo">
+      <wsdlsoap:operation soapAction="urn:weaver.hrm.webservice.WarningService.getEquipmentInfo" />
+      <wsdl:input name="getEquipmentInfoRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getEquipmentInfoResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEquipmentType">
+      <wsdlsoap:operation soapAction="urn:weaver.hrm.webservice.WarningService.getEquipmentType" />
+      <wsdl:input name="getEquipmentTypeRequest">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getEquipmentTypeResponse">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EquipmentService">
+    <wsdl:port name="EquipmentServiceHttpPort" binding="tns:EquipmentServiceHttpBinding">
+      <wsdlsoap:address location="http://10.202.1.72:8900/services/EquipmentService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,227 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@model IEnumerable<Epm_DataConfig>
+@{
+    ViewBag.Title = "项目资料列表";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width:100px;">资料名称 : </label>
+                <div class="layui-inline">
+                    <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入资料名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+
+        <div class="btns">
+            <a href="javascript:;" data-right="add" id="add" class="" style="display: inline;">新 增</a>
+            <a href="javascript:;" data-right="delete" id="delete" class="" style="display: inline;">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" style="text-align:center;word-break:break-all;word-wrap:break-word">
+                <thead>
+                    <tr>
+                        <th width="5%" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th width="5%" class="table-center">序号</th>
+                        <th width="12%" class="table-center">资料编码</th>
+                        <th width="20%" class="table-center">资料名称</th>
+                        <th width="34%" class="table-center">资料说明</th>
+                        <th width="8%" class="table-center">是否启用</th>
+                        <th width="8%" class="table-center">是否必填</th>
+                        <th width="8%" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td>@item.Code</td>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td class="table-center">
+                                    @if (item.State == 1)
+                                    {
+                                        <a href="javascript:;" class='change-state ' data-module="ElectronicAgreement" data-itemid="@item.SId" data-value="@item.State" data-right="enable" data-type="2" title="启用/禁用"><i class='glyphicon glyphicon-ok-sign handle-blue'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='change-state ' data-module="ElectronicAgreement" data-itemid="@item.SId" data-value="@item.State" data-right="enable" data-type="2" title="启用/禁用"><i class='glyphicon glyphicon-remove-sign handle-red'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    @if (item.IsRequire == true)
+                                    {
+                                        <a href="javascript:;" class='change-state ' data-module="ElectronicAgreement" data-itemid="@item.SId" data-value="@item.IsRequire" data-right="confirm" data-type="1" title="必填状态"><i class='glyphicon glyphicon-ok-sign handle-blue'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='change-state ' data-module="ElectronicAgreement" data-itemid="@item.SId" data-value="@item.IsRequire" data-right="confirm" data-type="1" title="非必填状态"><i class='glyphicon glyphicon-remove-sign handle-red'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class="editor-link checkright" data-itemid="@item.SId" title="编辑" data-module="TypeDictionary" data-right="modify"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/HcDataConfig/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        //删除
+        $("#delete").click(function () {
+            debugger;
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/HcDataConfig/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                });
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+    });
+
+    //修改
+    $(".editor-link").click(function () {
+        var id = $(this).data("itemid");
+        if (id != "") {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("资料管理-编辑"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '700px'],
+                content: '/HcDataConfig/Edit/' + id
+            });
+        }
+
+    });
+
+    //增加
+    $("#add").click(function () {
+        parent.layer.open({
+            type: 2,
+            title: GetLayerTitle("资料管理-添加"),
+            shadeClose: false, //点击遮罩关闭层
+            area: [BigLayerWidth, '700px'],
+            content: '/HcDataConfig/Add'
+        });
+    });
+
+    //确认状态切换
+    $(".change-state").click(function () {
+        var id = $(this).data("itemid");
+        var state = $(this).data("value");
+        var type = $(this).data("type");
+        if (state == "False" || state == 0) {
+            state = true;
+        } else {
+            state = false;
+        }
+        if (id != '') {
+            var mes = GetIsEnableLayerMes(state, type);//获取弹出询问层的提示语句
+
+            if (type == 1 && state == false) {//若该条数据为已确认数据将不能改变其确认状态
+                parent.layer.alert(mes, { icon: 2 });
+            } else {
+                parent.layer.confirm(mes, { icon: 3 }, function () {
+                    $.post("ChangeState", { id: id, type: type, state: state }, function (data) {
+                        if (data.Flag) {
+                            window.location.href = "/HcDataConfig/Index";
+                            parent.layer.msg("操作成功！", { time: 1000, icon: 1 });
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+
+                        }
+                    });
+                });
+            }
+        } else {
+            parent.layer.alert("请选择要操作的项！")
+        }
+    });
+
+    //关闭弹出层
+    $('.cancel').on("click", function () {
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    });
+</script>

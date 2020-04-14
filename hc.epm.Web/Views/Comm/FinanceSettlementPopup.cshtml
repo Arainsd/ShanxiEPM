@@ -1,0 +1,92 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_TzProjectApprovalInfo
+
+@{
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .row {
+        padding: 0 30px;
+        line-height: 36px;
+        overflow: hidden;
+    }
+
+        .row > p {
+            width: 80%;
+            display: inline-block;
+            float: right;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: right;
+        }
+
+    .hr {
+        border-bottom: 2px solid #c0c0c0;
+        margin: 20px;
+    }
+
+    .form-control {
+        height: 24px;
+        padding: 6px 12px;
+        font-size: 14px;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="container">
+    <form id="mainForm">
+        <div class="row">
+            <label>项目名称：</label>
+            <p>@Model.ProjectName</p>
+            <input type="hidden" id="ProId" name="Id" value="@Model.Id" />
+        </div>
+        <div class="row">
+            <label>项目性质：</label>
+            <p>@Model.NatureName</p>
+        </div>
+        <div class="row">
+            <label>批复金额：</label>
+            <p>@Model.TotalInvestment.ToString("0.00") 万元</p>
+        </div>
+        <div class="hr"></div>
+        <div class="row">
+            <label>财务决算：</label>
+            <p>
+                <input class="form-control" type="number" min="0" step="0.01" precision="2" id="FinanceAccounts" name="FinanceAccounts" value="@Model.FinanceAccounts.ToString("0.00")" /> 万元
+            </p>
+        </div>
+        <div class="row" style="color:#aeabab;margin-top:20px;text-align:right">注：财务决算只保留两位小数。</div>
+    </form>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            if ($("#FinanceAccounts").val() == "") {
+                result.flag = false;
+                result.msg = '请输入财务决算！';
+            }
+            else {
+                result.data.push({
+                    Id: $("#ProId").val() || '',
+                    FinanceAccounts: $("#FinanceAccounts").val() || ''
+                });
+            }
+
+            return result;
+        }
+    </script>
+}

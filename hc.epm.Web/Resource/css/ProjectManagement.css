@@ -1,0 +1,135 @@
+﻿
+
+.sel-pro {
+    width: 96%;
+    border-radius: 5px;
+    display: inline-flex;
+    border: 1px solid #7A7A7A;
+}
+
+.form-group {
+    display: contents;
+}
+
+.input_unit {
+    width: 83%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.td-div {
+    width: 402px;
+    text-align: left;
+}
+
+.module-div {
+    width: 100%;
+    padding: 10px 20px;
+    border: 1px solid #c5c5c5;
+    position: relative;
+    margin-bottom: 25px;
+}
+
+    .module-div > h4 {
+        display: inline-block;
+        padding: 4px;
+        font-weight: 600;
+        position: absolute;
+        top: -12px;
+        background-color: #ffffff;
+    }
+
+.table_title {
+    text-align: right;
+    width: 215px;
+}
+
+.apply_person {
+    width: 80.5%;
+    display: inline-block;
+}
+
+.color_red {
+    color: red;
+}
+
+.apply_time {
+    position: relative;
+}
+
+    .apply_time i {
+        position: absolute;
+        top: 15px;
+        right: 9px;
+    }
+
+.color_red_x {
+    color: red;
+    margin-top: 4px;
+    margin-right: 15px;
+}
+
+.text_lf {
+    text-align: left;
+}
+
+.font-black {
+    color: black;
+}
+
+.btn-save input {
+    background-color: #6a6969;
+    color: white;
+    border: 1px solid #c1c1c1;
+}
+
+.btn-upload {
+    display: inline;
+}
+
+.datalist td {
+    color: black;
+}
+
+/*详情手风琴样式*/
+.hand-title {
+    height: 42px;
+    width: 100%;
+    background: #535152;
+    line-height: 42px;
+    margin-top: 20px;
+    color: white;
+}
+
+    .hand-title:hover {
+        cursor: pointer;
+    }
+
+    .hand-title + div {
+        margin-top: 20px;
+    }
+    .btn-div{
+        margin-top:30px;
+        text-align:center;
+    }
+    .btn-back{
+        border:none;
+        width:150px;
+        height:40px;
+        color:white;
+        background-color:#666666;
+    }
+
+    /*弹出层按钮样式改变*/
+.frame_button .layui-layer-btn0, .frame_button .layui-layer-btn1 {
+    display: inline-block;
+    border: none;
+    background-color: #6a6969;
+    color: #fff;
+}
+
+/*页面上的选择按钮样式*/
+.btn-upload .btn {
+    background-color: #6a6969;
+    color: #fff;
+}

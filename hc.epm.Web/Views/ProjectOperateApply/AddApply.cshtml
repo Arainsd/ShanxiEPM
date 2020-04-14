@@ -1,0 +1,476 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "AddApply";
+}
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .pro {
+        display: inline-block;
+        height: 50px;
+        border-bottom: 1px solid black;
+        line-height: 50px;
+        width: 300px;
+        text-align: left;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 250px;
+    }
+
+    .pic {
+        top: 2px;
+        cursor: pointer;
+        left: 220px;
+        font-size: 20px;
+        left: -28px;
+        position: relative;
+    }
+
+
+    .bold-name {
+        font-weight: 800;
+    }
+
+    table td {
+        width: 25%;
+    }
+
+    .timer {
+        width: 200px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .timer-pic {
+        left: -24px;
+        position: relative;
+    }
+
+    .tera {
+        width: 788px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .add-icon {
+        color: darkseagreen;
+    }
+
+    .file-wrap {
+        height: 35px;
+        width: 245px;
+        margin-top: 20px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+    }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 10px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                /*overflow: hidden;*/
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+</style>
+<div class="contentData">
+    <form id="formData">
+        <div class="top-title">
+            <span class="pro">
+                <input type="text" placeholder="请选择项目" name="ProjectName" class="sel-pro" id="ProjectName"/>
+                <input type="hidden" id="ProjectId" name="ProjectId" />
+                <i class="pic iconfont">&#xe76a;</i>
+            </span>
+            <span class="ti">试运行申请表</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr style="height:60px;">
+                    <td class="bold-name">分公司名称</td>
+                    <td style="text-align:left;" colspan="3">
+                        <input type="text" id="CompanyName" name="CompanyName" placeholder="请选择项目所在分公司" class="sel-pro" />
+                        <input type="hidden" id="CompanyId" name="CompanyId" />
+                        <i class="iconfont pic">&#xe76a;</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">开工时间</td>
+                    <td>
+                        <input type="text" class="timer" id="StartDate" name="StartDate" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#EndDate').val(''); } })">
+                        <i onClick="WdatePicker({ el: 'StartDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                    </td>
+                    <td class="bold-name">竣工时间</td>
+                    <td>
+                        <input type="text" class="timer" id="EndDate" name="EndDate" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'StartDate\')}', })">
+                        <i onClick="WdatePicker({ el: 'EndDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程交接验收时间</td>
+                    <td>
+                        <input type="text" class="timer" id="AcceptDate" name="AcceptDate" onClick="WdatePicker({ el: 'AcceptDate' })">
+                        <i onClick="WdatePicker({ el: 'AcceptDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                    </td>
+                    <td class="bold-name">验收问题整改完成时间</td>
+                    <td>
+                        <input type="text" class="timer" id="RectFinishDate" name="RectFinishDate" onClick="WdatePicker({ el: 'RectFinishDate' })">
+                        <i onClick="WdatePicker({ el: 'RectFinishDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">计划完成工程决算时间</td>
+                    <td>
+                        <input type="text" class="timer" id="FinalDate" name="FinalDate" onClick="WdatePicker({ el: 'FinalDate' })">
+                        <i onClick="WdatePicker({ el: 'FinalDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                    </td>
+                    <td class="bold-name">计划完成工程审计时间</td>
+                    <td>
+                        <input type="text" class="timer" id="AuditDate" name="AuditDate" onClick="WdatePicker({ el: 'AuditDate' })">
+                        <i onClick="WdatePicker({ el: 'AuditDate' })" class="iconfont timer-pic">&#xe7e2;</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">上报交接验收文件<br /><span style="color:red;">（可上传多个附件）</span></td>
+                    <td colspan="3">
+                        <!--附件1-->
+                        <div class="SBJJ">
+                            <p class="file-wrap" id="btnUploadSBJJ" name="SBJJ">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>销售企业二级单位验收主要事项表</span>
+                            </p>
+                            <div style="width:100%; margin-top:5px;" id="fileList">
+                                <ul class="fileShow" id="SBJJ"></ul>
+                            </div>
+                        </div>
+
+                        <!--附件2-->
+                        <div class="SGSC">
+                            <p class="file-wrap" id="btnUploadSGSC" name="SGSC">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>施工转生产界面交接确认单</span>
+                            </p>
+                            <div style="width:100%; margin-top:5px;" id="fileList1">
+                                <ul class="fileShow" id="SGSC"></ul>
+                            </div>
+                        </div>
+
+                        <!--附件3-->
+                        <div class="GCJJ">
+                            <p class="file-wrap" id="btnUploadGCJJ" name="GCJJ">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>工程交接证书</span>
+                            </p>
+                            <div style="width:100%; margin-top:5px;" id="fileList2">
+                                <ul class="fileShow" id="GCJJ"></ul>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">消防、环保、安全、专项验收情况及竣工资料是否齐全</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="FullFiles" autofocus></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分公司验收意见</td>
+                    <td colspan="3">
+                        <textarea class="tera" name="AcceptOpinion" autofocus></textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big button-base bg-save" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="save layui-btn layui-btn-big button-base bg-save" data-state="@(PreProjectApprovalState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-big button-base bg-cancel cancel" />
+            <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        </div>
+    </form>
+</div>
+<script>
+    var fileDataArray = [];
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        isFlagFile = false;
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = column;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var odiv = '<li><span>' + obj.Name + '</span><i class="layui-icon fileDel" data-val="' + obj.GuidId + '">&#x1006;</i></li>';
+                        $("#" + column).append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+                return isFlagFile = true;
+            }
+        });
+    }
+    $(function () {
+        $('#btnUploadSBJJ,#btnUploadSGSC,#btnUploadGCJJ').click(function () {
+            $("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+    });
+   
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().remove();
+        var toremove = '';
+        var id = $(this).data("val");
+        //删除初始文件对应的值
+        fileDataArray = fileDataArray.filter(function (item, index, arr) {
+            return item.GuidId != id
+        })
+        fileDataJsonFile = JSON.stringify(fileDataArray);
+        $("#fileDataJsonFile").val(fileDataJsonFile);
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择项目
+        $("#ProjectName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择在建项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProjectAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        $("#CompanyName").val(obj.data[0].CompanyName);
+                        $("#CompanyId ").val(obj.data[0].CompanyId);
+                        parent.layer.close(index);//关闭窗口
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        })
+
+        //选择分公司
+        $("#CompanyName").click(function () {
+            if ($("#ProjectId").val() == "") {
+                layer.alert("请先选择项目", { icon: 2 });
+                return;
+            }
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分公司"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#CompanyName").val(obj.data[0].Name);
+                        $("#CompanyId ").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+
+    //数据提交
+    $("#save").click(function () {
+        //附件是否上传完成 isFlagFile
+        if (isFlagFile) {
+            $(".save").addClass("layui-btn-disabled");
+            $(".save").attr("disabled", "disabled");
+
+            //必填项验证
+            var data = {
+                ProjectId: $('#ProjectId').val() || '',
+                CompanyId: $('#CompanyId').val() || '',
+                StartDate: $('#StartDate').val() || '',
+                EndDate: $('#EndDate').val() || '',
+                AcceptDate: $('#AcceptDate').val() || '',
+                RectFinishDate: $('#RectFinishDate').val() || '',
+                FinalDate: $('#FinalDate').val() || '',
+                AuditDate: $('#AuditDate').val() || '',
+                SBJJ: $("#SBJJ li").length || '',
+                SGSC: $("#SGSC li").length || '',
+                GCJJ: $("#GCJJ li").length || '',
+            }
+            if (data.ProjectId === '') {
+                layer.alert("请选择项目", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.CompanyId === '') {
+                layer.alert("请选择分公司", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.StartDate === '') {
+                layer.alert("开工时间不能为空", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.EndDate === '') {
+                layer.alert("竣工时间不能为空", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.AcceptDate === '') {
+                layer.alert("工程交接验收时间不能为空", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.RectFinishDate === '') {
+                layer.alert("验收问题整改完成时间不能为空", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.FinalDate === '') {
+                layer.alert("计划完成工程决算时间不能为空", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.AuditDate === '') {
+                layer.alert("计划完成工程审计时间不能为空", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.SBJJ == 0) {
+                layer.alert("请至少上传一个销售企业二级单位验收主要事项表附件", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.SGSC == 0) {
+                layer.alert("请至少上传一个施工转生产界面交接确认单附件", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            if (data.GCJJ == 0) {
+                layer.alert("请至少上传一个工程交接证书附件", { icon: 2 });
+                $(".save").removeClass("layui-btn-disabled");
+                $(".save").removeAttr("disabled");
+                return;
+            }
+            //接口调用
+            var search = $("#formData").serialize();
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        window.location.href = "/ProjectOperateApply/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                }
+            });
+        }
+        else {
+            layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+        }
+    });
+
+    $("#close").click(function () {
+        window.location.href = "/ProjectOperateApply/Index";
+    });
+</script>

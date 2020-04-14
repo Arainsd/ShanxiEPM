@@ -1,0 +1,148 @@
+﻿
+@using hc.epm.ViewModel;
+
+<style type="text/css">
+    .accept_type > td:nth-child(1) {
+        font-weight: 600;
+        text-align: left;
+    }
+
+    .accept_detail > td:nth-child(1) {
+        padding-left: 40px;
+    }
+
+    #maincontent tr td:nth-child(1) {
+        text-align: left;
+    }
+
+    #maincontent {
+        width: 96%;
+        margin: 0 auto;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+</style>
+
+<div id="maincontent">
+    @{
+        List<CompletionAcceptanceItemView> itemList = ViewBag.CompletionAcceptanceItemList;
+        bool isAdd = ViewBag.isAdd;
+        if (itemList.Any(p => !p.Result) && isAdd)
+        {
+            <div class="alert" style="color:red;">系统提示：当前项目有未完成的事项，请完成后再进行竣工验收！</div>
+        }
+    }
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="80%">检查内容</th>
+                <th width="10%">结果</th>
+                <th width="10%">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (itemList.Any())
+                {
+                    var keys = itemList.Select(p => p.Type).Distinct().ToList();
+                    foreach (var key in keys)
+                    {
+                        var list = itemList.Where(p => p.Type == key).ToList();
+                        switch (key)
+                        {
+                            @*case "Epm_ProjectDataSubmit":
+                                {
+                                    foreach (var listItem in list)
+                                    {
+                                        if (string.IsNullOrEmpty(listItem.Id))
+                                        {
+                                            <tr class="accept_type" data-type="project">
+                                                <td colspan="3" title="点击可折叠/展开">项目资料&nbsp;(&nbsp;@listItem.Name&nbsp;)</td>
+                                            </tr>
+                                        }
+                                        else {
+                                            <tr class="accept_detail" name="project">
+                                                <td>@listItem.Name</td>
+                                                @if (@listItem.Result)
+                                                {
+                                                    <td><img src="/Resource/images/default_ok.png" title="已提交" /></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><img src="/Resource/images/ic_fail.png" title="未提交" class="ic_fail" /></td>
+                                                }
+                                                <td><a href="/Project/ProjectData?projectId=@listItem.Id" target="_blank" style="color:blue;">详情</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                break;*@
+                            case "Epm_Question":
+                                {
+                                    foreach (var listItem in list)
+                                    {
+                                        if (string.IsNullOrEmpty(listItem.Id))
+                                        {
+                                            <tr class="accept_type" data-type="question">
+                                                <td colspan="3" title="点击可折叠/展开">项目问题&nbsp;(&nbsp;@listItem.Name&nbsp;)</td>
+                                            </tr>
+                                        }
+                                        else {
+                                            <tr class="accept_detail" name="question">
+                                                <td>@listItem.Name</td>
+                                                @if (listItem.Result)
+                                                {
+                                                    <td><img src="/Resource/images/default_ok.png" title="已关闭" /></td>
+                                                }
+                                                else
+                                                {
+                                                    <td><img src="/Resource/images/ic_fail.png" title="未关闭" class="ic_fail" /></td>
+                                                }
+                                                <td><a href="/Question/Detail?id=@listItem.Id" target="_blank" style="color:blue;">详情</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+        </tbody>
+    </table>
+</div>
+<div class="button-group btn-center" style="text-align:center">
+    <button type="button" class="btnPrev">上一步</button>
+    @if (isAdd)
+    {
+        if (!itemList.Any(p => !p.Result))
+        {
+            <button type="button" class="btnNext">下一步</button>
+        }
+    }
+    else
+    {
+        <button type="button" class="btnNext">下一步</button>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".accept_type").bind("click", function () {
+            var type = $(this).data("type");
+            var obj = $(this).siblings("[name=" + type + "]");
+            if (obj.is(':visible')) {
+                obj.hide();
+            } else {
+                obj.show();
+            }
+        });
+    });
+</script>

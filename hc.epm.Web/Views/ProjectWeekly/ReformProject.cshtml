@@ -1,0 +1,872 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+@model List<ProjectCount>
+@{
+    ViewBag.Title = "ReformProject";
+    //改造项目汇总
+    List<ProjectView> projectSum1 = ViewBag.projectSum1;
+    //未开工
+    List<ProjectView> projectSum2 = ViewBag.projectSum2;
+    //完工未投运
+    List<ProjectView> projectSum3 = ViewBag.projectSum3;
+    //正在施工
+    List<ProjectView> projectSum4 = ViewBag.projectSum4;
+    //在建
+    List<ProjectView> projectSum6 = ViewBag.projectSum6;
+}
+
+<style>
+    .title {
+        margin: 15px 0;
+        text-align: center;
+    }
+
+        .title h2 {
+            font-size: 26px !important;
+        }
+
+    .tab-list {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+        .tab-list li {
+            width: 200px;
+        }
+
+    table thead td {
+        font-size: 20px;
+        color: black !important;
+    }
+</style>
+
+<div class="contentData">
+
+    <ul class="tab-list">
+        <li class="tabli"><a href="@Url.Action("AllProject",new {time=ViewBag.time,name=ViewBag.name })">所有项目统计表</a></li>
+        <li class="tabli"><a href="@Url.Action("AddProject",new {time=ViewBag.time,name=ViewBag.name })">新增项目统计表</a></li>
+        <li class="tabli active"><a href="@Url.Action("ReformProject",new {time=ViewBag.time,name=ViewBag.name })">改造项目统计表</a></li>
+    </ul>
+
+    <div style="width: 100%; overflow: auto;">
+        <div class="title">
+            <h2>改造汇总表</h2>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <td colspan="13">@ViewBag.name</td>
+                </tr>
+                <tr>
+                    <td colspan="13" style="text-align:left;"> 时间：@ViewBag.time</td>
+                </tr>
+                <tr>
+                    <th width="150">分公司</th>
+                    <th width="50">项目总数</th>
+                    <th width="80">未开工项目</th>
+                    <th width="150">已完成开工图设计项目</th>
+                    <th width="100">已完成招标项目</th>
+                    <th width="100">开工项目</th>
+                    <th width="100">完工项目</th>
+                    <th width="100">投运项目</th>
+                    <th width="100">省公司验收</th>
+                    <th width="100">转资项目</th>
+                    <th width="100">正在施工工地</th>
+                    <th width="100">在建</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                }
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                <tr>
+
+                    <td>@item.CompanyName</td>
+                    <td>@item.Count</td>
+                    <td>@item.NoStartCount</td>
+                    <td>@item.DesignSchemeCount</td>
+                    <td>@item.TenderingApplyCount</td>
+                    <td>@item.StartCount</td>
+                    <td>@item.FinshCount</td>
+                    <td>@item.ProjectPolitCount</td>
+                    <td>@item.CompletionAcceptanceCount </td>
+                    <td>@item.CapitalTransferCount</td>
+                    <td>@item.ConstructionCount</td>
+                    <td>@item.BeingBuiltCount</td>
+                </tr>
+                    }
+                }
+                else {
+                <tr>
+                    <td colspan="12" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    @*改造项目汇总表*@
+    <div style="width: 100%; overflow: auto;margin-top:20px;">
+        <div class="title">
+            <h2>改造汇总</h2>
+        </div>
+        <div>
+            <table class="datalist" style="width: 200%;">
+                <thead>
+                    <tr>
+                        <th width="100">分公司</th>
+                        <th width="80">序号</th>
+                        <th width="140">项目名称</th>
+                        <th width="120">投资文号</th>
+                        <th width="120">项目性质</th>
+                        <th width="120">总投资</th>
+                        <th width="120">可研销量</th>
+                        <th width="120">项目批复下达时间</th>
+                        <th width="120">施工图设计完成时间</th>
+                        <th width="120">完成招标时间</th>
+                        <th width="120">开工时间</th>
+                        <th width="120">完工时间</th>
+                        <th width="120">投运时间</th>
+                        <th width="120">合同工期</th>
+                        <th width="120">结算完成时间</th>
+                        <th width="120">省公司验收时间</th>
+                        <th width="120">转资时间</th>
+                        <th width="120">设计单位简称</th>
+                        <th width="120">施工单位简称</th>
+                        <th width="120">施工单位项目经理</th>
+                        <th width="120">监理单位简称</th>
+                        <th width="120">监理工程师</th>
+                        <th width="120">项目现状</th>
+                    </tr>
+                </thead>
+                <tbody id="Construction">
+                    @{
+                        int index1 = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                    }
+                    @if (projectSum1 != null && projectSum1.Count > 0)
+                    {
+                        foreach (var item in projectSum1)
+                        {
+                            index1++;
+                            <tr>
+                                <td>@item.CompanyName</td>
+                                <td>@index1</td>
+                                <td>@item.Name</td>
+                                <td>@item.ApprovalNo </td>
+                                <td>@item.ProjectNatureName</td>
+                                <td>@item.Amount</td>
+                                <td>@item.GasDailySales</td>
+                                @if (item.ReplyDate == null)
+                               {
+                                    <td></td>
+                                }
+                                @if (item.ReplyDate != null)
+                               {
+                                    <td>@(Convert.ToDateTime(item.ReplyDate).ToString("yyyy-MM-dd"))</td>@*项目批复下达时间*@
+
+                                }
+                                @if (item.DesignSchemeTime == null)
+                                {
+                                     <td></td>
+                                }
+                                @if (item.DesignSchemeTime != null)
+                                {
+                                    <td>@(Convert.ToDateTime(item.DesignSchemeTime).ToString("yyyy-MM-dd"))</td>
+
+
+                                }
+                                @if (item.BidResultTime == null)
+                                {
+                                    <td></td>
+                                }
+                                @if (item.BidResultTime != null)
+                                {
+                                    <td>@(Convert.ToDateTime(item.BidResultTime).ToString("yyyy-MM-dd"))</td>
+
+
+                                }
+                                @if (item.PlanWorkStartTime == null)
+                                 {
+                                    <td></td>
+                                }
+                                @if (item.PlanWorkStartTime != null)
+                               {
+                                    <td>@( Convert.ToDateTime(item.PlanWorkStartTime).ToString("yyyy-MM-dd"))</td>
+                                }
+                                @if (item.PlanWorkEndTime == null)
+                                {
+                                    <td></td>
+                                }
+                                @if (item.PlanWorkEndTime != null)
+                                {
+                                    <td>@( Convert.ToDateTime(item.PlanWorkEndTime).ToString("yyyy-MM-dd"))</td>
+                                }
+                                @if (item.ProjectPolitTime == null)
+                                {
+                                    <td></td>
+                                }
+                                @if (item.ProjectPolitTime != null)
+                                 {
+                                    <td>@(Convert.ToDateTime(item.ProjectPolitTime).ToString("yyyy-MM-dd"))</td>
+
+
+                                }
+                                <td>@item.Limit</td>
+                                @if (item.ReplyTime == null)
+                                {
+                                    <td></td>
+                                }
+                                @if (item.ReplyTime != null)
+                                {
+                                    <td>@(Convert.ToDateTime(item.ReplyTime).ToString("yyyy-MM-dd"))</td>
+
+
+                                }
+                                @if (item.RecTime == null)
+                                 {
+                                    <td></td>
+                                }
+                                @if (item.RecTime != null)
+                               {
+                                    <td>@(Convert.ToDateTime(item.RecTime).ToString("yyyy-MM-dd"))</td>
+
+
+                                }
+
+                                @if (item.ReplyTime == null)
+                               {
+                                    <td></td>
+                                }
+                                @if (item.ReplyTime != null)
+                                {
+                                    <td>@(Convert.ToDateTime(item.ReplyTime).ToString("yyyy-MM-dd"))</td>
+
+
+                                }
+                                <td>@item.DesignUnit</td>
+                                <td>@item.WorkUnit</td>
+                                <td>@item.WorkUnitPMName</td>
+                                <td>@item.SupervisorUnit</td>
+                                <td>@item.SupervisorUnitName</td>
+                                <td>@item.ProjectState</td>
+                            </tr>
+                        }
+                    }
+                    else {
+                    <tr>
+                        <td colspan="23" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="page1" style="text-align:right; margin-right:5px;"></div>
+
+    @*未开工项目*@
+    <div style="margin-top:20px;">
+        <div class="title">
+            <h2>未开工项目<span style="color:red;">@ViewBag.Total2</span>座</h2>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;">
+            <thead>
+                <tr>
+                    <th width="100">分公司</th>
+                    <th width="50">序号</th>
+                    <th width="100">项目名称</th>
+                    <th width="150">项目性质</th>
+                    <th width="100">项目批复下达时间</th>
+                    <th width="100">施工图设计完成时间</th>
+                    <th width="100">设计单位</th>
+                    <th width="100">项目现状</th>
+                </tr>
+            </thead>
+            <tbody id="Undone">
+                @{
+                    int index2 = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (projectSum2 != null && projectSum2.Count > 0)
+                {
+                    foreach (var item in projectSum2)
+                    {
+                        index2++;
+                <tr>
+                    <td>@item.CompanyName</td>
+                    <td>@index2</td>
+                    <td>@item.Name</td>
+                    <td>@item.ProjectNatureName</td>
+                    @if (item.ReplyDate == null)
+                    {
+                        <td></td>
+                    }
+                    @if (item.ReplyDate != null)
+                    {
+                        <td>@(Convert.ToDateTime(item.ReplyDate).ToString("yyyy-MM-dd"))</td>@*项目批复下达时间*@
+
+                    }
+                    @if (item.DesignSchemeTime == null)
+                    {
+                        <td></td>
+                    }
+                    @if (item.DesignSchemeTime != null)
+                    {
+                        <td>@(Convert.ToDateTime(item.DesignSchemeTime).ToString("yyyy-MM-dd"))</td>
+
+                    }
+                    <td>@item.DesignUnit</td>
+                    <td>@item.ProjectState</td>
+                </tr>
+                    }
+                }
+                else {
+                <tr>
+                    <td colspan="8" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page2" style="text-align:right; margin-right:5px;"></div>
+
+    @*完工未投运*@
+    <div style="margin-top:20px;">
+        <div class="title">
+            <h2>完工未投运<span style="color:red;">@ViewBag.Total3</span>座</h2>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;">
+
+            <thead>
+                <tr>
+                    <th width="100">分公司</th>
+                    <th width="50">序号</th>
+                    <th width="100">项目名称</th>
+                    <th width="150">项目性质</th>
+                    <th width="150">完工时间</th>
+                    <th width="150">投运时间</th>
+                    <th width="150">施工单位简称</th>
+                    <th width="150">施工单位项目经理</th>
+                    <th width="100">监理单位简称</th>
+                    <th width="100">监理工程师</th>
+                    <th width="100">项目现状</th>
+                </tr>
+            </thead>
+
+            <tbody id="Unused">
+                @{
+                    int index3 = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (projectSum3 != null && projectSum3.Count > 0)
+                {
+                    foreach (var item in projectSum3)
+                    {
+                        index3++;
+                        <tr>
+                            <td>@item.CompanyName</td>
+                            <td>@index3</td>
+                            <td>@item.Name</td>
+                            <td>@item.ProjectNatureName</td>
+                            @if (item.PlanWorkEndTime == null)
+                            {
+                                <td></td>
+                            }
+                            @if (item.PlanWorkEndTime != null)
+                            {
+                                <td>@( Convert.ToDateTime(item.PlanWorkEndTime).ToString("yyyy-MM-dd"))</td>
+                            }
+                            @if (item.ProjectPolitTime == null)
+                            {
+                                <td></td>
+                            }
+                            @if (item.ProjectPolitTime != null)
+                            {
+                                <td>@( Convert.ToDateTime(item.ProjectPolitTime).ToString("yyyy-MM-dd"))</td>
+                            }
+                            <td>@item.WorkUnit</td>
+                            <td>@item.WorkUnitPMName</td>
+                            <td>@item.SupervisorUnit</td>
+                            <td>@item.SupervisorUnitName</td>
+                            <td>@item.ProjectState</td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page3" style="text-align:right; margin-right:5px;"></div>
+
+    @*在建*@
+    <div style="margin-top:20px;">
+        <div class="title">
+            <h2>正在建设<span style="color:red;">@ViewBag.Total6</span>座</h2>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;">
+            <thead>
+                <tr>
+                    <th width="100">分公司</th>
+                    <th width="50">序号</th>
+                    <th width="100">项目名称</th>
+                    <th width="150">项目性质</th>
+                    <th width="150">开工时间</th>
+                    <th width="150">完工时间</th>
+                    <th width="100">施工单位简称</th>
+                    <th width="100">施工单位项目经理</th>
+                    <th width="150">监理单位简称</th>
+                    <th width="100">监理工程师</th>
+                    <th width="100">项目现状</th>
+                </tr>
+            </thead>
+            <tbody id="newConstruct">
+                @{
+                    int index4 = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (projectSum6 != null && projectSum6.Count > 0)
+                {
+                    foreach (var item in projectSum6)
+                    {
+                        index4++;
+                        <tr>
+                            <td>@item.CompanyName</td>
+                            <td>@index4</td>
+                            <td>@item.Name</td>
+                            <td>@item.ProjectNatureName</td>
+                            @if (item.PlanWorkStartTime == null)
+                            {
+                                <td></td>
+                            }
+                            @if (item.PlanWorkStartTime != null)
+                            {
+                                <td>@( Convert.ToDateTime(item.PlanWorkStartTime).ToString("yyyy-MM-dd"))</td>
+                            }
+                            @if (item.PlanWorkEndTime == null)
+                            {
+                                <td></td>
+                            }
+                            @if (item.PlanWorkEndTime != null)
+                            {
+                                <td>@( Convert.ToDateTime(item.PlanWorkEndTime).ToString("yyyy-MM-dd"))</td>
+                            }
+                            <td>@item.WorkUnit</td>
+                            <td>@item.WorkUnitPMName</td>
+                            <td>@item.SupervisorUnit</td>
+                            <td>@item.SupervisorUnitName</td>
+                            <td>@item.ProjectState</td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page5" style="text-align:right; margin-right:5px;"></div>
+
+    @*正在施工*@
+    <div style="margin-top:20px;">
+        <div class="title">
+            <h2>正在施工<span style="color:red;">@ViewBag.Total4</span>座</h2>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;">
+            <thead>
+                <tr>
+                    <th width="100">分公司</th>
+                    <th width="50">序号</th>
+                    <th width="100">项目名称</th>
+                    <th width="150">项目性质</th>
+                    <th width="150">开工时间</th>
+                    <th width="150">完工时间</th>
+                    <th width="150">合同工期</th>
+                    <th width="150">实际消耗工期</th>
+                    <th width="120">剩余工期</th>
+                    <th width="100">工程进度</th>
+                    <th width="100">施工单位简称</th>
+                    <th width="100">施工单位项目经理</th>
+                    <th width="150">监理单位简称</th>
+                    <th width="100">监理工程师</th>
+                    <th width="100">项目现状</th>
+                </tr>
+            </thead>
+            <tbody id="RoadWork">
+                @{
+                    int index5 = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (projectSum4 != null && projectSum4.Count > 0)
+                {
+                    foreach (var item in projectSum4)
+                    {
+                        index4++;
+                        <tr>
+                            <td>@item.CompanyName</td>
+                            <td>@index4</td>
+                            <td>@item.Name</td>
+                            <td>@item.ProjectNatureName</td>
+                            @if (item.PlanWorkStartTime == null)
+                            {
+                                <td></td>
+                            }
+                            @if (item.PlanWorkStartTime != null)
+                            {
+                                <td>@( Convert.ToDateTime(item.PlanWorkStartTime).ToString("yyyy-MM-dd"))</td>
+                            }
+                            @if (item.PlanWorkEndTime == null)
+                            {
+                                <td></td>
+                            }
+                            @if (item.PlanWorkEndTime != null)
+                            {
+                                <td>@( Convert.ToDateTime(item.PlanWorkEndTime).ToString("yyyy-MM-dd"))</td>
+                            }
+                            <td>@item.Limit</td>
+                            <td>@item.ConsumptionPeriod </td>
+                            <td>@item.SurplusLimit</td>
+                            <td>@item.WorkSchedule</td>
+                            <td>@item.WorkUnit</td>
+                            <td>@item.WorkUnitPMName</td>
+                            <td>@item.SupervisorUnit</td>
+                            <td>@item.SupervisorUnitName</td>
+                            <td>@item.ProjectState</td>
+                        </tr>
+                    }
+                }
+                else {
+                <tr>
+                    <td colspan="15" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page4" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+
+<script>
+    function showReocrd(pageNo, time, pageNumber, type, state) {
+        $.post("ProjectPost",
+            {
+                pageIndex: pageNo,
+                state: state,
+                type: type,
+                time: time
+            },
+            function (date) {
+                //加载后台返回的List集合数据
+                var startDate, endDate, replyDate, Amount, recTime;   //开工时间、完工时间、项目批复下达时间、总投资、省公司验收时间
+                for (var i = 0; i < date.length; i++) {
+
+                    //改造项目汇总表 分页
+                    if (pageNumber == 1) {
+                        //开工时间
+                        if (date[i].PlanWorkStartTime != null) {
+                            startDate = date[i].PlanWorkStartTime;
+                        } else {
+                            startDate = "";
+                        }
+                        //完工时间
+                        if (date[i].PlanWorkEndTime != null) {
+                            endDate = date[i].PlanWorkEndTime;
+                        } else {
+                            endDate = "";
+                        }
+                        //项目批复下达时间
+                        if (date[i].ReplyDate != null) {
+                            replyDate = date[i].ReplyDate;
+                        } else {
+                            replyDate = "";
+                        }
+                        //总投资
+                        if (date[i].Amount != null) {
+                            replyDate = date[i].Amount;
+                        } else {
+                            Amount = "";
+                        }
+                        //省公司验收时间
+                        if (date[i].RecTime != null) {
+                            recTime = date[i].RecTime
+                        } else {
+                            recTime = "";
+                        }
+                        var html = `
+                        <tr>
+                          <td> `+ data[i].CompanyName + ` </td>
+                            <td> `+ (i + 1) + ` </td>
+                            <td> `+ data[i].Name + ` </td>
+                            <td> `+ data[i].ApprovalNo + ` </td>
+                            <td> `+ data[i].ProjectNatureName + ` </td>
+                            <td> `+ data[i].Amount + ` </td>
+                            <td> `+ data[i].GasDailySales +` </td>
+                            <td> `+ ReplyDate + ` </td>
+                            <td> `+ ReplyTime + ` </td>
+                            <td> `+ DesignSchemeTime + ` </td>
+                            <td> `+ BidResultTime + ` </td>
+                            <td> `+ PlanWorkStartTime + ` </td>
+                            <td> `+ PlanWorkEndTime + ` </td>
+                            <td> `+ ProjectPolitTime + ` </td>
+                            <td> `+ data[i].Limit + ` </td>
+                            <td> `+ ReplyTime + ` </td>
+                            <td> `+ RecTime + ` </td>
+                            <td> `+ data[i].DesignUnit + ` </td>
+                            <td> `+ data[i].WorkUnit + ` </td>
+                            <td> `+ data[i].WorkUnitPMName + ` </td>
+                            <td> `+ data[i].SupervisorUnit + ` </td>
+                            <td> `+ data[i].SupervisorUnitName + ` </td>
+                            <td> `+ data[i].ProjectState + ` </td>
+                        </tr>
+                        `;
+                        $('#Construction').append(html);
+                    }
+                    //未完成设计 分页
+                    if (pageNumber == 2) {
+                        //项目批复下达时间
+                        if (date[i].ReplyDate != null) {
+                            replyDate = date[i].ReplyDate;
+                        } else {
+                            replyDate = "";
+                        }
+                        var html = `
+                            <tr>
+                                <td> `+ date[i].CompanyName + ` </td>
+                                <td> `+ (i + 1) + `</td>
+                                <td> `+ date[i].Name + `</td>
+                                <td> `+ date[i].ProjectNatureName + ` </td>
+                                <td> `+ replyDate + ` </td>
+                                <td> `+ DesignSchemeTime  + ` </td>
+                                <td> `+ date[i].DesignUnit + ` </td>
+                                <td> `+ data[i].ProjectState + ` </td>
+                            </tr>
+                        `;
+                        $('#Undone').append(html);
+                    }
+                    //完工未投运 分页
+                    if (pageNumber == 3) {
+                        //开工时间
+                        if (date[i].PlanWorkStartTime != null) {
+                            startDate = date[i].PlanWorkStartTime;
+                        } else {
+                            startDate = "";
+                        }
+                        //完工时间
+                        if (date[i].PlanWorkEndTime != null) {
+                            endDate = date[i].PlanWorkEndTime;
+                        } else {
+                            endDate = "";
+                        }
+                        var html = `
+                            <tr>
+                                <td> `+ date[i].CompanyName + ` </td>
+                                <td> `+ (i + 1) + ` </td>
+                                <td> `+ date[i].Name + ` </td>
+                                <td> `+ startDate + ` </td>
+                                <td> `+ endDate + ` </td>
+                                <td> `+ ProjectPolitTime  + ` </td>
+                                <td> `+ date[i].WorkUnit + ` </td>
+                                <td> `+ date[i].WorkUnitPMName + ` </td>
+                                <td> `+ date[i].SupervisorUnit + ` </td>
+                                <td> `+ date[i].SupervisorUnitName + ` </td>
+                                <td> `+ data[i].ProjectState + ` </td>
+                            </tr>
+                        `;
+                        $('#Unused').append(html);
+                    }
+                    if (pageNumber == 4) {
+                        //开工时间
+                        if (date[i].PlanWorkStartTime != null) {
+                            startDate = date[i].PlanWorkStartTime;
+                        } else {
+                            startDate = "";
+                        }
+                        //完工时间
+                        if (date[i].PlanWorkEndTime != null) {
+                            endDate = date[i].PlanWorkEndTime;
+                        } else {
+                            endDate = "";
+                        }
+                        var html = `
+                            <tr>
+                                <td> `+ date[i].CompanyName + ` </td>
+                                <td> `+ (i + 1) + ` </td>
+                                <td> `+ date[i].Name + ` </td>
+                                <td> `+ date[i].ProjectNatureName + ` </td>
+                                <td> `+ startDate + ` </td>
+                                <td> `+ endDate + ` </td>
+                                <td> `+ date[i].Limit + ` </td>
+                               <td> `+ date[i].ConsumptionPeriod + ` </td>
+                                <td> `+ date[i].SurplusLimit + ` </td>
+                                <td> `+ date[i].WorkSchedule + ` </td>
+                                <td> `+ date[i].WorkUnit + ` </td>
+                                <td> `+ date[i].WorkUnitPMName + ` </td>
+                                <td> `+ date[i].SupervisorUnit + ` </td>
+                                <td> `+ date[i].SupervisorUnitName + ` </td>
+                                <td> `+ data[i].ProjectState + ` </td>
+                            </tr>                           
+                        `;
+                        $('#RoadWork').append(html);
+                    }
+                    if (pageNumber == 5) {
+                        //开工时间
+                        if (date[i].PlanWorkStartTime != null) {
+                            startDate = date[i].PlanWorkStartTime;
+                        } else {
+                            startDate = "";
+                        }
+                        //完工时间
+                        if (date[i].PlanWorkEndTime != null) {
+                            endDate = date[i].PlanWorkEndTime;
+                        } else {
+                            endDate = "";
+                        }
+                        var html = `
+                            <tr>
+                                <td> `+ date[i].CompanyName + ` </td>
+                                <td> `+ (i + 1) + ` </td>
+                                <td> `+ date[i].Name + ` </td>
+                                <td> `+ date[i].ProjectNatureName + ` </td>
+                                <td> `+ startDate + ` </td>
+                                <td> `+ endDate + ` </td>
+                                <td> `+ date[i].WorkUnit + ` </td>
+                                <td> `+ date[i].WorkUnitPMName + ` </td>
+                                <td> `+ date[i].SupervisorUnit + ` </td>
+                                <td> `+ date[i].SupervisorUnitName + ` </td>
+                                <td> `+ data[i].ProjectState + ` </td>
+                            </tr>
+                        `;
+                        $('#newConstruct').append(html);
+                    }
+                }
+                layer.closeAll();
+            },
+            "json"
+        );
+    };
+
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        var time = '@ViewBag.time';
+        var name = '@ViewBag.name';
+
+        //改造项目汇总表
+        laypage.render({
+            elem: 'page1',
+            count: '@ViewBag.Total1',
+            curr: '@ViewBag.pageIndex',
+            //TODO 用于测试  待删除 --------每页显示数量
+            //limit: 1,
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    $('#Construction').empty();
+                    layer.msg('正在加载..', { icon: 16, shade: 0.3, time: 0 });
+                    var pageNumber = 1, //用于区分哪个分页
+                        type = 3,
+                        state = 5;
+                    showReocrd(obj.curr, time, pageNumber, type, state);
+                }
+            }
+        });
+
+        //未完成设计
+        laypage.render({
+            elem: 'page2',
+            count: '@ViewBag.Total2',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    $('#Undone').empty();
+                    layer.msg('正在加载..', { icon: 16, shade: 0.3, time: 0 });
+                    var pageNumber = 2, //用于区分哪个分页
+                        type = 3,
+                        state = 2;
+                    showReocrd(obj.curr, time, pageNumber, type, state);
+                }
+            }
+        });
+
+        //完工未投运
+        laypage.render({
+            elem: 'page3',
+            count: '@ViewBag.Total3',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    $('#Unused').empty();
+                    layer.msg('正在加载..', { icon: 16, shade: 0.3, time: 0 });
+                    var pageNumber = 3, //用于区分哪个分页
+                        type = 3,
+                        state = 3;
+                    showReocrd(obj.curr, time, pageNumber, type, state);
+                }
+            }
+        });
+
+        //正在施工
+        laypage.render({
+            elem: 'page4',
+            count: '@ViewBag.Total4',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    $('#RoadWork').empty();
+                    layer.msg('正在加载..', { icon: 16, shade: 0.3, time: 0 });
+                    var pageNumber = 4, //用于区分哪个分页
+                        type = 3,
+                        state = 4;
+                    showReocrd(obj.curr, time, pageNumber, type, state);
+                }
+            }
+        });
+        //在建
+        laypage.render({
+            elem: 'page5',
+            count: '@ViewBag.Total6',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    $('#newConstruct').empty();
+                    layer.msg('正在加载..', { icon: 16, shade: 0.3, time: 0 });
+                    var pageNumber = 5, //用于区分哪个分页
+                        type = 3,
+                        state = 4;
+                    showReocrd(obj.curr, time, pageNumber, type, state);
+                }
+            }
+        });
+    });
+</script>

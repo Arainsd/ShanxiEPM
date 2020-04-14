@@ -1,0 +1,401 @@
+﻿<!--项目批复-->
+@using hc.Plat.Common.Extend
+@using hc.epm.DataModel.Business;
+@model Epm_TzProjectApprovalInfo
+
+<div class="boxs">
+    @*油气销售信息*@
+    <div class="module-div">
+        <h4>油气销售信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <td class="table_title">估计油日销量：</td>
+                    <td class="td-div">
+                        <div>@Model.OilSalesTotal.ToString("0.00") 吨</div>
+                    </td>
+                    <td class="table_title">估计气日销量（CNG）：</td>
+                    <td class="td-div">
+                        <div>@Model.CNG.ToString("0.00") 千方</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">估计气日销量（LNG）：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.LNG.ToString("0.00") 千方</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @*项目批复信息*@
+    <div class="module-div">
+        <h4>项目批复信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <td class="table_title">限上/限下：</td>
+                    <td class="td-div">
+                        <div>
+                            @if (Model.LimitName == "XMXS1")
+                            {
+
+                                <span>地区公司限上项目</span>
+
+                            }
+                            else if (Model.LimitName == "XMXS2")
+                            {
+                                <span>地区公司限下项目</span>
+                            }
+                        </div>
+                    </td>
+                    <td class="table_title">示范/标准：</td>
+                    <td class="td-div">
+                        <div>
+                            @if (Model.StandardName == "XXGSPS1")
+                            {
+                                <span>示范加油站（油库）</span>
+                            }
+                            else if (Model.StandardName == "GFGSPS2")
+                            {
+                                <span>标准加油站（油库）</span>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">项目编号：</td>
+                    <td class="td-div">
+                        <div>@Model.ReviewCode</div>
+                    </td>
+                    <td class="table_title">生成批复（请示）文号：</td>
+                    <td class="td-div">
+                        <div>@Model.ApprovalNo</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">签发人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.SignerName</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">拟稿人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.DraftAuthorName</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">会签人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.SignPeopleName</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">决策负责人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.DecisionMakerName</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">现场负责人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.FieldManagerName</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">运营人：</td>
+                    <td class="td-div" colspan="3">
+                        <div>@Model.HeadOperationsName</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @*可研批复信息*@
+    <div class="module-div">
+        <h4>可研批复信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <td class="table_title">总投资：</td>
+                    <td class="td-div">
+                        <div>@Model.TotalInvestment.ToString("0.00") 万元</div>
+                    </td>
+                    <td class="table_title">合同款：</td>
+                    <td class="td-div">
+                        <div>@Model.ContractPayment.ToString("0.00") 万元</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">工程费用：</td>
+                    <td class="td-div">
+                        <div>@Model.EngineeringCost.ToString("0.00") 万元</div>
+                    </td>
+                    <td class="table_title">土地费用：</td>
+                    <td class="td-div">
+                        <div>@Model.LandCosts.ToString("0.00") 万元</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">其他费用：</td>
+                    <td class="td-div">
+                        <div>@Model.OtherExpenses.ToString("0.00") 万元</div>
+                    </td>
+                    <td class="table_title">首次取得投资计划日期：</td>
+                    <td class="td-div">
+                        <div>@(Convert.ToDateTime(Model.DateFirstScheme).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">已下达计划：</td>
+                    <td class="td-div">
+                        <div>@Model.IssuedPlan.ToString("0.00") 万元</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @*设施设备*@
+    <div class="module-div">
+        <h4>设施设备</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <td class="table_title">加油机：</td>
+                    <td class="td-div">
+                        <div>@Model.MachineOfOilStage 台 @Model.MachineOfOil 枪</div>
+                    </td>
+                    <td class="table_title">加气机：</td>
+                    <td class="td-div">
+                        <div>@Model.MachineOfGas 台 @Model.MachineOfGasStage 枪</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">罩棚：</td>
+                    <td class="td-div">
+                        <div>@Model.Shelter.ToString("0.00")</div>
+                    </td>
+                    <td class="table_title">油罐：</td>
+                    <td class="td-div">
+                        <div>@Model.OilTank.ToString("0.00")</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">站房：</td>
+                    <td class="td-div">
+                        <div>@Model.StationRoom.ToString("0.00")</div>
+                    </td>
+                    <td class="table_title">油罐数量：</td>
+                    <td class="td-div">
+                        <div>@Model.TankNumber</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">储气井（气罐）：</td>
+                    <td class="td-div">
+                        <div>@Model.GasWells.ToString("0.00")</div>
+                    </td>
+                    <td class="table_title">土地费用支付类型：</td>
+                    <td class="td-div">
+                         @if (Model.LandPaymentType == "FNZF")
+                         {
+                            <div>分年支付</div>
+                         }
+                         else if (Model.LandPaymentType == "YCXZF")
+                         {
+                            <div>一次性支付</div>
+                         }
+                         else if (Model.LandPaymentType == "ZNDZZF")
+                         {
+                            <div>逐年递增支付</div>
+                         }
+                         else if (Model.LandPaymentType == "QT")
+                         {
+                            <div>其他</div>
+                         }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">资产类型：</td>
+                    <td class="td-div">
+                        @if (Model.AssetType == "ZCLX1")
+                        {
+                            <div>全资</div>
+                        }
+                        else if(Model.AssetType == "ZCLX2")
+                        {
+                            <div>合资</div>
+                        }
+                    </td>
+                    <td class="table_title">投资金额：</td>
+                    <td class="td-div">
+                        <div>@Model.InvestmentAmount.ToString("0.00")</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">土地费用备注：</td>
+                    <td class="td-div" colspan="3" style="height:100px;">
+                        <div>@Model.RemarkOnLandCost</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">土地性质：</td>
+                    <td class="td-div">
+                        <div>@Model.LandStatus</div>
+                    </td>
+                    <td class="table_title">土地用途：</td>
+                    <td class="td-div">
+                        <div>@Model.LandUse</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">土地面积：</td>
+                    <td class="td-div">
+                        <div>@Model.AreaOfLand.ToString("0.00") 平米</div>
+                    </td>
+                    <td class="table_title">今年预计付款：</td>
+                    <td class="td-div">
+                        <div>@Model.ExpectedPaymentThisYear.ToString("0.00") 万元</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">预计达销时间：</td>
+                    <td class="td-div">
+                        <div>@Model.EstimatedTimeOfSales</div>
+                    </td>
+                    <td class="table_title">可研编制单位：</td>
+                    <td class="td-div">
+                        <div>@Model.UnitFeasibilityCompilation</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">股权投资形式：</td>
+                    <td class="td-div">
+                        <div>@Model.FormOfEquityInvestment</div>
+                    </td>
+                    <td class="table_title">实施单位：</td>
+                    <td class="td-div">
+                        <div>@Model.ImplementationCcompany</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">注册资本：</td>
+                    <td class="td-div">
+                        <div>@Model.RegisteredCapital.ToString("0.00") 万元</div>
+                    </td>
+                    <td class="table_title">控股比例：</td>
+                    <td class="td-div">
+                        <div>@Model.HoldingTheProportion</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">柴油日销量：</td>
+                    <td class="td-div">
+                        <div>@Model.DailyDieselSales.ToString("0.00")</div>
+                    </td>
+                    <td class="table_title">汽油日销量：</td>
+                    <td class="td-div">
+                        <div>@Model.DailyGasolineSales.ToString("0.00")</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">柴汽比：</td>
+                    <td class="td-div">
+                        <div>@Model.ChaiQibi</div>
+                    </td>
+                    <td class="table_title">气日销量 CNGY：</td>
+                    <td class="td-div">
+                        <div>@Model.CNGY.ToString("0.00")</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">气日销量 LNGQ：</td>
+                    <td class="td-div">
+                        <div>@Model.LNGQ.ToString("0.00")</div>
+                    </td>
+                    <td class="table_title">投资回收期：</td>
+                    <td class="td-div">
+                        <div>@Model.PayBackPeriod</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">内部收益率：</td>
+                    <td class="td-div">
+                        <div>@Model.InternalRateReturn</div>
+                    </td>
+                    <td class="table_title">非油年收入：</td>
+                    <td class="td-div">
+                        <div>@Model.AnnualNonOilIncome.ToString("0.00")</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">非油年成本：</td>
+                    <td class="td-div">
+                        <div>@Model.NonOilAnnualCost.ToString("0.00")</div>
+                    </td>
+                    <td class="table_title">预计投运时间：</td>
+                    <td class="td-div">
+                        <div>@(Convert.ToDateTime(Model.ScheduledComTime).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table_title">可研批复日期：</td>
+                    <td class="td-div">
+                        <div>@(Convert.ToDateTime(Model.FeasibleApprovalDate).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                    <td class="table_title">是否有工程信息：</td>
+                    <td class="td-div">
+                        @if (Model.HasEInformation == "GCXXBH1")
+                        {
+                            <div>是</div>
+                        }
+                        else if (Model.HasEInformation == "GCXXBH2")
+                        {
+                            <div>否</div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    @*附件信息*@
+    <div class="module-div">
+        <h4>附件信息</h4>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+            <tbody>
+                <tr>
+                    <th>序号</th>
+                    <th>附件名称</th>
+                    <th>附件类型</th>
+                    <th>操作</th>
+                </tr>
+                @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                {
+                    foreach (var item in Model.TzAttachs)
+                    {
+
+                        <tr id="${obj.GuidId}">
+                            <td><span class="font-black">@item.Sort</span></td>
+                            <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                            <td><span class="font-black">@item.TypeName</span></td>
+                            <td class="td-div" style="text-align:center">
+                                <a class="fileDel downloadFile" href="javascript:void(0)" data-id="@item.Id" data-url="@item.FilePath" data-name="@item.Name" data-typeno="@item.TypeNo" data-typename="@item.TypeName" style="color:#337ab7;">下载</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4">暂无附件</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

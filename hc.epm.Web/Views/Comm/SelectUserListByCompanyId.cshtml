@@ -1,0 +1,126 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel
+@using System.Collections.Generic;
+@model List<UserListView>
+
+@{
+    ViewBag.Title = "选择三商下的人员";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+
+    .form-select > form > div select {
+        padding-left: 5px;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>姓名 : </label><input type="text" id="name" name="name" value="@ViewBag.name" maxlength="100">
+                <input type="hidden" name="selectType" value="@ViewBag.SelectType" />
+                <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+            </div>
+            <div class="form-sub" style="width:auto;">
+                <button type="submit" style="cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="60">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="120">序号</th>
+                <th>姓名</th>
+                <th>电话</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.UserId" data-name="@item.UserName"/>
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Phone</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">暂无数据</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+            var CompanyId="@ViewBag.CompanyId";
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/Comm/SelectUserListByCompanyId?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize() + "&CompanyId=" + CompanyId;
+                    }
+                }
+            });
+        });
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    Name: $(this).data("name") || ''
+                });
+            });
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择人员';
+            }
+            return result;
+        }
+    </script>
+}
+

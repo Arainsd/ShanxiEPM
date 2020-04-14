@@ -1,0 +1,289 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_Protocol
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>标题：</label>
+                <div class="col-lg-9 col-sm-9">
+                    <input type="text" class="form-control" name="Title" id="Title" placeholder="请输入标题" style="margin-left:-4px;" value="@Model.Title" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.SId" />
+                </div>
+            </div>
+
+            <div class="form-group col-lg-12 col-sm-12">
+                <label class="col-lg-2 col-sm-2 control-label" style="margin-left:-3px;">启用/禁用 : </label>
+                <div class="col-lg-3 col-sm-3">
+                    @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+                <label class="col-lg-3 col-sm-3 control-label">是否确认 : </label>
+                <div class="col-lg-3 col-sm-3">
+                    @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>协议类型：</label>
+                <div class="col-lg-9 col-sm-9">
+                    @Html.DropDownList("Type", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="layui-form-item ">
+                <div class="layui-form-item menue">
+                    <div class="layui-inline col-sm-6">
+                        <label class="layui-form-label" style="margin-left:-15px;font-weight:bold;margin-right:12px;"><em class="required">*</em>附件：</label>
+                        <div class="layui-input-inline">
+                            <button class="layui-btn layui-btn-primary " id="btnSelect">
+                                <i class="layui-icon" style="font-size:30px;">&#xe622;</i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary " id="btnUpload" style="margin:0">
+                                <i class="layui-icon" style="font-size:30px;">&#xe62f;</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-inline col-sm-5">
+                        <div id="fileList" style="width:100%;">
+                        </div>
+                        <br />
+                        <div style="width:100%;display:none;" id="fileBar">
+                            <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%"></div></div>
+                        </div>
+                        <input type="hidden" name="fileDataJson" id="fileDataJson" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-12 col-sm-12">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>内容：</label>
+                <div class="col-lg-9 col-sm-9 ">
+                    <script type="text/plain" id="editor" style="height:200px">
+                        @Html.Raw(Model.Info)
+                    </script>
+                    <input type="text" name="Info" id="Info" class="form-control" style="width:0px;height:0px;border:0px;" />                  
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>说明 : </label>
+                <div class="col-lg-9 col-sm-9">
+                    <textarea name="Remark" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="Remark" placeholder="请输入内容">@Model.Remark</textarea>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12" style="margin-top:25px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var ue = UE.getEditor('editor');
+    //编辑器内容同步input
+    editor = UE.getEditor("editor", {
+        //initialFrameHeight: 40
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#Info").val(UE.getEditor("editor").getContent());
+            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+             .updateStatus('Info', 'NOT_VALIDATED', null)
+             .validateField('Info');
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Remark: {
+                    validators: {
+                        notEmpty: {
+                            message: '说明不能为空'
+                        },
+                    }
+                },
+                Title: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                    }
+                },
+                Info: {
+                    validators: {
+                        notEmpty: {
+                            message: '内容不能为空'
+                        }
+                    }
+                },
+            }
+        });
+    }
+    //提交
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        $.post("EditFiles", { tableName: '@ViewBag.tableName', id: '@Model.SId' }, function (data) {
+            if (data.Flag) {
+                for (var i = 0; i < data.Data.length; i++) {
+                    $("#fileList").append("<span id='files'>" + data.Data[i].Name + "</span>" + "<a href='" + FileDownLoadURL + data.Data[i].FileGuid + "' id='file'>下载</a>")
+                    var obj = {};
+                    var fileDataArray = [];
+                    obj.Name = data.Data[i].Name;
+                    obj.Size = data.Data[i].Size;
+                    obj.FileGuid = data.Data[i].FileGuid;
+                    fileDataArray.push(obj);
+                    var fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJson").val(fileDataJson);
+                };
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        })
+        //   监听提交
+        form.on('submit(sub)', function (data) {
+            $('#Info').val(ue.getContent());
+            var search = $("form").serialize();
+            //对表单进行验证
+            var files = $("#fileDataJson").val();
+            if (files == "" || files == null) {
+                parent.layer.alert("请上传电子协议附件", { icon: 2 });
+                return;
+            }
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");
+                        $("#save").val("请等待")
+                        var index2 = parent.layer.msg("电子协议修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(index2);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+                return false;
+            }
+
+
+        });
+        //图标上传
+
+        var uploader = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+            url: FileServerURL, // 服务端上传路径
+            max_file_size: MaxFileSize, // 文件上传最大限制。
+            max_file_count: 1, //指示用户可以同时上传文件的最大数量
+            chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+            browse_button: 'btnSelect',//触发上传元素
+            flash_swf_url: '/Scripts/plupload_2_1_2/Moxie.swf',
+            silverlight_xap_url: '/Scripts/plupload_2_1_2/Moxie.xap',
+            multi_selection: false,//	是否可以在文件浏览对话框中选择多个文件
+            //附加参数
+            multipart_params: {
+                app: 'epm'
+            },
+            //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+            filters: {
+                mime_types: [ //只允许上传图片和zip文件
+                { title: "Image files", extensions: "jpg,gif,png,pdf" },
+                ],
+                max_file_size: MaxPicSize, //最大只能上传400kb的文件
+                prevent_duplicates: true //不允许选取重复文件
+            },
+            rename: false, // 是否重命名文件
+            init: {
+                PostInit: function () {
+                    $('#fileList').html("");
+
+                    $('#btnUpload').click(function () {
+                        uploader.start();
+                        return false;
+                    });
+
+                },
+                FilesAdded: function (up, files) {
+                    $('#fileList').html("");
+                    //限定只能上传一个文件
+                    if (files.length > 1) {
+                        up.removeFile(files[0]);
+                    }
+                    plupload.each(files, function (file) {
+                        $('#fileList').append('<span id="' + file.id + '">' + file.name + '(' + plupload.formatSize(file.size) + ')</span>');
+                    });
+
+                },
+                UploadProgress: function (up, file) {
+                    $("#fileBar").show();
+                    element.progress("fileProgress", file.percent + "%");
+
+                },
+                FileUploaded: function (uploader, file, responseObject) {
+                    var data = JSON.parse(responseObject.response);
+                    var obj = {};
+                    var fileDataArray = [];
+                    obj.Name = data.file.Name;
+                    obj.Size = data.file.FileSize;
+                    obj.FileGuid = data.file.Guid;
+                    fileDataArray.push(obj);
+                    var fileDataJson = JSON.stringify(fileDataArray);
+                    setTimeout(function () {
+                        $("#fileBar").hide();
+                        element.progress("fileProgress", "0%");
+                    }, 1500);
+
+                    if (!data.flag) {
+                        layer.alert("错误,请检查文件格式后重新上传！");
+                        return;
+                    }
+                    var guid = data.file.Guid;
+                    $('#fileList').append("<a href='" + FileDownLoadURL + guid + "' id='file'>下载</a>");
+                    //上传完成移除队列
+                    uploader.removeFile(file);
+                    $("#fileDataJson").val(fileDataJson);
+
+                },
+                Error: function (up, err) {
+                    layer.alert("错误：" + err.code + ": " + err.message);
+
+                }
+            }
+        });
+        uploader.init();
+
+    });
+
+    //关闭弹出iframe层
+    $('.cancel').on("click", function () {
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    });
+</script>

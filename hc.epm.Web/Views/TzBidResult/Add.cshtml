@@ -1,0 +1,343 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_TzBidResult
+
+@{
+    ViewBag.Title = "上传招标结果";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .hideTr {
+        display: none;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称：</td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzTenderingApply.ProjectName</div>
+                            <input type="hidden" name="ProjectId" value="@Model.TzTenderingApply.ProjectId" />
+                            <input type="hidden" name="ProjectName" value="@Model.TzTenderingApply.ProjectName" />
+                            <input type="hidden" name="BidTd" value="@Model.TzTenderingApply.Id" />
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">承办部门：</td>
+                        <td class="td-div">
+                            <div>@Model.TzTenderingApply.UndertakeDepartment</div>
+                        </td>
+                        <td class="table_title">联系人：</td>
+                        <td class="td-div">
+                            <div>@Model.TzTenderingApply.UndertakeContacts</div>
+                            <input type="hidden" name="UndertakeContacts" value="@Model.TzTenderingApply.UndertakeContacts" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">联系电话：</td>
+                        <td class="td-div">
+                            <div>@Model.TzTenderingApply.UndertakeTel</div>
+                            <input type="hidden" name="UndertakeTel" value="@Model.TzTenderingApply.UndertakeTel" />
+                        </td>
+                        <td class="table_title">批复文件或者纪要：</td>
+                        <td class="td-div">
+                            <div>@Model.TzTenderingApply.ApprovalNo</div>
+                            <input type="hidden" name="ApprovalNo" value="@Model.TzTenderingApply.ApprovalNo" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>招标信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span>招标名称：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">@Model.TzTenderingApply.TenderingName</div>
+                            <input type="hidden" name="TenderingName" value="@Model.TzTenderingApply.TenderingName" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>招标类型：</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzTenderingApply.TenderingTypeName</div>
+                        </td>
+                        <td class="table_title">
+                            <span>招标方式：</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzTenderingApply.BidName</div>
+                            <input type="hidden" name="BidName" value="@Model.TzTenderingApply.BidName" />
+                            <input type="hidden" id="BidType" name="BidType" value="@Model.TzTenderingApply.BidType" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>资金预算及依据：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">@Model.TzTenderingApply.CapitalBudget 万元</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>项目概述：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">@Model.TzTenderingApply.ProjectSummary</div>
+                        </td>
+                    </tr>
+
+
+                    <tr class="hideTr">
+                        <td class="table_title">
+                            <span>邀请谈判理由：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">@Model.TzTenderingApply.InvitationNegotiate</div>
+                        </td>
+                    </tr>
+
+
+                    <tr class="hideTr">
+                        <td class="table_title">
+                            <span>拟邀请潜在谈判人：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">@Model.TzTenderingApply.InvitationNegotiator</div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="module-div">
+            <h4>中标候选人前三名</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <th class="table_title" style="width: 219px;">编号</th>
+                        <th class="td-div">公司名称</th>
+                        <th class="table_title">价标</th>
+                        <th class="td-div">备注</th>
+                    </tr>
+                    <tr>
+                        <td><i style="color:red;margin-left:-12px">*</i> 1</td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="BidderOne" class="form-control" placeholder="" value="@Model.BidderOne" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="QuotationOne" class="form-control" value="@Model.QuotationOne" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="RemarkOne" class="form-control" placeholder="" value="@Model.RemarkOne" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="BidderTwo" class="form-control" placeholder="" value="@Model.BidderTwo" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="QuotationTwo" class="form-control" value="@Model.QuotationTwo" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="RemarkTwo" class="form-control" placeholder="" value="@Model.RemarkTwo" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="BidderThree" class="form-control" placeholder="" value="@Model.BidderThree" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="QuotationThree" class="form-control" value="@Model.QuotationThree" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" name="RemarkThree" class="form-control" placeholder="" value="@Model.RemarkThree" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>拟推荐单位</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title"><i style="color:red;">*</i> 拟推荐单位：</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input class="form-control" type="text" id="RecommendUnit" name="RecommendUnit" placeholder="请输入拟推荐单位" value="@Model.RecommendUnit" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"><i style="color:red;">*</i> 推荐理由：</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" name="RecommendReason" style="resize:none;" placeholder="请输入推荐理由">@Model.RecommendReason</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+            <input type="hidden" name="State" id="State" />
+        </div>
+    </form>
+</div>
+
+<script>
+    $("#Cancel").on("click", function () {
+        window.location.href = "/TzBidResult/Index";
+    });
+
+    //根据招标方式是否展示隐藏字段
+    if ($("#BidType").val() == "ZBFSJINGZHENG") {
+        $(".hideTr").show();
+    }
+    else {
+        $(".hideTr").hide();
+    }
+    
+    //表单验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],
+
+        fields: {
+            BidderOne: {
+                validators: {
+                    notEmpty: {
+                        message: '公司名称不能为空'
+                    }
+                }
+            },
+            QuotationOne: {
+                validators: {
+                    notEmpty: {
+                        message: '价标不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '价标格式输入错误'
+                    }
+                }
+            },
+            RecommendUnit: {
+                validators: {
+                    notEmpty: {
+                        message: '拟推荐单位不能为空'
+                    }
+                }
+            },
+            RecommendReason: {
+                validators: {
+                    notEmpty: {
+                        message: '推荐理由不能为空'
+                    }
+                }
+            },
+            QuotationTwo: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '价标格式输入错误'
+                    }
+                }
+            },
+            QuotationThree: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: '价标格式输入错误'
+                    }
+                }
+            },
+        }
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //数据提交
+        $(".save").click(function () {
+            $(".save").addClass("layui-btn-disabled");
+            $(".save").attr("disabled", "disabled");
+
+            if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") { 
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+                if (!bv.isValid()) {
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                    return;
+                }
+            }
+
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        window.location.href = "/TzBidResult/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                    $(".save").removeClass("layui-btn-disabled");
+                    $(".save").removeAttr("disabled");
+                }
+            });
+        });
+
+    });
+</script>

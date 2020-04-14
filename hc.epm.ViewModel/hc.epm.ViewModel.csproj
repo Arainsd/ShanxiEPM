@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C2D7AF8D-0EFB-42D5-8B8B-AFCB1C3738B0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hc.epm.ViewModel</RootNamespace>
+    <AssemblyName>hc.epm.ViewModel</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\ServicePush\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppView\QuestionModel.cs" />
+    <Compile Include="AttendanceBranchCountView.cs" />
+    <Compile Include="AttendanceView.cs" />
+    <Compile Include="ChangeView.cs" />
+    <Compile Include="checkItemesPer.cs" />
+    <Compile Include="CheckItemView.cs" />
+    <Compile Include="CheckNewView.cs" />
+    <Compile Include="CheckView.cs" />
+    <Compile Include="Companies.cs" />
+    <Compile Include="CompanyTreeView.cs" />
+    <Compile Include="CompanyView.cs" />
+    <Compile Include="CompletionAcceptanceResUploadView.cs" />
+    <Compile Include="CompletionAcceptanceView.cs" />
+    <Compile Include="ConstituteCompanyView.cs" />
+    <Compile Include="ConstituteView.cs" />
+    <Compile Include="ContractView.cs" />
+    <Compile Include="CustomPropertyView.cs" />
+    <Compile Include="DataConfigView.cs" />
+    <Compile Include="EnumList.cs" />
+    <Compile Include="Gantt.cs" />
+    <Compile Include="GcGoodsOrdersApplyView.cs" />
+    <Compile Include="InspectView.cs" />
+    <Compile Include="MaterialDetailsView.cs" />
+    <Compile Include="MaterialView.cs" />
+    <Compile Include="MaterialViewNew.cs" />
+    <Compile Include="MaterielView.cs" />
+    <Compile Include="MeetingFileReportView.cs" />
+    <Compile Include="MessageView.cs" />
+    <Compile Include="MilepostView.cs" />
+    <Compile Include="MonitorView.cs" />
+    <Compile Include="NewProjectCompanyContractView.cs" />
+    <Compile Include="NoticeView.cs" />
+    <Compile Include="OperateProject.cs" />
+    <Compile Include="LogCompanyView.cs" />
+    <Compile Include="PeoplesView.cs" />
+    <Compile Include="PlanDelayView.cs" />
+    <Compile Include="PlanView.cs" />
+    <Compile Include="ProjectApprovalView.cs" />
+    <Compile Include="ProjectAttendanceTimeView.cs" />
+    <Compile Include="ProjectAttendanceView.cs" />
+    <Compile Include="ProjectBasicsInfoView.cs" />
+    <Compile Include="ProjectCompanyContractView.cs" />
+    <Compile Include="ProjectCount.cs" />
+    <Compile Include="ProjectKPIView.cs" />
+    <Compile Include="ProjectView.cs" />
+    <Compile Include="ProjectWeeklyView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionView.cs" />
+    <Compile Include="QuestType.cs" />
+    <Compile Include="ReformRecordView.cs" />
+    <Compile Include="RegionView.cs" />
+    <Compile Include="ResultUpload.cs" />
+    <Compile Include="ResultView.cs" />
+    <Compile Include="RightNode.cs" />
+    <Compile Include="RPAProjectProposalView.cs" />
+    <Compile Include="Score.cs" />
+    <Compile Include="SignFaceAI.cs" />
+    <Compile Include="SpecialAcceptanceView.cs" />
+    <Compile Include="SupervisorLogDetailView.cs" />
+    <Compile Include="SupervisorLogStatisticView.cs" />
+    <Compile Include="SupervisorLogView.cs" />
+    <Compile Include="SuppListView.cs" />
+    <Compile Include="SupplyMaterialReportView.cs" />
+    <Compile Include="TemplateView.cs" />
+    <Compile Include="TimeSettingView.cs" />
+    <Compile Include="TrainView.cs" />
+    <Compile Include="TzConDrawingView.cs" />
+    <Compile Include="TzProjectApprovalInfoWorkFlowView.cs" />
+    <Compile Include="TzMeetingFileReportWorkFlowView.cs" />
+    <Compile Include="TzProjectReveiewsWorkFlowView.cs" />
+    <Compile Include="TzFormTalkFileWorkFlowView.cs" />
+    <Compile Include="TzDesiginChangeApplyApprovalView.cs" />
+    <Compile Include="TzConDrawingWorkFlowView.cs" />
+    <Compile Include="TzDesignSchemeWorkFlowView.cs" />
+    <Compile Include="TzDesignSchemeView.cs" />
+    <Compile Include="TzDevResourceReportItemView.cs" />
+    <Compile Include="TzDevResourceReportView.cs" />
+    <Compile Include="TzFirstNegotiationView.cs" />
+    <Compile Include="TzFormTalkFileView.cs" />
+    <Compile Include="TzGasStationItemView.cs" />
+    <Compile Include="TzProjectProposalInfoView.cs" />
+    <Compile Include="TzGcGoodsOrdersItemView.cs" />
+    <Compile Include="TzLandNegotiationView.cs" />
+    <Compile Include="TzPeopleChgApplyItemView.cs" />
+    <Compile Include="TzPeopleChgApplyView.cs" />
+    <Compile Include="TzProjectApprovalInfoView.cs" />
+    <Compile Include="TzProjectReveiewsView.cs" />
+    <Compile Include="TzProjectScheduleView.cs" />
+    <Compile Include="TzProjectStartApplyView.cs" />
+    <Compile Include="TzResearchView.cs" />
+    <Compile Include="TzRivalStationReportView.cs" />
+    <Compile Include="TzResearchAllView.cs" />
+    <Compile Include="TzStartsApplyApprovalView.cs" />
+    <Compile Include="TzStartTenderingAndSupplyView.cs" />
+    <Compile Include="TzTenderingCountView.cs" />
+    <Compile Include="UserAndCompanyView.cs" />
+    <Compile Include="UserInfoView.cs" />
+    <Compile Include="UserView.cs" />
+    <Compile Include="WebRightNode.cs" />
+    <Compile Include="WebURLSettingView.cs" />
+    <Compile Include="WeeklyPathView.cs" />
+    <Compile Include="WeeklyView.cs" />
+    <Compile Include="WorkUploadRealSceneView.cs" />
+    <Compile Include="WorkView.cs" />
+    <Compile Include="XtCompletionAcceptanceView.cs" />
+    <Compile Include="XtTzBidResultView.cs" />
+    <Compile Include="XtTzNegotiationView.cs" />
+    <Compile Include="XtTzProjectProposalView.cs" />
+    <Compile Include="XtTzResearchView.cs" />
+    <Compile Include="XtTzTenderingApplyView.cs" />
+    <Compile Include="XtTzProjectStartApplyView.cs" />
+    <Compile Include="XtTzSupplyMaterialApplyView.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hc.epm.Common\hc.epm.Common.csproj">
+      <Project>{76C233FA-84B3-4A79-A3E3-5797373EC226}</Project>
+      <Name>hc.epm.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.BaseCore\hc.epm.DataModel.BaseCore.csproj">
+      <Project>{f8103b09-a5c7-48bd-b736-727fb2107165}</Project>
+      <Name>hc.epm.DataModel.BaseCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Basic\hc.epm.DataModel.Basic.csproj">
+      <Project>{64a4f74f-a0e1-4ef2-915b-dd49bd50edac}</Project>
+      <Name>hc.epm.DataModel.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Business\hc.epm.DataModel.Business.csproj">
+      <Project>{1c5dc3d9-56b1-4580-8b69-30955f72d6bd}</Project>
+      <Name>hc.epm.DataModel.Business</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

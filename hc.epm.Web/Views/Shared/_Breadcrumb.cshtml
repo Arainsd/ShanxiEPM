@@ -1,0 +1,51 @@
+﻿@using hc.epm.DataModel.Basic
+@using hc.epm.Web.ClientProxy;
+@using hc.Plat.Common.Global
+@{
+    List<Base_Right> list = new List<Base_Right>();
+
+    ClientProxyExType cpet = Session[ConstStr_Session.CurrentProxyExType] as ClientProxyExType;
+    if(cpet == null || cpet.UserID == "youke")
+    {
+        cpet = new ClientProxyExType()
+        {
+            UserID = "897711908373794816"
+        };
+    }
+    using (ClientSiteClientProxy proxy = new ClientSiteClientProxy(cpet))
+    {
+        var result = proxy.GetBreadcrumbNavigation(ViewBag.controllerName.ToString(), ViewBag.actionName.ToString());
+        list = result.Data;
+    }
+}
+<style>
+    .breadcrumb li {
+        display: inline !important;
+    }
+
+        .breadcrumb li img {
+            width: 20px;
+            height: 20px;
+            margin-right: 7px;
+            position: relative;
+            top: -1.5px;
+        }
+</style>
+<div class="breadcrumb">
+    <ul>
+        <li style="font-size:12px;"><img src="/Resource/images/ic_home.png" alt="Alternate Text" />您的位置：</li>
+        @if (list.Any())
+        {
+            foreach (var baseRight in list)
+            {
+                if (baseRight.IsMenu)
+                {
+                    <li><a href="@baseRight.URL" target="@baseRight.Target">@baseRight.Name</a></li>
+                }
+                else {
+                    <li>&nbsp;>&nbsp;<a href="@baseRight.URL" target="@baseRight.Target">@baseRight.Name</a></li>
+                }
+            }
+        }
+    </ul>
+</div>

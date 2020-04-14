@@ -1,0 +1,412 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+@model ReformRecordView
+@{
+    ViewBag.Title = "Detail";
+}
+<style>
+    .fileShow li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+    .title {
+        color: blue;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .control-label {
+        font-weight: 500;
+    }
+
+    .size {
+        font-weight: 500;
+        height: 34px;
+        line-height: 34px;
+        text-align: left;
+        padding: 0;
+    }
+
+    .timer-pic {
+        position: relative;
+        top: -25px;
+        left: 334px;
+    }
+
+    .af-na {
+        margin-left: -50px;
+    }
+
+    .sel {
+        width: 120px;
+        margin-left: 20px;
+    }
+
+    .file-name {
+        width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sort {
+        display: inline-block;
+        width: 45px;
+    }
+
+    .file-c {
+        color: blue;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">改造信息</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">项目名称：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" class="form-control" value="@Model.ReformRecord.ProjectName" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造类型：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control">
+                                <option>@ViewBag.RemarkType</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">站库名称：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" class="form-control" value="@Model.ReformRecord.StationName" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">地市公司：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" id="CompanyName" class="form-control" value="@Model.ReformRecord.CompanyName" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">限下/限上：</label>
+                        <div class="col-lg-8 col-sm-8">
+
+                            @if (Model.ReformRecord.LimitType == "1")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" checked />限上
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" />限下
+                                </label>
+
+                            }
+                            else if (Model.ReformRecord.LimitType == "2")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" />限上
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" checked />限下
+                                </label>
+                            }
+                            else {
+                                <label class="radio-inline">@Model.ReformRecord.LimitType</label>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">资金来源：</label>
+                        <div class="col-lg-8 col-sm-8">
+
+                            @if (Model.ReformRecord.SourceFund == "1")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" checked />投资
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" />费用
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" />二者兼有
+                                </label>
+
+                            }
+                            else if (Model.ReformRecord.SourceFund == "2")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" />投资
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" checked />费用
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" />二者兼有
+                                </label>
+                            }
+                            else if (Model.ReformRecord.SourceFund == "3")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" />投资
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" />费用
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="SourceFund" checked />二者兼有
+                                </label>
+                            }
+                            else {
+                                <label class="radio-inline">@Model.ReformRecord.SourceFund</label>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">投资金额：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" id="aa" class="form-control parse-float" value="@Model.ReformRecord.Investment" disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">万元</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">立项批复时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" id="ItemTime" name="ItemTime" value="@(Convert.ToDateTime(Model.ReformRecord.ItemTime).ToString("yyyy-MM-dd"))" disabled>
+                            <i class="iconfont timer-pic">&#xe7e2;</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">立项批复单位：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="ItemUnit" class="form-control" value="@Model.ReformRecord.ItemUnit" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">立项批复金额：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" class="form-control parse-float" value="@Model.ReformRecord.ItemMoney" disabled /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">初设批复文号：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="InitialNumber" class="form-control" value="@Model.ReformRecord.InitialNumber" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造起始时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" value="@(Convert.ToDateTime(Model.ReformRecord.RemarkStartTime).ToString("yyyy-MM-dd"))" disabled>
+                            <i class="iconfont timer-pic">&#xe7e2;</i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造终止时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="timer form-control" value="@Model.ReformRecord.RemarkEndTime" disabled>
+                            <i class="iconfont timer-pic">&#xe7e2;</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造金额：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control parse-float" value="@Model.ReformRecord.RemarkMoney" disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">万元</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">决策人：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" class="form-control" value="@Model.ReformRecord.DecisionMaker" disabled /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">负责人：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" class="form-control" value="@Model.ReformRecord.LeaderPerson" disabled /></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">运营人：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" class="form-control" value="@Model.ReformRecord.Operator" disabled /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <label class="control-label title">改造效果</label>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">原成品油销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" name="InitialSalesOfRefinedOil" class="form-control parse-float" value="@Model.ReformRecord.InitialSalesOfRefinedOil" disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造后成品油销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control parse-float" value="@Model.ReformRecord.RemarkSalesOfRefinedOil"  /></div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">原气销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control parse-float" value="@Model.ReformRecord.InitialSalesOfGas"  disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">千方/每日</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">改造后气销量：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control parse-float" value="@Model.ReformRecord.RemarkSalesOfGas" disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">千方/每日</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">内部收益率：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control parse-float" value="@Model.ReformRecord.IRR" disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">%</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">加管编码：</label>
+                        <div class="col-lg-7 col-sm-7"><input type="text" class="form-control" value="@Model.ReformRecord.PipetteCoding" disabled /></div>
+                        <label class="col-lg-2 col-sm-2 size">吨/日</label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">工程内容：</label>
+                    <div class="col-lg-6 col-sm-6"><textarea rows="2" class="form-control" disabled style="resize:none;">@Model.ReformRecord.ProjectContent</textarea></div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">备注：</label>
+                    <div class="col-lg-6 col-sm-6"><textarea rows="2" disabled class="form-control" style="resize:none;">@Model.ReformRecord.Remark</textarea></div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">附件：</label>
+                    <div class="col-lg-10 col-sm-10" id="fileListFile">
+                        <div style="margin-top:10px;">
+                            <ul class="fileShow">
+                                <li class="file-title">
+                                    <div class="file-name">
+                                        <span class="sort file-c">排序</span>
+                                        <a href="javascript:;" target="_blank" class="file-c">附件名称</a>
+                                    </div>
+                                    <span class="sel file-c">附件类型</span>
+                                    <div style="text-align:right; width:80px;" class="file-c">附件大小</div>
+                                    <span style="margin-left:20px;" class="file-c">上传人</span>
+                                    <span style="margin-left:20px;" class="file-c">上传时间</span>
+                                </li>
+                                @if (Model.Attachs != null && Model.Attachs.Count() > 0)
+                                {
+                                    foreach (var item in Model.Attachs)
+                                    {
+                                        <li>
+                                            <div class="file-name" data-url="@item.FilePath" data-fileName="@item.Name">
+                                                <span class="sort">@item.Sort</span>
+                                                <a href="javascript:;">@item.Name</a>
+                                            </div>
+                                            <span class="sel">@item.TypeName</span>
+                                            <div style="text-align:right; width:80px;">@item.Size</div>
+                                            <span style="margin-left:20px;">@item.OperateUserName</span>
+                                            <span style="margin-left:20px;">@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</span>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //去掉多余的0
+    $(".parse-float").each(function (index, item) {
+        if ($(item).val() != "") {
+            $(item).val(parseFloat($(item).val()));
+        } else if ($(item).val()=="") {
+            $(item).val("")
+        }
+      
+    });
+    if ($(".fileShow li").length > 1) {
+        $(".file-title").show();
+    } else {
+        $(".file-title").hide();
+    }
+    //下载附件
+
+    $("body").on("click", ".file-name", function () {
+      
+        var path = $(this).data("url");
+        var fileName = $(this).data("filename");
+        if (path.indexOf("http://") == -1) {
+            window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+        } else {
+            window.location.href = path;
+        }
+        
+    });
+</script>

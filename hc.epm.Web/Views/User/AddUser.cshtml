@@ -1,0 +1,691 @@
+﻿
+@{
+    ViewBag.Title = "人才库管理新增";
+    var companyid = ViewBag.CompanyId;
+    if (ViewBag.CompanyId == null)
+    {
+        return;
+    }
+}
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .file-but {
+        height: 30px;
+        width: 100px;
+        background: #2da0f3;
+        border-radius: 5px;
+        color: white;
+        border: none;
+    }
+
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #c3c3c3 !important;
+        color: white;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .box {
+        margin-bottom: 20px !important;
+    }
+
+        .box a {
+            padding: 0 5px;
+            line-height: 20px;
+        }
+
+    .breadcrumb {
+        display: none;
+    }
+      .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+</style>
+
+
+
+<div class="contentData">
+    <div class="box" style="width: 1200px; padding: 0; margin: auto; height: 30px; background-color:#f5f5f5;"><img src="/Resource/images/ic_home.png" /> 您的位置：<a href="javascript:void(0)" target="_self" onclick="jump()">人员管理列表</a> > <a>新增</a></div>
+    <form class="form-horizontal" id="mainForm">
+
+        <div class="module-div">
+            <h4>人员信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title"> <i class="color_red">*</i>用户编码:</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="UserCode" id="UserCode" placeholder="请输入编码" value="@ViewBag.UserCode" />
+                                <input type="hidden" name="Id" value="" />
+                                <input type="hidden" name="ImageInfo" id="ImageInfo" value="" />
+                            </div>
+                        </td>
+                        <td class="table_title" rowspan="4">人员照片：</td>
+                        <td class="td-div" rowspan="4">
+                            <div class="btn-upload" style="display:inline-block;">
+                                <img id="ImageId" class="ImageId" style="padding: 5px;width:150px;height:150px;cursor: pointer;margin-left: 10px;">
+                                <input type="button" id="btnUploadFile" name="btnUploadFile" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;top:49px;left:41px;" value="上传头像" />
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">性别:</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="radio" id="inlineRadio1" value=true name="Sex">男&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" id="inlineRadio2" value=false name="Sex" checked>女
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"><i class="color_red">*</i> 用户名称:</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="UserName" id="UserName" placeholder="请输入用户名称" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"> 登录账号:</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="UserAcct" id="UserAcct" placeholder="请输入登录账号" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"> 登录密码:</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="PassWord" id="PassWord" placeholder="请输入登录密码" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"><i class="color_red">*</i> 联系电话：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="Phone" id="Phone" placeholder="请输入电话" value="" />
+                            </div>
+                        </td>
+                        <td class="table_title"><i class="color_red">*</i> 所属单位：</td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="CompanyName" id="CompanyName" value="@ViewBag.CompanyName" readonly />
+                                <input type="hidden" name="CompanyId" id="CompanyId" value="@ViewBag.CompanyId" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">电子邮箱：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="Email" id="Email" placeholder="请输入电子邮箱" value="" />
+                            </div>
+                        </td>
+                        <td class="table_title">出生年月：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="BirthDate" class="form-control  input_unit" id="BirthDate" placeholder="请选择出生日期" autocomplete="off" value="" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd'})" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">毕业学校：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="University" id="University" placeholder="请输入毕业院校" value="" />
+                            </div>
+                        </td>
+                        <td class="table_title">专业名称：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="Major" id="Major" placeholder="请输入专业名称" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">学历：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <select name="Education" id="Education" lay-filter="Education" class="form-control selectpicker show-tick">
+                                    <option value="">请选择学历</option>
+                                    <option value="本科">本科</option>
+                                    <option value="大专">大专</option>
+                                    <option value="高中">高中</option>
+                                    <option value="中专">中专</option>
+                                    <option value="初中">初中</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td class="table_title">项目地区：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <select id="Province" class="form-control" style="width:33%;float:left">
+                                    <option value="">---请选择省---</option>
+                                </select>
+                                <select id="City" name="City" class="form-control" style="width:33%;float:left"></select>
+                                <select id="Area" name="Area" class="form-control" style="width:33%;float:left"></select>
+                                <input type="hidden" name="AddressName" id="AddressName" />
+                                <input type="hidden" name="Address" id="Address" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">职称：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("ProfessionalValue", ViewBag.Professional as SelectList, null, new { @class = "form-control" })
+                                <input id="Professional" type="hidden" name="Professional" value="" />
+
+                            </div>
+                        </td>
+                        <td class="table_title"><i class="color_red">*</i> 岗位：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("PostValue", ViewBag.Post as SelectList, null, new { @class = "form-control input_unit" })
+                                <input id="Post" type="hidden" name="Post" value="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">职业性质：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.DropDownList("ProfessionalQualificationValue", ViewBag.ProfessionalQualification as SelectList, new { @class = "form-control selectpicker  show-tick" })
+                                <input type="hidden" class="form-control  input_unit" name="ProfessionalQualification" id="ProfessionalQualification" value="" />
+                            </div>
+                        </td>
+                        <td class="table_title">开始职业日期：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="OccupationalStartTime" class="form-control  input_unit" id="OccupationalStartTime" style="text-align: left;border-radius: 4px;" placeholder="请选择开始职业日期" autocomplete="off" value="" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd'})" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"><i class="color_red">*</i>人员成绩：</td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" class="form-control  input_unit" name="achievement" id="achievement" value="" />
+                            </div>
+                        </td>
+                        <td class="table_title">成绩有效期：</td>
+                        <td class="td-div">
+                            <div class="timeGroup">
+                                <input type="text" class="form-control" id="achievementStartTime" name="achievementStartTime" value="" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#achievementEndTime').val(''); }})" placeholder="">
+                            </div>
+                            -
+                            <div class="timeGroup">
+                                <input type="text" class="form-control" id="achievementEndTime" name="achievementEndTime" value="" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'achievementStartTime\')}', })" placeholder="">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title"> 职业简述:</td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea name="OccupationalContent" id="OccupationalContent" class="sub-description" style="margin: 0px; width: 988px; height: 95px;" placeholder="请输入职业简述"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:300px;">证件类型</td>
+                        <td class="td-div" style="width: 570px!important;" colspan="3">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.UserFileType as SelectList, null, new { @class = "form-control sel" }))
+                        </td>
+                        <td class="table_title text_lf" colspan="6">
+                            <div class="btn-upload" style="display:inline-block">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="上传附件" />
+
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                        </td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">证件编号</th>
+                        <th class="td-div">颁发单位</th>
+                        <th class="td-div">获证日期</th>
+                        <th class="td-div">有效期至</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="button-group btn-center">
+            <button type="button" class="saveBut" style="background-color:#6a6969; color:#fff;">保存</button>
+            <button type="button" class="comBack" style="background-color:#6a6969; color:#fff;">返回</button>
+        </div>
+
+        <input type="file" id="loadFile" name="loadFile" style="display:none;" onchange="uploadFile()">
+        <input type="file" id="loadFile1" name="loadFile1" style="display:none;" onchange="uploadFile1()">
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <input type="hidden" name="fileDataJsonFileZP" id="fileDataJsonFileZP" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+
+    function jump(){
+        window.history.back();
+    }
+    //返回
+    $(".comBack").click(function () {
+        window.history.back();
+    });
+
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+    //头像上传
+    $(function(){
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile1").click();
+        });
+    });
+    //照片
+    var fileDataJsonFileZP = [];
+    function uploadFile1(){
+        if (document.getElementById("loadFile1").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        var imgUrl = "";
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = "SSRYGLZP";
+                    fileDataJsonFileZP.push(obj);
+                }
+
+            }
+        });
+    }
+    $('#loadFile1').on('change', function (e) {
+        // 检查是否是图片
+        var filePath = $(this).val();
+        //获取并记录图片的base64编码
+        var reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]); // 读出 base64
+        reader.onloadend = function () {
+            // 图片的 base64 格式, 可以直接当成 img 的 src 属性值
+            var dataURL = reader.result;//base64
+            // 显示图片
+            $('#ImageId').attr('src', dataURL);
+        };
+    });
+    function getBase64Image(img) {
+        var canvas = document.createElement("canvas");
+        canvas.width = 150;
+        canvas.height = 150;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
+        var dataURL = canvas.toDataURL("image/" + ext);
+        return dataURL;
+
+    }
+    //上传附件
+    function uploadFile() {
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = $("#FileType option:selected").val();
+                    obj.TypeName=$("#FileType option:selected").text();
+                    if(obj.TableColumn == "SSRYGLZP"){
+                        obj.ImageType == "small";
+                    };
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span  class ='sort'> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td><span><input type="text" class="form-control  input_unit" style="width:100%" name="CredentialsNumber" id="CredentialsNumber" placeholder="请输入证件编号" value="" /></span></td>
+                                        <td><span><input type="text" class="form-control  input_unit" style="width:100%" name="IssueUnit" id="IssueUnit" placeholder="请输入颁发单位" value="" /></span></td>
+                                        <td><span><input type="text" class="form-control GetCertificateTime" name="GetCertificateTime" id="GetCertificateTime_${index}" data-index=${index} style="text-align: left;border-radius: 4px;"  autocomplete="off" value=""/></span></td>
+                                        <td><span><input type="text" class="form-control TermofvalidityTime" name="TermofvalidityTime" id="TermofvalidityTime_${index}" data-index=${index} style="text-align: left;border-radius: 4px;"  autocomplete="off" value=""/></span></td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-tablecolumn="${obj.TableColumn}" >
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+            }
+        });
+
+    }
+
+    $(function () {
+        //附件上传限制证书最大日期和最小日期
+        $(document).on("click",".GetCertificateTime" ,function(e){  
+            var rowid =$(this).data("index");
+            WdatePicker({    
+                el: e.target,    
+                autoPickDate: true,    
+                dateFmt:"yyyy-MM-dd",
+                maxDate:'#F{$dp.$D(\'TermofvalidityTime_' + rowid + '\')}'  
+            });    
+        });  
+        //结束日期的点击事件  
+        $(document).on("click",".TermofvalidityTime" ,function(e){  
+            var rowid =$(this).data("index");
+            WdatePicker({    
+                el: e.target,    
+                autoPickDate: true,    
+                dateFmt:"yyyy-MM-dd",  
+                minDate:'#F{$dp.$D(\'GetCertificateTime_' + rowid + '\')}'  
+            });    
+        });
+        //获取区域列表（省）
+        function getRegionList() {
+            $.post("/Project/RegionList", { parentCode: "0" }, function (data) {
+                if (data.Flag) {
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#Province").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].Fullname + "</option>")
+                    };
+                }
+            });
+        }
+        $("#Province").change(function () {
+            var value = this.value
+            $.post("/Project/RegionList", { parentCode: value }, function (data) {
+                if (data.Flag) {
+                    $("#City").empty();
+                    $("#City").append("<option value=''>---请选择市---</option>")
+                    $("#Area").empty();
+                    $("#Area").append("<option value=''>---请选择县---</option>")
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#City").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+                }
+            });
+        });
+        //获取区域列表（县）
+        $("#City").change(function () {
+            value = this.value;
+            $.post("/Project/RegionList", { parentCode: value }, function (data) {
+                if (data.Flag) {
+                    $("#Area").empty();
+                    $("#Area").append("<option value=''>---请选择县---</option>");
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#Area").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+
+                }
+            });
+        });
+        //地区选择第三级选定后将地址信息保存至区域字段隐藏域
+        $("#Area").change(function () {
+            value = this.value;
+            $("#Address").val($("#Province").val() + "," + $("#City").val() + "," + value);
+            $("#AddressName").val($("#Province option:selected").text() + $("#City option:selected").text() + $("#Area option:selected").text());
+        });
+        getRegionList();//加载地区列表
+
+        jQuery.validator.addMethod("cellPhone", function (value, element) {
+            var tel = /^(0|86|17951)?1[356789][0-9]{9}$/;
+            return this.optional(element) || (tel.test(value));
+        }, "联系电话格式有误");
+        jQuery.validator.addMethod("IsEmail", function (value, element) {
+            var email = /^[a-zA-Z0-9_.-]+@{@Html.Raw("@");}[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+            return this.optional(element) || (email.test(value));
+        }, "邮箱格式有误");
+
+        jQuery.validator.addMethod("isChineseAndEnglish", function (value, element) {
+            var tel = /^[\u4E00-\u9FA5A-Za-z]+$/;
+            return this.optional(element) || (tel.test(value));
+        }, "此字段只允许中文或英文");
+
+
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                UserCode: {
+                    required: false,
+                    maxlength: 50
+                },
+                UserName: {
+                    required: true,
+                    maxlength: 20
+                },
+                UserAcct: {
+                    required: false,
+                    maxlength: 20
+                },
+                Phone: {
+                    required: true,
+                    cellPhone: true
+                },
+                PostValue: {
+                    required: true,
+                },
+                CompanyName: {
+                    required: true,
+                },
+                Email: {
+                    //required: false,
+                    maxlength: 50,
+                    IsEmail: true,
+                    //required: true,
+                },
+                University: {
+                    required: false,
+                    maxlength: 100,
+                    isChineseAndEnglish: true
+                },
+                Major: {
+                    required: false,
+                    maxlength: 50,
+                    isChineseAndEnglish: true
+                },
+                achievement:{
+                    min:1,
+                    max:100,
+                    required:true
+                },
+            },
+            messages: {
+                UserCode: {
+                    maxlength: "用户编码长度不能超过50字符",
+                },
+                achievement:{
+                    required: "输入的值必须在1-100之间",
+                },
+                UserName: {
+                    required: "用户名称不能为空",
+                    maxlength: "用户名称长度不能超过20字符",
+                },
+                Phone: {
+                    required: "联系电话不能为空",
+                },
+                PostValue: {
+                    required: "岗位不能为空",
+                },
+                UserAcct: {
+                    //required: "登录账号不能为空",
+                    maxlength: "登录账号长度不能超过20字符",
+                },
+                CompanyName: {
+                    required: "所属单位不能为空"
+                },
+                Email: {
+                    //required: "邮箱不能为空",
+                    maxlength: "邮箱长度不能超过50字符",
+                },
+                University: {
+                    maxlength: "毕业学校长度不能超过100字符",
+                },
+                Major: {
+                    maxlength: "专业名称长度不能超过50字符",
+                }
+            }
+        });
+    });
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, unit;
+        //$("#CompanyName").click(function () {
+        //    layer.open({
+        //        type: 2,
+        //        title: GetLayerTitle("选择分公司"),
+        //        shadeClose: false, //点击遮罩关闭层
+        //        area: ['800px', '600px'],
+        //        content: '/Comm/SelectServiceAll',
+        //        btn: ["确定", "取消"],
+        //        yes: function (index, layero) {
+        //            var iframeWin = window[layero.find('iframe')[0]['name']];
+        //            var obj = frames['layui-layer-iframe' + index].getSelectData();
+        //            if (obj.flag === false) {
+        //                ViewBag.Professional
+        //                layer.alert(obj.msg, { icon: 2 });
+        //            } else {
+        //                $("#CompanyName").val(obj.data[0].Name);
+        //                $("#CompanyId").val(obj.data[0].Id);
+        //            }
+        //            layer.close(index);
+        //        },
+        //        btn2: function (index, layero) {
+        //            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        //            parent.layer.close(index);//关闭窗口
+        //        },
+        //        cancel: function (index, layero) {
+        //        },
+        //    });
+        //});
+
+        //数据提交
+        $(".saveBut").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    Url: $(item).find("#updata").data("url"),
+                    TableColumn: $(item).find("#updata").data("tablecolumn"),
+                    Sort: index + 1,
+                    CredentialsNumber: $(item).find("#CredentialsNumber").val(),
+                    IssueUnit: $(item).find("#IssueUnit").val(),
+                    GetCertificateTime: $(item).find("#GetCertificateTime").val(),
+                    TermofvalidityTime: $(item).find("#TermofvalidityTime").val(),
+                })
+            });
+
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+
+            //头像
+            $("#fileDataJsonFileZP").val(JSON.stringify(fileDataJsonFileZP));
+
+            //职称
+            $("#Professional").val($("#ProfessionalValue option:selected").text());
+            //岗位
+            if($("#PostValue option:selected").val() != ""){
+                $("#Post").val($("#PostValue option:selected").text());
+            }
+
+            //职业性质
+            $("#ProfessionalQualification").val($("#ProfessionalQualificationValue option:selected").text());
+
+            if ($("#mainForm").valid()) {
+                var state = $(this).data("state");
+                var CompanyId = $("input:hidden[name='CompanyId']").val();
+
+                $("#State").val(state);
+                var search = $("form").serialize();
+                $.post("AddUser", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("修改成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/User/UserList?CompanyId=" + CompanyId;
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+        });
+    });
+</script>
+

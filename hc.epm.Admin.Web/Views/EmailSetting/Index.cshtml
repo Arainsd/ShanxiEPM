@@ -1,0 +1,244 @@
+﻿@using hc.epm.DataModel.Msg
+@using System.Collections.Generic;
+@model IEnumerable<Msg_EmailSetting>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> 邮件管理 </span> > <span> 邮件接口设置 </span>
+    </div>
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">邮件接口名称 : </label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入邮件接口名称" autocomplete="off" class="layui-input" value="@ViewBag.Name" /></div>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">启用/禁用 : </label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("IsEnable")
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否确认 : </label>
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("IsConfirm")
+                    </div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" data-module="EmailSetting" data-right="Add" id="add" class="checkright">新 增</a>
+            <a href="javascript:;" data-module="EmailSetting" data-right="Delete" id="delete" class="checkright">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="50">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th width="60" style="text-align:center">序号</th>
+                        <th width="10%" style="text-align:left">编号</th>
+                        <th  style="text-align:left">邮件接口名称</th>
+                        <th width="10%" style="text-align:left">邮件接口服务器</th>
+                        <th width="10%" style="text-align:left">SSL端口号</th>
+                        <th width="10%" style="text-align:left">邮件接口用户名</th>
+                        <th width="10%" style="text-align:left">邮件接口密码</th>
+                        <th width="100" style="text-align:center">启用/禁用</th>
+                        <th width="100" style="text-align:center">确认状态</th>
+                        <th width="90" style="text-align:center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td>
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td class="table-left">@item.No</td>
+                                <td class="table-left">@item.Name</td>
+                                <td class="table-left">@item.Servers</td>
+                                <td class="table-left">@item.SSL</td>
+                                <td class="table-left">@item.UserName</td>
+                                <td class="table-left">@item.PassWord</td>
+                                <td class="table-center">
+                                    @if (item.IsEnable)
+                                    {
+                                        <a href="javascript:;" class='change-state checkright' data-module="EmailSetting" data-right="enable" data-itemid="@item.Id" data-value="@item.IsEnable" data-type="1" title="启用/禁用"><i class='glyphicon glyphicon-check handle-blue'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='change-state checkright' data-module="EmailSetting" data-right="enable" data-itemid="@item.Id" data-value="@item.IsEnable" data-type="1" title="启用/禁用"><i class='glyphicon glyphicon-lock handle-red'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    @if (item.IsConfirm)
+                                    {
+                                        <a href="javascript:;" class='change-state checkright' data-module="EmailSetting" data-right="confirm" data-itemid="@item.Id" data-value="@item.IsConfirm" data-type="2" title="确认状态"><i class='glyphicon glyphicon-ok-sign handle-blue'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='change-state checkright' data-module="EmailSetting" data-right="confirm" data-itemid="@item.Id" data-value="@item.IsConfirm " data-type="2" title="确认状态"><i class='glyphicon glyphicon-question-sign handle-red'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    <a href="javascript:;" data-module="EmailSetting" data-right="Info" class="details-link checkright" data-itemid="@item.SId" style="margin-right:20%;" title="详情"><i class='glyphicon glyphicon-list-alt handle-blue'></i></a>
+                                    <a href="javascript:;" data-module="EmailSetting" data-right="Modify" class="editor-link checkright" data-itemid="@item.SId" title="编辑"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        //分页
+
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/EmailSetting/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //修改
+        $(".editor-link").click(function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("邮件接口设置-编辑"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: [BigLayerWidth, '600px'],
+                    content: '/EmailSetting/Edit/' + id
+                });
+            }
+
+        });
+        //详情
+        $(".details-link").click(function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("邮件接口设置-详情"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: [BigLayerWidth, '600px'],
+                    content: '/EmailSetting/Detail/' + id
+                });
+            }
+
+        });
+        //增加
+        $("#add").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("邮件接口设置-新增"),
+                area: [BigLayerWidth, '600px'],
+                content: '/EmailSetting/add'
+            });
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/EmailSetting/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+        //确认状态切换
+        $(".change-state").click(function () {
+            var id = $(this).data("itemid");
+            var value = $(this).data("value");
+            var type = $(this).data("type");
+            if (id != '') {
+                var mes = GetIsEnableLayerMes(value, type);//获取弹出询问层的提示语句
+                if (type == "2" && value == "True") {//若该条数据为已确认数据将不能改变其确认状态
+                    parent.layer.alert(mes, { icon: 2 });
+                } else {
+                    parent.layer.confirm(mes, { icon: 3 }, function () {
+                        $.post("EditState", { emailSettingId: id, type: type }, function (data) {
+                            if (data.Flag) {
+                                window.location.href = "/EmailSetting/Index";
+                                parent.layer.msg("操作成功！", { time: 1000, icon: 1 });
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        })
+                    })
+                }
+            } else {
+                parent.layer.alert("请选择要操作的项！")
+            }
+        })
+    });
+</script>

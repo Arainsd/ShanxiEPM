@@ -1,0 +1,480 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model Epm_DangerousWork
+@{
+    ViewBag.Title = "查看危险作业";
+    var realSceneList = ViewBag.RealSceneList;
+}
+<style>
+    .tab .realSceneList li > div:nth-child(1) {
+        flex: none !important;
+        width: 350px !important;
+    }
+
+    .tab .realSceneList li > div:nth-child(2) {
+        flex: none !important;
+    }
+
+    .tab .realSceneList {
+        padding-right: 40px;
+        margin: 30px 20px 20px 120px;
+        font-size: 14px;
+    }
+
+    .realSceneList .fileShow {
+        width: 100%;
+    }
+
+    .tab .realSceneList li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab .realSceneList li > div:nth-child(1) {
+            flex: 6;
+        }
+
+        .tab .realSceneList li > div:nth-child(2) {
+            flex: 1;
+        }
+
+        .tab .realSceneList li > div:nth-child(3) {
+            flex: 1;
+        }
+
+        .tab .realSceneList li > div:nth-child(4) {
+            flex: 1;
+        }
+</style>
+@if (Model == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" name="ProjectName" value="@Model.ProjectName" disabled />
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                    <input type="hidden" name="State" id="State" value="" />
+                </div>
+                @*<div class="long-text">
+                    <label>&nbsp;作业名称&nbsp;:</label>
+                    <input type="text" name="TaskName" id="TaskName" value="@Model.TaskName" disabled />
+                </div>*@
+                <div class="short-text">
+                    <label>&nbsp;作业时间&nbsp;:</label>
+
+                    <input type="text" id="StartTime" name="StartTime" disabled value="@(Model.StartTime == null ? "" : Convert.ToDateTime(Model.StartTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el:'time-single1' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                @*<div class="short-text">
+                        <label>&nbsp;结束时间&nbsp;:</label>
+                        <input type="text" id="EndTime" name="EndTime" disabled value="@(Model.EndTime == null ? "" : Convert.ToDateTime(Model.EndTime).ToString("yyyy-MM-dd"))">
+                        <i onClick="WdatePicker({ el:'time-single2' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                    </div>*@
+                <div class="short-text disable-drop">
+                    <label>&nbsp;作业分类&nbsp;:</label>
+                    <select disabled>
+                        <option selected>@Model.TaskTypeName</option>
+                    </select>
+                    <input type="hidden" name="TaskTypeName" value="@Model.TaskTypeName" />
+                    <input type="hidden" name="TaskTypeNo" value="@Model.TaskTypeNo" />
+                </div>
+                <div class="intro">
+                    <div><label>&nbsp;作业内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" disabled name="TaskContent">@Model.TaskContent</textarea>
+                    </div>
+                </div>
+                @*<div class="long-text">
+                    <label>&nbsp;作业区域&nbsp;:</label>
+                    <input type="text" name="TaskArea" value="@Model.TaskArea" disabled />
+                </div>*@
+                <div class="long-text">
+                    <label for="ProjectName">&nbsp;施工单位&nbsp;:</label>
+                    <input type="text" name="workCompanyName" id="workCompanyName" disabled value="@Model.workCompanyName" />
+                    <input type="hidden" name="WorkCompanyId" value="@Model.WorkCompanyId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                @*<div class="long-text">
+                    <label>&nbsp;防护措施&nbsp;:</label>
+                    <input type="text" name="Protective" value="@Model.Protective" disabled />
+                </div>*@
+                <div class="short-text disable-drop">
+                    <label>&nbsp;状态&nbsp;:</label>
+                    <select disabled>
+                        <option selected>@(((ApprovalState)Model.State).GetText())</option>
+                    </select>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                    <div style="width:100%;margin:3px 20px 20px 0px;" id="fileList">
+                        <ul class="fileShow"></ul>
+                    </div>
+                </div>
+                @{
+                    if (realSceneList != null && realSceneList.Count > 0)
+                    {
+                        foreach (var scene in realSceneList)
+                        {
+                            <div class="short-text" style="margin-top: 35px;">
+                                <label>&nbsp;上传日期&nbsp;:</label>
+                                <label style="text-align: left;">&nbsp;@(Convert.ToDateTime(scene.UploadTime).ToString("yyyy-MM-dd"))&nbsp;</label>
+                            </div>
+                            <div class="short-text">
+                                <label>&nbsp;状态&nbsp;:</label>
+                                <label style="text-align: left;">&nbsp;@(((ApprovalState)scene.State).GetText())&nbsp;</label>
+                            </div>
+                            <div class="upload" style="margin-bottom:0px;">
+                                <div><label>&nbsp;作业实景&nbsp;:</label></div>
+                                <div style="width:100%;margin:3px 20px 20px 0px;" class="realSceneList" id="@scene.SId">
+                                    <ul class="fileShow"></ul>
+                                </div>
+                            </div>
+                        }
+                    }
+                    if (Model.State == (int)ApprovalState.WorkPartAppr || Model.State == (int)ApprovalState.ApprSuccess)
+                    {
+                        <div class="upload" style="margin-bottom:0px;margin-top: 15px;">
+
+                            @if (ViewBag.detail == 2)
+                            {
+                                <div><label><span class="star">*</span>&nbsp;上传作业实景&nbsp;:</label></div>
+                                <div class="btn-upload">
+                                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" />
+                                </div>
+                                <div style="width:100%;margin:3px 20px 20px 0px;margin-top: 40px;margin-left:-100px;" id="fileListFile">
+                                    <ul class="fileShow"></ul>
+                                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                                </div>
+                            }
+                            else {
+                                <div style="width:100%;margin:3px 20px 20px 0px;" id="fileListFile">
+                                    <ul class="fileShow"></ul>
+                                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+                <div class="button-group btn-center">
+                    @if (Model.State == (int)ApprovalState.WaitAppr)
+                    {
+                        <button type="button" class="ApprSuccess checkright" data-module="DangerousWork" data-right="Check">审核</button>
+                        <button type="button" class="ApprFailure checkright" data-module="DangerousWork" data-right="UnCheck">驳回</button>
+                    }
+                    else if (Model.State == (int)ApprovalState.ApprFailure)
+                    {
+                        @*<button type="button" class="Discarded checkright" data-module="DangerousWork" data-right="Invalid">废弃</button>*@
+                    }
+                    else if (Model.State == (int)ApprovalState.ApprSuccess)
+                    {
+                        if (ViewBag.detail == 2)
+                        {
+                            <button type="button" class="Save" data-module="DangerousWork" data-right="UnCheck">提交</button>
+                        }
+                    }
+                    else if (Model.State == (int)ApprovalState.WorkPartAppr)
+                    {
+                        if (ViewBag.detail == 2)
+                        {
+                            <button type="button" class="Save" data-module="DangerousWork" data-right="UnCheck">提交</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="WorkApprSuccess checkright" data-module="DangerousWork" data-right="Check">审核</button>
+                            <button type="button" class="WorkApprFailure checkright" data-module="DangerousWork" data-right="UnCheck">驳回</button>
+                        }
+                        @*foreach (var scene in realSceneList)
+                            {
+                                if (scene.WorkId == Model.Id && scene.State == (int)ApprovalState.WaitAppr)
+                                {
+                                    <button type="button" class="WorkApprSuccess checkright" data-module="DangerousWork" data-right="Check">审核</button>
+                                    <button type="button" class="WorkApprFailure checkright" data-module="DangerousWork" data-right="UnCheck">驳回</button>
+                                    }
+                                }*@
+
+                    }
+                    <button type="button" class="Quesion">沟通</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+
+        //上传附件实景
+        var fileDataArray = [];
+        function uploadFile() {
+            if (document.getElementById("loadFile").files.length == 0) {
+                return;
+            }
+            var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+            var formFile = new FormData();
+            formFile.append("file", fileObj);
+            var path = formFile;
+
+            $.ajax({
+                url: "/Upload/UploadHB",
+                type: "POST",
+                data: path,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = {};
+                        obj.Name = data[i].Name;
+                        obj.GuidId = data[i].GuidId;
+                        obj.Size = data[i].Size;
+                        obj.ImageType = data[i].ImageType;
+                        obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                        obj.Url = data[i].ResponseObject.FDFS_NAME;
+                        fileDataArray.push(obj);
+
+                        if (data[i].ImageType == null) {
+                            var imgUrl = getFileImg(obj.Name);
+                            var odiv = '<li id="' + obj.GuidId + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                            odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                            odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                            odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+                    }
+                    fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJson);
+                    $("#loadFile").val("");
+                }
+            });
+        }
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+            //获取附件
+            $.post("/Files/GetFileList", { tableName: 'Epm_DangerousWork', id: '@Model.Id' }, function (data) {
+                if (data.Flag) {
+                    if (data.Data.length > 0) {
+                        data.Data.forEach(function (item, index, arr) {
+                            if (item.ImageType == null) {
+                                var odiv = '<li id="' + item.GuidId + '">';
+                                odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                odiv += '<div>' + item.Size + '</div>';
+                                odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '</li>';
+                                $('#fileList .fileShow').append(odiv);
+                            }
+                        });
+                    }
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+            $(".realSceneList").each(function () {
+                var sceneId = $(this).attr("id");
+                var obj = $(this);
+                //获取附件
+                $.post("/Files/GetFileList", { tableName: 'Epm_WorkUploadRealScene', id: sceneId }, function (data) {
+                    if (data.Flag) {
+                        if (data.Data.length > 0) {
+                            data.Data.forEach(function (item, index, arr) {
+                                if (item.ImageType == null) {
+                                    var odiv = '<li id="' + item.GuidId + '">';
+                                    odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                                    odiv += '<div>' + item.Size + '</div>';
+                                    odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                                    odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                                    odiv += '</li>';
+                                    $(obj).find('.fileShow').append(odiv);
+                                }
+                            });
+                        }
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            });
+
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+
+            //下载附件
+            $("body").on("click", ".downloadFile", function () {
+                var group = $(this).parent().find(".hiddenArea").data("group");
+                var path = $(this).parent().find(".hiddenArea").data("url");
+                var fileName = $(this).parent().find(".hiddenArea").data("filename");
+                window.location.href = "/Download/DownLoadHB?group=" + group + "&path=" + path + "&fileName=" + fileName;
+            });
+            //废弃
+            $(".Discarded").click(function () {
+                layer.confirm("是否废弃？", { icon: 3 }, function () {
+                    var id = $("#Id").val()
+                    $.post("/Work/Discard?id=" + id, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Work/Index";
+                            });
+                        } else {
+                            layer.alert(result.Message, { icon: 2 });
+                        }
+                    })
+
+                });
+            });
+            //删除
+            $(".Delete").click(function () {
+                layer.confirm("是否删除？", { icon: 3 }, function () {
+                    var id = $("#Id").val()
+                    $.post("/Work/Delete?id=" + id, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Work/Index";
+                            });
+                        } else {
+                            layer.alert(result.Message, { icon: 2 });
+                        }
+                    })
+
+                });
+            });
+            //审核
+            $(".ApprSuccess").click(function () {
+                parent.layer.confirm("是否确认通过？", { icon: 3 }, function () {
+                    var id = $("#Id").val();
+                    $.post("/Work/Audit?id=" + id, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Work/Index";
+                            });
+                        } else {
+                            layer.alert(result.Message, { icon: 2 });
+                        }
+                    })
+                });
+            });
+            //驳回
+            $(".ApprFailure").click(function () {
+               var id = $("#Id").val();
+                parent.layer.prompt({
+                    formType: 2,
+                    title: '请输入驳回理由',
+                    yes: function (index, layero) {
+                        // 获取文本框输入的值
+                        var value = layero.find(".layui-layer-input").val();
+                        if (value) {
+                            $.post("/Work/Reject?id=" + id,  function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("操作成功", { time: 2000, icon: 1 });
+                                    window.location.href = "/Work/Index";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        } else {
+                            parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                        }
+                    }
+                });
+            });
+
+            //沟通
+            $(".Quesion").click(function () {
+                var projectId = $("#ProjectId").val();
+                window.location.href = "/Question/Add?businType=Dangerous&projectId=" + projectId + "&BusinessId=@Model.Id";
+            });
+
+            //审核实景
+            $(".WorkApprSuccess").click(function () {
+                parent.layer.confirm("是否确认通过？", { icon: 3 }, function () {
+                    var id = $("#Id").val();
+                    $.post("/Work/Audit?id=" + id, function (result) {
+                        if (result.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Work/Index";
+                            });
+                        } else {
+                            layer.alert(result.Message, { icon: 2 });
+                        }
+                    })
+                });
+            });
+            //驳回实景
+            $(".WorkApprFailure").click(function () {
+                var id = $("#Id").val();
+                parent.layer.prompt({
+                    formType: 2,
+                    title: '请输入驳回理由',
+                    yes: function (index, layero) {
+                        // 获取文本框输入的值
+                        var value = layero.find(".layui-layer-input").val();
+                        if (value) {
+                            $.post("/Work/Reject?id=" + id, function (data) {
+                                if (data.Flag) {
+                                    parent.layer.msg("操作成功", { time: 2000, icon: 1 });
+                                    window.location.href = "/Work/Index";
+                                } else {
+                                    parent.layer.alert(data.Message, { icon: 2 });
+                                }
+                            }, "json");
+                        } else {
+                            parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                        }
+                    }
+                });
+            });
+
+            //提交数据
+            $(".Save").click(function () {
+                var id = $("#Id").val();
+                if ($("#fileListFile .fileShow li").length == 0) {
+                    layer.alert("请先上传附件", { icon: 2 });
+                    return false;
+                }
+                var data = $("#mainForm").serialize();
+                data = decodeURIComponent(data, true)
+                $.ajax({
+                    url: "/Work/SaveWorkFile?id=" + id,
+                    type: "post",
+                    data: data,
+                    success: function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Work/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+                    }

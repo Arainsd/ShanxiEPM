@@ -1,0 +1,444 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@model Epm_Template
+@{
+    ViewBag.Title = "模板管理添加";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style>
+    .layui-form-label {
+        width:112px!important;
+    }
+    </style>
+<link href="/Content/jqtree/TreeGrid.css" rel="stylesheet">
+<script src="/Content/jqtree/TreeGrid.js"></script>
+
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal bv-form" id="mainForm">
+            <div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>标题：</label>
+                <div class="col-lg-9 col-sm-9">
+                    <input type="text" class="form-control" name="Title" id="Title" placeholder="请输入标题" style="margin-left:-4px;" data-bv-field="Title"><i class="form-control-feedback" data-bv-icon-for="Title" style="display: none;"></i>
+                    <input type="hidden" id="templateTypeId" name="templateTypeId" value="@Model.TemplateTypeId" />
+                    <input type="hidden" id="templateTypeName" name="templateTypeName" value="@Model.TemplateTypeName" />
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Title" data-bv-result="NOT_VALIDATED" style="display: none;">标题不能为空</small>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 mb25" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>内容 : </label>
+                <div class="col-lg-9 col-sm-9" style="padding-left: 10px; padding-right: 20px;">
+                    <textarea name="Description" id="Remark" class="form-control" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" placeholder="请输入说明"></textarea>
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Description" data-bv-result="NOT_VALIDATED" style="display: none;">说明不能为空</small>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 has-feedback organization " style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位：</label>
+                <div class="col-lg-9 col-sm-9">
+                    <input type="text" class="form-control" autocomplete="off" name="TrainCompanyName" id="TrainCompanyName" placeholder="请输入单位" style="margin-left:-4px;" data-bv-field="TrainCompanyName"><i class="form-control-feedback" data-bv-icon-for="TrainCompanyName" style="display: none;"></i>
+                    <input type="hidden" name="TrainCompanyid" id="TrainCompanyid" />
+                    <small class="help-block" data-bv-validator="notEmpty" data-bv-for="TrainCompanyName" data-bv-result="NOT_VALIDATED" style="display: none;">标题不能为空</small>
+                </div>
+            </div>
+
+            <div class="form-group col-lg-12 col-sm-12 has-feedback organization ">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>项目：</label>
+                <div class="col-lg-9 col-sm-9" id="maincontent"></div>
+                <div class="col-lg-1 col-sm-1" style="margin-top:10px;">
+                    <input type="button" id="addDetails" value="添加" class="layui-btn layui-btn-xs" />
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 has-feedback" style="margin:0 0 10px 5px;">
+                <label class="layui-form-label" style="font-weight:bold;margin-right:10px;"><em class="required">*</em>附件列表：</label>
+                <div style="width:103%;">
+                    <table class="layui-table" style="width:83%;">
+                        <thead>
+                            <tr>
+                                <th width="150" class="table-center">名称</th>
+                                <th width="90" class="table-center">附件格式</th>
+                                <th width="100" class="table-center">大小</th>
+                                <th width="90" class="table-center">上传时间</th>
+                                <th width="70" class="table-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fileList"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-block col-sm-5">
+                <div style="width:100%;display:none;margin-left:140px;" id="fileBar">
+                    <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%" style="width: 0%;"><span class="layui-progress-text">NaN%</span></div></div>
+                </div>
+                <input type="hidden" name="fileDataJson" id="fileDataJson">
+            </div>
+            <div class="layui-form-item ">
+                <div class="layui-form-item menue">
+                    <div class="layui-inline col-sm-6" style="margin-left:140px">
+                        <div class="layui-input-inline">
+                            <button class="layui-btn layui-btn-primary " id="btnSelect" style="position: relative; z-index: 1;">
+                                <i class="layui-icon" style="font-size:30px;"></i>
+                            </button>
+                            <button class="layui-btn layui-btn-primary " id="btnUpload" style="margin:0">
+                                <i class="layui-icon" style="font-size:30px;"></i>
+                            </button>
+                            <div id="html5_1cc562u8f6oj148f1162ngkih33_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 0px; width: 71px; height: 38px; overflow: hidden; z-index: 0;">
+                                <input id="html5_1cc562u8f6oj148f1162ngkih33" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;" accept="image/jpeg,image/gif,image/png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <input type="hidden" name="id" id="templateId" value=@Model.Id />
+            <div class="col-lg-12 col-sm-12" style="margin-top:25px">
+                <div class="col-lg-12 col-sm-12" style="text-align:center;margin-bottom:10px">
+                    <input type="button" name="save" id="save" lay-submit="" lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<link href="/Content/jqtree/TreeGrid.css" rel="stylesheet">
+<script src="/Content/jqtree/TreeGrid.js"></script>
+<script>
+    //项目列表的编辑列
+    function customLook(row, col) {
+        return '<a href="javascript:;"class="editor-link checkright" onclick="delDetail(this)" data-itemid="' + row.checkboxValue + '" title="删除" data-module="TypeDictionary" data-right="modify" style="display: inline;"><i class="glyphicon glyphicon-remove handle-blue"></i></a>';
+    };
+    ActionPost();
+    function ActionPost() {
+        $("#maincontent").empty();
+        $.post("GetDetails?templateId=" + $("#templateId").val(), function (data) {
+            var config = {
+                id: "tg1",
+                width: "100%",
+                renderTo: "maincontent",
+                headerAlign: "left",
+                headerHeight: "30",
+                dataAlign: "left",
+                indentation: "30",
+                folderOpenIcon: "/Content/jqtree/img/folderOpen.png",
+                folderCloseIcon: "/Content/jqtree/img/folderClose.png",
+                hoverRowBackground: "false",
+                folderColumnIndex: "1",
+                itemClick: "itemClickEvent",
+                columns: [{ headerText: "序号", dataField: "Code", headerAlign: "center", dataAlign: "center", width: "20" },
+                          { headerText: "名称", dataField: "Name", headerAlign: "left", dataAlign: "left", width: "200" },
+                          { headerText: "操作", headerAlign: "center", dataAlign: "center", width: "50", handler: "customLook" }
+                ],
+                data: data
+            };
+            //创建一个组件对象
+            var treeGrid = new TreeGrid(config);
+            treeGrid.show();
+            $(".maincontent").find("td").children("a").show();
+            $("#tg1").addClass("layui-table");
+            //input重写
+            $("#maincontent").find(".allinput").bind("click", function () {
+                $(this).toggleClass("layui-form-checked");
+                $(this).children().toggleClass("addpic");
+            });
+            //添加序列
+            var len = $('table tr').length;
+            for (var i = 1; i < len; i++) {
+                $('table tr:eq(' + i + ') td:first').text(i);
+            }
+        })
+    };
+    function delDetail(obj) {
+        var ids = $(obj).data("itemid");
+        if (ids != "") {
+            layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                $.ajax({
+                    url: "/HcTemplate/DeleteDetails",
+                    type: "post",
+                    data: "ids=" + ids,
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.Flag) {
+                            layer.msg("删除成功", { time: 1000, icon: 1 });
+                            ActionPost();
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }
+                });
+            });
+        }
+    }
+    //无内容隐藏进度条
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    window.onload = function () {
+        //模板标识
+        var templateTypeName = location.href.split('=')[2];
+        var templateTypeId = location.href.split('=')[1];
+        templateTypeId = templateTypeId.split('&')[0]
+        $('#Id').val(templateTypeId)
+        $('#Name').val(templateTypeName)
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Title: {
+                    validators: {
+                        notEmpty: {
+                            message: '标题不能为空'
+                        },
+                        stringLength: {
+                            max: 254,
+                            message: '标题长度不能超过254字符'
+                        },
+                    }
+                },
+                Description: {
+                    validators: {
+                        notEmpty: {
+                            message: '说明不能为空'
+                        }
+                    }
+                },
+                TrainCompanyName: {
+                    validators: {
+                        notEmpty: {
+                            message: '验收单位不能为空'
+                        },
+                        stringLength: {
+                            max: 254,
+                            message: '长度不能超过254字符'
+                        },
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        var fileDataJson = [];
+        var fileDataArray = [];
+        //监听提交
+        $("#save").click(function () {
+            console.log($("#fileList tr").length)
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();
+                if ($("#fileDataJson").val() != "" && $("#fileList tr").length > 0) {
+                    $.post("Add", search, function (res) {
+                        if (res.Flag) {
+                            layer.msg("添加成功", { time: 1000, icon: 1 }, function () {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);//关闭窗口
+                                parent.window.location.reload();
+                            });
+                        } else {
+                            layer.alert(res.Message, { icon: 2 });
+                        }
+                    });
+                    return true;
+                }
+                else {
+                    layer.alert("请上传附件", { icon: 2 });
+                }
+                return false;
+            }
+
+        });
+        //图标上传
+        var uploader = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+            url: FileServerURL, // 服务端上传路径
+            max_file_size: MaxFileSize, // 文件上传最大限制。
+            max_file_count: 10, //指示用户可以同时上传文件的最大数量
+            chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+            browse_button: 'btnSelect',//触发上传元素
+            flash_swf_url: '/Scripts/plupload_2_1_2/Moxie.swf',
+            silverlight_xap_url: '/Scripts/plupload_2_1_2/Moxie.xap',
+            multi_selection: false,//	是否可以在文件浏览对话框中选择多个文件
+            //附加参数
+            multipart_params: {
+                app: 'epm'
+            },
+            //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+            filters: {
+                mime_types: [ //只允许上传图片和zip文件
+                { title: "Image files", extensions: "jpg,png,jpeg" },
+                { title: "Doc files", extensions: "doc,docx,pdf,bmp,xlsx,rar,zip" },
+                ],
+                max_file_size: MaxFileSize, //最大只能上传400kb的文件
+                prevent_duplicates: true //不允许选取重复文件
+            },
+            rename: false, // 是否重命名文件
+            init: {
+                PostInit: function () {
+                    $('#btnUpload').click(function () {
+                        if (uploader.files.length == 0) {
+                            layer.alert("请选择要上传的附件", { icon: 2 });
+                        } else {
+                            uploader.start();
+                            return false;
+                        }
+                    });
+                },
+                FilesAdded: function (up, files) {
+                    $('#fileList').html("");
+                    plupload.each(files, function (file) {
+                        var typeList = ["jpeg", "jpg", "png", "pdf", "docx", "doc", "zip", "rar", "bmp", "xlsx"];
+                        var fileType = File(typeList, file);
+                        if (fileType) {
+                            var type = file.name.split(".")
+                            var odiv = '<tr>';
+                            odiv += '<td class="table-center"><a href="' + FileDownLoadURL + file.FileGuid + '">' + type[0] + '</a></td>';
+                            odiv += '<td class="table-center">' + '.' + type[1] + '</td>';
+                            odiv += '<td class="table-center">' + plupload.formatSize(file.size) + '</td>';
+                            odiv += '<td class="table-center">' + new Date().toLocaleDateString() + '</td>';
+                            odiv += '<td class="table-center"><a class=\"delete-file\" data-val=' + file.id + ' style="color:red;cursor:pointer">删除</a></td></tr>';
+                            $('#fileList').append(odiv);
+                        } else {
+                            files.pop();
+                            layer.alert('上传文件类型仅支持"jpeg", "jpg", "png", "pdf", "docx", "doc", "zip", "rar", "bmp", "xlsx"格式，请重新上传', { icon: 2 })
+                        }
+                    });
+                },
+                UploadProgress: function (up, file) {
+                    $("#fileBar").show();
+                    element.progress("fileProgress", file.percent + "%");
+                },
+                FileUploaded: function (uploader, file, responseObject) {
+                    setTimeout(function () {
+                        $("#fileBar").hide();
+                        element.progress("fileProgress", "0%");
+                    }, 1500);
+
+                    var data = JSON.parse(responseObject.response);
+                    if (data.flag == true) {
+                        $.each(data.file, function (index, item) {
+                            fileDataArray.push({
+                                Name: item.Name,
+                                Size: item.FileSize,
+                                FileGuid: item.Guid,
+                                ImageType: getImageType(item.Name, item.Extension)
+                            });
+                        });
+                    } else {
+                        layer.alert("错误,请检查文件格式后重新上传！");
+                        return;
+                    }
+                    fileDataJson = JSON.stringify(fileDataArray);
+
+                    layer.msg("附件上传成功", { time: 1000, icon: 1 });
+                    $("#fileDataJson").val(fileDataJson);
+                },
+                Error: function (up, err) {
+                    layer.alert("错误：" + err.code + ": " + err.message);
+                }
+            }
+        });
+
+        uploader.init();
+
+        //删除附件
+        $("#fileList").on('click', 'a.delete-file', function () {
+            $(this).parent().parent().remove();
+            var toremove = '';
+            var id = $(this).attr("data-val");
+            for (var i in uploader.files) {
+                if (uploader.files[i].id === id) {
+                    toremove = i;
+                }
+            }
+            if (toremove != '') {
+                uploader.files.splice(toremove, 1);
+            }
+            //----删除初始文件对应的值
+            for (var i in fileDataArray) {
+                if (fileDataArray[i].FileGuid === id) {
+                    toremove = i;
+                }
+            }
+            if (toremove != "") {
+                fileDataArray.splice(toremove, 1);
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJson").val(fileDataJson);
+            }
+        });
+
+        ////选择验收单位
+        //$("#TrainCompanyName").click(function () {
+        //    layer.open({
+        //        type: 2,
+        //        title: GetLayerTitle("验收单位-选择"),
+        //        area: ['700px', '500px'],
+        //        content: '/Common/SelectCompany?IsMultiple=false',
+        //    });
+        //});
+        //添加详情单位
+        $("#addDetails").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("项目详情-添加"),
+                area: ['700px', '500px'],
+                content: ['/HcTemplate/AddDetails?templateId=' + $('#templateId').val(), 'no'],
+            });
+        });
+
+        //删除
+        $(".editor-link").click(function () {
+            var ids = $(this).data("itemid");
+            if (ids != "") {
+                layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids, belong: '@ViewBag.Belong' }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Role/Index?pageIndex=1&" + search;
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                });
+            }
+        });
+
+        //删除
+        $("#delete").click(function () {
+            var ids = $(this).data("itemid");
+            if (ids != "") {
+                layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids, belong: '@ViewBag.Belong' }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Role/Index?pageIndex=1&" + search;
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                });
+            }
+        });
+
+    });
+
+    //设置第三方单位值
+    function setComanyValue(name, id) {
+        $("#TrainCompanyName").val(name);
+        $("#TrainCompanyid").val(id);
+        $('#mainForm').data('bootstrapValidator')//重新验证inputName
+            .updateStatus('TrainCompanyName', 'NOT_VALIDATED', null)
+            .validateField('TrainCompanyName');
+    }
+
+</script>

@@ -1,0 +1,298 @@
+﻿
+@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_TzProjectProposal>
+@{
+    ViewBag.Title = "项目批复信息记录列表";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目性质 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("ProjectNature", ViewBag.ProjectNature as SelectList, null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">地市公司 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("companyId", ViewBag.CompanyName as SelectList, null, new { @class = "form-control" })
+                             
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">提出时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">库站名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="stationName" value="@ViewBag.stationName" placeholder="请输入库站名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">审批状态 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("ProjectState", ViewBag.ProjectState as SelectList, null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-sub" style="display:flow-root;margin-bottom: 25px;">
+                <button type="button" id="reply"  class="checkright" data-module="TzProjectApprovalInfo" data-right="Check">批复</button>
+                <button type="submit" id="btnsel" style="float:right" class="checkright" data-module="TzProjectApprovalInfo" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <div><input type="checkbox" id="allcheck" /></div>
+                    </th>
+                    <th width="50">序号</th>
+                    <th width="200">项目名称</th>
+                    <th width="100">库站名称</th>
+                    <th width="100">项目性质</th>
+                    <th width="100">提出时间</th>
+                    <th width="100">提交状态</th>
+                    <th width="100">当前操作人</th>
+                    <th width="100">操作</th>
+                </tr>
+            </thead>
+			<tbody>
+			</tbody>
+            
+            <tbody id="tbody">
+                    @{
+                        int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td style="display:none">
+                                    <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId"/>
+                                </td>
+                                <td><input type="checkbox" value="@item.SId" data-state="@((PreProjectState)item.State)"/></td>
+                                <td>@index</td>
+                                <td>@item.ProjectName</td>
+                                <td>@item.StationName</td>
+                                <td>@item.NatureName</td>
+                                <td>@(Convert.ToDateTime(item.ApplyTime).ToString("yyyy-MM-dd"))</td>
+                                <td>@(((PreProjectState)item.State).GetText())</td>
+                                <td>@item.OperateUserName</td>
+                                <td>
+
+                                    @if (((PreProjectState)item.State).GetText() == "待提交" || ((PreProjectState)item.State).GetText() == "已驳回")
+                                    {
+                                        <a class="edit checkright" style="cursor:pointer;color:#0099FF;padding: 6px;" data-module="TzProjectApprovalInfo" data-right="Modify">编辑</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="Detail checkright" style="cursor:pointer;color:#0099FF;padding: 6px;" data-module="TzProjectApprovalInfo" data-right="Info">查看</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else {
+                        <tr>
+                            <td colspan="9" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<script>
+  
+    $("body").on("click", ".edit", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.open('/TzProjectApprovalInfo/Add?projectId=' + id);
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzProjectApprovalInfo/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+
+    //查看
+    $("body").on("click", ".Detail", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.open("/TzProjectProposal/Detail?id=" + id + "&param=ProjectApprovalInfo");
+    });
+    //全选反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $("#tbody input[type='checkbox']").prop("checked", isChecked);
+    });
+    // 单独选项控制全选
+    $("#tbody input[type='checkbox']").click(function () {
+        var allLength = $("#tbody input[type='checkbox']").length;
+        var checkedLength = $("#tbody input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+    //批复
+    $("#reply").click(function () {
+        var flag = true,
+            state = "ApprovalSuccess", //已批复状态
+            ids = "",
+            chkItems = $('#tbody input[type="checkbox"]:checked');
+
+        if (chkItems.length > 0) {
+            chkItems.each(function (index, item) {
+                if ($(this).data("state") != "WaitApproval") {
+                    layer.msg('请选择状态为待审核的项目！', { time: 3000, icon: 2 });
+                    flag = false;
+                    return false;
+                }
+                else {
+                    ids += $(this).val();
+                    ids += ",";
+                }
+            });
+
+            ids = ids.substr(0, ids.lastIndexOf(","));
+
+            if (flag) {
+                parent.layer.confirm('确认要批复所选择的项目？', { icon: 3 }, function () {
+                    $.post("UpdateState", { ids: ids, state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("批复成功", { time: 2000, icon: 1 });
+                            location.reload();
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                });
+            }
+        }
+        else {
+            layer.msg('请选择要批复的项目！', { time: 3000, icon: 2 });
+        }
+
+    });
+</script>

@@ -1,0 +1,95 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model Base_Company
+@{
+    ViewBag.Title = "单位详情";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+
+<div class="content-right date-wrap fl c">
+    <div class="main mt5">
+        <table class="layui-table" style="table-layout: fixed">
+            <tbody>
+                <tr>
+                    <td width="120px" class="table-right">单位编号</td>
+                    <td width="250px" class="table-left">@Model.Code</td>
+                </tr>
+                <tr>
+                    <td width="80px" class="table-right">单位名称</td>
+                    <td width="250px" class="table-left">@Model.Name</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">简称</td>
+                    <td width="250px" class="table-left">@Model.ShortName</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">工作电话</td>
+                    <td width="250px" class="table-left">@Model.Phone</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">传真电话</td>
+                    <td width="250px" class="table-left">@Model.FaxPhone</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">邮箱地址</td>
+                    <td width="250px" class="table-left">@Model.Email</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">联系人</td>
+                    <td width="250px" class="table-left">@Model.LinkMan</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">联系人电话</td>
+                    <td width="250px" class="table-left">@Model.LinkPhone</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">所在地区</td>
+                    <td width="250px" class="table-left" id="Address">@ViewBag.Address</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">详细地址</td>
+                    <td width="250px" class="table-left">@Model.AddressInfo</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">父单位编码</td>
+                    <td width="250px" class="table-left">@Model.PreCode</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">父单位名称</td>
+                    <td width="250px" class="table-left">@Model.PreName</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">Logo</td>
+                    <td width="250px" class="table-left"><div style="width:100%;" id="fileList"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="layui-form-item row btn-save">
+            <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-save cancel" />
+        </div>
+    </div>
+</div>
+<script>
+    //返回上一页面
+    $(".cancel").on("click", function () {
+        window.history.go(-1);
+    })
+
+    //获取图片附件
+    $.post("/Files/GetFileList", { tableName: 'Base_Company', id: '@Model.SId' }, function (data) {
+        if (data.Flag) {
+            if (data.Data.length > 0) {
+                for (var i = 0; i < data.Data.length; i++) {
+                    if (item.ImageType == null) {
+                        var odiv = '<img src="' + data.Data[i].Url + '" alt="Logo" id="ImgShow" style="width: 100px;height: 100px;" />';
+                        $('#fileList').html(odiv);
+                    }
+                }
+            }
+        } else {
+            parent.layer.alert(data.Message, { icon: 2 });
+        }
+    });
+</script>
+

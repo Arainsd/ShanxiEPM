@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "检查项树";
+    Layout = "~/Views/Shared/_OldLayui.cshtml";
+}
+<style>
+    .layui-show {
+        margin-top: -4px;
+    }
+</style>
+<div class="form-wrap">
+    <div class="container">
+        <ul id="checkItemTree"></ul>
+    </div>
+    <input type="hidden" value="@ViewBag.roleType" id="RoleType"/>
+</div>
+
+<script type="text/javascript">
+    layui.use('tree', function () {
+        var roleType = $("#RoleType").val();
+        $.post("GetCheckItemTree", { roleType: roleType }, function (data) {
+            var tree = layui.tree({
+                elem: '#checkItemTree', //指定元素，生成的树放到哪个元素上
+                check: '', //勾选风格
+                skin: 'as', //设定皮肤
+                drag: false,//点击每一项时是否生成提示信息
+                checkboxName: 'cb[]',//复选框的name属性值
+                checkboxStyle: "",//设置复选框的样式，必须为字符串，css样式怎么写就怎么写
+                click: function (item) { //点击节点回调
+                },
+                onchange: function () {//当当前input发生变化后所执行的回调
+                },
+                nodes: [ //节点
+                    data
+                ],
+                click: function (data) {
+                    var parentName = data.name;
+                    var parentId = data.checkboxValue;
+                    var level = data.Level;
+                    parent.$("#ParentId").val(parentId);
+                    parent.$("#ParentName").val(parentName);
+                    parent.$("#Level").val(level + 1);
+                    parent.parentChange();
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                }
+            });
+        });
+    });
+</script>

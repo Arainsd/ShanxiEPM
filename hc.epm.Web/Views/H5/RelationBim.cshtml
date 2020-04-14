@@ -1,0 +1,180 @@
+@*
+    发起问题进入模型
+    http://192.168.1.239:8083/h5/RelationBim?id=1075585079624994816&bimId=1063227489339445248&projectId=1051756393545207808
+    http://192.168.1.239:8083/h5/RelationBim?id=QuestionId&bimId=&projectId=
+*@
+@{
+    ViewBag.Title = "模型";
+    Layout = "~/Views/Shared/_LayoutPageH5.cshtml";
+}
+<style>
+    .box {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: #000;
+    }
+
+    .main {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .event {
+        position: absolute;
+        top: 3%;
+        left: 3%;
+    }
+
+    .bar {
+        float: left;
+        margin-right: 5px;
+    }
+
+    .event .bars {
+        display: none;
+        float: left;
+        margin: 0;
+    }
+</style>
+<script type="text/javascript" src="/Resource/scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/Resource/scripts/global.js"></script>
+<script type="text/javascript" src="~/Resource/scripts/3d.js"></script>
+
+<body>
+    <div style="" class="box">
+
+        <div id="webglContainer" style="width:100%;height:100%;" class="main"></div>
+        <div class='work' style="position:absolute;margin-left: 3%;margin-top: 25%">
+            <a href="javascript:;" style='color:blue; width: 60px; line-height: 25px;display:inline-block;text-decoration:none;text-shadow: 2px -2px 2px #666;'>关联</a>
+        </div>
+        <div class="event">
+            <button class="bar">菜单</button>
+            <p class="bars">
+                <button class="top" title="aaa">顶视角</button>
+                <button class="bottom">底视角</button>
+                <button class="front">前视角</button>
+                <button class="back">后视角</button>
+                <button class="left">左视角</button>
+                <button class="right">右视角</button>
+                <button class="translucence">半透明</button>
+                <button class="disassembly">模型拆分</button>
+                <button class="recover">模型恢复</button>
+            </p>
+        </div>
+        <input type="hidden" value="@ViewBag.BimId" id="BimID" />
+    </div>
+
+    <script>
+        $(function () {
+            var result = EngineInit("webglContainer"); //初始化画布
+            //加载模型，如果加载多个模型，需一个一个加载
+            var id = $("#BimID").val();//ID开发自定义，用于后面操作模型
+            if(id != "-1"){
+                AddModel(BimFileURL+"@ViewBag.BIMAddress", id);
+                SetClickMode(3);//点击模式设置
+            }else{
+                alert("暂无模型");
+            }
+        });
+
+        var positionObjList = [];//选择构件、坐标信息数据
+        var IdsList = [];//选中构件ID数据
+
+        //获取坐标
+        var position = "";
+        function OnClickPosition(p) {
+            position = p;
+            //3157.9013671875,-47.87890625,-298.1455078125,0.7853981633974483,0,0.7853981633974483,1646.6454696193578,-3130.3899929737827,9415.35349693735
+        }
+        //获取构件ID
+        var componentId = "";
+        function OnSelectionChanged(id) {
+            componentId = id;
+            if (position && IdsList.indexOf(componentId) == -1) {
+                SetActorColor(id, 0, 0, 255);//构件批量着色
+                IdsList.push(componentId);
+                var obj = new Object();
+                obj.ComponentId = componentId;
+                obj.ComponentPosition = position;
+                obj.SId = $("#BimID").val();
+                obj.BIMName = "移动端模型";
+                positionObjList.push(obj);
+                componentId = "";
+                position = "";
+            } else {
+                SetActorColor(id, 255, 255, 255);
+                if (IdsList.indexOf(componentId) != -1) {
+                    var removeObj = {};
+                    $.each(positionObjList, function (index, obj) {
+                        if (obj.ComponentId == componentId) {
+                            removeObj = obj;
+                            return;
+                        }
+                    });
+                    positionObjList.pop(obj);
+                    IdsList.pop(componentId);
+                }
+            }
+        }
+        //模型加载完成监听事件
+        function OnLoadModelEnd(id) {
+            //加载模型初始化选中构件
+            var selectIds=@Html.Raw(ViewBag.ComponentJson);
+            if (selectIds != "") {
+                var InitializedData = selectIds;//来自问题沟通页面构件信息
+                if (InitializedData.length > 0 && InitializedData[0].ComponentId.indexOf(id) != -1) {
+                    for (var i = 0; i < InitializedData.length; i++) {//从数据中获取构件ID和坐标
+                        IdsList.push(InitializedData[i].ComponentId);
+                        positionObjList.push(InitializedData[i]);
+                        SetActorColor(InitializedData[i].ComponentId, 0, 0, 255);//构件批量着色
+                    }
+                }
+            }
+
+            //按钮区域
+            $(".bar").click(function () {
+                $(".bars").slideToggle();
+            });
+            $(".top").click(function () {
+                SetViewPort('top');
+            });
+            $(".front").click(function () {
+                SetViewPort('front');
+            });
+            $(".bottom").click(function () {
+                SetViewPort('bottom');
+            });
+            $(".back").click(function () {
+                SetViewPort('back');
+            });
+            $(".left").click(function () {
+                SetViewPort('left');
+            });
+            $(".right").click(function () {
+                SetViewPort('right');
+            });
+            $(".translucence").click(function () {
+                SetModelAlpha(id, 0.2);
+            });
+            var num = 0
+            $(".disassembly").click(function () {
+                num += 0.1
+                PopOut(num)
+            });
+            $(".recover").click(function () {
+                ZoomFitAll();
+                SetModelAlpha(id, $("#BimID").val());
+                PopOut(0)
+                num = 0
+            });
+        }
+        $(".work").on("click", function () {
+            var strobj = JSON.stringify(positionObjList);
+            window.location.pathname = "relationBim:" + strobj;
+        });
+    </script>
+</body>

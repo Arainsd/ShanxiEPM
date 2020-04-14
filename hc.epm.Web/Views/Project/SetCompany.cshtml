@@ -1,0 +1,408 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "服务商";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style>
+    .long-text {
+        margin-bottom: 10px;
+        height: 35px;
+        margin-left: 80px;
+    }
+
+    select, input {
+        width: 226px;
+        height: 35px;
+        display: inline-block;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+        padding-left: 10px;
+    }
+
+    .button-group button {
+        display: inline-block;
+        font-size: 16px;
+        letter-spacing: 3px;
+        margin: 30px 0 20px 0;
+        width: 89px;
+        height: 29px;
+        border: none;
+        border-radius: 3px;
+        background-color: #FFA000;
+        color: #FEE9D3;
+        font-weight: 500;
+        margin-left: 190px;
+    }
+
+    span .validaterror {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        background: url(/Resource/images/ic_fail.png) no-repeat;
+        background-size: 20px 20px;
+        background-position: 10px center;
+        font-weight: 500;
+        color: #FF2525;
+        padding-left: 33px;
+        font-size: 16px;
+    }
+
+    span .validatevalid {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        background: url(/Resource/images/ic_success.png) no-repeat;
+        background-size: 22px 22px;
+        background-position: 10px center;
+    }
+
+    .star {
+        color: red;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;供应商&nbsp;:</label>
+                <input type="text" class="CompanyName" name="CompanyName" id="CompanyName" value="" readonly="readonly" autocomplete="off" style="width:60%;" />
+                <input type="hidden" class="CompanyId" name="CompanyId" id="CompanyId" />
+            </div>
+            <div class="long-text" style="height: auto;">
+                <label style="margin-left:-13px;"><span class="star">*</span>&nbsp;合同编码&nbsp;:</label>
+                <input type="hidden" id="contractJson" class="contractJson" value="[]" />
+                @*<a href="javascript:;" class="btnUpload" style="cursor:pointer;color:blue;">上传</a>*@
+                @*<a href="javascript:;" class="btnSelect" type="1" style="cursor:pointer;color:blue;">选择</a>*@
+                @*<input id="ContractId" name="ContractId" value="" />*@
+                <input id="ContractCode" name="ContractCode" value="" />
+                <div id="contractJsonShow" style="margin-left: 63px;margin-top: 10px;line-height: 30px;">
+                </div>
+                <div class="tab" style="margin-left: -95px;margin-top: 15px;display:none;">
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;合同编码&nbsp;:</label>
+                        @*<input type="text" id="Code" name="Code" value="" />*@
+                        @*<input type="hidden" id="ContractId" name="ContractId" />
+                            <input type="hidden" id="ContractName" name="ContractName" />*@
+                    </div>
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;生效时间&nbsp;:</label>
+                        <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime' })" readonly="readonly" />
+                    </div>
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;截止时间&nbsp;:</label>
+                        <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime' })" readonly="readonly" />
+                    </div>
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;合同金额&nbsp;:</label>
+                        <input type="text" id="Amount" name="Amount" value="" maxlength="15" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,'');}).call(this)" onblur="this.v();" /> &nbsp;&nbsp;万元
+                    </div>
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;签订日期&nbsp;:</label>
+                        <input type="text" id="SignTime" name="SignTime" onClick="WdatePicker({ el: 'SignTime' })" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div id="divOrder" class="long-text" style="height: auto;margin-left: 47px; display:none;">
+                <label><span class="star">*</span>&nbsp;委托书/订单&nbsp;:</label>
+                <input type="hidden" id="orderJson" class="contractJson" value="[]" />
+                <a href="javascript:;" class="btnUpload" style="cursor:pointer;color:blue;">上传</a>
+                @*<a href="javascript:;" class="btnSelect" type="3" style="cursor:pointer;color:blue;">选择</a>*@
+                <div id="orderJsonShow" style="margin-left: 96px;margin-top: 10px;line-height: 30px;">
+                </div>
+                <div class="tab" style="margin-left: -107px;margin-top: 15px;display:none;">
+                    <div class="long-text" style="display:none;">
+                        <label><span class="star">*</span>&nbsp;委托书/订单编码&nbsp;:</label>
+                        <input type="text" id="OrderCode" name="OrderCode" value="" />
+                        <input type="hidden" id="OrderId" name="OrderId" />
+                        <input type="hidden" id="OrderName" name="OrderName" />
+                    </div>
+                    <div class="long-text" style="margin-left: 52px;">
+                        <label><span class="star">*</span>&nbsp;委托书/订单生效时间&nbsp;:</label>
+                        <input type="text" id="OrderStartTime" name="OrderStartTime" onClick="WdatePicker({ el: 'OrderStartTime' })" readonly="readonly" />
+                    </div>
+                    <div class="long-text" style="margin-left: 52px;">
+                        <label><span class="star">*</span>&nbsp;委托书/订单截止时间&nbsp;:</label>
+                        <input type="text" id="OrderEndTime" name="OrderEndTime" onClick="WdatePicker({ el: 'OrderEndTime' })" readonly="readonly" />
+                    </div>
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;委托书/订单金额&nbsp;:</label>
+                        <input type="text" id="OrderAmount" name="OrderAmount" value="" maxlength="15" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,'');}).call(this)" onblur="this.v();" /> &nbsp;&nbsp;万元
+                    </div>
+                    <div class="long-text" style="margin-left: 52px;">
+                        <label><span class="star">*</span>&nbsp;委托书/订单下达日期&nbsp;:</label>
+                        <input type="text" id="OrderSignTime" name="OrderSignTime" onClick="WdatePicker({ el: 'OrderSignTime' })" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="Type" value="@ViewBag.Type" />
+            <input type="hidden" id="ContractType" value="" />
+            <input type="file" id="loadFile" name="loadFile" show="" json="" style="display:none" onchange="uploadFile()">
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Resource/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript">
+
+
+        function uploadFile() {
+            if (document.getElementById("loadFile").files.length == 0) {
+                return;
+            }
+
+            var showObj = $("#" + $("#loadFile").attr("show"));
+            var jsonObj = $("#" + $("#loadFile").attr("json"));
+
+            var fileObj = document.getElementById("loadFile").files[0];
+            var filename = fileObj.name;
+            if (filename.length > 100) {
+                layer.alert("合同名称不能大于100字符", { icon: 2 });
+            }
+            var formFile = new FormData();
+            formFile.append("file", fileObj);
+
+            $.ajax({
+                url: "/Upload/UploadHB",
+                type: "POST",
+                async: false,
+                data: formFile,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $(showObj).empty();
+                    $(jsonObj).val("[]");
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = {};
+                        obj.Name = data[i].Name;
+                        obj.GuidId = data[i].GuidId;
+                        obj.Size = data[i].Size;
+                        obj.ImageType = data[i].ImageType;
+                        obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                        obj.Url = data[i].ResponseObject.FDFS_NAME;
+
+                        var fileDataArray = JSON.parse($(jsonObj).val());
+                        fileDataArray.push(obj);
+                        var fileDataJson = JSON.stringify(fileDataArray);
+                        $(jsonObj).val(fileDataJson);
+                        if (data[i].ImageType == null) {
+                            var odiv = '';
+                            odiv = '<span id="' + obj.GuidId + '">';
+                            odiv += '<span><a href="javascript:;" target="_blank" style="color: #333;">' + obj.Name + '</a></span>';
+                            odiv += '<br/></span>';
+
+                            $(showObj).append(odiv);
+                            $(showObj).next().show();
+
+                            $("#OrderId").val('');
+                            $("#OrderName").val('');
+                        }
+                    }
+                }
+            });
+        }
+
+        //合同附件上传
+        $(".btnUpload").click(function () {
+            var jsonfileId = $(this).prev().attr("id");//附件id
+            var showAreaId = $(this).next().attr("id");//显示文件id
+
+            var companyId = $(".CompanyId").val();
+            if (companyId == "") {
+                parent.layer.alert("请设置服务商", { icon: 2 });
+                return;
+            }
+
+            $("#loadFile").attr("show", showAreaId).attr("json", jsonfileId);
+            $("#loadFile").click();
+        });
+
+        $("body").on("click", ".CompanyName", function () {
+            var that = $(this);
+            var type = $("#Type").val();
+            parent.layer.open({
+                type: 2,
+                title: "选择供应商",
+                shadeClose: false, //点击遮罩关闭层SetCompany
+                area: ['800px', '600px'],
+                content: '/Comm/SelectServiceAll?selectType=1&constituteName=' + type,
+                btn: ["确定", "取消"],
+                yes: function (index11, layero11) {
+                    var iframeWin = window[layero11.find('iframe')[0]['name']];
+                    var obj = parent.frames['layui-layer-iframe' + index11].getSelectData();
+                    if (obj.flag === false) {
+                        parent.layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        that.parent().find(".CompanyName").val(obj.data[0].Name);
+                        that.parent().find(".CompanyId").val(obj.data[0].Id);
+                    }
+                    parent.layer.close(index11);
+                },
+                btn2: function (index11, layero11) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index11, layero11) {
+                },
+            });
+        });
+
+        //选择合同或订单
+        $("body").on("click", ".btnSelect", function () {
+            if ($("#CompanyId").val() == "") {
+                parent.layer.alert("请设置服务商", { icon: 2 });
+                return;
+            }
+
+            var CompanyId = $("#CompanyId").val();
+            var that = $(this);
+            parent.layer.open({
+                type: 2,
+                title: "选择合同",
+                shadeClose: false, //点击遮罩关闭层
+                area: ['900px', '600px'],
+                content: '/comm/SelectContract?selectType=1&SecondPartyId=' + CompanyId,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = parent.frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        parent.layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ContractId").val(obj.data[0].Id);
+                        $("#ContractName").val(obj.data[0].Name);
+                        $("#contractJsonShow").html(obj.data[0].Name);
+
+                        if (obj.data[0].Contracttype == 2) {
+                            $("#divOrder").show();
+                        } else {
+                            $("#divOrder").hide();
+                        }
+                        $("#ContractType").val(obj.data[0].Contracttype);
+
+                        parent.layer.close(index);
+                    }
+                },
+                btn2: function (index, layero) {
+                    //var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        $(function () {
+            var arr = parent.data;
+            if (arr.companyId != "") {
+                $("#CompanyId").val(arr.companyId);
+                $("#CompanyName").val(arr.companyName);
+                $("#ContractCode").val(arr.contractCode);
+                $("#Code").val(arr.contractCode);
+                $("#StartTime").val(arr.contractStartTime);
+                $("#EndTime").val(arr.contractEndTime);
+                $("#Amount").val(arr.contractAmount);
+                $("#SignTime").val(arr.contractSignTime);
+                $("#OrderCode").val(arr.orderCode);
+                $("#OrderStartTime").val(arr.orderStartTime);
+                $("#OrderEndTime").val(arr.orderEndTime);
+                $("#OrderAmount").val(arr.orderAmount);
+                $("#OrderSignTime").val(arr.orderSignTime);
+                $("#ContractId").val(arr.contractId);
+                $("#ContractName").val(arr.contractName);
+                $("#OrderId").val(arr.orderId);
+                $("#OrderName").val(arr.orderName);
+
+
+
+                $("#contractJsonShow").html("<span>" + arr.contractName + "</span>");
+                $("#orderJsonShow").html("<span>" + arr.orderName + "</span>");
+                //if (arr.orderName != "") {
+                //    debugger
+                //    $("#orderJsonShow").next().show();
+                //    $("#divOrder").show();
+                //}
+                $('input').attr("autocomplete", "off");
+            }
+        });
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+
+            result.data.push({
+                CompanyId: $("#CompanyId").val() || '',
+                CompanyName: $("#CompanyName").val() || '',
+                OrderJson: $("#orderJson").val() || '',
+                ContractJson: $("#contractJson").val() || '',
+                Code: $("#Code").val() || '',
+                StartTime: $("#StartTime").val() || '',
+                EndTime: $("#EndTime").val() || '',
+                Amount: $("#Amount").val() || '',
+                SignTime: $("#SignTime").val() || '',
+                OrderCode: $("#OrderCode").val() || '',
+                OrderStartTime: $("#OrderStartTime").val() || '',
+                OrderEndTime: $("#OrderEndTime").val() || '',
+                OrderAmount: $("#OrderAmount").val() || '',
+                OrderSignTime: $("#OrderSignTime").val() || '',
+                ContractId: $("#ContractId").val() || '',
+
+                ContractCode: $("#ContractCode").val() || '',
+
+                ContractName: $("#ContractName").val() || '',
+                OrderId: $("#OrderId").val() || '',
+                OrderName: $("#OrderName").val() || '',
+            });
+
+            if ($.trim(result.data[0].CompanyName) == '') {
+                result.flag = false;
+                result.msg = '请选择服务商！';
+                return result;
+            }
+            if ($.trim(result.data[0].CompanyId) == '') {
+                result.flag = false;
+                result.msg = '请选择服务商！';
+                return result;
+            }
+            if ((($.trim(result.data[0].ContractJson) == '' || $.trim(result.data[0].ContractJson) == '[]') && $("#ContractId").val() == "")) {
+                result.flag = false;
+                result.msg = '请选择合同！';
+                return result;
+            }
+            if ($("#ContractType").val() == "2") {
+                if ((($.trim(result.data[0].OrderJson) == '' || $.trim(result.data[0].OrderJson) == '[]') && $("#OrderId").val() == "")) {
+                    result.flag = false;
+                    result.msg = '请上传订单/委托书！';
+                    return result;
+                }
+                if ($.trim(result.data[0].OrderStartTime) == '') {
+                    result.flag = false;
+                    result.msg = '请选择委托书/订单生效时间！';
+                    return result;
+                }
+                if ($.trim(result.data[0].OrderEndTime) == '') {
+                    result.flag = false;
+                    result.msg = '请选择委托书/订单截止时间！';
+                    return result;
+                }
+                if ($.trim(result.data[0].OrderAmount) == '') {
+                    result.flag = false;
+                    result.msg = '请输入委托书/订单金额！';
+                    return result;
+                }
+                if ($.trim(result.data[0].OrderSignTime) == '') {
+                    result.flag = false;
+                    result.msg = '请选择委托书/订单下达时间！';
+                    return result;
+                }
+            }
+            return result;
+        }
+    </script>
+}

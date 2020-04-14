@@ -1,0 +1,143 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model List<Epm_Project>
+@{
+    ViewBag.Title = "项目列表";
+}
+<style>
+    .layui-form-item .layui-inline {
+    margin-bottom: 5px;
+    margin-right: -50px;
+}
+</style>
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">项目名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="name" placeholder="请输入项目名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                    <label class="layui-form-label">创建人姓名 : </label>
+                    <div class="layui-input-inline"><input type="text" name="CreateUserName" placeholder="请输入创建人姓名" autocomplete="off" class="layui-input" value="@ViewBag.CreateUserName" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" id="search" />
+
+            </div>
+        </form>
+    </div>
+
+    <div class="main mt5">
+        <div class="layui-form">
+            <table class="layui-table" style="text-align:center;word-break:break-all;word-wrap:break-word">
+                <thead>
+                    <tr>
+                        <th width="5%" class="table-center"  style="display:none">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th class="table-center">序号</th>
+                        <th class="table-center">项目名称</th>
+                        <th class="table-center">创建人</th>
+                        <th class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="selectData">
+                    @{
+                            int index = 0;
+                        }
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td class="table-center"style="display:none">
+                                        <input type="checkbox" lay-skin="primary" />
+                                        <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" data-projectname="@item.Name"/>
+                                    </td>
+                                    <td class="table-center">@index</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.CreateUserName</td>
+                                    <td class="table-center">
+                                        <a href="javascript:;" class="sel" style="color:blue;cursor:pointer;">选择</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="table-center">
+                                    暂无数据
+                                </td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[name="chName"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/VideoManager/IndexProject?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+    });
+
+    //选择项目（单选）
+        $("#selectData").on('click', '.sel', function () {
+            var ids = $(this).parent("td").parent("tr").find("[type=hidden]").val();
+            var names = $(this).parent("td").parent("tr").find("[type=hidden]").attr("data-projectname");
+
+            parent.setProjectValue(names, ids);
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    //选择项目（多选,暂时不用，以后扩展）
+        $("#selectContent").click(function () {
+            var ids = "", names = "";
+            $(".layui-table tbody input").each(function () {
+                if (this.checked === true) {
+                    if (ids == "") {
+                        ids = $(this).parent("td").parent("tr").find("[type=hidden]").val();
+                        names = $(this).parent("td").parent("tr").find("[type=hidden]").attr("data-projectname");
+                    } else {
+                        ids = ids + ',' + $(this).parent("td").parent("tr").find("[type=hidden]").val();
+                        names = names + ',' + $(this).parent("td").parent("tr").find("[type=hidden]").attr("data-projectname");
+                    }
+                }
+            });
+            parent.setProjectValue(names, ids);
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+</script>

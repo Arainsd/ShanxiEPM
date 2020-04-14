@@ -1,0 +1,279 @@
+﻿
+@{
+    ViewBag.Title = "土地协议出让谈判";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div">
+                            <div>汉城加油站项目立项申请</div>
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>新建</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>汉城加油站</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>2019-09-23</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>西安市汉城路81号</div>
+                        </td>
+                        <td class="table_title">估计金额</td>
+                        <td class="td-div">
+                            <div>2000万元</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司</td>
+                        <td colspan="3" align="left">
+                            <div>西安分公司</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="module-div">
+            <h4>谈判信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>谈判时间</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <input type="text" class="form-control position_rel"  onClick="WdatePicker({ el: '' })" placeholder="日期选择">
+                            <i onClick="WdatePicker({ el: '' })" class="iconfont">&#xe7e2;</i>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>谈判地点</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="ProjectName" type="text" name="ProjectName" class="form-control " placeholder="" />
+                                <input id="ProjectId" type="hidden" name="ProjectId" class="form-control" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>土地竞拍支付第一笔出让金（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="" />
+                                <input id="ProectId" type="hidden" name="" class="form-control" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>第一笔出让金日期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <input type="text" class="form-control position_rel" onClick="WdatePicker({ el: '' })" placeholder="日期选择">
+                            <i onClick="WdatePicker({ el: '' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>我方谈判人</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <textarea class="form-control" style="resize:none;"></textarea>
+                        </td>
+                        <td class="td-div">
+                            <div style="color:red;text-align:left;">我方谈判人三人以上以”、”分开</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>对方谈判人</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <textarea class="form-control" style="resize:none;"></textarea>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>谈判结果</span>
+                        </td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option>完全达成合作意向</option>
+                                <option>基本达成合作意向</option>
+                                <option>存在部分问题</option>
+                                <option>尚需继续谈判</option>
+                                <option>终止合作</option>
+                            </select>
+                            <input id="" type="hidden" name="" value="" />
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            <select class="form-control" id="fileType">
+                                @*id="fileType"后面要根据数据库的字段改*@
+                                <option value="value">谈判记录</option>
+                                <option value="value">其他资料</option>
+                            </select>
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+        </div>
+    </form>
+</div>
+
+
+<script>
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#fileType").val();
+                    obj.TypeName = $("#fileType").find("option:checked").text()
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = `
+                                     <tr>
+                                        <td><span class ="font-black">1</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td><span class ="font-black">${obj.TypeName}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}">
+                                        </td>
+                                    </tr>
+                           `
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+            }
+        });
+    }
+    
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //数据提交
+        $(".save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TypeNo: $("#fileType").val(),
+                    TypeName: $("#fileType").find("option:checked").text(),
+                    Sort: index + 1
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+            $.post("Add", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/ProjectManagement/ProjectManagementList";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+        });
+    });
+
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/ProjectManagementList";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+    });
+
+
+</script>

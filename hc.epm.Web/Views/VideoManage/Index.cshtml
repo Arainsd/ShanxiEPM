@@ -1,0 +1,195 @@
+﻿@using hc.epm.DataModel.Basic;
+@using System.Collections.Generic;
+@model List<Base_VideoManage>
+@{
+    ViewBag.Title = "视频管理";
+}
+<style>
+    .topBox {
+        border-bottom: 2px solid #00ccff;
+    }
+
+        .topBox button {
+            padding: 6px 16px;
+            margin-bottom: 0;
+            font-size: 16px;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            width: 140px;
+        }
+
+    .activeh {
+        border: none;
+        color: #fff;
+        background-color: #00ccff;
+        border: 1px solid #00ccff;
+    }
+
+    .deactive {
+        color: #00ccff;
+        border: 2px solid #00ccff;
+        background-color: #fff;
+        border-bottom: 1px solid #00ccff;
+    }
+
+    .tab-view {
+        overflow: hidden;
+    }
+
+    .vi-al {
+        width: 100%;
+        height: 100%;
+        text-align:center;
+        margin:10px 0;
+    }
+
+        .vi-al li {
+            float: left;
+            height: 300px;
+            width: 30%;
+            box-sizing: border-box;
+            margin-left: 3%;
+            /*margin-bottom:30px;*/
+
+        }
+
+    video {
+        height: 88%;
+        width: 100%;
+    }
+
+    .title {
+        width: 100%;
+        height: 12%;
+        color: blue;
+        text-align: left;
+        display: inline-block;
+        line-height: 3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 16px;
+        /*/*margin-bottom:30px;*/
+    }
+
+    .no-da {
+        font-size: 18px;
+    }
+
+    .fa-wrap {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .fa-com {
+        height: 30px;
+        width: 210px;
+        border-radius: 5px;
+    }
+
+    .form-sub {
+        display: inline-block;
+        margin-left: 35px;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+    .tab-list li {
+        line-height:11px;
+    }
+</style>
+@*<script src="https://open.ys7.com/sdk/js/2.0/ezuikit.js"></script>*@
+<script src="~/Resource/scripts/ezuikit.js">ezuikit.js</script>
+
+<div class="contentData" style="min-height:500px;">
+    <div class="topBox">
+        <button id="normal" class="activeh">正常视频</button>
+        <button id="lose" class="deactive">视频丢失</button>
+    </div>
+    <div class="fa-wrap">
+        <form method="get">
+            <label>地市公司：</label>
+            <span>
+                @Html.DropDownList("companyId", ViewBag.CompanyName as SelectList, null, new { @class = "fa-com" })
+            </span>
+            <label style="margin-left:20px;">@ViewBag.Date</label>
+
+            <div class="form-sub">
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div class="tab-view" style="margin-top:20px;">
+
+        <div class="tab-list">
+            @{
+                int index = -1;
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                <ul class="vi-al">
+                    @foreach (var item in Model)
+                    {
+                        index++;
+                        <li>
+                            <video id="myPlayer_@index" controls playsInline webkit-playsinline autoplay="autoplay">
+                                <source src="@item.UrlAddress" type="rtmp/flv" />
+                            </video>
+                            <span class="title">@item.CameraName</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <ul class="vi-al" style="font-size:20px;">暂无数据...</ul>
+            }
+        </div>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;margin-top:15px;"></div>
+</div>
+<script>
+
+    $("#lose").click(function () {
+        window.location.href = "/VideoManage/VideoFailure";
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/VideoManage/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+
+    //初始播放视频
+    var len = $(".vi-al li").length;//取视频个数
+    if (len > 0) {
+        for (var i = 0; i < len; i++) {
+            var player0 = new EZuikit.EZUIPlayer('myPlayer_' + i);//萤石云初始化
+        }
+    }
+
+
+    $("#video").click(function () {
+        window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+    });
+</script>

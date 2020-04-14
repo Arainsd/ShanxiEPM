@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnAdd').click(function () {
+                $.ajax({
+                    type: 'get',
+                    dataType: 'json',
+                    //url: 'http://localhost:12497/api/Project/GetApproverList?projectId=0&type=&state=&time=&publisherId=0&pageIndex=2',
+                    //url: 'http://localhost:12497/api/user/GetUserMenu?projectId=1',
+                    url:'http://localhost:12497/api/Project/GetBusinessDataDetail?id=1044783701222887424&type=Log',
+                    //contentType: 'application/x-www-form-urlencoded;charest=utf-8',
+                    //data: JSON.stringify({ "oldpwd": '1', "pwd": '2' }),
+                    //data: { "user": 'ningke', "pwd": 'd3apjAsOTp0A3rYUoORTZw==' },
+                    headers: {
+                        Sys: "1",
+                        AccessToken: "5106a533f03b90d2b32A"
+                    },
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            });
+
+            $('#btnAdd1').click(function () {
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: 'http://localhost:12497/api/project/AddMonitor',
+                    //contentType: 'application/x-www-form-urlencoded;charest=utf-8',
+                    data: {
+                        "projectId": 1033896604052099072,
+                        "projectName": "问题探讨",
+                        "companyId": 994206933714079900,
+                        "companyName": '武汉市燃气热力规划设计院有限公司',
+                        "monitorTime": '2018-09-13',
+                        "questions": "[{\"id\": \'1030729237528711168\',\"name\":'tyuty'}]"
+                    },
+                    headers: {
+                        Sys: "1",
+                        AccessToken: "5106a533f03b05d2b32A"
+                    },
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            });
+        })
+    </script>
+</head>
+<body>
+    <!--<form action="/api/Project/UploadFile" method="post" enctype="multipart/form-data">
+        <p><input type="file" name="file1" value="" /></p>
+        <p><input type="submit" value="提交" /></p>
+    </form>-->
+    <button type="button" id="btnAdd">添加</button>
+    <button type="button" id="btnAdd1">添加</button>
+</body>
+</html>

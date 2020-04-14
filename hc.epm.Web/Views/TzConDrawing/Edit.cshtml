@@ -1,0 +1,486 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TzConDrawingView
+
+@{
+    ViewBag.Title = "图纸会审修改";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #6a6969;
+        color: #fff;
+    }
+
+    .timeGroup {
+        width: 100%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称：</td>
+                        <td class="td-div" colspan="3">
+                            <div>
+                                @Model.TzConDrawing.ProjectName
+                            </div>
+                            <input type="hidden" id="Id" name="Id" value="@Model.TzConDrawing.Id" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称：</td>
+                        <td class="td-div">
+                            <div class="StationName">@Model.TzConDrawing.StationName</div>
+                            <input type="hidden" id="StationId" name="StationId" value="@Model.TzConDrawing.StationId" />
+                            <input type="hidden" id="StationName" name="StationName" value="@Model.TzConDrawing.StationName" />
+                        </td>
+                        <td class="table_title">项目性质：</td>
+                        <td class="td-div">
+                            <div class="NatureName">@Model.TzConDrawing.NatureName</div>
+                            <input type="hidden" id="Nature" name="Nature" value="@Model.TzConDrawing.Nature" />
+                            <input type="hidden" id="NatureName" name="NatureName" value="@Model.TzConDrawing.NatureName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">项目类型：</td>
+                        <td class="td-div">
+                            <div class="ProjectType">@Model.TzProjectApproval.ProjectType</div>
+                        </td>
+                        <td class="table_title">项目编号：</td>
+                        <td class="td-div">
+                            <div class="ProjectCode">@Model.TzConDrawing.ProjectCode</div>
+                            <input type="hidden" id="ProjectCode" name="ProjectCode" value="@Model.TzConDrawing.ProjectCode" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地区公司：</td>
+                        <td class="td-div">
+                            <div class="RegionCompany">@Model.TzProjectApproval.RegionCompany</div>
+                        </td>
+                        <td class="table_title">地市公司：</td>
+                        <td class="td-div">
+                            <div class="CompanyName">@Model.TzConDrawing.CompanyName</div>
+                            <input type="hidden" id="CompanyId" name="CompanyId" value="@Model.TzConDrawing.CompanyId" />
+                            <input type="hidden" id="CompanyName" name="CompanyName" value="@Model.TzConDrawing.CompanyName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">估算投资：</td>
+                        <td class="td-div">
+                            <div class="PredictMoney">@Model.PredictMoney.ToString("0.00") 万元</div>
+                        </td>
+                        <td class="table_title">工程费用：</td>
+                        <td class="td-div">
+                            <div class="EngineeringCost">@Model.TzProjectApproval.EngineeringCost</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">土地费用：</td>
+                        <td class="td-div">
+                            <div class="LandCosts">@Model.TzProjectApproval.LandCosts</div>
+                        </td>
+                        <td class="table_title">其他费用：</td>
+                        <td class="td-div">
+                            <div class="OtherExpenses">@Model.TzProjectApproval.OtherExpenses</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>加油站施工图会审</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span><i class="color_red">*</i>评审时间：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="timeGroup">
+                                <div class="form-group">
+                                    @if (Model.TzConDrawing.ReviewTime == null)
+                                    {
+                                        <input type="text" class="form-control position_rel" id="ReviewTime" name="ReviewTime" onClick="WdatePicker({ el: 'ReviewTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ReviewTime', 'NOT_VALIDATED', null).validateField('ReviewTime') } })" placeholder="日期选择" value="">
+                                        <i onClick="WdatePicker({ el: 'ReviewTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                                    }
+                                    @if (Model.TzConDrawing.ReviewTime != null)
+                                    {
+                                        <input type="text" class="form-control position_rel" id="ReviewTime" name="ReviewTime" onClick="WdatePicker({ el: 'ReviewTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ReviewTime', 'NOT_VALIDATED', null).validateField('ReviewTime') } })" placeholder="日期选择" value="@(Convert.ToDateTime(Model.TzConDrawing.ReviewTime).ToString("yyyy-MM-dd"))">
+                                        <i onClick="WdatePicker({ el: 'ReviewTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                                    }
+                                </div>                               
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span>主持人：</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="Moderator" class="form-control" placeholder="" value="@Model.TzConDrawing.Moderator" />
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>评审地点：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="ReviewAddress" class="form-control" placeholder="" value="@Model.TzConDrawing.ReviewAddress" />
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>特邀专家：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" name="ReviewExperts" style="resize:none;">@Model.TzConDrawing.ReviewExperts</textarea>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>参会人员：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea class="form-control" name="Participants" style="resize:none;">@Model.TzConDrawing.Participants</textarea>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span>评审结论：</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            @if (Model.TzConDrawing.Conclusion == "XMPSJL1")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL1" checked />同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL2" />原则同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL3" />不同意
+                                </label>
+                            }
+                            @if (Model.TzConDrawing.Conclusion == "XMPSJL2")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL1" />同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL2" checked />原则同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL3" />不同意
+                                </label>
+                            }
+                            @if (Model.TzConDrawing.Conclusion == "XMPSJL3")
+                            {
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL1" />同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL2" />原则同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL3" checked />不同意
+                                </label>
+                            }
+                           @if (Model.TzConDrawing.Conclusion == null)
+                           {
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL1" checked />同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL2" />原则同意
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Conclusion" value="XMPSJL3" />不同意
+                                </label>
+                            }
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:300px;">附件类型</td>
+                        <td class="td-div" style="width: 570px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.drawingType as SelectList, null, new { @class = "form-control sel" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title text_lf" colspan="3">
+                            <div class="btn-upload" style="display:inline-block">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                        </td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">附件归属</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                    @if (Model.TzConDrawing.TzAttachs != null && Model.TzConDrawing.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzConDrawing.TzAttachs)
+                        {
+                            <tr>
+                                <td><span class="sort">@item.Sort</span></td>
+                                <td class="text_lf"><span>@item.Name</span></td>
+                                <td><span>@item.TypeName</span></td>
+                                <td>
+                                    @if (item.Uploadtype == 1)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                        </label>
+                                    }
+                                    else if (item.Uploadtype == 2)
+                                    {
+                                        if (item.FilesSize < ConstString.TzMaxFileSize())
+                                        {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                            </label>
+
+                                        }
+                                        else {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                            </label>
+                                        }
+                                    }
+                                </td>
+                                <td style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typename="@item.TypeName" data-typeno="@item.TypeNo">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+        <input type="button" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectApprovalState.WaitSubmitted.GetValue().ToString())" />
+        <input type="button" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectApprovalState.WaitApproval.GetValue().ToString())" />
+        <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+        <input type="hidden" name="State" id="State" />
+    </div>
+</form>
+</div>
+
+<script>
+    //取消按钮
+    $("#Cancel").on("click", function () {
+        window.location.href = "/TzConDrawing/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                     </label>
+                                    `
+                        var html2 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                     </label>
+                                   `
+                        var html = (fileObj.size > tzmaxfilesize) ? html1 : html2;
+
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span class="sort"> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td>${html}</td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                var fileDataArray = [];
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    var uploadtype = 0;
+                    var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+
+                    if (uploadtype1 == true) {
+                        uploadtype = 1;
+                    }
+                    if (uploadtype1 == false) {
+                        uploadtype = 2;
+                    }
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $(item).find("#updata").data("typeno"),
+                        TypeName: $(item).find("#updata").data("typename"),
+                        Sort: index + 1,
+                        Uploadtype: uploadtype
+                    })
+                });
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+                var search = $("#mainForm").serialize();
+
+                //点击提交表单验证，点击暂存表单不验证
+                if ($(this).data("state") == "@(PreProjectApprovalState.WaitApproval.GetValue().ToString())") {
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (!bv.isValid()) {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        return;
+                    }
+                }
+
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/TzConDrawing/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+
+    });
+
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            ReviewTime: {
+                validators: {
+                    notEmpty: {
+                        message: '评审时间不能为空'
+                    }
+                }
+            },
+
+        }
+    });
+</script>

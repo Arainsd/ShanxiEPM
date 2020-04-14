@@ -1,0 +1,29 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "历史总批复及构成";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<div>
+    <table class="datalist">
+        <tr>
+            @foreach (var col in Model.Columns)
+            {
+                <th>@col</th>
+            }
+        </tr>
+        @foreach (System.Data.DataRow item in Model.Rows)
+            {
+            <tr>
+
+                @foreach (var rows in item.ItemArray)
+                {
+                    <td>@rows</td>
+                }
+            </tr>
+        }
+    </table>
+</div>

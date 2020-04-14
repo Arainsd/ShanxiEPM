@@ -1,0 +1,184 @@
+﻿
+@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@model List<Epm_TzInitialTalk>
+@{
+    ViewBag.Title = "初次谈判详情";
+}
+<style>
+      .fileShow li {
+            display: flex;
+            list-style: none;
+            height: 35px;
+            line-height: 30px;
+        }
+
+    .title {
+        color: blue;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .control-label {
+        font-weight: 500;
+    }
+
+    .size {
+        font-weight: 500;
+        height: 34px;
+        line-height: 34px;
+        text-align: left;
+        padding: 0;
+    }
+
+    input[type="file"] {
+        display: inline !important;
+    }
+
+    .af-na {
+        margin-left: -50px;
+    }
+
+    .sel {
+        width: 120px;
+        margin-left: 20px;
+    }
+
+    .file-name {
+        width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sort {
+        display: inline-block;
+        width: 45px;
+    }
+
+    .file-c {
+        color: blue;
+    }
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">谈判时间：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="form-control" name="TalkTime" value="" readonly />
+                            @*<input type="text" name="TalkTime" value="@Model.TalkTime" readonly />*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">谈判地点：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @*<input type="text" class="form-control" value="@Model.TalkAdress" readonly />*@
+                            <input type="text" class="form-control" value="" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">我方谈判人：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <input id="Project_name" type="text" class="form-control" value="" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">对方谈判人：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <input id="Project_name" type="text" class="form-control" value="" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">土地竞拍支付第一笔出让金：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <input type="text" class="form-control" name="TalkTime" value="" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">开工日期：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="form-control" value="" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 col-sm-3 control-label">谈判结果：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <input id="Project_name" type="text" class="form-control" value="" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">附件：</label>
+                    <div class="col-lg-10 col-sm-10" id="fileListFile">
+                        <div style="margin-top:3px;">
+                            <ul class="fileShow">
+                                <li>
+                                    <div class="file-name">
+                                        <span class="sort file-c">排序</span>
+                                        <a href="javascript:;" target="_blank" class="file-c">附件名称</a>
+                                    </div>
+                                    <span class="sel file-c">附件类型</span>
+                                    <div style="text-align:right; width:80px;" class="file-c">附件大小</div>
+                                    <span style="margin-left:20px;" class="file-c">上传人</span>
+                                    <span style="margin-left:20px;" class="file-c">上传时间</span>
+                                </li>
+                                @*@if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                                {
+                                    foreach (var item in Model.TzAttachs)
+                                    {
+
+                                        <li>
+                                            <div class="file-name">
+                                                <span class="sort">@item.Sort</span>
+                                                <a href="javascript:;" target="_blank">@item.Name</a>
+                                            </div>
+                                            <span class="sel">@item.TypeName</span>
+                                            <div style="text-align:right; width:80px;">@item.Size</div>
+                                            <span style="margin-left:20px;">@item.OperateUserName</span>
+                                            <span style="margin-left:20px;">@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</span>
+                                        </li>
+                                    }
+                                }*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+                <input type="button" id="Cancel" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    //返回按钮
+    $("#Cancel").on("click", function () {
+        window.location.href = "/TzFirstNegotiation/Index";
+    });
+</script>

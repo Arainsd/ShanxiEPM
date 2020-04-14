@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "SelectProject";
+}
+<div class="content-right date-wrap fl c" style="width: 660px; margin-top: 10px;">
+    <div class="search mt5" style="padding:5px 10px;">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width:100px;">资料名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入资料名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" style="margin-left:0px;" />
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="选 择" id="selectData" style="margin-left:0px;" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5" style="padding:5px 20px; min-height:350px;">
+        <div class="layui-form" style="overflow: scroll;height: 300px;">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="10%" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                        </th>
+                        <th width="10%" class="table-center">序号</th>
+                        <th width="80%" class="table-left">资料名称</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td class="table-left">@item.Name</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/HcMilestone/SelectProject?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+    });
+    //选择项目资料
+    $("#selectData").click(function () {
+        var ids = "", names = "";
+        $(".layui-table tbody input").each(function () {
+            if (this.checked === true) {
+                if (ids == "") {
+                    ids = $(this).parent("td").parent("tr").find("[type=hidden]").val();
+                    names = $(this).parent("td").parent("tr").find("td").eq(2).text();
+                } else {
+                    ids = ids + ',' + $(this).parent("td").parent("tr").find("[type=hidden]").val();
+                    names = names + ',' + $(this).parent("td").parent("tr").find("td").eq(2).text();
+                }
+            }
+        });
+
+        if (ids == "") {
+            parent.layer.alert("请选择项目资料", { icon: 2 });
+            return;
+        }
+        parent.$("#DataConfigId").val(ids);
+        parent.$("#DataConfigName").val(names);
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    });
+</script>

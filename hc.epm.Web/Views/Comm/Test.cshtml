@@ -1,0 +1,274 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "Test";
+}
+<style>
+    .layui-form {
+        height: 90px;
+        padding-top: 40px;
+    }
+
+    .layui-form-label {
+        width: 100px;
+    }
+</style>
+<div style="margin:30px; text-align:center">
+    <button class="11">确认框</button>
+    <button class="22">驳回确认</button>
+    <button class="223">终结</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="33">选择用户</button>
+    <button class="44">选择单位</button>
+    <button class="55">选择项目</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="66">选择项目资料</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="99">选择油站</button>
+    <button class="aa">选择模板</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="77">关联工程节点</button>
+    <button class="bb">关联BIM</button>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+
+
+        //确认框
+        $(".11").click(function () {
+            layer.confirm("是否确认？", { icon: 3 }, function () {
+                parent.layer.msg("确认成功", { time: 1000, icon: 1 });
+            });
+        });
+        //驳回确认
+        $(".22").click(function () {
+            layer.prompt({ formType: 2, value: '', title: '请输入驳回理由' }, function (value, index, elem) {
+                parent.layer.msg("驳回意见：" + value, { time: 1000, icon: 0 });
+            });
+        });
+        //终结
+        $(".223").click(function () {
+            layer.open({
+                type: 1,
+                title: '确认终结',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index) {
+                }
+            });
+        });
+
+
+
+
+
+
+
+        //在建项目
+        $(".55").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择在建项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProject',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    console.log(obj);
+                },
+                btn2: function (index, layero) {
+                    alert("点击取消按钮事件");
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+
+
+
+
+
+
+        //选择项目资料
+        $(".66").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目资料"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                //selType = [1：单选；2：多选]
+                content: '/Comm/SelectData?selType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        alert("id:" + obj.data[0].Id + " name:" + obj.data[0].Name);
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    alert("点击取消按钮事件");
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+
+
+
+
+
+        //选择项目资料
+        $(".99").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目资料"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectOilStation?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        console.log(obj);
+                        layer.close(index);
+                    }
+                },
+                btn2: function (index, layero) {
+                    alert("点击取消按钮事件");
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+
+
+
+
+
+        //关联里程碑
+        $(".77").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("选择工程节点"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectMilestone',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    console.log(layero)
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        console.log(obj);
+                        layer.close(index);
+                    }
+                },
+                btn2: function (index, layero) {
+                    alert("点击取消按钮事件");
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+
+
+
+
+
+
+        //选择模板
+        $(".aa").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("选择模板"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                //TemplateTypeNo = [AQJC：安全检查；ZLJC：质量检查；ZXYS：专项验收；AQPX：安全培训；ZLPX：质量培训]
+                //selType = [1：单选；2：多选]
+                content: '/Comm/GetTemplateList?selectType=1&TemplateTypeNo=AQJC',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        console.log(obj);
+                        layer.close(index);
+                    }
+                },
+                btn2: function (index, layero) {
+                    alert("点击取消按钮事件");
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+        //关联Bim模型
+        $(".bb").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("关联BIM模型"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/RelationBIM?projectId=1016877654374223872',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getIds();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        console.log(obj);
+                        layer.close(index);
+                    }
+                },
+                btn2: function (index, layero) {
+                    alert("点击取消按钮事件");
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+</script>
+<div id="convert" style="display:none;width:360px;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">终结类型 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <select name="modules">
+                            <option value="@(ProjectState.Failure.ToString())">@(ProjectState.Failure.ToString().ToEnumReq<ProjectState>().GetText())</option>
+                            <option value="@(ProjectState.Discard.ToString())">@(ProjectState.Discard.ToString().ToEnumReq<ProjectState>().GetText())</option>
+                            <option value="@(ProjectState.Invalid.ToString())">@(ProjectState.Invalid.ToString().ToEnumReq<ProjectState>().GetText())</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

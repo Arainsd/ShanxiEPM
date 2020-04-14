@@ -1,0 +1,376 @@
+﻿@{
+    ViewBag.Title = "新增问题";
+}
+<style>
+    .listable .datalist {
+        margin-left: 20px;
+    }
+
+    .add_btn {
+        width: 100px;
+        height: 25px;
+    }
+
+    ._partner {
+        margin-bottom: 0px !important;
+    }
+</style>
+<div class="contentData">
+    <input type="hidden" id="ComponentArray" name="ComponentArray" value="@ViewBag.ComponentIds" />
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" id="ProjectName" name="ProjectName" readonly value="@ViewBag.ProjectName" />
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@ViewBag.ProjectId" />
+                <i class="pic iconfont" id="ProjectName_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;业务类型&nbsp;:</label>
+                @Html.DropDownList("BusinessType", null, new { @class = "form-control selectpicker  show-tick" })
+                <input type="hidden" name="BusinessTypeNo" id="BusinessTypeNo" />
+                <input type="hidden" name="BusinessTypeName" id="BusinessTypeName" />
+                <input type="hidden" name="BusinessId" id="BusinessId" value="@ViewBag.BusinessId" />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;问题类型&nbsp;:</label>
+                @Html.DropDownList("ProblemTypeNo", null, new { @class = "form-control selectpicker  show-tick" })
+                <input type="hidden" name="ProblemTypeName" id="ProblemTypeName" />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;标题&nbsp;:</label>
+                <input type="text" id="Title" name="Title" />
+            </div>
+            <div class="intro">
+                <div><label><span class="star">*</span>&nbsp;描述&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Description" name="Description"></textarea>
+                </div>
+            </div>
+            <div class="intro" style="margin-top: 33px;">
+                <div><label>&nbsp;建议&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Proposal" name="Proposal"></textarea>
+                </div>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;重大事故&nbsp;:</label>
+                <input type="radio" class="IsAccident" name="IsAccident" value="true" />是&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" class="IsAccident" name="IsAccident" value="false" checked />否
+            </div>
+            @*<div class="long-text">
+                <label>&nbsp;关联BIM&nbsp;:</label>
+                <input type="text" id="SelectBIM" name="SelectBIM" readonly value='@(ViewBag.ComponentIds=="[]"?"未关联构件":"已关联构件")' />
+                <i class="pic iconfont SelectBIM_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" id="ComponentIds" name="ComponentIds" value="@ViewBag.ComponentIds" />
+                <input type="hidden" id="BIMId" name="BIMId" value="" />
+
+            </div>*@
+            <div class="long-text">
+                <label for=""><span class="star">*</span>&nbsp;接收单位&nbsp;:</label>
+                <input type="text" name="RecCompanyName" id="RecCompanyName" value="" autocomplete="off" readonly />
+                <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                <input type="hidden" name="RecCompanyId" id="RecCompanyId" value="" />
+
+            </div>
+            <div class="upload" style="margin-bottom:0px;">
+                <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                   </div>
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+            <div class="button-group btn-center">
+                <input type="hidden" name="QuestionBim" id="QuestionBim" />
+                <button type="button" class="btnSub">提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileListFile .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+                $("#loadFile").val("");
+            }
+        });
+    }
+
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+    });
+    $("#ProblemTypeNo").change(function () {
+        var problemTypeName = $("#ProblemTypeNo option:selected").text();
+        $("#ProblemTypeName").val(problemTypeName);
+    });
+
+    @*$("#RecCompanyId").change(function () {
+        var recCompanyId = $('#RecCompanyId').val();
+        var recCompanyName = $('#RecCompanyId option:selected').text();
+        $("#RecCompanyName").val(recCompanyName);
+        $("#RecCompanyId").val(recCompanyId);
+    });
+
+    SetCompany('@ViewBag.ProjectId');
+
+    function SetCompany(projectId) {
+        if (projectId == "") return;
+        $.post("/Question/GetCompany?projectId=" + projectId, function (result) {
+            if (result.length > 0) {
+                var str = "";
+                for (var i = 0; i < result.length; i++) {
+                    str += '<option value="' + result[i].SId + '">' + result[i].CompanyName + '</option>';
+                }
+                $("#RecCompanyId").append(str);
+            }
+        })
+    }*@
+
+    var validator = $("#mainForm").validate({
+        errorClass: "validaterror",
+        validClass: "validatevalid",
+        errorElement: "span",
+        success: function (label) {
+            label.addClass("validatevalid").html("&nbsp;");
+        },
+        rules: {
+            ProjectName: {
+                required: true,
+                maxlength: 200
+            },
+            ProblemTypeName: {
+                required: true
+            },
+            Title: {
+                required: true,
+                maxlength: 200
+            },
+            Description: {
+                required: true,
+                maxlength: 500
+            },
+            RecCompanyId: {
+                required: true
+            },
+            BusinessTypeNo: {
+                required: true
+            }, ProblemTypeNo: {
+                required: true
+            },
+        },
+        messages: {
+            ProjectName: {
+                required: "项目名称不能为空"
+            },
+            ProblemTypeName: {
+                required: "请选择问题类型"
+            },
+            Title: {
+                required: "标题不能为空",
+                maxlength: "标题不能大于100个字符"
+            },
+            Description: {
+                required: "描述不能为空",
+                maxlength: "描述不能超过500个字符"
+            },
+            RecCompanyId: {
+                required: "接收单位不能为空"
+            },
+            BusinessTypeNo: {
+                required: "业务类型不能为空"
+            }, ProblemTypeNo: {
+                required: "问题类型不能为空"
+            },
+        }
+    })
+    layui.use(['layer', 'laydate', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage, laydate = layui.laydate;
+        //默认当前日期
+        laydate.render({
+            elem: '#SubmitTime'
+            , value: new Date()
+            , isInitValue: false //是否允许填充初始值，默认为true
+        });
+
+        $("#BusinessTypeNo").val($("#BusinessType").val())
+        $("#BusinessTypeName").val($("#BusinessType option:checked").text())
+        $("#BusinessType").prop("disabled", true);
+
+        //提交
+        $(".btnSub").click(function () {
+            if (!validator.form()) {
+                return false;
+            }
+            var data = $("#mainForm").serialize();
+            $.post("/Question/Add", data, function (result) {
+                if (result.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 });
+                    window.location.href = "/Question/Index";
+                    return false;
+                }
+                layer.alert(result.Message, { icon: 2 });
+            })
+        })
+        $("#SelectBIM,.SelectBIM_icon").click(function () {
+            var id = $("#ProjectId").val();
+            if (!id) {
+                layer.alert("请先选择项目", { icon: 2 })
+
+            } else {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("关联BIM模型"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['1000px', '700px'],
+                    content: '/Comm/RelationBIM?bimId=' + $("#BIMId").val() + '&projectId=' + id,
+                    btn: ["确定", "取消"],
+                    success: function (layero, index) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                    },
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var result = iframeWin.getIds();
+                        if (result.flag) {
+                            layer.msg("操作成功", { icon: 1, time: 1000 })
+                            var data = result.data;
+                            $("#BIMId").val(data[0].BIMId)
+                            console.log(data)
+                            data = JSON.stringify(data)
+                            $("#ComponentIds").val(data);
+                            $("#SelectBIM").val("已关联构件").css("color", "blue");
+                            layer.close(index)
+                        } else {
+                            layer.alert(result.msg, { icon: 2 })
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        $("#ComponentIds").val("");
+                        $("#SelectBIM").val("未关联构件").css("color", "");
+                    },
+                    cancel: function (index, layero) {
+                        $("#ComponentIds").val("");
+                        $("#SelectBIM").val("未关联构件").css("color", "");
+                    },
+                });
+            }
+        });
+        //选择在建项目
+        $("#ProjectName,#ProjectName_icon").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择在建项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectProject',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].Id);
+                        //SetCompany(obj.data[0].Id);
+                        layer.close(index);
+                    }
+                    else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //接收单位
+        $("#RecCompanyName").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectCustomerByNameOrType?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#RecCompanyName").val(obj.data[0].Name);
+                        $("#RecCompanyId").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //删除附件
+        $("#fileListFile").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+    });
+</script>

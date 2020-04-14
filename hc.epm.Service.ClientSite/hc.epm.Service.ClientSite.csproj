@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{344EEE4B-8211-4F9B-AE19-DC16B18FA54C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hc.epm.Service.ClientSite</RootNamespace>
+    <AssemblyName>hc.epm.Service.ClientSite</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\ServicePush\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AipSdk, Version=3.6.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AipSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.Common">
+      <HintPath>..\..\..\ServicePush\hc.epm.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.DataModel.BaseCore">
+      <HintPath>..\..\..\ServicePush\hc.epm.DataModel.BaseCore.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.DataModel.Basic">
+      <HintPath>..\..\..\ServicePush\hc.epm.DataModel.Basic.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.DataModel.Msg, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ServicePush\hc.epm.DataModel.Msg.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.Service.Base">
+      <HintPath>..\..\..\ServicePush\hc.epm.Service.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.Service.Msg, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ServicePush\hc.epm.Service.Msg.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.ViewModel">
+      <HintPath>..\..\..\ServicePush\hc.epm.ViewModel.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.Plat.Common.Global">
+      <HintPath>..\..\..\ServicePush\hc.Plat.Common.Global.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\lib\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\lib\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AIFaceService.cs" />
+    <Compile Include="ApproverService.cs" />
+    <Compile Include="AppService.cs" />
+    <Compile Include="BimService.cs" />
+    <Compile Include="ChangeService.cs" />
+    <Compile Include="CompletionAcceptanceResUploadService.cs" />
+    <Compile Include="ProjectAttendanceService.cs" />
+    <Compile Include="RPATzFirstNegotiationService.cs" />
+    <Compile Include="SupervisorLogStatisticService.cs" />
+    <Compile Include="TimeLimitAndProcedureService.cs" />
+    <Compile Include="CompanyService.cs" />
+    <Compile Include="CompletionAcceptanceService.cs" />
+    <Compile Include="ContractService.cs" />
+    <Compile Include="CustomPropertyService.cs" />
+    <Compile Include="DangerousWorkService.cs" />
+    <Compile Include="DataConfigService.cs" />
+    <Compile Include="DrawService.cs" />
+    <Compile Include="FileService.cs" />
+    <Compile Include="IClientSiteService.cs" />
+    <Compile Include="MassageService.cs" />
+    <Compile Include="MaterialService.cs" />
+    <Compile Include="MaterielService.cs" />
+    <Compile Include="MeetingFileReportService.cs" />
+    <Compile Include="MilepostService.cs" />
+    <Compile Include="TzBidResultService.cs" />
+    <Compile Include="TzConDrawingService.cs" />
+    <Compile Include="TzDesignSchemeService.cs" />
+    <Compile Include="TzDevResourceReportService.cs" />
+    <Compile Include="TzFirstNegotiationService.cs" />
+    <Compile Include="TzGcGoodsOrdersApplyService.cs" />
+    <Compile Include="TzLandNegotiationService.cs" />
+    <Compile Include="TzPeopleChgApplyService.cs" />
+    <Compile Include="TzProjectApprovalInfoService.cs" />
+    <Compile Include="TzProjectPolitService.cs" />
+    <Compile Include="RectificationServer.cs" />
+    <Compile Include="RectificationList.cs" />
+    <Compile Include="MonitorService.cs" />
+    <Compile Include="NewsService.cs" />
+    <Compile Include="OilStationService.cs" />
+    <Compile Include="PlanDelayService.cs" />
+    <Compile Include="PlanService.cs" />
+    <Compile Include="ProjectService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionService.cs" />
+    <Compile Include="ReformRecordService.cs" />
+    <Compile Include="RegionService.cs" />
+    <Compile Include="Service References\XtWorkFlow\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SpecialAcceptanceService.cs" />
+    <Compile Include="SupervisorLogService.cs" />
+    <Compile Include="TrainService.cs" />
+    <Compile Include="TzCodeMapService.cs" />
+    <Compile Include="TzDesiginChangeApplyService.cs" />
+    <Compile Include="TzFormTalkFileService.cs" />
+    <Compile Include="TzProjectProposalService.cs" />
+    <Compile Include="TzLandTalkService.cs" />
+    <Compile Include="TzProjectApprovalService.cs" />
+    <Compile Include="TzProjectReveiewsService.cs" />
+    <Compile Include="TzProjectStartApplyService.cs" />
+    <Compile Include="TzRivalStationReportService.cs" />
+    <Compile Include="TzResearchService.cs" />
+    <Compile Include="TzStartsApplyService.cs" />
+    <Compile Include="TzSupMatManagementService.cs" />
+    <Compile Include="TzSupplyMaterialApplyService.cs" />
+    <Compile Include="TzTalkRecordService.cs" />
+    <Compile Include="TzTenderingCountService.cs" />
+    <Compile Include="TzTenderingApplyService.cs" />
+    <Compile Include="UserService.cs" />
+    <Compile Include="VisaService.cs" />
+    <Compile Include="WorkUploadRealSceneService.cs" />
+    <Compile Include="XtWorkFlowService.cs" />
+    <Compile Include="XtWorkFlowSubmitService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hc.epm.DataModel.Basic\hc.epm.DataModel.Basic.csproj">
+      <Project>{64a4f74f-a0e1-4ef2-915b-dd49bd50edac}</Project>
+      <Name>hc.epm.DataModel.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Business\hc.epm.DataModel.Business.csproj">
+      <Project>{1c5dc3d9-56b1-4580-8b69-30955f72d6bd}</Project>
+      <Name>hc.epm.DataModel.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Msg\hc.epm.DataModel.Msg.csproj">
+      <Project>{85643354-d470-49aa-a4d0-e9b6ba8116a2}</Project>
+      <Name>hc.epm.DataModel.Msg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.Service.Basic\hc.epm.Service.Basic.csproj">
+      <Project>{12078b7d-28a5-4d0a-871d-664c65cb1df5}</Project>
+      <Name>hc.epm.Service.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.Plat.Common.Extend\hc.Plat.Common.Extend.csproj">
+      <Project>{4f59530f-798f-45a0-8500-1864e7508bbe}</Project>
+      <Name>hc.Plat.Common.Extend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.Plat.Common\hc.Plat.Common.Service\hc.Plat.Common.Service.csproj">
+      <Project>{93303137-27db-4026-a202-badfcfa5f99b}</Project>
+      <Name>hc.Plat.Common.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Service References\XtWorkFlow\hc.epm.Service.ClientSite.XtWorkFlow.ArrayOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\XtWorkFlow\hc.epm.Service.ClientSite.XtWorkFlow.RequestResultSet.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\XtWorkFlow\hc.epm.Service.ClientSite.XtWorkFlow.WorkflowBaseInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\XtWorkFlow\hc.epm.Service.ClientSite.XtWorkFlow.WorkflowRequestInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\XtWorkFlow\hc.epm.Service.ClientSite.XtWorkFlow.WorkflowRequestLog.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\XtWorkFlow\WorkflowService.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\XtWorkFlow\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\XtWorkFlow\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\XtWorkFlow\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\XtWorkFlow\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,253 @@
+﻿@using hc.epm.DataModel.Business;
+@model Epm_TzGcGoodsOrdersApply
+
+@{
+    ViewBag.Title = "Detail";
+}
+
+<link href="~/Resource/css/TzDesiginChangeApply.css" rel="stylesheet" />
+
+<style>
+    .fr-ta {
+        width: 100%;
+    }
+
+    .ou-ta div {
+        width: 100px;
+    }
+
+    .tab-conten input[type=text] {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid;
+        box-sizing: border-box;
+    }
+
+    .fr-ta input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-icon i {
+        font-size: 24px;
+    }
+
+        .tab-icon i:hover {
+            cursor: pointer;
+        }
+
+    .div-sty {
+        margin-left: 35px;
+        text-align: left;
+    }
+</style>
+
+<div class="contentData">
+    <form id="mainForm">
+        <div class="top-title">
+            <span class="ti">工程甲供物资订审批流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr>
+                    <td class="bold-name">标题</td>
+                    <td style="text-align:center;" colspan="3">
+                        <div class="form-group">
+                            <div class="div-sty">@Model.Title</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请人</td>
+                    <td>
+                        <div class="div-sty">@Model.Applicant</div>
+                    </td>
+                    <td class="bold-name">申请单位</td>
+                    <td>
+                        <div class="div-sty">@Model.CompanyName</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申请时间</td>
+                    <td>
+                        <div class="div-sty">@(Convert.ToDateTime(Model.ApplyDate).ToString("yyyy-MM-dd"))</div>
+                    </td>
+                    <td class="bold-name">申请部门</td>
+                    <td>
+                        <div class="div-sty">
+                            <span style="margin-right:5px;">@Model.CompanyName</span>
+                            <span>@Model.Department</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">合同名称</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.ContractName</div>
+                        </div>
+                    </td>
+                    <td class="bold-name">合同报审序号</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.ContractNumber</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">联系人</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.Contact</div>
+                        </div>
+                    </td>
+                    <td class="bold-name">联系人电话</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.ContactNumber</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">项目名称</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.ProjectName</div>
+                        </div>
+                    </td>
+                    <td class="bold-name">批文号</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.ApprovalNo</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">物资种类</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.MaterialName</div>
+                        </div>
+
+                    </td>
+                    <td class="bold-name">erp订单号</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.ErpOrderNumber</div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="4" style="background-color:#e4e4e4;">供应商基础信息</td>
+                </tr>
+                <tr>
+                    <td class="bold-name">供应商名称</td>
+                    <td colspan="3">
+                        <div class="form-group">
+                            <div class="div-sty">@Model.SupplierName</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">供应商地址</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.SupplierAdress</div>
+                        </div>
+                    </td>
+                    <td class="bold-name">供应商邮编</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.SupplierCode</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">收件人</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.Recipient</div>
+                        </div>
+                    </td>
+                    <td class="bold-name">电话</td>
+                    <td>
+                        <div class="form-group">
+                            <div class="div-sty">@Model.Phone</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table class="fr-ta" style="word-break:break-all;word-wrap:break-word;">
+                            <thead>
+                                <tr class="ou-ta">
+                                    <th><div style="width:40px;">序号</div></th>
+                                    <th><div>单位</div></th>
+                                    <th><div>站名</div></th>
+                                    <th><div>品名</div></th>
+                                    <th><div>规格</div></th>
+                                    <th><div>数量</div></th>
+                                    <th><div>单价</div></th>
+                                    <th><div>金额</div></th>
+                                    <th><div>到货地址</div></th>
+                                    <th><div>备注</div></th>
+                                </tr>
+                            </thead>
+                            <tbody class="addtab">
+                                @{
+                                    int index = 0;
+                                }
+                                @if (Model.TzGcGoodsOrdersItem != null && Model.TzGcGoodsOrdersItem.Count() > 0)
+                                {
+                                    foreach (var item in Model.TzGcGoodsOrdersItem)
+                                    {
+                                        index++;
+                                        <tr class="tab-conten">
+                                            <td class="Sort">@index</td>
+                                            <td>
+                                                @item.CompanyName
+                                            </td>
+                                            <td>@item.StationName</td>
+                                            <td>@item.ProductName</td>
+                                            <td>@item.Specifications</td>
+                                            <td>@item.Number</td>
+                                            <td>@item.UnitPrice</td>
+                                            <td>@item.Amount</td>
+                                            <td>@item.Address</td>
+                                            <td>@item.Note</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">部门负责人</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            <div class="div-sty">@Model.DepLeaderName</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分管领导</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            <div class="div-sty">@Model.LeaderName</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="background-color:#e4e4e4;">签字意见</td>
+                </tr>
+                <tr>
+                    <td colspan="4">@Html.Raw(Model.SignIdea)</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

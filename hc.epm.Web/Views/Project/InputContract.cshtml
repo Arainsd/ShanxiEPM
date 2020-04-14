@@ -1,0 +1,139 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "输入合同/委托单信息";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style>
+    .long-text {
+        margin-bottom: 10px;
+        height: 35px;
+        margin-left: 80px;
+    }
+
+    select, input {
+        width: 226px;
+        height: 35px;
+        display: inline-block;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+        padding-left: 10px;
+    }
+
+    .button-group button {
+        display: inline-block;
+        font-size: 16px;
+        letter-spacing: 3px;
+        margin: 30px 0 20px 0;
+        width: 89px;
+        height: 29px;
+        border: none;
+        border-radius: 3px;
+        background-color: #FFA000;
+        color: #FEE9D3;
+        font-weight: 500;
+        margin-left: 190px;
+    }
+
+    span.validaterror {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        background: url(/Resource/images/ic_fail.png) no-repeat;
+        background-size: 20px 20px;
+        background-position: 10px center;
+        font-weight: 500;
+        color: #FF2525;
+        padding-left: 33px;
+        font-size: 16px;
+    }
+
+    span.validatevalid {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        background: url(/Resource/images/ic_success.png) no-repeat;
+        background-size: 22px 22px;
+        background-position: 10px center;
+    }
+
+    .star {
+        color: red;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;合同编码&nbsp;:</label>
+                <input type="text" id="Code" name="Code" value="" />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;生效时间&nbsp;:</label>
+                <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime' })" readonly="readonly" />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;截止时间&nbsp;:</label>
+                <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime' })" readonly="readonly" />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;合同金额&nbsp;:</label>
+                <input type="text" id="Amount" name="Amount" value="" maxlength="15" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9\.]/g,'');}).call(this)" onblur="this.v();" /> &nbsp;&nbsp;万元
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;签订日期&nbsp;:</label>
+                <input type="text" id="SignTime" name="SignTime" onClick="WdatePicker({ el: 'SignTime' })" readonly="readonly" />
+            </div>
+        </div>
+    </form>
+</div>
+@section scripts
+{
+    <script type="text/javascript" src="~/Resource/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('input').attr("autocomplete", "off");
+        });
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            result.data.push({
+                Code: $("#Code").val() || '',
+                StartTime: $("#StartTime").val() || '',
+                EndTime: $("#EndTime").val() || '',
+                Amount: $("#Amount").val() || '',
+                SignTime: $("#SignTime").val() || ''
+            });
+
+            if ($.trim(result.data[0].Code) == '') {
+                result.flag = false;
+                result.msg = '请输入合同编号！';
+                return result;
+            }
+            if ($.trim(result.data[0].StartTime) == '') {
+                result.flag = false;
+                result.msg = '请选择生效时间！';
+                return result;
+            }
+            if ($.trim(result.data[0].EndTime) == '') {
+                result.flag = false;
+                result.msg = '请选择截止时间！';
+                return result;
+            }
+            if ($.trim(result.data[0].Amount) == '') {
+                result.flag = false;
+                result.msg = '请输入合同金额！';
+                return result;
+            }
+            if ($.trim(result.data[0].SignTime) == '') {
+                result.flag = false;
+                result.msg = '请选择合同签订时间！';
+                return result;
+            }
+            return result;
+        }
+    </script>
+}

@@ -1,0 +1,212 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@model IEnumerable<Epm_News>
+@{
+    ViewBag.Title = "新闻资讯";
+}
+
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> <a href="">新闻资讯管理</a> </span> > <span> 新闻发布记录</span>
+    </div>
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">新闻标题 : </label>
+                    <div class="layui-input-inline"><input type="text" name="NewsTitle" id="NewsTitle" placeholder="请输入新闻标题" autocomplete="off" class="layui-input" value="@ViewBag.NewsTitle"/></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" data-module="TypeDictionary" data-right="add" id="add" class="checkright">新 增</a>
+            <a href="javascript:;" data-module="TypeDictionary" data-right="delete" id="delete" class="checkright">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table" style="word-break:break-all;word-wrap:break-word">
+                <thead>
+                    <tr>
+                        <th width="50" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                        </th>
+                        <th width="90" class="table-center">序号</th>
+                        <th width="100" class="table-left">新闻标题</th>
+                        <th width="18%" class="table-left">新闻分类</th>
+                        <th width="18%" class="table-left">来源</th>
+                        <th width="10%" class="table-left">是否置顶</th>
+                        <th width="10%" class="table-left">是否发布</th>
+                        <th width="90" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">
+                                    <input type="checkbox" lay-skin="primary"/>
+                                    <input type="hidden" name="id-@item.Id" id="id-@item.Id" value="@item.Id" />
+                                </td>
+                                <td class="table-center">@index</td>
+                                <td>@item.NewsTitle</td>
+                                <td>@item.NewsTypeName</td>
+                                <td>@item.Source</td>
+                                <td class="table-center">
+                                    @if (item.IsTop == false)
+                                    {
+                                        <a href="javascript:;" class='change-state' data-module="ElectronicAgreement" data-itemid="@item.Id" data-value="true" data-right="enable" data-type="1" title="是否置顶"><i class='glyphicon glyphicon-remove-sign handle-red'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='change-state' data-module="ElectronicAgreement" data-itemid="@item.Id" data-value="false" data-right="enable" data-type="1" title="是否置顶"><i class='glyphicon glyphicon-ok-sign handle-blue'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    @if (item.IsPublish == false)
+                                    {
+                                        <a href="javascript:;" class='change-state' data-module="ElectronicAgreement" data-itemid="@item.Id" data-value="true" data-right="confirm" data-type="2" title="是否发布"><i class='glyphicon glyphicon-remove-sign handle-red'></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" class='change-state' data-module="ElectronicAgreement" data-itemid="@item.Id" data-value="false" data-right="confirm" data-type="2" title="是否发布"><i class='glyphicon glyphicon-ok-sign handle-blue'></i></a>
+                                    }
+                                </td>
+                                <td class="table-center">
+                                    <a href="javascript:;" class="editor-link" data-itemid="@item.Id" title="编辑" data-module="TypeDictionary" data-right="modify"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/News/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //修改
+        $(".editor-link").click(function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("新闻资讯管理-编辑"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: [BigLayerWidth, BigLayerWidth],
+                    content: '/News/Edit/' + id
+                });
+            }
+        });
+        //增加
+        $("#add").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("新闻资讯管理-添加"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, BigLayerWidth],
+                content: '/News/add'
+            });
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/News/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+        //确认状态切换
+        $(".change-state").click(function () {
+            var id = $(this).data("itemid");
+            var state = $(this).data("value");
+            var type = $(this).data("type");
+            if (type == 1) {
+                mes = "确认修改置顶状态？";
+            } else {
+                mes = "确认修改发布状态？";
+            }
+            if (id != '') {
+                parent.layer.confirm(mes, { icon: 3 }, function () {
+                    $.post("ChangeState", { id: id, type: type, state: state }, function (data) {
+                        if (data.Flag) {
+                            window.location.href = "/News/Index";
+                            parent.layer.msg("操作成功！", { time: 1000, icon: 1 });
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    })
+                })
+
+            } else {
+                parent.layer.alert("请选择要操作的项！")
+            }
+        });
+    });
+</script>
+

@@ -1,0 +1,189 @@
+/*---------------head-------------------*/
+/*.head, .nav {
+    background: #ffffff;
+}
+
+.head {
+    font-family: 宋体;
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid #e6e6e6;
+    color: #666666;
+}
+
+    .head .subhead {
+        width: 1200px;
+        height: 40px;
+        margin: 0 auto;
+    }
+
+.subheadRight {
+    float: left;
+    height: 100%;
+    width: 450px;
+}
+
+    .subheadRight img {
+        float: left;
+        margin-top: 10px;
+    }
+
+    .subheadRight p {
+        float: left;
+        font-size: 12px;
+        margin-left: 12px;
+        height: 100%;
+        line-height: 40px;
+    }
+
+        .subheadRight p a {
+            color: #006fc3;
+        }
+
+.subheadLeft {
+    float: right;
+}
+
+    .subheadLeft li {
+        float: left;
+        height: 40px;
+        width: 80px;
+        line-height: 40px;
+    }
+
+        .subheadLeft li a {
+            font-size: 12px;
+            color: #666;
+        }*/
+
+
+.content {
+    width: 1200px;
+    height: 654px;
+    background: url(/Resource/images/loginbg.png) no-repeat;
+    background-position-y: 25px;
+    background-position-x: -40px;
+    margin:0 auto;
+}
+
+    .content .subcontent {
+        width: 1200px;
+        height: 654px;
+        margin: 0 auto;
+    }
+
+.loginback {
+    width: 690px;
+    height: 428px;
+    float: left;
+    margin-top: 100px;
+    margin-right: 88px;
+}
+
+.subcontentL {
+    height: 428PX;
+    width: 380px;
+    border: 1px solid #d2d2d2;
+    border-radius: 2px;
+    float: right;
+    margin-right: 6px;
+    margin-top: 100px;
+}
+
+.userlogin {
+    height: 80px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+    .userlogin p {
+        padding-top: 30px;
+        margin-left: 28px;
+    }
+
+.userpass {
+    height: 195px;
+    margin-left: 26px;
+    font-size: 0;
+}
+
+    .userpass .imgcode {
+        width: 44px;
+        height: 44px;
+    }
+
+        .userpass .imgcode:nth-child(odd) {
+            margin-top: 1px;
+        }
+
+    .userpass .onep {
+        margin-top: 26px;
+    }
+
+    .userpass input {
+        height: 42px;
+        width: 286px;
+        font-size: 18px;
+        border-left: none;
+        border: solid 1px #d9d9d9;
+        vertical-align: middle;
+        padding-left: 10px;
+    }
+
+    .userpass .inputlast {
+        width: 160px;
+    }
+
+.checkpass {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+    .checkpass input {
+        background: #FFFFFF;
+        width: 18px;
+        height: 18px;
+        margin-left: 28px;
+        padding-top: 2px;
+        vertical-align: middle;
+    }
+
+.remarks {
+    width: 324px;
+    height: 35px;
+    margin-left: 28px;
+}
+
+.error {
+    padding-left: 5px;
+    border-color: #ebccd1;
+    background: #f2dedf;
+    border-radius: 2px;
+    line-height: 35px;
+    font-size: 12px;
+    color: #947177;
+}
+
+.butlogin {
+    margin-top: 20px;
+    margin-left: 28px;
+    width: 330px;
+    height: 40px;
+}
+
+    .butlogin input {
+        background: #1493ec;
+        border-radius: 5px;
+        border: none;
+        font-size: 20px;
+        color: #FFFFFF;
+        height: 100%;
+        width: 100%;
+    }
+
+.verify-code {
+    margin-top: 1px;
+    width: 120px;
+    height: 44px;
+    cursor: pointer;
+}

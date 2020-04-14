@@ -1,0 +1,152 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_Account>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> <a href="">企业诚信库</a> </span> > <span> 企业账户</span>
+    </div>
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开户银行 : </label>
+                    <div class="layui-input-inline"><input type="text" name="OpenBank" placeholder="请输入银行名称" autocomplete="off" class="layui-input" value="@ViewBag.OpenBank" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" data-module="AccountManage" data-right="Add" id="add" class="checkright">新 增</a>
+            <a href="javascript:;" data-module="AccountManage" data-right="Delete" id="delete" class="checkright">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="50">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                        </th>
+                        <th width="60" class="table-center">序号</th>
+                        <th width="14%" class="table-center">开户银行</th>
+                        <th width="16%" class="table-center">银行账号</th>
+                        <th class="table-center">地址</th>
+                        <th width="10%" class="table-center">电话</th>
+                        <th width="10%" class="table-center">账户类型</th>
+                        <th width="100" class="table-center">是否默认</th>
+                        <th width="90" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr class="table-center">
+                                <td >
+                                    <input type="checkbox" lay-skin="primary" />
+                                    <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                                </td>
+                                <td>@index</td>
+                                <td class="table-left">@item.OpenBank</td>
+                                <td>@item.Account</td>
+                                <td class="table-left">@item.Address</td>
+                                <td class="table-left">@item.Phone</td>
+                                <td>@(item.Type.ToEnumReq<AccountType>().GetText())</td>
+                                <td>
+                                    <a href="javascript:;" class='change-state checkright text-link' data-module="AccountManage" data-right="Default" data-itemid="@item.SId" data-value="@item.IsDefault" data-companyid="@item.CompanyId" title='@(item.IsDefault?"取消默认":"设为默认")'>
+                                        @(item.IsDefault ? "默认账户" : "设为默认")
+                                    </a>
+                                </td>
+                                <td style="text-align:center">
+                                    <a href="javascript:;" data-module="AccountManage" data-right="Modify" class="editor-link checkright" data-itemid="@item.SId" title="编辑"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="12" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', ], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery;
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+        //增加
+        $("#add").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("企业账户-新增"),
+                area: [BigLayerWidth, '500px'],
+                content: '/Account/Add'
+            });
+        });
+        //修改
+        $(".editor-link").click(function () {
+            var id = $(this).data("itemid");
+            if (id != "") {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("企业账户-编辑"),
+                    area: [BigLayerWidth, '500px'],
+                    content: '/Account/Edit/' + id
+                });
+            }
+
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Account/Index/" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+    });
+</script>

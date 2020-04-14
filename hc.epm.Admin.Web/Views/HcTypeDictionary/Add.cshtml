@@ -1,0 +1,145 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_TypeDictionary
+@{
+    ViewBag.Title = "类型添加";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+</style>
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>类型：</label>
+                <div class="col-lg-10 col-sm-10">
+                    @Html.DropDownList("Type", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>编号：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" class="form-control" name="No" id="No" placeholder="请输入编号" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>名称：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" name="Name" id="Name" placeholder="请输入类型名称" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label">备注：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="Remark" id="Remark" placeholder="请输入内容" class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25" style="margin-top:57px">
+                <div class="col-lg-12 col-sm-12" style="text-align:center">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        ////加载父级类型
+        //function LoadParentMenu() {
+        //    var val = $("#Type").val();
+        //    $.get("GetParentType", { roleType: val }, function (data) {
+        //        if (data.Flag) {
+        //            $("#PId").empty();
+        //            $("#PId").append(" <option value=\"0\">无父级类型</option>");
+        //            $.each(data.Data, function (index, item) {
+        //                $("#PId").append(" <option value=\"" + item.SId + "\">" + item.Name + "</option>");
+        //            });
+        //            $('#PId').addClass("show-tick").selectpicker();
+        //            $('#PId').selectpicker("refresh");
+        //        } else {
+        //            layer.alert(data.Message, { icon: 2 });
+        //        }
+        //        form.render('select');
+        //    }, "json");
+        //}
+        //LoadParentMenu();
+        ////所属类型改变加载锁对应的父级类型
+        //$("#Type").change(function () {
+        //    LoadParentMenu();
+        //})
+        //自定义验证规则
+        window.onload = function () {
+            $('#mainForm').bootstrapValidator({
+                excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    No: {
+                        validators: {
+                            notEmpty: {
+                                message: '编号不能为空'
+                            }, stringLength: {
+                                max: 100,
+                                message: '编号长度不能超过100字符'
+                            }, regexp: {
+                                regexp: /^[a-zA-Z0-9]+$/i,
+                                message: "编号由数字和字母组成"
+                            }
+                        }
+                    },
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: '名称不能为空'
+                            }, stringLength: {
+                                max: 500,
+                                message: '名称长度不能超过500字符'
+                            }, regexp: {
+                                regexp: /^[a-zA-Z0-9\u4e00-\u9fa5-]+$/i,
+                                message: "名称由汉字字母数字及-组成"
+                            }
+                        }
+                    },
+                }
+            });
+        }
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+
+                var search = $("form").serialize();//表单序列化
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");//禁止连续提交表单
+                        $("#save").val("请等待");
+                        var layerIndex = layer.msg("添加成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(layerIndex);
+                            parent.window.location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+        });
+
+    });
+
+</script>
+

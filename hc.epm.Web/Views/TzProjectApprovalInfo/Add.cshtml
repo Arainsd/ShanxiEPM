@@ -1,0 +1,2165 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TzProjectApprovalInfoView
+@{
+    ViewBag.Title = "项目批复信息记录";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    /*附件表样式 strat*/
+    .file-wrap {
+        height: 35px;
+        width: 200px;
+        margin: 0 5px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 100%;
+            float: left;
+            text-align: left;
+            padding: 0 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+            border-bottom: 1px solid #D9D8D8;
+        }
+
+            .fileShow li > div {
+                display: inline-block;
+            }
+
+                .fileShow li > div .checkbox-inline {
+                    line-height: 23px;
+                    color: #000000;
+                    padding-top: 0;
+                }
+
+                .fileShow li > div:first-child {
+                    width: 77%;
+                }
+
+            .fileShow li span {
+                display: inline-flex;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+                .fileShow li span:first-child {
+                    width: 90%;
+                    overflow: hidden;
+                }
+
+            .fileShow li i {
+                color: black;
+            }
+    /*附件表样式 end*/
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectProposal.ProjectName</div>
+                            <input type="hidden" name="ProjectId" value="@Model.TzProjectProposal.Id" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.StationName</div>
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.NatureName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">项目类型</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProjectType</div>
+                        </td>
+                        <td class="table_title">项目编号</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProjectCode</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地区公司</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProvinceName</div>
+                        </td>
+                        <td class="table_title">所属地市公司</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.CompanyName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.Position</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>@(Convert.ToDateTime(Model.TzProjectProposal.ApplyTime).ToString("yyyy-MM-dd"))</div>
+                        </td>
+                    </tr>
+                    @*<tr>
+                            <td class="table_title">估算投资</td>
+                            <td class="td-div">
+                                <div>@Model.TzProjectProposal.PredictMoney</div>
+                            </td>
+                            <td class="table_title">工程费用</td>
+                            <td class="td-div">
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">土地费用</td>
+                            <td class="td-div">
+                                <div></div>
+                            </td>
+                            <td class="table_title">其它费用</td>
+                            <td class="td-div">
+                                <div></div>
+                            </td>
+                        </tr>*@
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>油气销量信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">估计油日销量</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.OilSalesTotal</div>
+                        </td>
+                        <td class="table_title">估计气日销量（CNG）</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.CNG 千方</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">估计气日销量（LNG）</td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectProposal.LNG 千方</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目批复信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title font-black">
+                            <span class="font-black"> 限上/限下</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @if (Model.TzProjectApprovalInfo.LimitCode == "XMXS1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitName" checked value="XMXS1" />地区公司限上项目
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitName" value="XMXS2" />地区公司限下项目
+                                    </label>
+                                }
+                                else if (Model.TzProjectApprovalInfo.LimitCode == "XMXS2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitName" value="XMXS1" />地区公司限上项目
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitName" checked value="XMXS2" />地区公司限下项目
+                                    </label>
+                                }
+                                else {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitName" value="XMXS1" checked />地区公司限上项目
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="LimitName" value="XMXS2" />地区公司限下项目
+                                    </label>
+                                }
+
+                            </div>
+                        </td>
+                        <td class="table_title font-black">
+                            <span class="font-black">示范/标准</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @if (Model.TzProjectApprovalInfo.StandardCode == "XXGSPS1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="StandardName" checked value="XXGSPS1" />示范加油站（油库）
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="StandardName" value="GFGSPS2" />标准加油站（油库）
+                                    </label>
+                                }
+                                else if (Model.TzProjectApprovalInfo.StandardCode == "GFGSPS2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="StandardName" value="XXGSPS1" />示范加油站（油库）
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="StandardName" checked value="GFGSPS2" />标准加油站（油库）
+                                    </label>
+                                }
+                                else {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="StandardName" value="XXGSPS1" />示范加油站（油库）
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="StandardName" value="GFGSPS2" checked />标准加油站（油库）
+                                    </label>
+                                }
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">生成批复（请示）文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ApprovalNo" class="form-control " value="@Model.TzProjectApprovalInfo.ApprovalNo" placeholder="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">拟稿人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DraftAuthorName" id="DraftAuthorName" class="form-control" value="@Model.TzProjectApprovalInfo.DraftAuthorName" style="display:inline-block;width:66%;" placeholder="" readonly />
+
+                                <input type="hidden" name="DraftAuthorId" id="DraftAuthorId" value="@Model.TzProjectApprovalInfo.DraftAuthorId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="ngr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">会签人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="SignPeopleName" id="SignPeopleName" class="form-control" value="@Model.TzProjectApprovalInfo.SignPeopleName" style="display:inline-block;width:66%;" placeholder="" readonly />
+
+                                <input type="hidden" name="SignPeopleId" id="SignPeopleId" value="@Model.TzProjectApprovalInfo.SignPeopleId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="hqr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">签发人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="SignerName" id="SignerName" class="form-control" value="@Model.TzProjectApprovalInfo.SignerName" style="display:inline-block;width:66%;" placeholder="" readonly />
+
+                                <input type="hidden" name="SignerId" id="SignerId" value="@Model.TzProjectApprovalInfo.SignerId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="qfr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">现场负责人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="FieldManagerName" id="FieldManagerName" class="form-control" value="@Model.TzProjectApprovalInfo.FieldManagerName" style="display:inline-block;width:66%;" placeholder="" readonly />
+                                <input type="hidden" name="FieldManagerId" id="FieldManagerId" value="@Model.TzProjectApprovalInfo.FieldManagerId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="xcfzr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">决策负责人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DecisionMakerName" id="DecisionMakerName" class="form-control" value="@Model.TzProjectApprovalInfo.DecisionMakerName" style="display:inline-block;width:66%;" placeholder="" readonly />
+
+                                <input type="hidden" name="DecisionMakerId" id="DecisionMakerId" value="@Model.TzProjectApprovalInfo.DecisionMakerId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="jcfzr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">运营人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="HeadOperationsName" id="HeadOperationsName" class="form-control" value="@Model.TzProjectApprovalInfo.HeadOperationsName" style="display:inline-block;width:66%;" placeholder="" readonly />
+
+                                <input type="hidden" name="HeadOperationsId" id="HeadOperationsId" value="@Model.TzProjectApprovalInfo.HeadOperationsId" />
+                                <div class="btn-upload">
+                                    <input type="button" data-type="yyr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>可研批复信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">总投资</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="TotalInvestment" value="@Model.TzProjectApprovalInfo.TotalInvestment.ToString("0.00")" class="form-control input_unit" placeholder="" />万元
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">合同款</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="ContractPayment" placeholder="" value="@Model.TzProjectApprovalInfo.ContractPayment.ToString("0.00")" class="form-control input_unit" />万元
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程费用</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="EngineeringCost" value="@Model.TzProjectApprovalInfo.EngineeringCost.ToString("0.00")" class="form-control input_unit" placeholder="" />万元
+                            </div>
+
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">土地费用</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="LandCosts" value="@Model.TzProjectApprovalInfo.LandCosts.ToString("0.00")" placeholder="" class="form-control input_unit" />万元
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">其他费用</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="OtherExpenses" value="@Model.TzProjectApprovalInfo.OtherExpenses.ToString("0.00")" class="form-control input_unit" placeholder="" />万元
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">首次取得投资计划日期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                @if (Model.TzProjectApprovalInfo.DateFirstScheme == null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="DateFirstScheme" name="DateFirstScheme" onClick="WdatePicker({ el: 'DateFirstScheme', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('DateFirstScheme', 'NOT_VALIDATED', null).validateField('DateFirstScheme') } })" placeholder="日期选择" value="">
+                                    <i onClick="WdatePicker({ el: 'FeasibleApprovalDate' })" style="bottom:25px;left:92%;" class="iconfont">&#xe7e2;</i>
+                                }
+                                @if (Model.TzProjectApprovalInfo.DateFirstScheme != null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="DateFirstScheme" name="DateFirstScheme" onClick="WdatePicker({ el: 'DateFirstScheme', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('DateFirstScheme', 'NOT_VALIDATED', null).validateField('DateFirstScheme') } })" placeholder="日期选择" value="@(Convert.ToDateTime(Model.TzProjectApprovalInfo.DateFirstScheme).ToString("yyyy-MM-dd"))">
+                                    <i onClick="WdatePicker({ el: 'FeasibleApprovalDate' })" style="bottom:25px;left:92%;" class="iconfont">&#xe7e2;</i>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">已下达计划</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="IssuedPlan" value="@Model.TzProjectApprovalInfo.IssuedPlan.ToString("0.00")" class="form-control input_unit" placeholder="" />万元
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>设施设备</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">加油机</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="MachineOfOilStage" value="@(Model.TzProjectApprovalInfo.MachineOfOilStage == null ? 0 : Model.TzProjectApprovalInfo.MachineOfOilStage)" placeholder="" class="form-control input_unit" style="width:43%;" />台
+                                <input type="text" name="MachineOfOil" value="@(Model.TzProjectApprovalInfo.MachineOfOil == null ? 0 : Model.TzProjectApprovalInfo.MachineOfOil)" placeholder="" class="form-control input_unit" style="width:43%;" />枪
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">加气机</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="MachineOfGasStage" value="@(Model.TzProjectApprovalInfo.MachineOfGasStage == null ? 0 : Model.TzProjectApprovalInfo.MachineOfGasStage)" placeholder="" class="form-control input_unit" style="width:43%;" />台
+                                <input type="text" name="MachineOfGas" value="@(Model.TzProjectApprovalInfo.MachineOfGas == null ? 0 : Model.TzProjectApprovalInfo.MachineOfGas)" placeholder="" class="form-control input_unit" style="width:43%;" />枪
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">罩棚</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="Shelter" value="@Model.TzProjectApprovalInfo.Shelter.ToString("0.00")" placeholder="" class="form-control input_unit" />平
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">油罐</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="OilTank" value="@Model.TzProjectApprovalInfo.OilTank.ToString("0.00")" placeholder="" class="form-control input_unit" />方
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">站房</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="StationRoom" value="@Model.TzProjectApprovalInfo.StationRoom.ToString("0.00")" placeholder="" class="form-control input_unit" />平
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">油罐数量</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="TankNumber" value="@Model.TzProjectApprovalInfo.TankNumber" placeholder="" class="form-control input_unit" />个
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">储气井（气罐）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="GasWells" value="@Model.TzProjectApprovalInfo.GasWells.ToString("0.00")" placeholder="" class="form-control input_unit" />方
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地费用支付类型</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+
+
+                                @foreach (var item in ViewBag.LandPaymentType)
+                                {
+                                    if (Model.TzProjectApprovalInfo.LandPaymentType != null)
+                                    {
+                                        if (Model.TzProjectApprovalInfo.LandPaymentType == item.No)
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="LandPaymentType" autocomplete="off" value="@item.No" checked>@item.Name
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="LandPaymentType" value="@item.No">@item.Name
+                                            </label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="LandPaymentType" value="@item.No" checked>@item.Name
+                                        </label>
+                                    }
+                                }
+
+
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">资产类型</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @if (Model.TzProjectApprovalInfo.AssetType == "ZCLX1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetType" checked value="ZCLX1" />全资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetType" value="ZCLX2" />合资
+                                    </label>
+                                }
+                                else if (Model.TzProjectApprovalInfo.AssetType == "ZCLX2")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetType" value="ZCLX1" />全资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetType" checked value="ZCLX2" />合资
+                                    </label>
+                                }
+                                else {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetType" value="ZCLX1" checked />全资
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="AssetType" value="ZCLX2" />合资
+                                    </label>
+                                }
+                            </div>
+
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">投资金额</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="InvestmentAmount" value="@Model.TzProjectApprovalInfo.InvestmentAmount.ToString("0.00")" class="form-control input_unit" />万元
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地性质</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.Raw(Html.DropDownList("LandStatusCode", null, new { @class = "form-control" }))
+                                <input id="LandStatusCode" type="hidden" name="LandStatusCode" value="@Model.TzProjectApprovalInfo.LandStatusCode" />
+                                <input id="LandStatus" type="hidden" name="LandStatus" value="@Model.TzProjectApprovalInfo.LandStatus" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">土地用途</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @Html.Raw(Html.DropDownList("LandUseCode", null, new { @class = "form-control" }))
+                                <input id="LandUseCode" type="hidden" name="LandUseCode" value="@Model.TzProjectApprovalInfo.LandUseCode" />
+                                <input id="LandUse" type="hidden" name="LandUse" value="@Model.TzProjectApprovalInfo.LandUse" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">土地面积</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="AreaOfLand" value="@Model.TzProjectApprovalInfo.AreaOfLand.ToString("0.00")" class="form-control input_unit" placeholder="" />平米
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">今年预计付款</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="ExpectedPaymentThisYear" value="@Model.TzProjectApprovalInfo.ExpectedPaymentThisYear.ToString("0.00")" class="form-control input_unit" />万元
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地费用备注</span>
+                        </td>
+                        <td class="table_title" colspan="3">
+                            <div class="form-group">
+                                <textarea rows="4" name="RemarkOnLandCost" class="form-control">@Model.TzProjectApprovalInfo.RemarkOnLandCost</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">预计达销时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="EstimatedTimeOfSales" value="@Model.TzProjectApprovalInfo.EstimatedTimeOfSales" class="form-control input_unit" placeholder="" />年
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">可研编制单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="UnitFeasibilityCompilation" value="@Model.TzProjectApprovalInfo.UnitFeasibilityCompilation" class="form-control" placeholder="" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">股权投资形式</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="FormOfEquityInvestment" value="@Model.TzProjectApprovalInfo.FormOfEquityInvestment" class="form-control" placeholder="" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">实施单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="ImplementationCcompany" value="@Model.TzProjectApprovalInfo.ImplementationCcompany" class="form-control" placeholder="" />
+                            </div>
+                        </td>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">注册资本</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="RegisteredCapital" value="@Model.TzProjectApprovalInfo.RegisteredCapital" class="form-control input_unit" />万元
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">控股比例</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="HoldingTheProportion" value="@Model.TzProjectApprovalInfo.HoldingTheProportion" class="form-control input_unit" />%
+                            </div>
+                        </td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">柴油日销量（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DailyDieselSales" value="@Model.TzProjectApprovalInfo.DailyDieselSales.ToString("0.00")" class="form-control input_unit" placeholder="" />吨
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">汽油日销量（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="DailyGasolineSales" value="@Model.TzProjectApprovalInfo.DailyGasolineSales.ToString("0.00")" class="form-control input_unit" placeholder="" />吨
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">柴汽比</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="ChaiQibi" value="@Model.TzProjectApprovalInfo.ChaiQibi" class="form-control input_unit" placeholder="" />%
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">气日销量 CNGY（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="CNGY" value="@Model.TzProjectApprovalInfo.CNGY.ToString("0.00")" class="form-control input_unit" placeholder="" />方
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">气日销量 LNGQ（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="LNGQ" value="@Model.TzProjectApprovalInfo.LNGQ.ToString("0.00")" class="form-control input_unit" placeholder="" />千方
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">投资回收期</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="PayBackPeriod" value="@Model.TzProjectApprovalInfo.PayBackPeriod" class="form-control input_unit" placeholder="" />年
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">内部收益率</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="InternalRateReturn" value="@Model.TzProjectApprovalInfo.InternalRateReturn" class="form-control input_unit" placeholder="" />%
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">非油年收入</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="AnnualNonOilIncome" value="@Model.TzProjectApprovalInfo.AnnualNonOilIncome.ToString("0.00")" class="form-control input_unit" placeholder="" />万元
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">非油年成本</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input type="text" name="NonOilAnnualCost" value="@Model.TzProjectApprovalInfo.NonOilAnnualCost.ToString("0.00")" class="form-control input_unit" placeholder="" />万元
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">预计投运时间  </span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+
+                                @if (Model.TzProjectApprovalInfo.ScheduledComTime == null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="ScheduledComTime" name="ScheduledComTime" onClick="WdatePicker({ el: 'ScheduledComTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ScheduledComTime', 'NOT_VALIDATED', null).validateField('ScheduledComTime') } })" placeholder="日期选择" value="">
+                                    <i onClick="WdatePicker({ el: 'ScheduledComTime' })" style="bottom:25px;left:92%;" class="iconfont">&#xe7e2;</i>
+                                }
+                                @if (Model.TzProjectApprovalInfo.ScheduledComTime != null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="ScheduledComTime" name="ScheduledComTime" onClick="WdatePicker({ el: 'ScheduledComTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ScheduledComTime', 'NOT_VALIDATED', null).validateField('ScheduledComTime') } })" placeholder="日期选择" value="@(Convert.ToDateTime(Model.TzProjectApprovalInfo.ScheduledComTime).ToString("yyyy-MM-dd"))">
+                                    <i onClick="WdatePicker({ el: 'ScheduledComTime' })" style="bottom:25px;left:92%;" class="iconfont">&#xe7e2;</i>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">可研批复日期  </span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                @if (Model.TzProjectApprovalInfo.FeasibleApprovalDate == null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="FeasibleApprovalDate" name="FeasibleApprovalDate" onClick="WdatePicker({ el: 'FeasibleApprovalDate', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('FeasibleApprovalDate', 'NOT_VALIDATED', null).validateField('FeasibleApprovalDate') } })" placeholder="日期选择" value="">
+                                    <i onClick="WdatePicker({ el: 'FeasibleApprovalDate' })" style="bottom:25px;left:92%;" class="iconfont">&#xe7e2;</i>
+                                }
+                                @if (Model.TzProjectApprovalInfo.FeasibleApprovalDate != null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="FeasibleApprovalDate" name="FeasibleApprovalDate" onClick="WdatePicker({ el: 'FeasibleApprovalDate', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('FeasibleApprovalDate', 'NOT_VALIDATED', null).validateField('FeasibleApprovalDate') } })" placeholder="日期选择" value="@(Convert.ToDateTime(Model.TzProjectApprovalInfo.FeasibleApprovalDate).ToString("yyyy-MM-dd"))">
+                                    <i onClick="WdatePicker({ el: 'FeasibleApprovalDate' })" style="bottom:25px;left:92%;" class="iconfont">&#xe7e2;</i>
+                                }
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">是否有工程信息</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                @if (Model.TzProjectApprovalInfo.HasEInformation == "GCXXBH1")
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasEInformation" value="GCXXBH1" checked />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasEInformation" value="GCXXBH2" />否
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasEInformation" value="GCXXBH1" />是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="HasEInformation" value="GCXXBH2" checked />否
+                                    </label>
+
+                                }
+
+                            </div>
+
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>附件上传</h4>
+            @*<table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody class="fileShow-append">
+                        <tr class="headtr">
+                            <td style="width:300px;">附件类型</td>
+                            <td class="td-div" style="width: 570px!important;">
+                                @Html.Raw(Html.DropDownList("FileType", ViewBag.AnnexType as SelectList, null, new { @class = "form-control sel" }))
+                                <input id="FileType" type="hidden" name="FileType" value="" />
+                            </td>
+                            <td class="table_title text_lf" colspan="3">
+                                <div class="btn-upload" style="display:inline-block;float: left;">
+                                    <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                    <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                                </div>
+                                <div class="color_red" style="display:inline-block;margin-left:20px;width:54%;">附件类型仅支持：.doc、.pdf、.xls、.pptx、png等。所有附件类型必须上传！</div>
+                            </td>
+                        </tr>
+                        <tr class="headtr">
+                            <th class="table_title" style="width: 219px;">序号</th>
+                            <th class="td-div" style="width: 570px!important;">附件名称</th>
+                            <th class="td-div">附件类型</th>
+                            <th class="td-div">附件归属</th>
+                            <th class="table_title" style="width: 219px;">操作</th>
+                        </tr>
+                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                        {
+                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                            {
+                                <tr id="${obj.GuidId}">
+                                    <td><span class='sort'>@item.Sort</span></td>
+                                    <td class="text_lf"><span>@item.Name</span></td>
+                                    <td><span class="file_name">@item.TypeName</span></td>
+                                    <td>
+                                        @if (item.Uploadtype == 1)
+                                        {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                            </label>
+
+                                        }
+                                        else if (item.Uploadtype == 2)
+                                        {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                            </label>
+                                        }
+                                    </td>
+                                    <td style="text-align:center">
+                                        <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                        <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-type="@item.TypeName" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>*@
+
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <th class="" width="20%">附件类型</th>
+                        <th class="" width="55%" colspan="2"><div>附件名称 / 附件归属</div></th>
+                        <th class="" width="25%">操作</th>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">批复文件扫描件</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="PFSMJ">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "PFSMJ")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                </label>
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload1" name="PFSMJ">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">各类文件复印件</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GLSMJ">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "GLSMJ")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                </label>
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload1" name="GLSMJ">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">可行性研究报告</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="KXYJBG">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "KXYJBG")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload1" name="KXYJBG">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">地区公司评审会议纪要</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="DQPSJY">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "DQPSJY")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload4" name="DQPSJY">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">地市评审材料</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="DSPSJY">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "DSPSJY")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload5" name="DSPSJY">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">效益承诺书（总经理签字，扫描件）</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XYCNS">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XYCNS")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload6" name="XYCNS">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">经济效益测算表（总会计师和主管副总签字，扫描件）</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="JJXYCSB">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "JJXYCSB")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload7" name="JJXYCSB">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">利润表</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LRB">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "LRB")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload8" name="LRB">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">销售收入与销售税金及附加</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XSXX">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XSXX")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload9" name="XSXX">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">投资估算表</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="TZGSB">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "TZGSB")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload10" name="TZGSB">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">现金流量表</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XJLLB">
+                                        @if (Model.TzProjectApprovalInfo.TzAttachs != null && Model.TzProjectApprovalInfo.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectApprovalInfo.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XJLLB")
+                                                {
+                                                    <li>
+                                                        <div>
+                                                            <span>@item.Name</span>
+                                                            <i class="layui-icon fileDel" data-val="">&#x1006;</i>
+                                                        </div>
+                                                        <div>
+                                                            @if (item.Uploadtype == 1)
+                                                            {
+                                                                <label class="checkbox-inline">
+                                                                    <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                                </label>
+                                                            }
+                                                            else if (item.Uploadtype == 2)
+                                                            {
+                                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                                {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                                                    </label>
+
+                                                                }
+                                                                else {
+
+                                                                    <label class="checkbox-inline">
+                                                                        <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                                    </label>
+                                                                }
+                                                            }
+                                                        </div>
+                                                        <input type="hidden" class="updata" data-id="@item.Id" data-typeno="@item.TypeNo" data-typename="@item.TypeName" data-name="@item.Name" data-size="@item.Size" data-url="@item.FilePath" />
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-div" style="text-align:center;">
+                            <p class="file-wrap" id="btnUpload11" name="XJLLB">
+                                <i class="layui-icon add-icon">&#xe654;</i>
+                                <span>点击上传</span>
+                            </p>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+        <!--附件上传触发-->
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" typeName="" />
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+    //附件
+    var fileDataArray = [];
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        isFlagFile = false;
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+        var typeNames = $("#loadFile").attr("typeName");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.FilePath = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = column;
+                    obj.TypeName = typeNames;
+                    fileDataArray.push(obj);
+                    if (data[i].ImageType == null) {
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                                             <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                                         </label>
+                                                        `
+                        var html2 = `<label class ="checkbox-inline">
+                                                             <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                                         </label>
+                                                       `
+                        var html = (fileObj.size > tzmaxfilesize) ? html1 : html2;
+
+                        var odiv = `<li><div><span>` + obj.Name + `</span><i class="layui-icon fileDel" style="margin-left: 4px;" data-val="` + obj.GuidId + `">&#x1006;</i></div><div style="margin-left: 4px;">${html}</div><input type="hidden" class ="updata" data-id="${obj.GuidId}" data-name="${obj.Name}" data-size="${obj.Size}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}" data-url="${obj.FilePath}"></li>`;
+                        $("#" + column).append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    $(".file-wrap").on("click", function () {
+        var typeName = $(this).parents("tr").find("td").eq(0).children().text();
+        typeName = typeName.substring(2, typeName.length);
+        $("#loadFile").attr("typeName", typeName);
+        $("#loadFile").attr("fileListId", $(this).attr("name"));
+        document.getElementById("loadFile").click();
+    });
+
+    //表单验证
+    window.onload = function () {
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],
+
+            fields: {
+                ApprovalNo: {
+                    validators: {
+                        notEmpty: {
+                            message: '批复文号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '批复文号不能超过50字符'
+                        },
+                    }
+                },
+                DraftAuthorName: {
+                    validators: {
+                        notEmpty: {
+                            message: '拟稿人不能为空'
+                        }
+                    }
+                },
+                SignPeopleName: {
+                    validators: {
+                        notEmpty: {
+                            message: '会签人不能为空'
+                        }
+                    }
+                },
+                SignerName: {
+                    validators: {
+                        notEmpty: {
+                            message: '签发人不能为空'
+                        }
+                    }
+                },
+                DailyDieselSales: {
+                    validators: {
+                        notEmpty: {
+                            message: '柴油日销量不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: "柴油日销量格式输入错误"
+                        },
+                    }
+                },
+                DailyGasolineSales: {
+                    validators: {
+                        notEmpty: {
+                            message: '汽油日销量不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: "汽油日销量格式输入错误"
+                        },
+                    }
+                },
+                ChaiQibi: {
+                    validators: {
+                        notEmpty: {
+                            message: '柴汽比不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: " 柴汽比格式输入错误"
+                        },
+                    }
+                },
+                ScheduledComTime: {
+                    validators: {
+                        notEmpty: {
+                            message: '预计投运时间不能为空'
+                        },
+                    }
+                },
+                FeasibleApprovalDate: {
+                    validators: {
+                        notEmpty: {
+                            message: '可研批复日期不能为空'
+                        },
+                    }
+                },
+                TotalInvestment: {
+                    validators: {
+                        notEmpty: {
+                            message: '总投资不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: "总投资格式输入错误"
+                        },
+                    }
+                },
+                ContractPayment: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '合同款格式输入错误'
+                        },
+
+                    }
+                },
+                EngineeringCost: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '工程费用格式输入错误'
+                        }
+                    }
+                },
+                LandCosts: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '土地费用格式输入错误'
+                        }
+
+                    }
+                },
+                OtherExpenses: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '其他费用格式输入错误'
+                        }
+
+                    }
+                },
+                IssuedPlan: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '已下达计划格式输入错误'
+                        }
+
+                    }
+                },
+                Shelter: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '罩棚格式输入错误'
+                        }
+                    }
+                },
+                StationRoom: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '格式输入错误'
+                        },
+
+                    }
+                },
+                TankNumber: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[1-9]\d*$/,
+                            message: '格式输入错误'
+                        },
+
+                    }
+                },
+                ExpectedPaymentThisYear: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '格式输入错误'
+                        }
+                    }
+                },
+                CNG: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '格式输入错误'
+                        }
+                    }
+                },
+                LNG: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '格式输入错误'
+                        }
+                    }
+                },
+                PayBackPeriod: {
+                    validators: {
+                        regexp: {
+                            regexp: /^[1-9]\d*$/,
+                            message: '格式输入错误'
+                        }
+                    }
+                },
+                AnnualNonOilIncome: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '格式输入错误'
+                        }
+                    }
+                },
+                NonOilAnnualCost: {
+                    validators: {
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '油运品距格式输入错误'
+                        }
+                    }
+                },
+                MachineOfOilStage: {
+                    validators: {
+                        notEmpty: {
+                            message: '加油机(台)不能为空'
+                        },
+                        regexp: {
+                            regexp: /^-?[0-9]\d*$/,
+                            message: '加油机(台)格式输入错误'
+                        }
+                    },
+
+                },
+                MachineOfOil: {
+                    validators: {
+                        notEmpty: {
+                            message: '加油机（枪）不能为空'
+                        },
+                        regexp: {
+                            regexp: /^-?[0-9]\d*$/,
+                            message: '加油机（枪）格式输入错误'
+                        }
+                    }
+                },
+                MachineOfGasStage: {
+                    validators: {
+                        notEmpty: {
+                            message: '加气机(台)不能为空'
+                        },
+                        regexp: {
+                            regexp: /^-?[0-9]\d*$/,
+                            message: '加气机(台)格式输入错误'
+                        }
+                    }
+                },
+                MachineOfGas: {
+                    validators: {
+                        notEmpty: {
+                            message: '加气机（枪）不能为空'
+                        },
+                        regexp: {
+                            regexp: /^-?[0-9]\d*$/,
+                            message: '加气机（枪）格式输入错误'
+                        }
+                    }
+                },
+                AreaOfLand: {
+                    validators: {
+                        notEmpty: {
+                            message: '土地面积不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '土地面积格式输入错误'
+                        }
+                    }
+                },
+                OilTank: {
+                    validators: {
+                        notEmpty: {
+                            message: '油罐不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '油罐格式输入错误'
+                        }
+                    }
+                },
+                GasWells: {
+                    validators: {
+                        notEmpty: {
+                            message: '储气井（气罐）不能为空'
+                        },
+                        regexp: {
+                            regexp: /^\d+(\.\d{0,2})?$/,
+                            message: '储气井（气罐）格式输入错误'
+                        }
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择各负责人
+        $(".selectUser").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择人员"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectUser?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        //拟稿人
+                        if (_this.data("type") == "ngr") {
+                            $("#DraftAuthorName").val(obj.data[0].Name)
+                            $("#DraftAuthorId").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                            .updateStatus('DraftAuthorName', 'NOT_VALIDATED', null)
+                            .validateField('DraftAuthorName');
+                        }
+                            //会签人
+                        else if (_this.data("type") == "hqr") {
+                            $("#SignPeopleName").val(obj.data[0].Name)
+                            $("#SignPeopleId").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                           .updateStatus('SignPeopleName', 'NOT_VALIDATED', null)
+                           .validateField('SignPeopleName');
+                        }
+                            //签发人
+                        else if (_this.data("type") == "qfr") {
+                            $("#SignerName").val(obj.data[0].Name)
+                            $("#SignerId").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                          .updateStatus('SignerName', 'NOT_VALIDATED', null)
+                          .validateField('SignerName');
+                        }
+                            //现场负责人
+                        else if (_this.data("type") == "xcfzr") {
+                            $("#FieldManagerName").val(obj.data[0].Name)
+                            $("#FieldManagerId").val(obj.data[0].Id);
+
+                        }
+                            //决策负责人
+                        else if (_this.data("type") == "jcfzr") {
+                            $("#DecisionMakerName").val(obj.data[0].Name)
+                            $("#DecisionMakerId").val(obj.data[0].Id);
+
+                        }
+                            //运营人
+                        else if (_this.data("type") == "yyr") {
+                            $("#HeadOperationsName").val(obj.data[0].Name)
+                            $("#HeadOperationsId").val(obj.data[0].Id);
+
+                        }
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                var flag = true;
+                if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (!bv.isValid()) {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        return;
+                    }
+
+                    //对附件是否为空验证
+                    //$(".fileShow-append .fileShow").each(function (index, item) {
+                    //    if ($(this).children().length == 0) {
+                    //        layer.msg('所有附件类型必须上传！', { time: 3000, icon: 2 });
+                    //        $(".save").removeClass("layui-btn-disabled");
+                    //        $(".save").removeAttr("disabled");
+                    //        return flag = false;
+                    //    }
+                    //});
+                }
+
+                //if (flag) {
+                    var fileDataArray = [];//已上传附件数据
+                    $(".fileShow-append .fileShow>li").each(function (index, item) {
+                        var uploadtype = 0;
+                        var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+
+                        if (uploadtype1 == true) {
+                            uploadtype = 1;
+                        }
+                        if (uploadtype1 == false) {
+                            uploadtype = 2;
+                        }
+                        fileDataArray.push({
+                            Name: $(item).find(".updata").data("name"),
+                            GuidId: $(item).find(".updata").data("id"),
+                            Size: $(item).find(".updata").data("size"),
+                            Group: $(item).find(".updata").data("group"),
+                            FilePath: $(item).find(".updata").data("url"),
+                            TypeNo: $(item).find(".updata").data("typeno"),
+                            TypeName: $(item).find(".updata").data("typename"),
+                            Sort: index + 1,
+                            Uploadtype: uploadtype
+                        });
+                    });
+
+                    var fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJson);
+
+                    $("#State").val($(this).data("state"))//提交或保存的状态值
+
+                    //土地性质
+                    $("#LandStatusCode").val($("#LandStatusCode option:selected").val());
+                    $("#LandStatus").val($("#LandStatusCode option:selected").text());
+                    //土地用途
+                    $("#LandUseCode").val($("#LandUseCode option:selected").val());
+                    $("#LandUse").val($("#LandUseCode option:selected").text());
+
+                    var search = $("#mainForm").serialize();
+
+                    $.post("Add", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                $(".save").removeClass("layui-btn-disabled");
+                                $(".save").removeAttr("disabled");
+                                window.location.href = "/TzProjectApprovalInfo/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                        }
+                    });
+                //}
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/TzProjectApprovalInfo/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("li").remove();
+        document.getElementById('loadFile').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+</script>

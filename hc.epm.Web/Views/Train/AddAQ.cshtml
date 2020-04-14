@@ -1,0 +1,474 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TrainView
+@{
+    ViewBag.Title = "新增安全培训";
+}
+
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label for="PrejectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="ProjectName" name="ProjectName" value="@ViewBag.projectName" readonly="readonly" autocomplete="off" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@ViewBag.ProjectId" />
+                </div>
+                <div class="long-text">
+                    <label>&nbsp;选择模板&nbsp;:</label>
+                    <input type="text" name="Template" id="Template" autocomplete="off" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label for="Title"><span class="star">*</span>&nbsp;培训标题&nbsp;:</label>
+                    <input type="text" name="Title" id="Title" autocomplete="off" />
+                </div>
+                <div class="intro">
+                    <div><label for="Content"><span class="star">*</span>&nbsp;培训内容&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" name="Content" id="Content"></textarea>
+                    </div>
+                </div>
+                <div class="long-text TrainCompanyName">
+                    <label for="TrainCompanyName"><span class="star">*</span>&nbsp;培训单位&nbsp;:</label>
+                    <input type="text" name="TrainCompanyName" id="TrainCompanyName" autocomplete="off" readonly/>
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="TrainCompanyId" id="TrainCompanyId" value="" />
+
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;培训人员&nbsp;:</label>
+                    <input type="text" name="TrainUserName" id="TrainUserName" autocomplete="off" readonly/>
+                    <i class="pic iconfont ee" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="TrainUserId" id="TrainUserId" value="" />
+                    <input type="hidden" name="TrainCompanyType" id="TrainCompanyType" value="" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;培训参与单位&nbsp;:</label>
+                    <input type="button" value="选择参与单位" style="width:100px!important" id="setCompany" />
+                    <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:120px;width:88%">
+                        <thead>
+                            <tr>
+                                <th width="50">单位编码</th>
+                                <th width="50">单位名称</th>
+                                <th width="30">单位类型</th>
+                                <th width="30">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <input type="hidden" name="CompanyIds" id="CompanyIds" value="" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;开始时间&nbsp;:</label>
+                    <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime' })" autocomplete="off">
+                    <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;结束时间&nbsp;:</label>
+                    <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime' })" autocomplete="off">
+                    <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <button id="btnUploadFile" style="position: relative; z-index: 1;">上传附件</button>
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow"></ul>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    <button type="button" class="saveBut" data-state="@(ConfirmState.WaitConfirm.GetValue().ToString())">提交</button>
+                    <button type="button" class="saveBut" data-state="@(ConfirmState.Enabled.GetValue().ToString())">保存</button>
+                    <input type="hidden" name="State" id="State" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        var companyArray = [];
+        $(function () {
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    Title: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    Content: {
+                        required: true,
+                    },
+                    TrainCompanyName: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    TrainUserName: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    StartTime: {
+                        required: true,
+                        date: true
+                    },
+                    EndTime: {
+                        required: true,
+                        date: true
+                    }
+
+                },
+                messages: {
+                    Title: {
+                        required: "标题不能为空",
+                        maxlength: "标题长度不能大于254个字符"
+                    },
+                    Content: {
+                        required: "描述不能为空"
+                    },
+                    TrainCompanyName: {
+                        required: "培训公司名称不能为空",
+                        maxlength: "培训公司长度不能大于254个",
+                    },
+                    TrainUserName: {
+                        required: "培训人员不能为空",
+                        maxlength: "培训人员长度不能大于50个"
+                    },
+                    StartTime: {
+                        required: "开始时间不能为空"
+                    },
+                    EndTime: {
+                        required: "结束时间不能为空"
+                    }
+                }
+            });
+            //判断开始时间和结束时间
+            $("#StartTime,#EndTime").blur(function () {
+                var strStartTime = $("#StartTime").val();
+                var endTime = $("#EndTime").val();
+                var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+                var endNum = parseInt(endTime.replace(/-/g, ''), 10);
+                if (startNum > endNum) {
+                    layer.alert("培训结束时间不能小于培训开始时间!", { icon: 2 });
+                    $("#EndTime").val("");
+                    return false;
+                }
+            });
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    var state = $(this).data("state");
+                    $("#State").val(state);
+                    var search = $("form").serialize();
+                    $.post("AddAQ", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Train/IndexAQ";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+            });
+
+        });
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+            //培训资料上传
+            var fileDataArrayFile = [];
+            var fileDataJsonFile = [];
+            //附件上传
+            var uploaderFile = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: FileServerURL, // 服务端上传路径
+                max_file_size: MaxFileSize, // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: true,//	是否可以在文件浏览对话框中选择多个文件
+                multipart_params: {//附加参数
+                    app: 'epm',
+                    crop: true
+                },
+                //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "doc,docx,xls,xlsx,rar,zip,7z,gif,rmvb,mp4,avi,jpg,png,jpeg" },
+                    ],
+                    max_file_size: MaxFileSize, //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                rename: false, // 是否重命名文件
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploaderFile, files) {
+                        if (files) {
+                            files.forEach(function (item, index, arr) {
+                                var imgUrl = getFileImg(item.name);
+                                var odiv = '<li id="' + item.id + '">';
+                                odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                                odiv += '<div>' + plupload.formatSize(item.size) + '</div>';
+                                odiv += '<div class="fileComplete"><span class="fileProgress" style="cursor: pointer;">' + item.percent + '</span>%</div>';
+                                odiv += '<div><img src="/Resource/images/delete_default.png" class="fileDel" data-val="' + item.id + '" style="cursor: pointer;"/></div>'
+                                odiv += '</li>';
+                                $('#fileListFile .fileShow').append(odiv);
+                            })
+                            uploaderFile.start();
+                        }
+                    },
+                    UploadProgress: function (uploaderFile, file) {
+                        $("#" + file.id).find(".fileProgress").html(file.percent)
+                    },
+                    FileUploaded: function (uploaderFile, file, responseObject) {
+                        var data = JSON.parse(responseObject.response);
+                        data.file.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.GuidId = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.FileSize;
+                            obj.FileGuid = item.Guid;
+                            obj.Url = item.VirtualURL;
+                            if (IsImage(item.Extension)) {
+                                obj.ImageType = getImageType(item.Name, item.Extension);
+                            }
+                            fileDataArrayFile.push(obj);
+                        })
+                        var img = '<img src="/Resource/images/default_ok.png" alt="完成" />'
+                        $("#" + file.id).find(".fileComplete").html(img);
+                        $("#" + file.id).find("a").prop("href", FileDownLoadURL + data.file[0].Guid)
+                        uploaderFile.removeFile(file);
+                    },
+                    UploadComplete: function (uploaderFile, file, responseObject) {
+                        fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                        $("#fileDataJsonFile").val(fileDataJsonFile);
+                    },
+                    Error: function (up, err) {
+                        layer.alert("错误：" + err.code + ": " + err.message);
+                    }
+                },
+            });
+            uploaderFile.init();
+            //删除附件
+            $("#fileListFile").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArrayFile = fileDataArrayFile.filter(function (item, index, arr) {
+                    return item.GuidId != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+            //项目名称
+            $("#ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['1000px', '720px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj && obj.flag && obj.data) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else if (!obj.flag) {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //培训单位
+            $(".TrainCompanyName").click(function () {
+                var projectId = $("#ProjectId").val();
+                var projectName = $("#ProjectName").val();
+                if (projectId == "" || projectName == "") {
+                    parent.layer.msg("请先选择项目", { time: 1000, icon: 2 });
+                    return false;
+                }
+                //layer.open({
+                //    type: 2,
+                //    title: GetLayerTitle("选择单位"),
+                //    shadeClose: false, //点击遮罩关闭层
+                //    area: ['800px', '600px'],
+                //    content: '/Comm/SelectCompany2?companyType=all&selectType=1&projectId=' + projectId,
+                //    btn: ["确定", "取消"],
+                //    yes: function (index, layero) {
+                //        var iframeWin = window[layero.find('iframe')[0]['name']];
+                //        var obj = frames['layui-layer-iframe' + index].getSelectData();
+                //        if (obj.flag === false) {
+                //            layer.alert(obj.msg, { icon: 2 });
+                //        } else {
+                //            $("#TrainCompanyName").val(obj.data[0].CompanyName)
+                //            $("#TrainCompanyId").val(obj.data[0].Id);
+                //            $("#TrainCompanyType").val(obj.data[0].CompanyTypeName)
+                //            layer.close(index);
+                //        }
+                //    },
+                //    btn2: function (index, layero) {
+                //        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                //        parent.layer.close(index);//关闭窗口
+                //    },
+                //    cancel: function (index, layero) {
+                //    },
+                //});
+            });
+            //设置参与培训单位
+            $("#setCompany").click(function () {
+                var projectName = $("#ProjectName").val();
+                var projectId = $("#ProjectId").val();
+                if (projectId == "" || projectName == "") {
+                    parent.layer.msg("请先选择项目", { time: 1000, icon: 2 });
+                    return false;
+                }
+                //layer.open({
+                //    type: 2,
+                //    title: GetLayerTitle("设置第三方单位"),
+                //    shadeClose: false, //点击遮罩关闭层
+                //    area: ['800px', '600px'],
+                //    content: '/Comm/SelectCompany2?companyType=all&selectType=2&projectId=' + projectId,
+                //    btn: ["确定", "取消"],
+                //    yes: function (index, layero) {
+                //        var iframeWin = window[layero.find('iframe')[0]['name']];
+                //        var obj = iframeWin.getSelectData();
+                //        if (obj && obj.flag && obj.data) {
+                //            var row = getRowNum($("tbody"));
+                //            for (var i = 0; i < obj.data.length; i++) {
+                //                if (companyArray.indexOf(obj.data[i].Id) == -1) {
+                //                    var str = "";
+                //                    str += "<tr><td>" + obj.data[i].Code + "</td>";
+                //                    str += "<td>" + obj.data[i].CompanyName + "</td>";
+                //                    str += '<td>' + obj.data[i].CompanyTypeName + "</td>";
+                //                    str += '<td><a class=\"delete-Three\" data-val="' + obj.data[i].Id + '" style="cursor:pointer;">删除</a></td></tr>';
+                //                    $("tbody").append(str);
+                //                    companyArray.push(obj.data[i].Id);
+                //                }
+                //            }
+                //            $("#CompanyIds").val(companyArray);
+                //            parent.layer.close(index);//关闭窗口
+                //        } else if (!obj.flag) {
+                //            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                //            return false;
+                //        }
+                //    },
+                //    btn2: function (index, layero) {
+                //        parent.layer.close(index);//关闭窗口
+                //    },
+                //    cancel: function (index, layero) {
+                //    },
+                //});
+            });
+
+            $("tbody").on("click", "a.delete-Three", function () {
+                var val = $(this).data("val");
+                var arr = $("#CompanyIds").val().split(",")
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].indexOf(val) != -1) {
+                        arr.splice(i, 1)
+                    }
+                }
+                $("#CompanyIds").val(arr);
+                $(this).parent().parent().remove();
+            });
+            function getRowNum(obj) {
+                var i = 0;
+                if ($(obj).find("tr").length != 0) {
+                    var row = $(obj).find("tr:last").find("td:first").html();
+                    i = Number(row);
+                }
+                return i;
+            }
+            //培训人员
+            $("#TrainUserName").click(function () {
+                var trainCompanyId = $("#TrainCompanyId").val();
+                var trainCompanyName = $("#TrainCompanyName").val();
+                if (trainCompanyId == "" || trainCompanyName == "") {
+                    parent.layer.msg("请先选择培训单位", { time: 1000, icon: 2 });
+                    return false;
+                }
+                //parent.layer.open({
+                //    type: 2,
+                //    title: GetLayerTitle("选择用户"),
+                //    shadeClose: false, //点击遮罩关闭层
+                //    area: ['800px', '600px'],
+                //    content: '/Comm/SelectUser?selectType=1&companyId=' + trainCompanyId,
+                //    btn: ["确定", "取消"],
+                //    yes: function (index, layero) {
+                //        var iframeWin = window[layero.find('iframe')[0]['name']];
+                //        var obj = frames['layui-layer-iframe' + index].getSelectData();
+
+                //        if (obj.flag === false) {
+                //            layer.alert(obj.msg, { icon: 2 });
+                //        } else {
+                //            $("#TrainUserName").val(obj.data[0].UserName);
+                //            $("#TrainUserId").val(obj.data[0].Id);
+                //            layer.close(index);
+                //        }
+                //    },
+                //    btn2: function (index, layero) {
+                //        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                //        parent.layer.close(index);//关闭窗口
+                //    },
+                //    cancel: function (index, layero) {
+                //    },
+                //});
+            });
+            //选择模板
+            $("#Template").click(function () {
+                parent.layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择模板"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/GetTemplateList?selType=1&TemplateTypeNo=AQPX',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = frames['layui-layer-iframe' + index].getSelectData();
+
+                        if (obj.flag === false) {
+                            layer.alert(obj.msg, { icon: 2 });
+                        } else {
+                            //$("#TemplateId").val(obj.data[0].Id);
+                            $("#Template").val(obj.data[0].Title);
+                            $("#Title").val(obj.data[0].Title);
+                            $("#Content").val(obj.data[0].Description);
+                            $("#TrainCompanyName").val(obj.data[0].TrainCompanyName);
+                            $("#TrainCompanyId").val(obj.data[0].TrainCompanyId);
+                            layer.close(index);
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+        });
+    </script>
+</body>

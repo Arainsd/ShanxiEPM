@@ -1,0 +1,666 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<NewProjectCompanyContractView>
+@{
+    ViewBag.Title = "ProjectISP";
+}
+<div class="contentData">
+    <ul class="tab-list" style="margin-bottom:38px;">
+        <li id="Edit">基本信息</li>
+        <li id="ApprovalConstitute">总批复构成</li>
+        <li id="ProjectISP" class="active">工程供应商</li>
+        <li id="ProjectMainPoint">工程要点</li>
+        <li id="MilestonePlan">工程节点</li>
+        <li id="TimeManage">工期管理</li>
+        @*<li id="ProjectData">项目资料</li>*@
+        <li id="IsCrossingsManage">外部手续</li>
+    </ul>
+    <form>
+        <input type="hidden" name="ISPValue" id="ISPValue" />
+    </form>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="280">类型</th>
+                    <th width="300">供应商</th>
+                    <th width="280">合同编码</th>
+                    @*<th width="280">委托书/订单</th>*@
+                    <th width="280">项目经理</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Epm_ProjectCompany.Type</td>
+                            <td>
+                                <span id="ISPType" class="ISPType" style="display:none;">@item.Epm_ProjectCompany.Type</span>
+                                <span id="ISPId" class="ISPId" style="display:none;">@item.Epm_ProjectCompany.CompanyId</span>&nbsp;&nbsp;&nbsp;
+                                <span id="ISPName" class="ISPName">@item.Epm_ProjectCompany.CompanyName</span>&nbsp;&nbsp;&nbsp;
+                                <input type="hidden" class="ISPItemId" value="@item.Epm_ProjectCompany.Id" />
+                                <i class="layui-icon deleteISP" style="font-size: 16px; color:red; cursor:pointer;display:none">&#x1006; </i>
+                                @if (item.Epm_ProjectCompany.CompanyId.HasValue && item.Epm_ProjectCompany.CompanyId.Value != 0)
+                                {
+                                <span class="peojectCompany " style="cursor:pointer;color:blue;" data-module="ProjectInfoManage" data-right="SetCustomer">修改</span>
+                                }
+                                else {
+                                <span class="peojectCompany " style="cursor:pointer;color:blue;" data-module="ProjectInfoManage" data-right="SetCustomer">选择</span>
+                                }
+                            </td>
+                            <td class="dpfile">
+                                <div id="contract_@item.Epm_ProjectCompany.Id" class="divContract">
+                                    @*@if (!string.IsNullOrEmpty(item.Epm_ProjectCompany.ContractName))
+                                        {
+                                            var strCon = item.Epm_ProjectCompany.ContractName.Split(',');
+                                            foreach (var epm in strCon)
+                                            {
+                                                if (!string.IsNullOrEmpty(epm))
+                                                {
+                                                    <span style="cursor:pointer;">@epm</span><br /><br />
+                                                }
+                                            }
+                                        }*@
+                                    <span style="cursor:pointer;">@item.Epm_ProjectCompany.ContractCode</span>
+                                </div>
+                                <input type="hidden" id="contractJson__@item.Epm_ProjectCompany.Id" class="contractJson" value="[]" />
+                                <input type="hidden" id="ContractInput" class="hidContractId" ContractName="@item.Epm_ProjectCompany.ContractName" ContractId="@item.Epm_ProjectCompany.ContractId" IsContractAdd="" ContractCode="@item.Epm_ProjectCompany.ContractCode" ContractStartTime="@item.ContractStartTime" ContractEndTime="@item.ContractEndTime" ContractSignTime="@item.ContractSignTime" ContractAmount="@item.ContractAmount" />
+                            </td>
+                            @*<td class="dpfile">
+                                    <div id="order_@item.Epm_ProjectCompany.Id" class="divContract">
+                                        @if (!string.IsNullOrEmpty(item.Epm_ProjectCompany.OrderName))
+                                        {
+                                            var strCon = item.Epm_ProjectCompany.OrderName.Split(',');
+                                            foreach (var ept in strCon)
+                                            {
+                                                if (!string.IsNullOrEmpty(ept))
+                                                {
+                                                    <span class="ord-name" style="cursor:pointer;">@ept</span><br />
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                    <input type="hidden" id="orderJson__@item.Epm_ProjectCompany.Id" class="contractJson" value="[]" />
+                                    <input type="hidden" id="OrderInput" class="hidContractId" ContractName="@item.Epm_ProjectCompany.OrderName" ContractId="@item.Epm_ProjectCompany.OrderId" IsContractAdd="" ContractCode="@item.Epm_ProjectCompany.ContractCode" ContractStartTime="@item.OrderStartTime" ContractEndTime="@item.OrderEndTime" ContractSignTime="@item.OrderSignTime" ContractAmount="@item.OrderAmount"  data-code="@item.Epm_ProjectCompany.ContractCode"/>
+
+                                </td>*@
+                            <td class="dpman">
+                                @if (!string.IsNullOrEmpty(item.Epm_ProjectCompany.PMId.ToString()))
+                                {
+                                    if (item.Epm_ProjectCompany.Type == "监理")
+                                    {
+                                        <span>总监：</span>
+                                    }
+                                    else if (item.Epm_ProjectCompany.Type == "设计费" || item.Epm_ProjectCompany.Type == "地勘" || item.Epm_ProjectCompany.Type == "危废处置")
+                                    {
+                                        <span>本省地区负责人：</span>
+                                    }
+                                    else if (item.Epm_ProjectCompany.Type == "土建" || item.Epm_ProjectCompany.Type == "内衬")
+                                    {
+                                        <span>项目经理：</span>
+                                    }
+                                    else
+                                    {
+                                        <span>本省地区负责人：</span>
+                                    }
+                                    <span class="PMName">@item.Epm_ProjectCompany.PM</span>
+                                    <span class="PMPhone">@item.Epm_ProjectCompany.PMPhone</span><br />
+                                }
+                                @if (!string.IsNullOrEmpty(item.Epm_ProjectCompany.LinkManId.ToString()))
+                                {
+                                    if (item.Epm_ProjectCompany.Type == "监理")
+                                    {
+                                        <span>现场监理：</span>
+                                    }
+                                    else if (item.Epm_ProjectCompany.Type == "设计费" || item.Epm_ProjectCompany.Type == "地勘" || item.Epm_ProjectCompany.Type == "危废处置")
+                                    {
+                                        <span>本省地区负责人：</span>
+                                    }
+                                    else if (item.Epm_ProjectCompany.Type == "土建" || item.Epm_ProjectCompany.Type == "内衬")
+                                    {
+                                        <span>现场负责人：</span>
+                                    }
+                                    else if (item.Epm_ProjectCompany.Type == "安装" || item.Epm_ProjectCompany.Type == "包装" || item.Epm_ProjectCompany.Type == "加固" || item.Epm_ProjectCompany.Type == "油罐清洗费")
+                                    {
+                                        <span>现场负责人：</span>
+                                    }
+                                    else
+                                    {
+                                        <span></span>
+                                    }
+                                    <span class="LinkManName">@item.Epm_ProjectCompany.LinkMan</span>
+                                    <span class="LinkManPhone">@item.Epm_ProjectCompany.LinkPhone</span><br />
+                                }
+                                @if (@item.Epm_ProjectCompany.State == (int)ApprovalState.WaitAppr)
+                                {
+                                    <span class="PMAudite checkright" style="cursor:pointer;color:blue;" data-module="ProjectInfoManage" data-right="AuditCustomerUser">
+                                        审核
+                                    </span>
+                                }
+                                else
+                                {
+                                    if (!ViewBag.isService)
+                                    {
+                                        if (string.IsNullOrEmpty(item.Epm_ProjectCompany.PM))
+                                        {
+                                            <span class="PMEdit checkright" style="cursor:pointer;color:blue;" data-module="ProjectInfoManage" data-right="SetCustomerUser">添加</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="PMEdit checkright" style="cursor:pointer;color:blue;" data-module="ProjectInfoManage" data-right="SetCustomerUser">修改</span>
+                                        }
+                                    }
+                                    else if (ViewBag.isService && ViewBag.isSupervisor && !string.IsNullOrEmpty(item.Epm_ProjectCompany.PM))
+                                    {
+                                        <span class="PMEdit checkright" style="cursor:pointer;color:blue;" data-module="ProjectInfoManage" data-right="SetCustomerUser">修改</span>
+                                    }
+                                }
+                            </td>
+                            <td style="display:none;">
+                                <input type="text" class="inputId" data-id="@item.Epm_ProjectCompany.SId" value="@item.Epm_ProjectCompany.SId" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="button-group btn-center">
+        @*<button type="button" class="saveBut checkright" id="saveBut" data-module="ProjectInfoManage" data-right="SetCustomer">保存</button>*@
+        <input type="file" id="loadFile" name="loadFile" show="" json="" style="display:none" onchange="uploadFile()">
+    </div>
+</div>
+
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+
+        var showObj = $("#" + $("#loadFile").attr("show"));
+        var jsonObj = $("#" + $("#loadFile").attr("json"));
+
+        var fileObj = document.getElementById("loadFile").files[0];
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            async: false,
+            data: formFile,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+
+                    var fileDataArray = JSON.parse($(jsonObj).val());
+                    fileDataArray.push(obj);
+                    var fileDataJson = JSON.stringify(fileDataArray);
+                    $(jsonObj).val(fileDataJson);
+
+                    if (data[i].ImageType == null) {
+                        var odiv = '<span id="' + obj.GuidId + '">';
+                        odiv += '<span><a href="javascript:;" target="_blank">' + obj.Name + '</a></span>';
+                        odiv += '<span style="margin-left:5px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '" data-json="' + $("#loadFile").attr("json") + '">删除</span>';
+                        odiv += '<br/></span>';
+                        if ($(showObj).parent().find(".hidContractId").attr("ContractId") != '') {
+                            $(showObj).empty();
+                            $(showObj).parent().find(".hidContractId").attr("ContractId", "");
+                        }
+                        $(showObj).append(odiv);
+                    }
+                }
+            }
+        });
+        var type = $(showObj).parent().find(".hidContractId").prev().attr("type");
+        var title = "";
+        if (type == "1") {
+            title = "输入合同信息";
+        } else {
+            title = "输入委托书/订单信息";
+        }
+        //输入合同号、时间、金额
+        layer.open({
+            type: 2,
+            title: GetLayerTitle(title),
+            shadeClose: false, //点击遮罩关闭层
+            area: ['600px', '420px'],
+            content: '/Project/InputContract',
+            btn: ["确定", "取消"],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var obj = frames['layui-layer-iframe' + index].getSelectData();
+                if (obj.flag === false) {
+                    layer.alert(obj.msg, { icon: 2 });
+                } else {
+                    $(showObj).parent().find(".hidContractId").attr("IsContractAdd", "Add");
+                    $(showObj).parent().find(".hidContractId").attr("ContractCode", obj.data[0].Code);
+                    $(showObj).parent().find(".hidContractId").attr("ContractStartTime", obj.data[0].StartTime);
+                    $(showObj).parent().find(".hidContractId").attr("ContractEndTime", obj.data[0].EndTime);
+                    $(showObj).parent().find(".hidContractId").attr("ContractSignTime", obj.data[0].SignTime);
+                    $(showObj).parent().find(".hidContractId").attr("ContractAmount", obj.data[0].Amount);
+                    layer.close(index);
+                }
+            },
+            btn2: function (index, layero) {
+                parent.layer.close(index);//关闭窗口
+                $(showObj).empty();
+                $(showObj).parent().find(".hidContractId").attr("IsContractAdd", "");
+            },
+            cancel: function (index, layero) {
+                $(showObj).empty();
+                $(showObj).parent().find(".hidContractId").attr("IsContractAdd", "");
+            },
+        });
+    }
+
+    //删除附件
+    $("body").on("click", ".fileDel", function () {
+        $(this).parent("span").remove();
+        var id = $(this).data("val");
+        //----删除初始文件对应的值
+        var jsonObj = $("#" + $(this).data("json"));
+        var fileDataArray = JSON.parse($(jsonObj).val());
+        fileDataArray = fileDataArray.filter(function (item, index, arr) {
+            return item.GuidId != id
+        });
+        var fileJson = JSON.stringify(fileDataArray);
+        $(jsonObj).val(fileJson);
+    });
+
+    $(function () {
+        $("#Edit").click(function () {
+            window.location.href = 'Edit?projectId=@ViewBag.ProjectId';
+        });
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = "ApprovalConstitute?projectId=@ViewBag.ProjectId"
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#TimeManage").click(function () {
+            window.location.href = 'TimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'ProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        //数据提交
+        // $("#saveBut").click(function () {
+        function savaData() {
+            var ISPValue = [];
+            $("tbody tr").each(function (index, item) {
+                var hidContractId = $(item.children[2]).find(".hidContractId");
+
+                if ($(item.children[2]).find("input[type='hidden']").val() == '[]') {
+                    var ContractFile = "";
+                } else {
+                    ContractFile = $(item.children[2]).find("input[type='hidden']").val();
+                }
+                if ($(item.children[3]).find("input[type='hidden']").val() == '[]') {
+                    var OrderFile = "";
+                } else {
+                    OrderFile = $(item.children[3]).find("input[type='hidden']").val();
+                }
+
+                ISPValue.push({
+                    Id: $(item.children[4]).find("input").val(),
+                    Type: $(item.children[0]).text(),
+                    CompanyId: $(item.children[1]).find(".ISPId").text(),
+                    CompanyName: $(item.children[1]).find(".ISPName").text(),
+                    ProjectId: '@ViewBag.ProjectId',
+                    ContractFiles: ContractFile,
+                    OrderFiles: OrderFile,
+                    IsContractAdd: hidContractId.attr("IsContractAdd"),
+                    ContractId: hidContractId.attr("ContractId"),
+                    ContractName: hidContractId.attr("ContractName"),
+                    ContractCode: hidContractId.attr("ContractCode"),
+                    ContractStartTime: hidContractId.attr("ContractStartTime"),
+                    ContractEndTime: hidContractId.attr("ContractEndTime"),
+                    ContractSignTime: hidContractId.attr("ContractSignTime"),
+                    ContractAmount: hidContractId.attr("ContractAmount"),
+                    IsOrderAdd: $(item.children[3]).find(".hidContractId").attr("IsContractAdd"),
+                    OrderId: $(item.children[3]).find(".hidContractId").attr("ContractId"),
+                    OrderName: $(item.children[3]).find(".hidContractId").attr("ContractName"),
+                    OrderCode: $(item.children[3]).find(".hidContractId").attr("ContractCode"),
+                    OrderStartTime: $(item.children[3]).find(".hidContractId").attr("ContractStartTime"),
+                    OrderEndTime: $(item.children[3]).find(".hidContractId").attr("ContractEndTime"),
+                    OrderSignTime: $(item.children[3]).find(".hidContractId").attr("ContractSignTime"),
+                    OrderAmount: $(item.children[3]).find(".hidContractId").attr("ContractAmount"),
+                });
+            });
+            ISPValues = JSON.stringify(ISPValue);
+            $("#ISPValue").val(ISPValues);
+            if (ISPValue.length < 1) {
+                layer.alert("请填写供应商信息", { icon: 2 })
+                return false;
+            }
+
+            var search = $("form").serialize();
+            $.post("ProjectISP", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/Project/ProjectISP";
+                        window.location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        };
+
+        //选择供应商
+        $(".peojectCompany").click(function () {
+            var that = $(this);
+            var type = that.parent().find(".ISPType").text();
+            var id = that.parent().find(".ISPItemId").val();
+            var s_value = that.parents("tr").find("#OrderInput");
+            var p_value = that.parents("tr").find("#ContractInput");
+            data = {
+                companyId: that.parent().find(".ISPId").text(),
+                companyName: that.parent().find(".ISPName").text(),
+                contractId: p_value.attr("ContractId"),
+                contractName: p_value.attr("ContractName"),
+                contractCode: p_value.attr("ContractCode"),
+                contractStartTime: p_value.attr("ContractStartTime"),
+                contractEndTime: p_value.attr("ContractEndTime"),
+                contractSignTime: p_value.attr("ContractSignTime"),
+                contractAmount: p_value.attr("ContractAmount"),
+
+                orderId: s_value.attr("ContractId"),
+                orderName: s_value.attr("ContractName"),
+                orderCode: s_value.attr("ContractCode"),
+                orderStartTime: s_value.attr("ContractStartTime"),
+                orderEndTime: s_value.attr("ContractEndTime"),
+                orderSignTime: s_value.attr("ContractSignTime"),
+                orderAmount: s_value.attr("ContractAmount"),
+            };
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("设置供应商"),
+                shadeClose: false, //点击遮罩关闭层SetCompany
+                area: ['800px', '600px'],
+                content: '/Project/SetCompany?type=' + type,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        //主逻辑业务
+                        //清空其它项数据
+                        that.parents("tr").find(".dpfile span").text('');
+                        that.parents("tr").find(".dpfile .hidContractId").attr("ContractName", "");
+                        that.parents("tr").find(".dpfile .hidContractId").attr("ContractId", "");
+
+                        that.parents("tr").find(".dpfile .hidContractId").attr("ContractCode", "");
+                        that.parents("tr").find(".dpman .dpcontrol").text('');
+                        that.parents("tr").find(".dpman .PMEdit").text('添加');
+
+                        that.parent().find(".ISPId").text(obj.data[0].CompanyId);
+                        that.parent().find(".ISPName").text(obj.data[0].CompanyName);
+                        var len = that.parents("tr").find("#ContractInput");
+                        len.attr("ContractId", obj.data[0].ContractId);
+                        len.attr("ContractName", obj.data[0].ContractName);
+                        len.attr("ContractCode", obj.data[0].Code);
+                        len.attr("ContractStartTime", obj.data[0].StartTime);
+                        len.attr("ContractEndTime", obj.data[0].EndTime);
+                        len.attr("ContractSignTime", obj.data[0].SignTime);
+                        len.attr("ContractAmount", obj.data[0].Amount);
+
+                        len.attr("ContractCode", obj.data[0].ContractCode);
+
+                        len.attr("IsContractAdd", "Add");
+                        that.parents("tr").find("#contractJson__" + id).val(obj.data[0].ContractJson);
+
+                        var conList = JSON.parse(obj.data[0].ContractJson);
+                        if (conList.length > 0) {
+                            for (var i = 0; i < conList.length; i++) {
+                                var obj = {};
+                                obj.Name = conList[i].Name;
+                                obj.GuidId = conList[i].GuidId;
+                                obj.Size = conList[i].Size;
+                                obj.ImageType = conList[i].ImageType;
+
+                                if (conList[i].ImageType == null) {
+                                    var odiv = '<span id="' + obj.GuidId + '">';
+                                    odiv += '<span><a href="javascript:;" target="_blank">' + obj.Name + '</a></span>';
+                                    odiv += '<br/></span>';
+                                    that.parents("tr").find("#contract_" + id).append(odiv);
+                                }
+                            }
+                        }
+                        if (obj.data[0].ContractCode !== "" || obj.data[0].ContractCode !== null) {
+                            var odiv = '';
+                            odiv += '<span><a href="javascript:;" target="_blank">' + obj.data[0].ContractCode + '</a></span>';
+                            odiv += '<br/></span>';
+                            that.parents("tr").find("#contract_" + id).append(odiv);
+                        }
+                        var orderlen = that.parents("tr").find("#OrderInput");
+                        orderlen.attr("ContractId", obj.data[0].OrderId);
+                        orderlen.attr("ContractName", obj.data[0].OrderName);
+                        orderlen.attr("ContractCode", obj.data[0].OrderCode);
+                        orderlen.attr("ContractStartTime", obj.data[0].OrderStartTime);
+                        orderlen.attr("ContractEndTime", obj.data[0].OrderEndTime);
+                        orderlen.attr("ContractSignTime", obj.data[0].OrderSignTime);
+                        orderlen.attr("ContractAmount", obj.data[0].OrderAmount);
+                        orderlen.attr("IsContractAdd", "Add");
+                        that.parents("tr").find("#orderJson__" + id).val(obj.data[0].OrderJson);
+
+                        var orderList = JSON.parse(obj.data[0].OrderJson);
+                        if (orderList.length > 0) {
+
+                            for (var i = 0; i < orderList.length; i++) {
+                                var obj = {};
+
+                                var OrderName = orderList[i].Name;
+                                OrderName = OrderName.substring(0, OrderName.lastIndexOf('.'));
+
+                                obj.Name = OrderName;
+                                obj.GuidId = orderList[i].GuidId;
+                                obj.Size = orderList[i].Size;
+                                obj.ImageType = orderList[i].ImageType;
+                                if (orderList[i].ImageType == null) {
+                                    var odiv = '<span id="' + obj.GuidId + '">';
+                                    odiv += '<span><a href="javascript:;" target="_blank">' + obj.Name + '</a></span>';
+                                    if (i < orderList.length - 2)
+                                        odiv += '<br/>';
+                                    odiv += '</span>';
+                                    that.parents("tr").find("#order_" + id).append(odiv);
+                                }
+                            }
+                        }
+                        if (obj.data[0].OrderId !== "" || obj.data[0].OrderId !== null) {
+                            var odiv = '';
+                            odiv += '<span><a href="javascript:;" target="_blank">' + obj.data[0].OrderName + '</a></span>';
+                            odiv += '<br/></span>';
+                            that.parents("tr").find("#order_" + id).append(odiv);
+                        }
+                        if (that.parent().find(".ISPName").text() != "") {
+                            that.hide();
+                            that.prev().show();
+                        }
+                        layer.close(index);
+                        savaData();
+
+                    }
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        $(".btnSelect").click(function () {
+            if ($(this).parents("tr").find(".ISPName").text() == "") {
+                layer.alert("请设置服务商", { icon: 2 });
+                return;
+            }
+            var type = "";
+            if ($(this).attr("type") == 3) {
+                type = 3
+            } else if ($(this).attr("type") == 1) {
+                type = 1
+            }
+            var CompanyId = $(this).parents("tr").find(".ISPId").text();
+            var that = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择附件"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/comm/SelectContract?selectType=1&SecondPartyId=' + CompanyId + '&contractType=' + type,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        var array = obj.data[0].FileName.split(',');
+                        var selectData = '';
+                        for (var i = 0; i < array.length; i++) {
+                            selectData += `<span>${array[i]}</span>`
+                            if (i < array.length - 1) {
+                                selectData += "<br>"
+                            }
+                        }
+                        var tdcurrent = that.parents("td");
+                        if (tdcurrent.find(".hidContractId").attr("ContractId") == '' && tdcurrent.find(".divContract") != '') {
+                            tdcurrent.find(".divContract").empty();
+                        }
+                        that.parents("td").find(".hidContractId").attr("ContractId", obj.data[0].Id);
+                        that.parents("td").find(".hidContractId").attr("ContractName", obj.data[0].FileName);
+                        that.parents("td").find(".divContract").html(selectData);
+
+                        //输入合同号、时间、金额
+                        parent.layer.open({
+                            type: 2,
+                            title: GetLayerTitle("输入合同信息"),
+                            shadeClose: false, //点击遮罩关闭层
+                            area: ['600px', '420px'],
+                            content: '/Project/InputContract',
+                            btn: ["确定", "取消"],
+                            yes: function (index2, layero2) {
+                                var iframeWin = window[layero2.find('iframe')[0]['name']];
+                                var obj = frames['layui-layer-iframe' + index2].getSelectData();
+                                if (obj.flag === false) {
+                                    parent.layer.alert(obj.msg, { icon: 2 });
+                                } else {
+                                    that.parents("td").find(".hidContractId").attr("IsContractAdd", "Add");
+                                    that.parents("td").find(".hidContractId").attr("ContractCode", obj.data[0].Code);
+                                    that.parents("td").find(".hidContractId").attr("ContractStartTime", obj.data[0].StartTime);
+                                    that.parents("td").find(".hidContractId").attr("ContractEndTime", obj.data[0].EndTime);
+                                    that.parents("td").find(".hidContractId").attr("ContractSignTime", obj.data[0].SignTime);
+                                    that.parents("td").find(".hidContractId").attr("ContractAmount", obj.data[0].Amount);
+                                    parent.layer.close(index2);
+                                }
+                            },
+                            btn2: function (index2, layero2) {
+                                parent.layer.close(index2);//关闭窗口
+                                that.parents("td").find(".divContract").empty();
+                                that.parents("td").find(".hidContractId").attr("IsContractAdd", "");
+
+                            },
+                            cancel: function (index2, layero2) {
+                                that.parents("td").find(".divContract").empty();
+                                that.parents("td").find(".hidContractId").attr("IsContractAdd", "");
+                            },
+                        });
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //删除工程服务商
+        $("body").on("click", ".deleteISP", function () {
+            $(this).parent().find(".ISPId").text("");
+            $(this).parent().find(".ISPName").text("");
+            $(this).hide();
+            $(this).parent().find(".peojectCompany").show();
+            $(this).parents("tr").find(".divContract").empty();
+            $(this).parents("tr").find(".contractJson").val('[]');
+        });
+        //隐藏“修改”功能
+        $("tbody tr").each(function (index, item) {
+            if ($(item.children[1]).find(".ISPId").text() == '') {
+                $(item.children[4]).find(".PMEdit").hide();
+            }
+        });
+        //修改项目经理
+        $(".PMEdit").click(function () {
+            var that = $(this);
+            var isUpdate = $(this).text() == "修改" ? "0" : "1";
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("设置服务商用户"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['600px', '400px'],
+                content: '/project/AddPerson?id=' + that.parents("tr").find(".inputId").val() + "&isUpdate=" + isUpdate + "&type=" + that.parents("tr").find(".ISPType").text(),
+
+                cancel: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                   
+                },
+            });
+        });
+        $(".PMAudite").click(function () {
+            var that = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("审核服务商用户"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['900px', '500px'],
+                content: '/project/AuditePerson?id=' + that.parents("tr").find(".inputId").val(),
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+
+        function GetContractInfo(code, id) {
+            var result = true;
+            $.ajaxSettings.async = false;
+            $.post("GetContract?code=" + code + "&id=" + id, function (data) {
+                if (data.length > 0) {
+                    result = false;
+                }
+            });
+            $.ajaxSettings.async = true;
+            return result;
+        }
+
+    });
+</script>

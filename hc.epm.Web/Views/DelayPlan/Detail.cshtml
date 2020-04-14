@@ -1,0 +1,176 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@using hc.epm.ViewModel;
+@model PlanDelayView
+@{
+    ViewBag.Title = "查看延期申请";
+}
+@if (Model == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" name="ProjectName" id="ProjectName" value="@Model.ProjectName" readonly="readonly" disabled />
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.ProjectId" />
+                <i class="pic iconfont " width="20" height="30" style="cursor:pointer;left:595px;">&#xe76a;</i>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;延期里程牌&nbsp;:</label>
+                <select disabled style="background-color:#EBEBE4">
+                    <option style="background-color:#EBEBE4" selected>@Model.PlanName</option>
+                </select>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;计划开始日期&nbsp;:</label>
+                <input type="text" id="OldStartDate" name="OldStartDate" value="@(Model.OldStartDate == null ? "" : Convert.ToDateTime(Model.OldStartDate).ToString("yyyy-MM-dd"))" disabled>
+            </div>
+            <div class="short-text">
+                <label for="">&nbsp;计划结束日期&nbsp;:</label>
+                <input type="text" id="OldEndDate" name="OldEndDate" autocomplete="off" value="@(Model.OldEndDate == null ? "" : Convert.ToDateTime(Model.OldEndDate).ToString("yyyy-MM-dd"))" disabled/>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;延期天数&nbsp;:</label>
+                <input type="text" id="DelayDay" name="DelayDay" value="@Model.DelayDay" disabled>
+            </div>
+            <div class="intro">
+                <div><label><span class="star">*</span>&nbsp;延期原因&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Reason" name="Reason" disabled>@Model.Reason</textarea>
+                </div>
+            </div>
+            <div class="intro" style="height:100%;">
+                <label><span class="star">*</span>&nbsp;施工单位&nbsp;:</label>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;width:79%;margin-left:2px;">
+                    <thead>
+                        <tr>
+                            <th width="100">单位名称</th>
+                            <th width="30">影响天数</th>
+                        </tr>
+                    </thead>
+                    <tbody class="unit">
+                        @if (Model.PlanDelayCompanys != null && Model.PlanDelayCompanys.Count() > 0)
+                        {
+                            foreach (var item in Model.PlanDelayCompanys)
+                            {
+                        <tr>
+                            <td>@item.CompanyName</td>
+                            <td>@item.DelayDay</td>
+                        </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="intro">
+                <div><label>&nbsp;备注&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Remark" name="Remark" disabled>@Model.Remark</textarea>
+                </div>
+            </div>
+            <input type="hidden" id="Id" value="@Model.Id" />
+            <div class="button-group btn-center">
+                @if (Model.State == (int)ApprovalState.WaitAppr)
+                {
+                    <button type="button" class="audit checkright" data-module="DelayApply" data-right="Check">审核</button>
+                    <button type="button" class="reject checkright" data-module="DelayApply" data-right="UnCheck">驳回</button>
+                }
+                else if (Model.State == (int)ApprovalState.ApprFailure)
+                {
+                    <button type="button" class="discard checkright" data-module="DelayApply" data-right="Invalid">废弃</button>
+                }
+                <button type="button" class="exchange">沟通</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['layer', 'element'], function () {
+        var layer = layui.layer, element = layui.element, $ = layui.jquery;
+
+        //审核
+        $('.audit').click(function () {
+            parent.layer.confirm("确认审核通过？", { icon: 3 }, function () {
+                $.post("Audit", { id: $("#Id").val(), state: '@ApprovalState.ApprSuccess.ToString()' }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("审核通过", { time: 1000, icon: 1 });
+                        location.href = "/DelayPlan/Index?pageIndex=1";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        });
+
+        //驳回
+        $(".reject").click(function () {
+            parent.layer.prompt({
+                formType: 2,
+                title: '请输入驳回理由',
+                yes: function (index, layero) {
+                    // 获取文本框输入的值
+                    var value = layero.find(".layui-layer-input").val();
+                    if (value) {
+                        $.post("Reject", { id: $("#Id").val(), state: '@ApprovalState.ApprFailure.ToString()' }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                location.href = "/DelayPlan/Index?pageIndex=1";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    } else {
+                        parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                    }
+                }
+            });
+        });
+        @*//驳回
+        $('.reject').click(function () {
+            parent.layer.confirm("确认驳回吗？", { icon: 3 }, function () {
+                $.post("Reject", { id: $("#Id").val(), state: '@ApprovalState.ApprFailure.ToString()' }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("驳回成功", { time: 1000, icon: 1 });
+                        location.href = "/DelayPlan/Index?pageIndex=1";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        });*@
+        //废弃
+        $('.discard').click(function () {
+            parent.layer.confirm("确认废弃吗？", { icon: 3 }, function () {
+                $.post("Discard", { id: $("#Id").val(), state: '@ApprovalState.Discarded.ToString()' }, function (data) {
+                    if (data.Flag) {
+                        layer.msg("废弃成功", { time: 1000, icon: 1 });
+                        location.href = "/DelayPlan/Index";
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        });
+        //沟通
+        $('.exchange').click(function () {
+            var projectId = $("#ProjectId").val();
+            window.location.href = "/Question/Add?businType=DelayApply&projectId=" + projectId + "&BusinessId=@Model.Id";
+        });
+    });
+</script>
+}

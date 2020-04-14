@@ -1,0 +1,119 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_TypeDictionary
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+</style>
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>类型：</label>
+                <div class="col-lg-10 col-sm-10">
+                    @Html.DropDownList("Type", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>编号：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" class="form-control" name="No" id="No" placeholder="请输入编号" value="@Model.No" />
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>名称：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <input type="text" name="Name" id="Name" value="@Model.Name" placeholder="请输入名称" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 form-group">
+                <label class="col-lg-2 col-sm-2 control-label">备注：</label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="Remark" id="Remark" placeholder="请输入内容" class="form-control" rows="5">@Model.Remark</textarea>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25" style="margin-top:57px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+
+        //自定义验证规则
+        window.onload = function () {
+            $('#mainForm').bootstrapValidator({
+                excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    No: {
+                        validators: {
+                            notEmpty: {
+                                message: '编号不能为空'
+                            }, stringLength: {
+                                max: 50,
+                                message: '编号长度不能超过50字符'
+                            },
+                        }
+                    },
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: '名称不能为空'
+                            }, stringLength: {
+                                max: 50,
+                                message: '名称长度不能超过50字符'
+                            },
+                        }
+                    },
+                }
+            });
+        }
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+
+                var search = $("form").serialize();//表单序列化
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");//禁止连续提交表单
+                        $("#save").val("请等待");
+                        parent.layer.msg("修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+        });
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>

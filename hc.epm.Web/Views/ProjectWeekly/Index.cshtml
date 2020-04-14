@@ -1,0 +1,146 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+@model List<ProjectWeeklyView>
+@{
+    ViewBag.Title = "周报报表统计列表";
+}
+<style>
+    .data_time{
+        width:60%!important;
+    }
+    .title_name{
+        width: 55px!important;
+    display: inline-block!important;
+    text-align:right;
+    padding-right:5px;
+    }
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label class="title_name">标题 : </label><input type="text" name="name" value="@ViewBag.name" placeholder="">
+                </div>
+                <div class="data_time">
+                    <label>日期范围 : </label>
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }, maxDate: '%y-%M-#{%d-1}' })" placeholder="">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                    —
+                    <input type="text" class="timer se-in" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="" style="margin-left:20px;">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+            </div>
+            @*<div>
+                <div >
+                    <label>年范围 : </label>
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }, maxDate: '%y-%M-#{%d-1}' })" placeholder="" style="width:30%;">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>—<input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }, maxDate: '%y-%M-#{%d-1}' })" placeholder="" style="margin-left:20px;width:30%;">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+                <div class="data_time">
+                    <label>年月范围 : </label>
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }, maxDate: '%y-%M-#{%d-1}' })" placeholder="" >
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>—<input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }, maxDate: '%y-%M-#{%d-1}' })" placeholder="" style="margin-left:20px;">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+            </div>*@
+            
+            <div class="form-sub">
+                <button type="submit" id="btnsel">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="150">标题</th>
+                    <th width="150">汇总时间</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td class="sort">
+                               <span>@item.sort</span>
+                            </td>
+                            <td>@item.name</td>
+                            <td>@item.time</td>
+                            <td>
+                                <a class="Detail" style="cursor:pointer;color:#0000FF;" data-name="@item.name" data-time="@item.time">查看</a>
+                                <a class="export" style="cursor:pointer;color:#0000FF;">导出报表</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="13" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<script>
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/ProjectWeekly/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    $("body").on("click", ".Detail", function () {
+        var name = $(this).data("name");
+        var time = $(this).data("time");
+
+        window.location.href = "/ProjectWeekly/AllProject?name=" + name + "&time="+time;
+    });
+    //报表导出
+    $("body").on("click", ".export", function () {
+        var name = $(this).parent().find(".Detail").data("name");
+        var time = $(this).parent().find(".Detail").data("time");
+        parent.layer.confirm('确认要导出所选择的数据？', { icon: 3 }, function () {
+            var loading = layer.msg('正在导出', { icon: 16, shade: 0.3, time: 0 });
+            $.post("ExportToExcel", { time: time,name:name }, function (data) {
+                if (data.suss) {
+                    layer.msg("导出成功", { time: 2000, icon: 1 });
+                    window.location.href = "/Download/DownLoadHB?path=" + data.Path + "&fileName=" + data.Title;
+                    layer.close(loading);
+                } else {
+                    layer.close(loading);
+                    layer.alert("导出失败", { icon: 2 });
+                }
+            }, "json");
+        });
+    });
+
+</script>
+

@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{294A148A-F503-4155-A186-E6412F60BA9B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hc.epm.Web.ClientProxy</RootNamespace>
+    <AssemblyName>hc.epm.Web.ClientProxy</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="hc.epm.Common">
+      <HintPath>..\..\..\ServicePush\hc.epm.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.Plat.Common.Global">
+      <HintPath>..\..\..\ServicePush\hc.Plat.Common.Global.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientSiteClientProxy.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hc.epm.DataModel.BaseCore\hc.epm.DataModel.BaseCore.csproj">
+      <Project>{f8103b09-a5c7-48bd-b736-727fb2107165}</Project>
+      <Name>hc.epm.DataModel.BaseCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Basic\hc.epm.DataModel.Basic.csproj">
+      <Project>{64a4f74f-a0e1-4ef2-915b-dd49bd50edac}</Project>
+      <Name>hc.epm.DataModel.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Business\hc.epm.DataModel.Business.csproj">
+      <Project>{1c5dc3d9-56b1-4580-8b69-30955f72d6bd}</Project>
+      <Name>hc.epm.DataModel.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Msg\hc.epm.DataModel.Msg.csproj">
+      <Project>{85643354-d470-49aa-a4d0-e9b6ba8116a2}</Project>
+      <Name>hc.epm.DataModel.Msg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.Service.Basic\hc.epm.Service.Basic.csproj">
+      <Project>{12078b7d-28a5-4d0a-871d-664c65cb1df5}</Project>
+      <Name>hc.epm.Service.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.Service.ClientSite\hc.epm.Service.ClientSite.csproj">
+      <Project>{344eee4b-8211-4f9b-ae19-dc16b18fa54c}</Project>
+      <Name>hc.epm.Service.ClientSite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.ViewModel\hc.epm.ViewModel.csproj">
+      <Project>{c2d7af8d-0efb-42d5-8b8b-afcb1c3738b0}</Project>
+      <Name>hc.epm.ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

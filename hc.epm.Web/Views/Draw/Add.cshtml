@@ -1,0 +1,1065 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "新增图纸";
+}
+
+<style>
+    #btnUploadFile1, #btnUploadFile2, #btnUploadFile3, #btnUploadFile4, #btnUploadFile5, #btnUploadFile6, #btnUploadFile7, #btnUploadFile8 {
+        margin-top: 5px;
+        height: 25px;
+        width: 100px;
+        font-size: 16px;
+    }
+
+    #fileListFile1, #fileListFile2, #fileListFile3, #fileListFile4, #fileListFile5, #fileListFile6, #fileListFile7, #fileListFile8 {
+        padding-right: 40px;
+        margin: 30px 20px 20px 120px;
+        font-size: 14px;
+    }
+
+        #fileListFile1 .fileShow {
+            width: 100%;
+        }
+
+    .tab #fileListFile1 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile1 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile1 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile2 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile2 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile2 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile2 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile3 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile3 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile3 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile3 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile4 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile4 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile4 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile4 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile5 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile5 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile5 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile5 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile6 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile6 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile6 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile6 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile7 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile7 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile7 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile7 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+
+    #fileListFile8 .fileShow {
+        width: 100%;
+    }
+
+    .tab #fileListFile8 li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+        .tab #fileListFile8 li > div:nth-child(1) {
+            flex: none !important;
+            width: 350px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .tab #fileListFile8 li > div:nth-child(2) {
+            flex: none !important;
+            width: 60px !important;
+        }
+</style>
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text ProjectName">
+                    <label for="ProjectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" value="@ViewBag.ProjectName" id="ProjectName" name="ProjectName" autocomplete="off" readonly="readonly" />
+                    <input type="hidden" value="@ViewBag.ProjectId" id="ProjectId" name="ProjectId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                @*<div class="long-text">
+                    <label for="Name"><span class="star">*</span>&nbsp;图纸名称&nbsp;:</label>
+                    <input type="text" id="Name" name="Name" autocomplete="off" />
+                </div>
+                <div class="intro">
+                    <div><label for="Desciption"><span class="star">*</span>&nbsp;描述&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Desciption" name="Desciption"></textarea>
+                    </div>
+                </div>*@
+                <div class="short-text" style="margin-top:30px;">
+                    <label><span class="star">*</span>&nbsp;版本标识&nbsp;:</label>
+                    @Html.DropDownList("VersionNo", null, new { @class = "form-control selectpicker  show-tick" })
+                    <input type="hidden" name="VersionName" id="VersionName" />
+                </div>
+                <div class="long-text">
+                    <label for="VisaNo"><span class="star"></span>&nbsp;版本号&nbsp;:</label>
+                    <input type="text" id="VersionOrder" name="VersionOrder" autocomplete="off" />
+                </div>
+                <div class="intro">
+                    <div><label for="Remark">&nbsp;备注&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Remark" name="Remark"></textarea>
+                    </div>
+                </div>
+                
+                <div class="long-text user" style="display:none;">
+                    <label for="SubmitUserName"><span class="star">*</span>&nbsp;上传人&nbsp;:</label>
+                    <input type="text" id="SubmitUserName" name="SubmitUserName"  value="@ViewBag.UserName" readonly="readonly" style="background-color:#EBEBE4"/>
+                    <input type="hidden" value="@ViewBag.UserID" id="SubmitUserId" name="SubmitUserId" />
+                    <i class="pic iconfont ee" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text unit" style="display:none;">
+                    <label for="SubmitCompanyName"><span class="star">*</span>&nbsp;上传单位&nbsp;:</label>
+                    <input type="text" id="SubmitCompanyName" name="SubmitCompanyName"  value="@ViewBag.CompanyName" readonly="readonly" style="background-color:#EBEBE4"/>
+                    <input type="hidden" value="@ViewBag.CompanyId" id="SubmitCompanyId" name="SubmitCompanyId" />
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="short-text" style="display:none;">
+                    <label for="SubmitDate"><span class="star">*</span>&nbsp;上传时间&nbsp;:</label>
+                    <input type="text" id="SubmitDate" name="SubmitDate"  value="" style="background-color:#EBEBE4" readonly>
+                    <i  class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;工艺安装图&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile1" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile1">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;建筑图&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile2" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile2">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;钢结构&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile3" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile3">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;结构&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile4" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile4">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;电气安装图&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile5" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile5">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;装饰及包装图&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile6" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile6">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;暖通及排水图&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile7" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile7">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star"></span>&nbsp;自动化控制&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile8" style="position: relative; z-index: 1;" value="上传附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+                <div style="width:100%;" id="fileListFile8">
+                    <ul class="fileShow"></ul>
+                </div>
+
+                <div class="button-group btn-center">
+                    <button type="button" class="saveBut" data-state="@(ApprovalState.WaitAppr.GetValue().ToString())">提交</button>
+                    <button type="button" class="saveBut" data-state="@(ApprovalState.Enabled.GetValue().ToString())">保存</button>
+                    <input type="hidden" name="State" id="State" />
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            //当前时间
+            var time = new Date();
+            var Year = time.getFullYear()
+            var Month = time.getMonth() + 1
+            Month = Month < 10 ? "0" + Month : Month
+            var day = time.getDate()
+            day = day < 10 ? "0" + day : day
+            time = Year + "-" + Month + "-" + day;
+            $("#SubmitDate").val(time);
+
+            var VersionName = $('#VersionNo option:selected').text();
+            $("#VersionName").val(VersionName);
+
+            $("#VersionNo").change(function () {
+                var VersionName = $('#VersionNo option:selected').text();
+                $("#VersionName").val(VersionName);
+            });
+
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    //Name: {
+                    //    required: true,
+                    //    maxlength: 100
+                    //},
+                    //Desciption: {
+                    //    required: true,
+                    //    maxlength: 254
+                    //},
+                    VersionNo: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空",
+                        maxlength: "项目名称不能大于254个字符串"
+                    },
+                    //Name: {
+                    //    required: "图纸名称不能为空",
+                    //    maxlength: "图纸名称不能大于100个字符串"
+                    //},
+                    //Desciption: {
+                    //    required: "描述不能为空",
+                    //    maxlength: "描述不能大于254个字符串"
+                    //},
+                }
+            });
+        });
+
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+            var fileDataArray = [];
+            //1工艺安装图
+            var uploader = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile1',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile1 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "1";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader.init();
+            //2建筑图
+            var uploader2 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile2',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile2 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "2";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader2.init();
+            //3结构钢
+            var uploader3 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile3',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile3 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "3";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader3.init();
+            //4结构
+            var uploader4 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile4',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile4 .fileShow').append(odiv);
+                            uploader.start();
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "4";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader4.init();
+            //5电气安装图
+            var uploader5 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile5',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile5 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "5";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader5.init();
+            //6装饰及包装图
+            var uploader6 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile6',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile6 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "6";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader6.init();
+            //7暖通及给排水图
+            var uploader7 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile7',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile7 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "7";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader7.init();
+            //8自动化控制
+            var uploader8 = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: "/Upload/UploadHB", // 服务端上传路径
+                max_file_size: "500mb", // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnUploadFile8',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//是否可以在文件浏览对话框中选择多个文件
+                filters: {
+                    mime_types: [
+                        { title: "Doc files", extensions: "*" },
+                    ],
+                    max_file_size: "500mb", //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                init: {
+                    PostInit: function () { },
+                    FilesAdded: function (uploader, files) {
+                        if (files) {
+                            var item = files[files.length - 1];
+                            var imgUrl = getFileImg(item.name);
+                            var odiv = '<li id="' + item.id + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;"></div>';
+                            odiv += '</li>';
+                            $('#fileListFile8 .fileShow').append(odiv);
+                            uploader.start();
+                            console.log(item);
+                        }
+                    },
+                    UploadProgress: function (uploader, file) {
+                        $("#" + file.id + " div:eq(1)").html(file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        console.log(responseObject.response);
+                        var data = JSON.parse(responseObject.response);
+                        data.forEach(function (item, index, arr) {
+                            var obj = {};
+                            obj.FileGuid = file.id;
+                            obj.Name = item.Name;
+                            obj.Size = item.Size;
+                            obj.GuidId = item.GuidId;
+                            obj.ImageType = item.ImageType;
+                            obj.Group = item.ResponseObject.FDFS_GROUP;
+                            obj.Url = item.ResponseObject.FDFS_NAME;
+                            obj.TableColumn = "8";
+                            fileDataArray.push(obj);
+
+                            if (item.ImageType == null) {
+                                $("#" + file.id + " div:eq(1)").html(item.Size);
+                                odiv = '<span style="margin-left:20px;">' + item.UploadName + '</span>';
+                                odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                                odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + file.id + '">删除</span>'
+                                $("#" + file.id).append(odiv);
+                            }
+                        })
+                        fileDataJson = JSON.stringify(fileDataArray);
+                        $("#fileDataJsonFile").val(fileDataJson);
+                        uploader.removeFile(file);
+                    },
+                    Error: function (up, err) {
+                        console.log("错误：" + err.code + ": " + err.message);
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }
+            });
+            uploader8.init();
+
+            //删除附件
+            $("#fileListFile,#fileListFile2,#fileListFile3,#fileListFile4,#fileListFile5,#fileListFile6,#fileListFile7,#fileListFile8").on("click", ".fileDel", function () {
+                $(this).parents("li").remove();
+                var toremove = '';
+                var id = $(this).data("val");
+                //----删除初始文件对应的值
+                fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                    return item.FileGuid != id
+                })
+                fileDataJsonFile = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            });
+
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    //if ($(".fileShow li").length == 0) {
+                    //    layer.alert("请先上传附件", { icon: 2 });
+                    //    return false;
+                    //}
+                    var state = $(this).data("state");
+                    $("#State").val(state);
+                    var search = $("form").serialize();
+                    $.post("Add", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Draw/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+            });
+            
+            //在建项目
+            $(".ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        console.log(obj)
+                        if (obj.flag) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            $.post("GetListByProjectId?projectId=" + obj.data[0].Id, function (data) {
+                                if (data == 1) {
+                                    $("#VersionNo").find("option[value='FirstVersion']").remove();
+                                    var VersionName = $('#VersionNo option:selected').text();
+                                    $("#VersionName").val(VersionName);
+                                } else if (data == 2) {
+                                    $("#VersionNo").empty();
+                                    layer.alert("已存在竣工版图纸，不能再上传！");
+                                }
+                                parent.layer.close(index);//关闭窗口
+                            });
+                        } else {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+        });
+    </script>
+</body>

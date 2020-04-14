@@ -1,0 +1,225 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model List<Epm_Material>
+@{
+    ViewBag.Title = "工器具机械验收列表";
+}
+<style>
+    #recpmpany {
+        padding-left: 28px;
+    }
+
+    #lableStar {
+        padding-left: 13px;
+    }
+
+    .content > div:nth-child(5) label {
+        margin-left: 15px;
+    }
+
+    .content > div:nth-child(6) label {
+        margin-left: 40px;
+    }
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div><label>项目名称 : </label><input type="text" id="projectName" name="projectName" value="@ViewBag.projectName" maxlength="100"></div>
+                <div><label id="recpmpany">验收单位 : </label><input type="text" id="companyName" name="companyName" value="@ViewBag.companyName" maxlength="100"></div>
+                <div><label>供应商 : </label><input type="text" id="supplier" name="supplier" value="@ViewBag.supplier" maxlength="100"></div>
+            </div>
+            <div>
+                <div>
+                    <label>&nbsp;状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态&nbsp; : </label>
+                    @Html.DropDownList("state", ViewBag.ApprovalState as SelectList, new { @class = "selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" class="add checkright" data-module="Material" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="Material" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th>项目名称</th>
+                    <th width="100">验收日期</th>
+                    <th>验收单位</th>
+                    <th>供应商</th>
+                    <th width="100">状态</th>
+                    <th width="110">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - 1) * 10;
+                    int Enabled = int.Parse(ConfirmState.Enabled.GetValue().ToString());
+                    int WaitAppr = int.Parse(ConfirmState.WaitConfirm.GetValue().ToString());
+                    int ApprSuccess = int.Parse(ConfirmState.Confirm.GetValue().ToString());
+                    int ApprFailure = int.Parse(ConfirmState.ConfirmFailure.GetValue().ToString());
+                    int Discarded = int.Parse(ConfirmState.Discarded.GetValue().ToString());
+                }
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@(item.CheckTime == null ? "" : Convert.ToDateTime(item.CheckTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.CheckCompanyName</td>
+                            <td>@item.SupplierName</td>
+                            <td>@(((ConfirmState)item.State).GetText())</td>
+                            @if (item.State == Enabled)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                    <a href="javascript:" class="Edit checkright" data-module="Material" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="Material" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            else if (item.State == WaitAppr)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (item.State == ApprSuccess)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (item.State == ApprFailure)
+                            {
+                                if (item.CreateUserId.ToString().Equals(@ViewBag.CurrentUserId.ToString()))
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                        <a href="javascript:" class="Edit checkright" data-module="Material" data-right="Modify">修改</a>
+                                        <a href="javascript:;" class="Discarded checkright" data-module="Material" data-right="Invalid">废弃</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                    </td>
+                                }
+                            }
+                            else if (item.State == Discarded)
+                            {
+                                if (item.CreateUserId.ToString().Equals(@ViewBag.CurrentUserId.ToString()))
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                        <a href="javascript:;" class="Delete checkright" data-module="Material" data-right="Delete">删除</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a href="javascript:;" class="Detail checkright" data-module="Material" data-right="Info">查看</a>
+                                    </td>
+                                }
+                            }
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+
+    </div>
+</div>
+<script>
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    //search = decodeURIComponent(search, true)
+                    window.location.href = "/Material/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //新增
+        $(".add").click(function () {
+            window.location.href = "/Material/Add"
+        })
+        //修改
+        $(".Edit").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/Material/Edit?id=" + id
+        })
+        //沟通
+        $(".Communite").click(function () {
+            var projectName = $(this).parents("tr").find("td").eq(1).text();
+            var projectId = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/Question/Add?businType=Equipment&projectName=" + projectName + "&projectId=" + projectId + "&BusinessId=" + $(this).parents("tr").find(".inputId").data("id");
+        });
+        //查看
+        $(".Detail").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/Material/Detail?id=" + id
+        })
+         //废弃
+        $(".Discarded").click(function () {
+            var that = this;
+            layer.confirm("是否废弃", { icon: 3 }, function () {
+                var id = $(that).parents("tr").find(".inputId").data("id");
+                $.post("/Material/Discard", { id}, function(result) {
+                    if(result.Flag) {
+                        layer.msg("操作成功", { icon: 1 })
+                        window.location.reload();
+                        return false
+                    }
+                    layer.alert(result.Message, { icon: 2 })
+                })
+            })
+        })
+        //删除
+        $(".Delete").click(function () {
+            var that = this;
+            layer.confirm("是否删除", { icon: 3 }, function () {
+                var id = $(that).parents("tr").find(".inputId").data("id");
+                $.post("/Material/Delete", { id}, function(result) {
+                    if(result.Flag) {
+                        layer.msg("操作成功", {icon: 1})
+                        window.location.reload();
+                        return false
+                    }
+                    layer.alert(result.Message, { icon: 2 })
+                })
+            })
+        })
+
+
+    })
+</script>

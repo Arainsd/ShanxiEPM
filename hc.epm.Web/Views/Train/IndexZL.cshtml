@@ -1,0 +1,221 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model List<TrainView>
+@{
+    ViewBag.Title = "安全培训列表";
+}
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <div>
+                    <label>项目名称 : </label>
+                    <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName">
+                    <input type="hidden" name="ProjectId" id="ProjectId">
+                </div>
+                <div><label>培训标题 : </label> <input type="text" name="name" id="Title" value="@ViewBag.name" maxlength="50"></div>
+                <div>
+                    <label>培训状态 : </label>
+                    @Html.DropDownList("state", ViewBag.State as SelectList)
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label>开始时间 : </label> <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime' })" value="@ViewBag.startTime">
+                    <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div>
+                    <label id="timeLabel">结束时间 : </label> <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime' })" value="@ViewBag.endTime">
+                    <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div><label>培训单位 : </label> <input type="text" name="TrainCompanyName" id="TrainCompanyName" value="@ViewBag.TrainCompanyName"></div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add" class="" data-module="QualityTrain" data-right="Add">新 增</button>
+                <button type="submit" class="" data-module="QualityTrain" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="80">项目名称</th>
+                    <th width="100">培训标题</th>
+                    <th width="100">培训单位</th>
+                    <th width="90">开始时间</th>
+                    <th width="90">结束时间</th>
+                    <th width="50">状态</th>
+                    <th width="110">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName<input type="hidden" value="@item.ProjectId" /></td>
+                            <td>@item.Title</td>
+                            <td>@item.TrainCompanyName</td>
+                            <td>@(item.StartTime == null ? "" : Convert.ToDateTime(item.StartTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.EndTime == null ? "" : Convert.ToDateTime(item.EndTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(((ConfirmState)item.State).GetText())</td>
+                            @if (@item.State == int.Parse(ConfirmState.Enabled.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="QualityTrain" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Edit checkright" data-module="QualityTrain" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="QualityTrain" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ConfirmState.WaitConfirm.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="QualityTrain" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="exchange">沟通</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ConfirmState.Confirm.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="QualityTrain" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="exchange">沟通</a>
+                                </td>
+
+                            }
+                            else if (@item.State == int.Parse(ConfirmState.ConfirmFailure.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="QualityTrain" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Edit checkright" data-module="QualityTrain" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Discard checkright" data-module="QualityTrain" data-right="Invalid">废弃</a>
+                                    <a href="javascript:;" class="exchange">沟通</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ConfirmState.Discarded.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="QualityTrain" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="QualityTrain" data-right="Delete">删除</a>
+                                    <a href="javascript:;" class="exchange">沟通</a>
+                                </td>
+                            }
+                            else {
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Train/IndexZL?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //新增
+    $("#add").on("click", function () {
+        window.location.href = "/Train/AddZL";
+    });
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Train/DetailZL?id=" + id;
+    });
+    //修改
+    $(".Edit").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Train/EditZL?id=" + id;
+    });
+    //删除
+    $(".Delete").on("click", function () {
+        var id = "";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                $.post("Delete", { id: id }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("删除成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        } else {
+            parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+        }
+    });
+    //废弃
+    $(".Discard").click(function () {
+        var id = "";
+        var state = "Discarded";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                $.post("UpdateState", { id: id, state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        }
+    });
+
+    //沟通
+    $('tbody').on('click', '.exchange', function () {
+        var projectName = $(this).parents("tr").find("td").eq(2).text();
+        var projectId = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Question/Add?businType=QualityTrain&projectName=" + projectName + "&projectId=" + projectId + "&BusinessId=" + $(this).parents("tr").find($(".inputId")).data("id");
+    });
+</script>
+

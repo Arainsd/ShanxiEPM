@@ -1,0 +1,834 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model hc.epm.ViewModel.TzStartTenderingAndSupplyView
+
+@{
+    ViewBag.Title = "StartApplyDetail";
+}
+
+<style>
+    .file-wrap {
+        height: 35px;
+        width: 300px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .timer_p {
+        position: relative;
+    }
+
+    .timer_c {
+        position: absolute;
+        bottom: 16px;
+        left: 136px;
+    }
+        #start,#management {
+        display: inline-block;
+        padding: 6px 16px;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        color:#00ccff;
+        border-color:#00ccff;
+        background-color:#fff;
+        border-bottom:1px solid #00ccff;
+
+    }
+    .topBox {
+        border-bottom:2px solid #00ccff;
+    }
+    #start {
+        border-right:0;
+        margin-right:0;
+        background-color:#00ccff;
+        color:#fff;
+    }
+    #management {
+        border-left:0;
+        margin-left:-3px;
+        border-right-color :#00ccff;
+    }
+    #content {
+        margin-bottom:2px;
+       
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<div class="contentData" id="content">
+    <div class="topBox">
+        <button id="start" class="col-lg-pull-3">开工申请信息</button>
+        <button id="management">工期管理及外部手续</button>
+    </div>
+</div>
+<div class="contentData"  id="contentOne">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>申请人信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ApplyTitle</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.ApplyUserName</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        @*<td class="td-div">
+                            <div>@(Convert.ToDateTime(Model.TzProjectStartApply.StartApplyTime).ToString("yyyy-MM-dd"))</div>
+                        </td>*@
+                        <td class="td-div">
+                            @if (Model.TzProjectStartApply.StartApplyTime == null)
+                            {
+                                <div></div>
+                            }
+                            @if (Model.TzProjectStartApply.StartApplyTime != null)
+                            {
+                                <div>@(Convert.ToDateTime(Model.TzProjectStartApply.StartApplyTime).ToString("yyyy-MM-dd"))</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ApplyDepartment</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.ApplyTel</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ProjectName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+
+                            <span class="font-black">设计规模或能力</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.DesignScale</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目建设书批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.BuildNumber</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">估算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.InvestmentEstimateAmount</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">可研报告批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.FeasibilityReport</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或初步设计批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.ReplyNumber</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">批复投资或概算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.ReplyInvestmentAmount</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">资金来源</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.FundsSource</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">当前计划投资情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.CurrentPlanned</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            @if (Model.TzProjectStartApply.PlanStartTime == null || Model.TzProjectStartApply.PlanEndTime == null)
+                            {
+                                <div></div>
+                            }
+                            @if (Model.TzProjectStartApply.PlanStartTime != null || Model.TzProjectStartApply.PlanEndTime != null)
+                            {
+                                <div>@(Convert.ToDateTime(Model.TzProjectStartApply.PlanStartTime).ToString("yyyy-MM-dd"))~@(Convert.ToDateTime(Model.TzProjectStartApply.PlanEndTime).ToString("yyyy-MM-dd"))</div>
+                            }
+                            
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期（天）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.BuildCycle</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程项目概况及主要工程内容和主要工程量</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ProjectSummary</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构及人员到位情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ProjectManagement</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设总体部署（或施工组织设计）编制情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.BuildDeploy</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">设计单位及图纸落实情况（主要设计单位、施工图交付计划情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.DesignUnits</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.ConstructionName</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">项目经理</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.ProjectManager</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（施工）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ConstructionScore</div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位落实及施工队伍、机具进场情况（主要施工单位、合同签订情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ConstructionSituation</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.SupervisionUnit</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">监理工程师</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.SupervisionEngineer</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（监理）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.SupervisionScore</div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位、质量监督部门落实情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.SupervisionSituation</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工前期准备情况（包括征地、拆迁、四通一平等）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.ConstructionReady</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">主要设备、材料订货、到货情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.MainEquipment</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">环境影响、劳动安全卫生、消防等审批手续办理情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.Environment</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">@*<i class="color_red_x">*</i>*@摄像头序列号</span>
+                        </td>
+                        <td class="td-div">
+                            <div >@Model.TzProjectStartApply.CameraSerialNumber</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">@*<i class="color_red_x">*</i>*@验证码</span>
+                        </td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectStartApply.VerificationCode</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">@*<i class="color_red_x">*</i>*@URL地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.UrlAddress</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构（项目经理部或油库项目组）设立的文件、机构组成和职责分工各一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMGLJGWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "XMGLJGWJ")
+                                                {
+                                                    <li>
+                                                        <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:blue;">@item.Name</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或项目初步设计批复文件复印件一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件2-->
+                            <div class="">
+
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LXPFWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "LXPFWJ")
+                                                {
+                                                    <li>
+                                                        <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:blue;">@item.Name</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">经审批的施工组织设计或工程建设总体部署一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件3-->
+                            <div class="">
+
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SGSJWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "SGSJWJ")
+                                                {
+                                                    <li>
+                                                        <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:blue;">@item.Name</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工进场人员名单及《安全教育合格证》（复印件）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件4-->
+                            <div class="">
+
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="AQJYZWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "AQJYZWJ")
+                                                {
+                                                    <li>
+                                                        <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:blue;">@item.Name</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">分公司与供应厂商确定的主要设备材料交付时间表一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件5-->
+                            <div class="">
+
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GYSWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "GYSWJ")
+                                                {
+                                                    <li>
+                                                        <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:blue;">@item.Name</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件6-->
+                            <div class="">
+
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="HSEWJ">
+                                        @if (Model.TzProjectStartApply.TzAttachs != null && Model.TzProjectStartApply.TzAttachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.TzProjectStartApply.TzAttachs)
+                                            {
+                                                if (item.TypeNo == "HSEWJ")
+                                                {
+                                                    <li>
+                                                        <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:blue;">@item.Name</a>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程形象进度计划表附于此页</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                           <div>@Html.Raw(Model.TzProjectStartApply.ProjectPlan)</div>
+                        </td>
+                    </tr>
+                </tbody> 
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>下一步信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>@Model.TzProjectStartApply.LeadershipName</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+
+    </form>
+</div>
+
+<div class="contentData" id="contentTwo" style="display:none">
+    <form class="form-horizontal" id="mainForm1">
+        <div class="module-div">
+            <h4>工期管理</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black"> 实际停业时间：</span>
+                        </td>
+                
+                        <td class="td-div">
+
+                                @if (Model.timeAndCrossings != null)
+                                {
+                              <div>@Model.timeAndCrossings.ShutdownTime.ToString("yyyy-MM-dd")</div>
+                                }
+                        </td>
+                
+                        
+                        <td class="table_title">
+                            <span class="font-black">计划开工时间：</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.timeAndCrossings != null)
+                            {
+                            <div>@Model.timeAndCrossings.PlanWorkStartTime.ToString("yyyy-MM-dd")</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划完工时间：</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.timeAndCrossings != null)
+                            {
+                            <div>@Model.timeAndCrossings.PlanWorkEndTime.ToString("yyyy-MM-dd")</div>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">工期（天）：</span>
+                        </td>
+                        <td class="td-div">
+                            @{
+                                if (Model.timeAndCrossings != null)
+                                {
+                            <div>@Model.timeAndCrossings.TimeLimit</div>
+                                }
+                            }
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">计划开业时间：</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.timeAndCrossings != null)
+                            {
+                            <div>@Model.timeAndCrossings.PlanOpeningTime.ToString("yyyy-MM-dd")</div>
+                            }
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划停业时长（天）：</span>
+                        </td>
+                        <td class="td-div">
+                            @if (Model.timeAndCrossings != null)
+                            {
+                                <div>
+                                    @Model.timeAndCrossings.PlanShutdowLimit  天
+                            </div>
+                            }
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @if (Model.timeAndCrossings != null)
+                    {
+                        if (Model.timeAndCrossings.TzAttachs != null && Model.timeAndCrossings.TzAttachs.Count() > 0)
+                        {
+                            foreach (var item in Model.timeAndCrossings.TzAttachs)
+                            {
+                                if (item.TypeNo != "SHOUXU")
+                                { 
+
+                            <tr id="${obj.GuidId}">
+                                <td><span class="font-black">@item.Sort</span></td>
+                                <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                <td><span class="font-black">@item.TypeName</span></td>
+                                <td class="td-div" style="text-align:center">
+                                    <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:#337ab7;">下载</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                </td>
+                            </tr>
+                                }
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>外部手续</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title"><i class="color_red">*</i>  外部手续:</td>
+                        <td class="td-div" colspan="5">
+                            @if (Model.timeAndCrossings.IsCrossings == true)
+                            {
+                                <div>办理</div>
+                            }
+                            @if (Model.timeAndCrossings.IsCrossings == false)
+                            {
+                                <div>无</div>
+                            }
+                        </td>
+                    </tr>
+                @if (Model.timeAndCrossings.IsCrossings == true)
+                {
+                    <tr>
+                        <td colspan="4">
+                            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                                <tbody class="fileShow-append" id="JHMX">
+                                    <tr class="headtr">
+                                        <th class="table_title" style="width: 219px;">序号</th>
+                                        <th class="td-div">附件名称</th>
+                                        <th class="td-div">操作</th>
+
+                                    </tr>
+                                    @{
+                                        int index = 0;
+                                    }
+                                    @if (Model.timeAndCrossings != null)
+                                    {
+                                        if (Model.timeAndCrossings.TzAttachs != null && Model.timeAndCrossings.TzAttachs.Count() > 0)
+                                        {
+
+
+                                            foreach (var item in Model.timeAndCrossings.TzAttachs)
+                                            {
+                                                index++;
+
+                                                if (item.TypeNo == "SHOUXU")
+                                                {
+                                                    <tr>
+                                                        <td>@item.Sort</td>
+                                                        <td>@item.Name</td>
+                                                        <td><a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:#337ab7;">下载</a></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                  }
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="closes" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+
+        <input type="file" id="loadFile1" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile1" />
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+
+    window.onload = function () {
+        //菜单切换
+        $("#start").click(function () {
+            $("#contentOne").show();
+            $("#contentTwo").hide();
+            $(this).css({ "background-color": "#00ccff", "color": "#fff" })
+            $("#management").css({ "background-color": "#fff", "color": "#00ccff" })
+        });
+        $("#management").click(function () {
+            $("#contentTwo").show();
+            $("#contentOne").hide();
+            $(this).css({ "background-color": "#00ccff", "color": "#fff" })
+            $("#start").css({ "background-color": "#fff", "color": "#00ccff" })
+        });
+
+        //外部
+        $('#btnUploadFile').click(function () {
+            //$("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+    }
+    $("#close").click(function () {
+        window.location.href = "/TzProjectStartApply/Index"
+    });
+    $("#closes").click(function () {
+        window.location.href = "/TzProjectStartApply/Index"
+    });
+    //下载附件
+    $("body").on("click", ".downloadFile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("name");
+        window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+    });
+</script>

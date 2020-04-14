@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <input type="button" name="save1" id="save1" value="测试">
+</body>
+</html>
+<script src="jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    $('#save1').click(function () {
+        debugger;
+        var data = {
+            Id: '1159408897547702272',
+            StepId: '1',
+            StepName: '1111',
+            AuditUserCode: '1910086',
+            AuditName: '董青芳',
+            AuditState: '1',
+            AuditTime: '2019-08-09',
+            AuditRemark: '备注',
+            AuditSign: '签章(备用)',
+            NextAuditUserCode: '1910742',
+            NextAuditName: '程金堂',
+            NextStepId: '2',
+            NextStepName: '22222',
+            ApprovalState: '2',
+        }
+
+        $.post('http://localhost:7027/Api/Receive/GetAuditRecord', data, function (result) {
+            debugger;
+            if (result.Data==false) {
+                alert("失败");
+                return;
+            } else {
+                alert("成功");
+                return;
+            }
+        })
+    })
+</script>

@@ -1,0 +1,278 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_DangerousWork>
+@{
+    ViewBag.Title = "危险作业列表";
+}
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+     table thead > tr > th:nth-child(n+2) {
+        min-width: 90px;
+    }
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .pic {
+        position: absolute;
+        top: 9px;
+        left: 236px;
+    }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+
+<div class="contentData">
+
+    <div class="form-query">
+        <form id="mainForm" method="get">
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input type="text" class="form-control" name="projectName" id="projectName" value="@ViewBag.projectName" autocomplete="off" maxlength="100">
+                                </div>
+                            </div>
+                        @*<div>
+                    <label>作业状态 : </label>
+                    @Html.DropDownList("state", null, new { @class = "form-control selectpicker  show-tick" })
+                </div>*@
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-sm-3">作业类型 : </label>
+                                <div class="col-lg-8 col-sm-8 control-label-div">
+                                    @Html.DropDownList("WorkType", null, new { @class = "selectpicker  show-tick form-control" })
+                                    </div>
+                                </div>
+                        </div>
+                    <div class="col-lg-4 col-sm-4">
+                        @*<div>
+                <label>作业名称 : </label><input type="text" id="workName" name="workName" value="@ViewBag.workName" maxlength="100">
+            </div>*@
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">提单时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                    <input type="text" class="form-control" id="submitTime" name="submitTime" onClick="WdatePicker({ el: 'submitTime' })" autocomplete="off" value="@ViewBag.submitTime">
+                                    <i onClick="WdatePicker({ el: 'submitTime' })" class="iconfont pic" >&#xe7e2;</i>
+                                </div>
+                              </div>
+                        </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label id="timeLabel" class="control-label col-lg-3 col-sm-3">施工时间 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                    <input type="text" class="form-control" id="time" name="time" onClick="WdatePicker({ el: 'time' })" autocomplete="off" value="@ViewBag.time">
+                                    <i onClick="WdatePicker({ el: 'time' })" class="iconfont pic">&#xe7e2;</i>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                </div>
+                    <div class="form-sub" style="display:flow-root;margin-bottom: 25px;">
+                        <button type="submit" class="checkright" data-module="DangerousWork" data-right="Browse" style="margin-left:699px;">查 询</button>
+                        <button type="button" id="btnExport" class="checkright" data-module="DangerousWork" data-right="Add">导出</button>
+                        <button type="button" class="add checkright" data-module="DangerousWork" data-right="add">新 增</button>
+                        
+                    </div>
+                    
+        </form>
+    </div>
+
+    <div>
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th width="40">序号</th>
+                    <th>项目名称</th>
+                    @*<th>作业名称</th>*@
+                    <th>作业时间</th>
+                    @*<th>结束时间</th>*@
+                    <th>作业分类</th>
+                    @*<th>作业区域</th>*@
+                    <th>作业内容</th>
+                    @*<th>防护设施</th>*@
+                    <th>状态</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            @*<td>@item.TaskName</td>*@
+                            <td>@(item.StartTime == null ? "" : Convert.ToDateTime(item.StartTime).ToString("yyyy-MM-dd"))</td>
+                            @*<td>@(item.EndTime == null ? "" : Convert.ToDateTime(item.EndTime).ToString("yyyy-MM-dd"))</td>*@
+                            <td>@item.TaskTypeName</td>
+                            @*<td>@item.TaskArea</td>*@
+                            <td>@item.TaskContent</td>
+                            @*<td>@item.Protective</td>*@
+                            <td>@(((ApprovalState)item.State).GetText())</td>
+                            <td>
+                                @if (item.State == (int)ApprovalState.Enabled)
+                                {
+                                    <a href="javascript:;" class="Detail checkright" data-module="DangerousWork" data-right="Info">查看</a>
+                                    <a href="javascript:" class="Edit checkright" data-module="DangerousWork" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="DangerousWork" data-right="Delete">删除</a>
+                                }
+                                else if (item.State == (int)ApprovalState.ApprFailure)
+                                {
+                                    <a href="javascript:;" class="Detail checkright" data-module="DangerousWork" data-right="Info">查看</a>
+                                    <a href="javascript:" class="Edit checkright" data-module="DangerousWork" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Discard checkright" data-module="DangerousWork" data-right="Invalid">废弃</a>
+                                }
+                                else if (item.State == (int)ApprovalState.WaitAppr || item.State == (int)ApprovalState.WorkPartAppr || item.State == (int)ApprovalState.WorkFinish)
+                                {
+                                    <a href="javascript:;" class="Detail checkright" data-module="DangerousWork" data-right="Info">查看</a>
+                                }
+                                else if (item.State == (int)ApprovalState.Discarded)
+                                {
+                                    <a href="javascript:;" class="Detail checkright" data-module="DangerousWork" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="DangerousWork" data-right="Delete">删除</a>
+                                }
+                                else if (item.State == (int)ApprovalState.WorkPartAppr || item.State == (int)ApprovalState.ApprSuccess)
+                                {
+                                    <a href="javascript:;" class="Detail checkright" data-module="DangerousWork" data-right="Info">查看</a><br />
+                                    if (Convert.ToDateTime(item.StartTime).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+                                    {
+                                        <a href="javascript:;" class="Upload checkright" data-module="DangerousWork" data-right="UploadWork">上传作业实景</a>
+                                    }
+                                }
+                            </td>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            theme: '#6a6969',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    //search = decodeURIComponent(search, true)
+                    window.location.href = "/Work/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //新增
+        $(".add").click(function () {
+            location.href = "/Work/Add"
+        })
+        //查看
+        $(".Detail").on("click", function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/Work/Detail?type=1&id=" + id;
+        });
+        //上传作业实景
+        $(".Upload").on("click", function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/Work/Detail?type=2&id=" + id;
+        });
+        //修改
+        $(".Edit").on("click", function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/Work/Edit?id=" + id;
+        });
+        //废弃
+        $(".Discarded").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            layer.confirm("确认废弃？", { icon: 3 }, function () {
+                $.post("/Work/Discard?id=" + id, function (result) {
+                    if (result.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/Work/Index";
+                        });
+                    } else {
+                        layer.alert(result.Message, { icon: 2 });
+                    }
+                })
+            });
+        });
+        //删除
+        $(".Delete").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            layer.confirm("确认删除？", { icon: 3 }, function () {
+                $.post("/Work/Delete?id=" + id, function (result) {
+                    if (result.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/Work/Index";
+                        });
+                    } else {
+                        layer.alert(result.Message, { icon: 2 });
+                    }
+                })
+            });
+        });
+        $('#btnExport').click(function () {
+            var url = '@Html.Raw(Url.Action("OutputWorkToExcel"))';
+            $.exportToExcel(url, "危险作业列表");
+        });
+    });
+</script>

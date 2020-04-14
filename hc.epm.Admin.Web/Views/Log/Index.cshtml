@@ -1,0 +1,110 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model IEnumerable<Base_Log>
+@{
+    ViewBag.Title = "日志查询";
+}
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">模块名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="moduleName" placeholder="模块名称" autocomplete="off" class="layui-input" value="@ViewBag.moduleName" /></div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">操作名称 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="actionDesc" placeholder="操作名称" autocomplete="off" class="layui-input" value="@ViewBag.actionDesc" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="startTime" id="startTime" placeholder="开始时间" autocomplete="off" class="layui-input" value="@ViewBag.startTime" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间 : </label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="endTime" placeholder="结束时间" autocomplete="off" class="layui-input" value="@ViewBag.endTime" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'startTime\')}',dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+                    </div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+
+        </form>
+    </div>
+    <div class="main mt5">
+
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+
+                        <th width="10%">操作人ID</th>
+                        <th width="10%">操作人账户</th>
+                        <th width="10%">客户端IP</th>
+                        <th width="10%">服务器IP</th>
+                        <th width="10%">模块名称</th>
+
+                        <th width="10%">操作名称</th>
+                        <th>操作描述</th>
+
+                        <th width="15%">时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>@item.UserId</td>
+                                <td>@item.UserAcct</td>
+                                <td>@item.ClientIP</td>
+                                <td>@item.ServiceServerIP</td>
+                                <td>@item.ModuleName</td>
+                                <td>@item.ActionDesc</td>
+                                <td>@item.Contents</td>
+                                <td>@item.OperateTime</td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    layui.use(["laypage", "layer","form"], function () {
+        var laypage = layui.laypage, layer = layui.layer,form=layui.form;
+        laypage.render({
+            elem: 'page',
+            count: @ViewBag.Total,
+            curr:@ViewBag.pageIndex,
+            layout: ['prev', 'page', 'next', 'skip','count', ],
+            jump:function(obj,first){
+                if (!first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Log/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+</script>
+
+

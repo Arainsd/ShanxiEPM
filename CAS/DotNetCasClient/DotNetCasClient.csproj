@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>DotNetCasClient</RootNamespace>
+    <AssemblyName>DotNetCasClient</AssemblyName>
+    <TargetFrameworks>net45;net40;net35;net20</TargetFrameworks>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <ProjectGuid>{883A296E-C898-4D1F-9ED9-DE7569DEFB3D}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <DefineConstants>NET45</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
+    <DefineConstants>NET40</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net35'">
+    <DefineConstants>NET35</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net20'">
+    <DefineConstants>NET20</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net35' OR '$(TargetFramework)'=='net20'">
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45' OR '$(TargetFramework)'=='net40'">
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.5.0" />
+  </ItemGroup>
+</Project>

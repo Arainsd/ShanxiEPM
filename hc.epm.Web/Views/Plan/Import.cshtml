@@ -1,0 +1,255 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "导入";
+}
+<link href="/Resource/css/iconfont.css" rel="stylesheet" type="text/css" />
+<link href="/Resource/css/fileUpload.css" rel="stylesheet" type="text/css">
+@*<script type="text/javascript" src="~/Resource/scripts/jquery-1.10.2.js"></script>*@
+<script type="text/javascript" src="/Resource/scripts/fileUpload.js"></script>
+<body>
+    <div class="contentData">
+        <form id="mainForm" method="post" enctype="multipart/form-data">
+            <div class="tab">
+                <div class="long-text ProjectName">
+                    <label for="ProjectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" value="@ViewBag.ProjectName" name="ProjectName" id="ProjectName" readonly />
+                    <input type="hidden" value="@ViewBag.ProjectId" id="ProjectId" name="ProjectId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label><span class="star">*</span>&nbsp;模型上传&nbsp;:</label></div>
+                    <div style="width:100%;" id="fileListFile">
+                        <ul></ul>
+                        
+                    </div>
+                </div>
+                <div class="layui-block col-sm-5" style="margin-bottom:0px; float:none;">
+                    <div style="width:100%;margin:10px auto 0px 110px; display:none;" id="fileBarFile">
+                        <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%" style="width: 0%;"><span class="layui-progress-text">NaN%</span></div></div>
+                    </div>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="layui-block col-sm-5" style="margin:10px 110px 25px; width:100%; float:none;">
+                    <input type="file" class="file1" id="file1" name="file1" />
+                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;">只支持mpp格式</span>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;文件模板&nbsp;:</label>
+                    <div style="display:inline-block">
+                        <a href="javascript:;" style="color:blue" class="project" >project模板下载地址</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span style="color:darkgray" class="">excel模板下载地址</span>
+                    </div>
+
+                </div>
+                <div class="button-group btn-center">
+                    <button type="button" class="saveBut">保存</button>
+                    <button type="button" class="cancel">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true
+                    },
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空"
+                    },
+                }
+            })
+
+        })
+        layui.use(['layer', 'form', 'element'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery;
+            var fileDataArrayFile = [];
+            var fileDataJsonFile = [];
+            //附件上传
+            var uploaderFile = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: FileServerURL, // 服务端上传路径
+                max_file_size: MaxFileSize, // 文件上传最大限制。
+                max_file_count: 10, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnSelectFile',//触发上传元素
+                flash_swf_url: '/Resource/scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Resource/scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: true,//	是否可以在文件浏览对话框中选择多个文件
+                multipart_params: {//附加参数
+                    app: 'epm',
+                    crop: true
+                },
+                //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+                filters: {
+                    mime_types: [{ title: "Doc files", extensions: "xls,xlsx,mpp" }],
+                    max_file_size: MaxFileSize, //最大只能上传100mb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                rename: false, // 是否重命名文件
+
+                init: {
+                    PostInit: function () {
+                        $('#btnUploadFile').click(function () {
+                            if (uploaderFile.files.length == 0) {
+
+                                parent.layer.alert("请选择要上传的附件", { icon: 2 });
+                            } else {
+                                uploaderFile.start();
+                                return false;
+                            }
+                        });
+                    },
+                    FilesAdded: function (up, files) {
+                    },
+                    UploadProgress: function (up, file) {
+                        $("#fileBarFile").show();
+                        element.progress("fileProgress", file.percent + "%");
+                    },
+
+                    FileUploaded: function (uploaderFile, file, responseObject) {
+                        var data = JSON.parse(responseObject.response);
+                        if (data.file) {
+                            var imgurl = getFileImg(data.file[0].Extension);
+                            var odiv = '<li><a href="' + FileDownLoadURL + data.file[0].Guid + '" target="_blank">';
+                            odiv += '<img src="' + imgurl + '" style="width: 114px;height: 100px;cursor: pointer;" /></a><i class="iconfont del" style="cursor: pointer;" data-val=' + file.id + '>&#xe601;</i></li>';
+                            odiv += "</li>";
+                            $('#fileListFile ul').append(odiv);
+
+                            setTimeout(function () {
+                                $("#fileBarFile").hide();
+                                element.progress("fileProgress", "0%");
+                            }, 1500);
+
+                            var data = JSON.parse(responseObject.response);
+                            if (data.flag == true) {
+                                for (item in data.file) {
+                                    var imgurl = getFileImg(data.file[item].Extension)
+                                    fileDataArrayFile.push({
+                                        imgurl: imgurl
+                                    });
+                                }
+                            }
+
+                            parent.layer.msg("附件上传成功", { time: 1000, icon: 1 });
+                            uploaderFile.removeFile(file);
+
+                            var obj = {};
+                            obj.GuidId = file.id;
+                            obj.Name = data.file.Name;
+                            obj.Size = data.file.FileSize;
+                            obj.FileGuid = data.file.Guid;
+                            obj.TableColumn = "file";
+
+                            fileDataArrayFile.push(obj);
+                            fileDataJsonFile = JSON.stringify(fileDataArrayFile);
+                            $("#fileDataJsonFile").val(fileDataJsonFile);
+                        }
+                    },
+                    Error: function (up, err) {
+                        layer.alert("错误：" + err.code + ": " + err.message);
+                    }
+                }
+            });
+            uploaderFile.init();
+          
+            //数据提交
+            $(".saveBut").click(function () {
+                var fileObj = document.getElementById("file1").files[0]; // js 获取文件对象
+                if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                    layer.alert("请上传不为空的mpp文件", { icon: 2 });
+                    return;
+                }
+                var formFile = new FormData();
+                formFile.append("file", fileObj);
+                var projectname = $("#ProjectName").val();
+                var projectid = $("#ProjectId").val();
+                formFile.append("ProjectName", projectname);
+                formFile.append("ProjectId", projectid);
+                var data = formFile;
+                $.ajax({
+                    url: "ProjectImport",
+                    data: data,
+                    type: "Post",
+                    dataType: "json",
+                    cache: false,//上传文件无需缓存
+                    processData: false,//用于对data参数进行序列化处理 这里必须false
+                    contentType: false, //必须
+                    success: function (result) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Plan/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }
+                })
+            });
+            //在建项目
+            $("#ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj.flag) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //下载模板
+            $('.excel').on('click', function () {
+                try {
+                    var elemIF = document.createElement("iframe");
+                    elemIF.src = "/Resource/excel.doc";
+                    elemIF.style.display = "none";
+                    document.body.appendChild(elemIF);
+                } catch (e) {
+                    zzrw.alert("下载异常！");
+                };
+            });
+            //下载模板
+            $('.project').on('click', function () {
+                try {
+                    var elemIF = document.createElement("iframe");
+                    elemIF.src = "/Resource/mpp.mpp";
+                    elemIF.style.display = "none";
+                    document.body.appendChild(elemIF);
+                } catch (e) {
+                    zzrw.alert("下载异常！");
+                };
+            });
+            //取消
+            $('.cancel').click(function () {
+                history.go(-1)
+            })
+        });
+    </script>
+</body>

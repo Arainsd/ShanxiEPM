@@ -1,0 +1,148 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+
+@{
+    ViewBag.Title = "请选择物资清单";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+    .form-select > form > div div {
+        width:0;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>标题 : </label><input type="text" name="title" value="" placeholder="请输入标题">
+                
+            </div>
+            <div style="margin-right:10px; width:auto;">
+                <label>项目名称 : </label><input type="text" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+
+            </div>
+            <div style="margin-right:10px; width:auto;">
+                <label>地市公司 : </label><input type="text" name="name" value="@ViewBag.userName">
+
+            </div>
+            <div style="margin-right:10px; width:auto;">
+                <label>供应商名称 : </label><input type="text" name="supplierName" value="@ViewBag.supplierName" placeholder="请输入供应商名称">
+
+            </div>
+            <div class="form-sub">
+                <button type="submit" style="cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="60">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th>序号</th>
+                <th>标题</th>
+                <th>项目名称</th>
+                <th>分公司</th>
+                <th>供应商名称</th>
+                <th>申请时间</th>
+               
+            </tr>
+        </thead>
+        @*<tbody id="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.SId" data-name="@item.UserName" data-phone="@item.Phone" />
+                        </td>
+                        <td>@index</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Phone</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>*@
+    </table>
+</div>
+@section scripts
+    {
+    <script type="text/javascript">
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/TzSupplyMaterialApply/BatchExport?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize();
+                    }
+                }
+            });
+            //全选
+            $("#selectAll").bind("click", function () {
+                if ($(this).prop("checked")) {
+                    $("input[type='checkbox']").prop("checked", true);
+                } else {
+                    $("input[type='checkbox']").prop("checked", false);
+                }
+            });
+        });
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    Name: $(this).data('name') || '',
+                    Phone: $(this).data('phone') || ''
+                });
+            });
+
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择要导出的数据！';
+            }
+            return result;
+        }
+    </script>
+}

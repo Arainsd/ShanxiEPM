@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/Shared/_LayoutPersonInfo.cshtml";
+}
+
+<div class="update" style="margin-bottom:100px;">
+
+    <div class="c update-icon">
+        <div class="fl">
+            <img src="/Resource/images/update.png">
+        </div>
+        <div class="fl">
+            <span>修改密码</span><br />
+            <span>定期修改密码,有助于保护您的账户安全和个人隐私</span>
+        </div>
+    </div>
+    <div>
+        <label>原始密码&nbsp;&nbsp;:&nbsp;</label>
+        <input type="password" name="old" id="old">
+    </div>
+    <div>
+        <label>新密码&nbsp;&nbsp;:&nbsp;</label>
+        <input type="password" name="pwd" id="pwd">
+    </div>
+    <div>
+        <label> 确认新密码&nbsp;&nbsp;:&nbsp;</label>
+        <input type="password" name="cpwd" id="cpwd" />
+    </div>
+    <div>
+        <button id="btnSubmit" type="button" onclick="doChange()">确认修改</button>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        layui.use(['layer'],
+            function() {
+            });
+        function doChange() {
+            var data = {
+                oldPwd: $('#old').val() || '',
+                pwd: $('#pwd').val() || '',
+                cpwd: $('#cpwd').val() || ''
+            }
+
+            if (data.oldPwd === '') {
+                layui.layer.alert('请填写旧密码！', { icon: 2 });
+                return;
+            }
+
+            if (data.pwd === '') {
+                layer.alert('请填写新密码！', { icon: 2 });
+                return;
+            }
+
+            if (data.pwd.length < 6 || data.pwd.length > 20) {
+                layer.alert('密码长度在6~20之间！', { icon: 2 });
+                return;
+            }
+
+            if (data.cpwd !== data.pwd) {
+                layer.alert('两次密码输入不一致！', { icon: 2 });
+                return;
+            }
+
+            $.post('@Html.Raw(Url.Action("UpdatePwd", "Home"))',
+                data,
+                function(result) {
+                    if (result.Flag === true) {
+                        layer.alert("密码修改成功！", {icon:1}, function() {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(result.Message, { icon: 2 });
+                    }
+                });
+        }
+    </script>
+}

@@ -1,0 +1,199 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@model List<Epm_Visa>
+@{
+    ViewBag.Title = "签证列表";
+}
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <div>
+                    <label>项目名称 : </label>
+                    <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName" maxlength="100">
+                    <input type="hidden" name="ProjectId" id="ProjectId">
+                </div>
+                <div><label>签证标题 : </label><input type="text" name="name" id="name" value="@ViewBag.name" maxlength="100"></div>
+                <div>
+                    <label>签证状态 : </label>
+                    @Html.DropDownList("state", ViewBag.ApprovalState as SelectList)
+                </div>
+                <div>
+                    <label>签证类型 : </label>
+                    <input type="text" name="VisaTypeName" id="VisaTypeName" value="@ViewBag.visaTypeName" maxlength="100">
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" id="add" class="checkright" data-module="Visa" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="Visa" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="220">项目</th>
+                    <th width="220">标题</th>
+                    <th width="220">签证类型</th>
+                    <th>内容</th>
+                    <th width="70">状态</th>
+                    <th width="110">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.VisaTitle</td>
+                            <td>@item.VisaTypeName</td>
+                            <td>@item.VisaContent</td>
+                            <td class="state">@(((ApprovalState)item.State).GetText())</td>
+                            @if (@item.State == int.Parse(ApprovalState.Enabled.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Visa" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Edit checkright" data-module="Visa" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="Visa" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.WaitAppr.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Visa" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.ApprSuccess.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Visa" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.ApprFailure.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Visa" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Edit checkright" data-module="Visa" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Discard checkright" data-module="Visa" data-right="Invalid">废弃</a>
+                                </td>
+                            }
+                            else if (@item.State == int.Parse(ApprovalState.Discarded.GetValue().ToString()))
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="Visa" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="Visa" data-right="Delete">删除</a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="11" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Visa/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //新增
+    $("#add").on("click", function () {
+        window.location.href = "/Visa/Add";
+    });
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Visa/Detail?id=" + id;
+    });
+    //修改
+    $(".Edit").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/Visa/Edit?id=" + id;
+    });
+    //删除
+    $(".Delete").on("click", function () {
+        var id = "";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                $.post("Delete", { id: id }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("删除成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        } else {
+            parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+        }
+    });
+    //废弃
+    $(".Discard").click(function () {
+        var id = "";
+        var state = "Discarded";
+        id = $(this).parents("tr").find($(".inputId")).data("id");
+        if (id != "") {
+            parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                $.post("UpdateState", { id: id, state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                        location.reload();
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            });
+        }
+    });
+</script>
+

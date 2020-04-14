@@ -1,0 +1,136 @@
+﻿@using hc.epm.ViewModel
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model IEnumerable<ContractView>
+@{
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+
+    .form-select > form > div select {
+        padding-left: 5px;
+    }
+</style>
+<div class="form-select c">
+    <form id="searchForm" method="get">
+        <div>
+            <div style="margin-right:10px; width:auto;">
+                <label>合同: </label><input type="text" id="name" name="name" value="@ViewBag.name" maxlength="100">
+                <input type="hidden" name="selectType" value="@ViewBag.SelectType" />
+                <input type="hidden" name="contractType" value="@ViewBag.contractType" />
+                <input type="hidden" name="SecondPartyId" value="@ViewBag.SecondPartyId" />
+            </div>
+            <div class="form-sub" style="width:auto;">
+                <button type="submit" style="cursor:pointer;">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist">
+        <thead>
+            <tr>
+                <th width="60">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="60">序号</th>
+                <th>合同</th>
+                <th>编号</th>
+                <th>类型</th>
+                <th>附件</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.Id" data-name="@item.Name" data-filename="@item.FileNameStr" data-contracttype="@item.ContractType" />
+                        </td>
+                        <td class="table-center">@index</td>
+                        <td>@item.Name</td>
+                        <td>@item.Code</td>
+                        <td>@(((ContractType)item.ContractType).GetText())</td>
+                        <td>
+                            @if (item.FileName.Count() > 0)
+                            {
+                                foreach (var temp in item.FileName)
+                                {
+                                    <span>@temp</span><br />
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">暂无数据</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        layui.use(['layer', 'element', 'laypage', 'form', 'table'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, table = layui.table, laypage = layui.laypage;
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                theme: '#6a6969',
+                jump: function (obj, first) {
+                    if (!first) {
+                        window.location.href = "/Comm/SelectContract?pageIndex=" + obj.curr + "&" + $('#searchForm').serialize();
+                    }
+                }
+            });
+        });
+
+        function getSelectData() {
+            var result = {
+                flag: true,
+                msg: '',
+                data: []
+            };
+            $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+                result.data.push({
+                    Id: $(this).val() || '',
+                    Name: $(this).data('name') || '',
+                    FileName: $(this).data('filename') || '',
+                    Contracttype: $(this).data('contracttype') || ''
+                });
+            });
+            if (result.data.length === 0) {
+                result.flag = false;
+                result.msg = '请选择！'+ @(ViewBag.contractType == 1 ? "合同" : "委托书/订单");
+            }
+            return result;
+        }
+    </script>
+}

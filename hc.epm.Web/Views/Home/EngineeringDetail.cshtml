@@ -1,0 +1,292 @@
+﻿
+@{
+    ViewBag.Title = "工程动态详情";
+}
+<style>
+    .centre {
+        margin: 0 360px;
+    }
+
+    .crumbs {
+        line-height: 70px;
+        background-color: #FBFBFB;
+        color: #656565;
+    }
+
+        .crumbs .home {
+            color: #1493ec;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .crumbs .fl {
+            margin-right: 8px;
+        }
+
+    .content {
+        width: 1200px;
+    }
+
+    .fa {
+        height: 16px;
+        width: 26px;
+    }
+
+    .right {
+        width: 940px;
+        background-color: #FFF;
+    }
+
+    .hender {
+        margin: 0 44px 0 26px;
+        padding-top: 46px;
+        font-size: 10px;
+        text-align: center;
+        height: 148px;
+        border-bottom: 1px solid #ccc;
+    }
+
+        .hender .company {
+            line-height: 34px;
+        }
+
+        .hender .topic {
+            font-size: 22px;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .hender p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .hender .amount {
+            margin: 0 25px;
+        }
+
+    .home img {
+        width: 246px;
+        margin-top: 24px;
+    }
+
+    .subject {
+        margin: 38px 0 50px 70px;
+        height: 148px;
+    }
+
+        .subject .centerLeft, .subject .centerRight {
+            line-height: 35px;
+            width: 400px;
+            float: left;
+            height: 145px;
+        }
+
+        .subject .centerRight {
+            border-left: 1px solid #E6E6E6;
+            padding-left: 53px;
+        }
+
+        .subject span {
+            display: block;
+        }
+
+            .subject span i {
+                color: #1393EE;
+            }
+
+    .brief {
+        padding: 14px 0 0 33px;
+        height: 50px;
+        background-color: #EEE;
+    }
+
+    .briefName {
+        color: #1393EE;
+        line-height: 22px;
+        padding-left: 18px;
+        font-size: 18px;
+        border-left: 3px solid #1393EE;
+    }
+
+    .briefText {
+        padding: 28px 45px 0 42px;
+        line-height: 28px;
+        color: #666;
+        text-indent: 2em;
+    }
+
+    .unit {
+        margin-top: 38px;
+    }
+
+    .units {
+        width: 108px;
+        height: 108px;
+        border: 1px solid #E6E6E6;
+        border-radius: 50%;
+        float: left;
+        margin: 30px 40px 0 40px;
+    }
+
+    .supervisor {
+        background: url("/Resource/images/supervisor.jpg") no-repeat 5px;
+    }
+
+    .construction {
+        background: url("/Resource/images/construction.jpg") no-repeat -27px -8px;
+    }
+
+    .consult {
+        background: url("/Resource/images/information.jpg") no-repeat center;
+    }
+
+    .prospect {
+        background: url("/Resource/images/prospect.jpg") no-repeat center -20px;
+    }
+
+    .supplier {
+        background: url("/Resource/images/supplier.jpg") no-repeat -13px 10px;
+    }
+
+    #sidebar {
+        width: 246px;
+        background-color: #fff;
+        margin-right: 14px;
+    }
+
+        #sidebar #mine {
+            height: 135px;
+            padding: 30px;
+            background: #1393EC url("/Resource/images/globe1.jpg") no-repeat 177px 2px;
+        }
+
+            #sidebar #mine span:nth-child(1) {
+                font-size: 24px;
+                color: #ffffff;
+                font-weight: 600;
+                display: block;
+            }
+
+            #sidebar #mine span:nth-child(2) {
+                margin: 5px 0 0 3px;
+                font-size: 18px;
+                color: #66baf6;
+                display: block;
+            }
+
+        #sidebar .lefttab {
+            margin-top: 20px;
+        }
+
+            #sidebar .lefttab a {
+                display: block;
+                box-sizing: border-box;
+                padding: 0 50px;
+                font-size: 16px;
+                height: 50px;
+                line-height: 50px;
+                color: #666666;
+                letter-spacing: .5px;
+            }
+
+            #sidebar .lefttab li:nth-child(2) a {
+                color: #1393EE;
+                background-color: #ecf3f7;
+            }
+
+    .padd {
+        padding-bottom: 100px;
+    }
+</style>
+<div class="centre">
+    <div class="crumbs">
+        <ul>
+            <li class="fl"><i class="iconfont home">&#xe602;</i></li>
+            <li class="fl">首页</li>
+            <li class="fl">></li>
+            <li class="fl">资讯中心</li>
+            <li class="fl">></li>
+            <li class="fl">动态详情</li>
+        </ul>
+    </div>
+    <div id="container" class="c content">
+        <div id="sidebar" class="fl">
+            <div id="mine">
+                <span>资讯中心</span>
+                <span>INFORMATION</span>
+            </div>
+            <ul class="lefttab">
+                <li><a href="#">最新资讯</a></li>
+                <li><a href="#">工程动态</a></li>
+                <li><a href="#">最新公告</a></li>
+            </ul>
+            <div class="home">
+                <img src="/Resource/images/home.jpg" />
+            </div>
+        </div>
+        <div id="main" class="fl c">
+            <div class="right">
+                <div class="hender">
+                    <h2 class="topic">习近平的英雄情怀</h2>
+                    <p class="company">人民日报客户端 2018年05月22日</p>
+                    <p><span class="amount">浏览次数:【７】次</span></p>
+                </div>
+                <div class="subject">
+                    <div class="centerLeft">
+                        <span>项目名称 : <i>华春公司</i></span>
+                        <span>工程主体 : 混泥土主体</span>
+                        <span>项目类型 : 工程建筑</span>
+                        <span>项目地区 : 陕西-西安</span>
+                    </div>
+                    <div class="centerRight">
+                        <span>项目周期 : 1111.11.11-2222.22.22</span>
+                        <span>项目负责人 : <i>张三</i></span>
+                        <span>项目地址 : 陕西省西安市北林区222号地段</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="brief"><h3 class="briefName">项目简介</h3></div>
+                    <div class="briefText">
+                        <p class="detas">
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破
+                            任务具体任务就卡盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                        </p>
+                        <p class="detas">
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破
+                            任务具体任务就卡盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                            盘口口皮卡皮让我IE我图网和哈忒王夫人wire和我建瓯盘问我破任务具体任务就卡
+                        </p>
+
+
+
+                    </div>
+                </div>
+                <div>
+                    <div class="brief unit"><h3 class="briefName">参与单位</h3></div>
+                    <div class="c padd">
+                        <div><a href="#" class="units supervisor"></a></div>
+                        <div><a href="#" class="units construction"></a></div>
+                        <div><a href="#" class="units consult"></a></div>
+                        <div><a href="#" class="units prospect"></a></div>
+                        <div><a href="#" class="units supplier"></a></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

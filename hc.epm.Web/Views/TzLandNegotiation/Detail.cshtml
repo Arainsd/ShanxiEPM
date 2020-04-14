@@ -1,0 +1,421 @@
+﻿
+@{
+    ViewBag.Title = "土地协议出让谈判";
+}
+<style>
+    .fileShow li {
+        display: flex;
+        list-style: none;
+        height: 35px;
+        line-height: 30px;
+    }
+
+    .title {
+        color: blue;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .control-label {
+        font-weight: 500;
+    }
+
+    .size {
+        font-weight: 500;
+        height: 34px;
+        line-height: 34px;
+        text-align: left;
+        padding: 0;
+    }
+
+    .timer-pic {
+        position: relative;
+        top: -25px;
+        left: 334px;
+    }
+
+    .af-na {
+        margin-left: -38px;
+    }
+
+    .sel {
+        width: 120px;
+        margin-left: 20px;
+    }
+
+    .file-name {
+        width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sort {
+        display: inline-block;
+        width: 45px;
+    }
+
+    .file-c {
+        color: blue;
+    }
+
+    /*详情手风琴样式*/
+    .hand-title {
+        height: 35px;
+        width: 100%;
+        background: #85beed;
+        line-height: 35px;
+        margin-top: 10px;
+        color: white;
+    }
+        .hand-title:hover {
+            cursor:pointer;
+        }
+        .hand-title + div {
+            margin-top: 20px;
+        }
+</style>
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="hand-wrap">
+            <p class="hand-title"><span class="icon"><i class="layui-icon">&#xe61a;</i></span> <span>土地协议</span></p>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判时间：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="timer form-control" name="TalkTime" disabled>
+                                <i class="iconfont timer-pic">&#xe7e2;</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判地点：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="form-control" name="TalkAdress" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label" style="width: 279px;margin-left: -137px;">土地竞拍支付第一笔出让金（万元）：</label>
+                            <div class="col-lg-8 col-sm-8"><input type="text" name="FirstPay" class="form-control" value="" disabled /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">第一笔出让金日期：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="form-control" name="FirstPayTime" value="" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">我方谈判人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <textarea rows="2" name="Fees" class="form-control" disabled style="resize:none;"></textarea>
+                        </div>
+                        <label class="col-lg-3 col-sm-3" style="color:red;text-align:left;">我方谈判人三人以上以”、”分开</label>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">对方谈判人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <textarea rows="2" name="FeesTime" disabled class="form-control" style="resize:none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判结果：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <select name="TalkResult_Name" class="form-control" disabled>
+                                    <option>1111</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">附件：</label>
+                        <div class="col-lg-10 col-sm-10" id="fileListFile">
+                            <div style="margin-top:10px;">
+                                <ul class="fileShow">
+                                    <li class="file-title">
+                                        <div class="file-name">
+                                            <span class="sort file-c">排序</span>
+                                            <a href="javascript:;" target="_blank" class="file-c">附件名称</a>
+                                        </div>
+                                        <span class="sel file-c">附件类型</span>
+                                        <div style="text-align:right; width:80px;" class="file-c">附件大小</div>
+                                        <span style="margin-left:20px;" class="file-c">上传人</span>
+                                        <span style="margin-left:20px;" class="file-c">上传时间</span>
+                                    </li>
+                                    @*@if (Model.Attachs != null && Model.Attachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.Attachs)
+                                            {
+                                                <li>
+                                                    <div class="file-name">
+                                                        <span class="sort">@item.Sort</span>
+                                                        <a href="javascript:;" target="_blank">@item.Name</a>
+                                                    </div>
+                                                    <span class="sel">@item.TypeName</span>
+                                                    <div style="text-align:right; width:80px;">@item.Size</div>
+                                                    <span style="margin-left:20px;">@item.OperateUserName</span>
+                                                    <span style="margin-left:20px;">@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</span>
+                                                </li>
+                                            }
+                                        }*@
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="hand-title"><span class="icon"><i class="layui-icon">&#xe619;</i></span><span>土地协议</span></p>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判时间：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="timer form-control" name="TalkTime" disabled>
+                                <i class="iconfont timer-pic">&#xe7e2;</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判地点：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="form-control" name="TalkAdress" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label" style="width: 279px;margin-left: -137px;">土地竞拍支付第一笔出让金（万元）：</label>
+                            <div class="col-lg-8 col-sm-8"><input type="text" name="FirstPay" class="form-control" value="" disabled /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">第一笔出让金日期：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="form-control" name="FirstPayTime" value="" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">我方谈判人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <textarea rows="2" name="Fees" class="form-control" disabled style="resize:none;"></textarea>
+                        </div>
+                        <label class="col-lg-3 col-sm-3" style="color:red;text-align:left;">我方谈判人三人以上以”、”分开</label>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">对方谈判人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <textarea rows="2" name="FeesTime" disabled class="form-control" style="resize:none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判结果：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <select name="TalkResult_Name" class="form-control" disabled>
+                                    <option>1111</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">附件：</label>
+                        <div class="col-lg-10 col-sm-10" id="fileListFile">
+                            <div style="margin-top:10px;">
+                                <ul class="fileShow">
+                                    <li class="file-title">
+                                        <div class="file-name">
+                                            <span class="sort file-c">排序</span>
+                                            <a href="javascript:;" target="_blank" class="file-c">附件名称</a>
+                                        </div>
+                                        <span class="sel file-c">附件类型</span>
+                                        <div style="text-align:right; width:80px;" class="file-c">附件大小</div>
+                                        <span style="margin-left:20px;" class="file-c">上传人</span>
+                                        <span style="margin-left:20px;" class="file-c">上传时间</span>
+                                    </li>
+                                    @*@if (Model.Attachs != null && Model.Attachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.Attachs)
+                                            {
+                                                <li>
+                                                    <div class="file-name">
+                                                        <span class="sort">@item.Sort</span>
+                                                        <a href="javascript:;" target="_blank">@item.Name</a>
+                                                    </div>
+                                                    <span class="sel">@item.TypeName</span>
+                                                    <div style="text-align:right; width:80px;">@item.Size</div>
+                                                    <span style="margin-left:20px;">@item.OperateUserName</span>
+                                                    <span style="margin-left:20px;">@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</span>
+                                                </li>
+                                            }
+                                        }*@
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="hand-title"><span class="icon"><i class="layui-icon">&#xe619;</i></span><span>土地协议</span></p>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判时间：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="timer form-control" name="TalkTime" disabled>
+                                <i class="iconfont timer-pic">&#xe7e2;</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判地点：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="form-control" name="TalkAdress" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label" style="width: 279px;margin-left: -137px;">土地竞拍支付第一笔出让金（万元）：</label>
+                            <div class="col-lg-8 col-sm-8"><input type="text" name="FirstPay" class="form-control" value="" disabled /></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">第一笔出让金日期：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <input type="text" class="form-control" name="FirstPayTime" value="" disabled />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">我方谈判人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <textarea rows="2" name="Fees" class="form-control" disabled style="resize:none;"></textarea>
+                        </div>
+                        <label class="col-lg-3 col-sm-3" style="color:red;text-align:left;">我方谈判人三人以上以”、”分开</label>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">对方谈判人：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <textarea rows="2" name="FeesTime" disabled class="form-control" style="resize:none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-6">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 control-label">谈判结果：</label>
+                            <div class="col-lg-8 col-sm-8">
+                                <select name="TalkResult_Name" class="form-control" disabled>
+                                    <option>1111</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-sm-12 af-na">
+                    <div class="form-group">
+                        <label class="col-lg-2 col-sm-2 control-label">附件：</label>
+                        <div class="col-lg-10 col-sm-10" id="fileListFile">
+                            <div style="margin-top:10px;">
+                                <ul class="fileShow">
+                                    <li class="file-title">
+                                        <div class="file-name">
+                                            <span class="sort file-c">排序</span>
+                                            <a href="javascript:;" target="_blank" class="file-c">附件名称</a>
+                                        </div>
+                                        <span class="sel file-c">附件类型</span>
+                                        <div style="text-align:right; width:80px;" class="file-c">附件大小</div>
+                                        <span style="margin-left:20px;" class="file-c">上传人</span>
+                                        <span style="margin-left:20px;" class="file-c">上传时间</span>
+                                    </li>
+                                    @*@if (Model.Attachs != null && Model.Attachs.Count() > 0)
+                                        {
+                                            foreach (var item in Model.Attachs)
+                                            {
+                                                <li>
+                                                    <div class="file-name">
+                                                        <span class="sort">@item.Sort</span>
+                                                        <a href="javascript:;" target="_blank">@item.Name</a>
+                                                    </div>
+                                                    <span class="sel">@item.TypeName</span>
+                                                    <div style="text-align:right; width:80px;">@item.Size</div>
+                                                    <span style="margin-left:20px;">@item.OperateUserName</span>
+                                                    <span style="margin-left:20px;">@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</span>
+                                                </li>
+                                            }
+                                        }*@
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    if ($(".fileShow li").length > 1) {
+        $(".file-title").show();
+    } else {
+        $(".file-title").hide();
+    }
+    $(".row").hide().eq(0).show();//默认第一个以外的div合拢
+    $(".hand-wrap .hand-title").click(function () {
+        if ($(this).next("div").css('display') == "block") {
+            $(this).find(".icon").html('<span class="icon"><i class="layui-icon">&#xe619;</i>');
+            $(this).next("div").hide(100);
+        } else if ($(this).next("div").css('display') == "none") {
+            $(this).find(".icon").html('<span class="icon"><i class="layui-icon">&#xe61a;</i>');
+            $(this).next("div").show(100);
+        }
+    });
+</script>

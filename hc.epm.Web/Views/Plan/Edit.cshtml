@@ -1,0 +1,292 @@
+﻿
+@using hc.epm.ViewModel;
+@model PlanView
+@{
+    ViewBag.Title = "施工计划修改";
+}
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text ProjectName">
+                    <label for="ProjectName"><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" value="@Model.Plan.ProjectName" id="ProjectName" name="ProjectName" autocomplete="off" />
+                    <input type="hidden" id="Id" name="Id" value="@Model.Plan.Id" />
+                    <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.Plan.ProjectId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" id="PlanBim" name="PlanBim" />
+                </div>
+                <div class="long-text">
+                    <label for="Name"><span class="star">*</span>&nbsp;计划名称&nbsp;:</label>
+                    <input type="text" id="Name" name="Name" autocomplete="off" value="@Model.Plan.Name"/>
+                </div>
+                <div class="long-text Parent ">
+                    <label for="Parent"><span class="star">*</span>&nbsp;父级计划&nbsp;:</label>
+                    <input type="text" id="ParentId" name="ParentId" autocomplete="off" readonly value="@Model.Plan.ParentId" />
+                    <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label for="BatchNo"><span class="star">*</span>&nbsp;计划批次号&nbsp;:</label>
+                    <input type="text" id="BatchNo" name="BatchNo" autocomplete="off" value="@Model.Plan.BatchNo"/>
+                </div>
+                <div class="short-text">
+                    <label for="StartTime"><span class="star">*</span>&nbsp;计划开始时间&nbsp;:</label>
+                    <input type="text" id="StartTime" name="StartTime" onClick="WdatePicker({ el: 'StartTime'})" autocomplete="off" value="@(Model.Plan.StartTime == null ? "" : Convert.ToDateTime(Model.Plan.StartTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="short-text">
+                    <label for="EndTime"><span class="star">*</span>&nbsp;计划结束时间&nbsp;:</label>
+                    <input type="text" id="EndTime" name="EndTime" onClick="WdatePicker({ el: 'EndTime'})" autocomplete="off" value="@(Model.Plan.EndTime == null ? "" : Convert.ToDateTime(Model.Plan.EndTime).ToString("yyyy-MM-dd"))">
+                    <i onClick="WdatePicker({ el: 'EndTime'})" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+
+                <div class="long-text Milepost">
+                    <label for="MilepostName">&nbsp;关键工程节点&nbsp;:</label>
+                    <input type="text" id="MilepostName" name="MilepostName" autocomplete="off" readonly value="@Model.Plan.MilepostName" />
+                    <input type="hidden" id="MilepostId" name="MilepostId" readonly value="@Model.Plan.MilepostId" />
+                    <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label>&nbsp;关联BIM&nbsp;:</label>
+                    <input type="text" id="SelectBIM" name="SelectBIM" readonly />
+                    <i class="pic iconfont SelectBIM_icon" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="intro">
+                    <div><label><span class="star">*</span>&nbsp;计划说明&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="PlanContent" name="PlanContent">@Model.Plan.PlanContent</textarea>
+                    </div>
+                </div>
+                <div class="button-group btn-center">
+                    <button type="button" class="saveBut">保存</button>
+                    <button type="button" class="cancel">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true
+                    },
+                    Name: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    ParentId: {
+                        required: true
+                    },
+                    BatchNo: {
+                        required: true
+                    },
+                    StartTime: {
+                        required: true
+                    },
+                    EndTime: {
+                        required: true
+                    },
+                    Remark: {
+                        required: true,
+                        maxlength: 500
+                    }
+
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空"
+                    },
+                    Name: {
+                        required: "计划名称不能为空",
+                        maxlength: "计划名称长度不能大于254个字符"
+                    },
+                    ParentId: {
+                        required: "父级计划不能为空"
+                    },
+                    BatchNo: {
+                        required: "计划批次号不能为空"
+                    },
+                    StartTime: {
+                        required: "计划开始时间不能为空"
+                    },
+                    EndTime: {
+                        required: "计划结束时间不能为空"
+                    },
+                    Remark: {
+                        required: "实际开始时间不能为空",
+                        maxlength: "计划说明长度不能大于500个字符"
+                    },
+                }
+            })
+
+        })
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //选择父级
+            $(".Parent").click(function () {
+                if ($("#ProjectId").val() == "") {
+                    layer.alert("请先选择项目", { icon: 2 })
+                } else {
+                    parent.layer.open({
+                        type: 2,
+                        title: GetLayerTitle("所属父级"),
+                        shadeClose: false, //点击遮罩关闭层
+                        area: ['800px', '600px'],
+                        content: '/Plan/SelectParent'
+                    });
+                }
+            });
+            //关键里程碑
+            $(".Milepost").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择用户"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectMilestone',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        if (obj.flag) {
+                            $("#MilepostName").val(obj.data[0].Name);
+                            $("#MilepostId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+            //关联Bim模型
+            $("#SelectBIM,.SelectBIM_icon").click(function () {
+                var projectId = $("#ProjectId").val();
+                if (projectId) {
+                    layer.open({
+                        type: 2,
+                        title: GetLayerTitle("关联BIM模型"),
+                        shadeClose: false, //点击遮罩关闭层
+                        area: ['1300px', '800px'],
+                        content: '/Comm/RelationBIM?projectId=' + projectId,
+                        btn: ["确定", "取消"],
+                        success: function (layero, index) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                        },
+                        yes: function (index, layero) {
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            var result = iframeWin.getIds();
+                            if (result.flag) {
+                                layer.msg("操作成功", { icon: 1, time: 1000 })
+                                var data = result.data;
+                                var SelectBIM = "";
+                                data.forEach(function (item, index, obj) {
+                                    var i = item.ComponentId.indexOf("_");
+                                    var value = item.ComponentId.substring(i + 1);
+                                    SelectBIM = SelectBIM + value + ","
+                                });
+                                SelectBIM = SelectBIM.substring(0, SelectBIM.length - 1)
+                                $("#SelectBIM").val(SelectBIM);
+                                data = JSON.stringify(data)
+                                $("#PlanBim").val(data);
+                                layer.close(index)
+                            } else {
+                                layer.alert(result.msg, { icon: 2 })
+                            }
+                        },
+                        btn2: function (index, layero) {
+                        },
+                        cancel: function (index, layero) {
+                        },
+                    });
+                } else {
+                    layer.alert("请先选择项目", { icon: 7 });
+                }
+            })
+            //在建项目
+            $(".ProjectName").click(function () {
+                layer.open({
+                    type: 2,
+                    title: GetLayerTitle("选择在建项目"),
+                    shadeClose: false, //点击遮罩关闭层
+                    area: ['800px', '600px'],
+                    content: '/Comm/SelectProject',
+                    btn: ["确定", "取消"],
+                    yes: function (index, layero) {
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        var obj = iframeWin.getSelectData();
+                        console.log(obj)
+                        if (obj.flag) {
+                            $("#ProjectName").val(obj.data[0].Name);
+                            $("#ProjectId").val(obj.data[0].Id);
+                            parent.layer.close(index);//关闭窗口
+                        } else {
+                            parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                            return false;
+                        }
+                    },
+                    btn2: function (index, layero) {
+                        parent.layer.close(index);//关闭窗口
+                    },
+                    cancel: function (index, layero) {
+                    },
+                });
+            });
+
+            //数据提交
+            $(".saveBut").click(function () {
+                if ($("#mainForm").valid()) {
+                    var search = $("form").serialize();
+                    $.post("Edit", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Plan/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+            });
+            //废弃
+            $('.discard').on('click', function () {
+                var state = "Discarded";
+                if (id != "") {
+                    parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                        $.post("Archive", { id: '@Model.Id', state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                                window.location.href = "/Plan/Index?pageIndex=1";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+                }
+            });
+            //沟通
+            $('.exchange').on('click', function () {
+                window.location.href = "/Question/Add?businType=Plan";
+            });
+            //取消
+            $('.cancel').click(function () {
+                history.go(-1)
+            })
+        });
+    </script>
+</body>
+

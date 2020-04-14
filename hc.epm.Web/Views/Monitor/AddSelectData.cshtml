@@ -1,0 +1,191 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "添加检查项";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style>
+    table {
+        height:auto;
+    }
+    #convert tbody tr {
+        height: 288px;
+        overflow: scroll;
+    }
+    #convert .mu {
+        margin-top:-139px;
+    }
+    #convert .mu > li, #convert .two ul > li, #convert .tree ul > li {
+        line-height: 25px;
+        text-align: left;
+        overflow: hidden;
+        color: #000;
+    }
+
+        #convert .mu > li a {
+            display: block;
+            line-height: 25px;
+        }
+
+    a:hover {
+        color: #000;
+        text-decoration: none;
+    }
+
+    #convert .two {
+        width: 34%;
+        position: absolute;
+        left: 33%;
+        top: 7px;
+        margin-top: 40px;
+    }
+
+        #convert .two ul {
+            margin-top: 18px;
+        }
+
+        #convert .two a {
+            margin: 0px 12px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    a {
+        padding-left: 4px;
+    }
+
+    #convert .three {
+        position: absolute;
+        left: 99%;
+        top: 1px;
+        width: 91%;
+    }
+
+        #convert .three ul li {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .company {
+        width: 30%;
+        height: 30px;
+    }
+</style>
+<div style="border:1px solid #e4e4ef;height:600px;z-index:99;background-color:#fff;" class="issue">
+    <div id="convert" style="position:relative;padding: 5px 10px;height:350px; overflow:auto;">
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th width="">大类</th>
+                    <th width="">小类</th>
+                    <th width="">检查项</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:259px; padding-top:40px;">
+                        <ul class="mu">
+                            @if (ViewBag.Work.Count > 0 && ViewBag.Work != null)
+                            {
+                                foreach (var item in ViewBag.Work)
+                                {
+                                    <li>
+                                        <a href="javascript:;" class="broad">@item.Name</a>
+                                        <div class="two" style="display:none">
+                                            <ul>
+                                                @if (item.children.Count > 0 && item.children != null)
+                                                {
+                                                    foreach (var itemOne in item.children)
+                                                    {
+                                                <li>
+                                                    <a href="javascript:;">@itemOne.Name</a>
+                                                    <div class="three" style="display:none">
+                                                        <ul>
+                                                            @if (itemOne.children.Count > 0 && itemOne.children != null)
+                                                                    {
+                                                                        foreach (var itemTwo in itemOne.children)
+                                                                        {
+                                                                    <li>
+                                                                        <input type="checkbox" value="@itemTwo.Name" class="week" data-id="@itemTwo.Id" />@itemTwo.Name
+                                                                        <input type="hidden" value="@itemTwo.Id" class="workid week" />
+                                                                    </li>
+                                                                        }
+                                                                    }
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </td>
+                    <td style="width:259px;"></td>
+                    <td style="width:259px"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="height: 40px; margin-left:10px;">
+        <label>&nbsp;整改单位&nbsp;:</label>
+        @Html.DropDownList("CompanyId", null, new { @class = "form-control selectpicker  show-tick company" })
+        <input type="hidden" name="CompanyName" id="CompanyName" />
+    </div>
+    <div style="border:1px solid #e4e4e4; height:188px; width:97%; margin-left:10px; overflow-y:scroll;" class="dv">
+        <span class="sp"></span>
+        <span class="spid" style="display:none"></span>
+    </div>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script>
+    var broad = $(".broad");
+    for (var i = 0; i < broad.length; i++) {
+        var atext = broad.eq(i).text();
+        if (atext.length > 16) {
+            var astext = atext.substr(0, 16) + "...";
+            broad.eq(i).text(astext)
+        }
+    }
+    //问题背景颜色设置
+    $("#convert").on("click", "a", function () {
+        $(this).parent().siblings().find("a").css("backgroundColor", "#fff");
+        $(this).css("backgroundColor", "#ebebe5");
+        $(this).parent().siblings().find("div").hide();
+        $(this).siblings("div").eq(0).show();
+    });
+    $("input.week").each(function () {//给所有的input绑定事件
+        $(this).click(function () {
+            var QuesName = []; //创建检查项数组存放名称
+            var QuesId = []; //创建检查项数组存放ID
+            $("input.week:checked").each(function (i) { QuesName[i] = this.value; QuesId[i] = $(this).data("id") });
+            $(".dv .sp").text(QuesName.join("；"));//将数据值联合字符串给显示对象附值
+            $(".dv .spid").text(QuesId.join(","));//将数据值联合字符串给显示对象附值
+        })
+    });
+    //封装回调函数
+    function getSelectData() {
+        var result = {
+            flag: true,
+            msg: '',
+            arrayId: [],
+            arrayName: [],
+            company: $(".company option:selected").text(),
+            companyId: $(".company option:selected").val()
+        };
+        $("input.week:checked").each(function (i) {
+            result.arrayName[i] = this.value;
+            result.arrayId[i] = $(this).data("id")
+        });
+        return result;
+    }
+</script>
+
+
+

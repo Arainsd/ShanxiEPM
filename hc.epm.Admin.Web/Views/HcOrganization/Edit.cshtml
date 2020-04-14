@@ -1,0 +1,613 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.epm.Common
+@{
+    ViewBag.Title = "单位详情";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+
+    .info-tittle {
+        width: 100%;
+        height: 33px;
+        background-color: #d2d1d1;
+        line-height: 33px;
+        padding-left: 25px;
+        box-sizing: border-box;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="content-right date-wrap fl c">
+    <div class="main mt5 pd-t-b" style="padding:0 0 15px 0">
+        <div class="container" style="max-width:100%;width:100%;padding-top:0">
+            <div class="row">
+                <form class="form-horizontal " id="mainForm">
+                    <input type="hidden" name="filesDataList" id="filesDataList" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.SId" />
+                    <div class="info-tittle">
+                        <label>单位信息-编辑</label>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位编码：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="Code" id="Code" placeholder="请输入单位编号" class="form-control" value="@Model.Code" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位名称：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <input type="text" name="Name" id="Name" placeholder="请输入单位名称" class="form-control" value="@Model.Name" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位简称：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <input type="text" name="ShortName" id="ShortName" placeholder="请输入单位简称" class="form-control" value="@Model.ShortName" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>单位电话：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="Phone" id="Phone" placeholder="请输入工作电话" class="form-control" value="@Model.Phone" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label">单位传真：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="FaxPhone" id="FaxPhone" placeholder="请输入传真电话" class="form-control" value="@Model.FaxPhone" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label">邮箱地址：</label>
+                            <div class="col-lg-3 col-sm-3">
+                                <input type="text" name="Email" id="Email" placeholder="请输入邮箱地址" class="form-control" value="@Model.Email" />
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-lg-12 col-sm-12" style="height:60px">
+                            <div class="form-group">
+                                <label class="col-lg-2 col-sm-2 control-label">联系人：</label>
+                                <div class="col-lg-3 col-sm-3">
+                                    <input type="text" name="LinkMan" id="LinkMan" placeholder="请输入联系人" class="form-control" readonly value="@Model.LinkMan" />
+                                    <input type="hidden" id="LinkManId" name="LinkManId" value="@Model.LinkManId" />
+                                </div>
+                                <div class="col-lg-3 col-sm-3">
+                                    <button type="button" id="btnOpenUser" class="btn">请选择联系人</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-sm-12" style="height:60px">
+                            <div class="form-group">
+                                <label class="col-lg-2 col-sm-2 control-label">联系人电话：</label>
+                                <div class="col-lg-3 col-sm-3">
+                                    <input type="text" name="LinkPhone" id="LinkPhone" placeholder="请输入联系人电话" class="form-control" readonly value="@Model.LinkPhone" />
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label" style="text-align:right"><em class="required">*</em>所在地区：</label>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="Province" id="Province" lay-filter="Province" class="form-control">
+                                    <option value="">---请选择省---</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="City" id="City" lay-filter="City" class="form-control">
+                                    <option value="">---请选择市---</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="Country" id="Country" lay-filter="Country" class="form-control">
+                                    <option value="">---请选择县---</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="Address" id="Address" class="form-control" value="@Model.Address" />
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:60px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>详细地址：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <input type="text" name="AddressInfo" id="AddressInfo" placeholder="请输入详细地址" class="form-control" value="@Model.AddressInfo" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:110px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>简介：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <textarea name="Remark" id="Remark" placeholder="请输入简介" class="form-control" rows="4">@Model.Remark</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12" style="height:110px">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>Logo：</label>
+                            <div class="col-lg-6 col-sm-6">
+                                <div style="width:100%;" id="fileList">
+                                </div>
+                                <div class="layui-block col-sm-5">
+                                    <div style="width:100%;display:none;margin-left:120px;" id="fileBar">
+                                        <div class="layui-progress" lay-showpercent="true" lay-filter="fileProgress"><div class="layui-progress-bar" lay-percent="0%" style="width: 0%;"><span class="layui-progress-text">NaN%</span></div></div>
+                                    </div>
+                                    <input type="hidden" name="fileDataJson" id="fileDataJson">
+                                </div>
+                                <div class="layui-form-item ">
+                                    <div class="layui-form-item menue">
+                                        <div class="layui-inline col-sm-6" style="padding-left:0px; padding-top:10px;">
+                                            <div class="layui-input-inline">
+                                                <button class="layui-btn layui-btn-primary " id="btnSelect" style="position: relative; z-index: 1;">
+                                                    <i class="layui-icon" style="font-size:30px;"></i>
+                                                </button>
+                                                <button class="layui-btn layui-btn-primary " id="btnUpload" style="margin:0">
+                                                    <i class="layui-icon" style="font-size:30px;"></i>
+                                                </button>
+                                                <div id="html5_1cc562u8f6oj148f1162ngkih33_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 0px; width: 71px; height: 38px; overflow: hidden; z-index: 0;">
+                                                    <input id="html5_1cc562u8f6oj148f1162ngkih33" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;" accept="image/jpeg,image/gif,image/png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item row  btn-save">
+                        <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                        <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var array = [];
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                Code: {
+                    validators: {
+                        notEmpty: {
+                            message: '单位编号不能为空'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '单位编号长度不能超过50字符'
+                        }, regexp: {
+                            regexp: /^[a-zA-Z0-9]+$/i,
+                            message: "单位编号由数字和字母组成"
+                        }
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '单位名称不能为空'
+                        },
+                        stringLength: {
+                            max: 254,
+                            message: '单位名称不能超过254字符'
+                        },
+                    }
+                },
+                Email: {
+                    validators: {
+                        notEmpty: {
+                            message: '电子邮箱不能为空'
+                        },
+                        emailAddress: {
+                            message: '邮箱格式错误'
+                        },
+                        stringLength: {
+                            max: 50,
+                            message: '邮箱不能超过50字符'
+                        },
+                    }
+                },
+                Phone: {
+                    validators: {
+                        notEmpty: {
+                            message: '单位电话不能为空'
+                        },
+                        regexp: {
+                            regexp: /^(^0\d{2}-?\d{8}$)|(^0\d{3}-?\d{7}$)|(^0\d2-?\d{8}$)|(^0\d3-?\d{7}$)$/,
+                            message: "请填写正确的工作电话(带区号)"
+                        }
+                    }
+                },
+                FaxPhone: {
+                    validators: {
+                        regexp: {
+                            regexp: /^(^0\d{2}-?\d{8}$)|(^0\d{3}-?\d{7}$)|(^0\d2-?\d{8}$)|(^0\d3-?\d{7}$)$/,
+                            message: "请填写正确的传真电话(带区号)"
+                        }
+                    }
+                },
+                Province: {
+                    validators: {
+                        notEmpty: {
+                            message: '所在省市不能为空'
+                        }
+                    }
+                },
+                City: {
+                    validators: {
+                        notEmpty: {
+                            message: '所在市不能为空'
+                        }
+                    }
+                },
+                Country: {
+                    validators: {
+                        notEmpty: {
+                            message: '所在县或区不能为空'
+                        }
+                    }
+                },
+                AddressInfo: {
+                    validators: {
+                        notEmpty: {
+                            message: '详细地址不能为空'
+                        }, stringLength: {
+                            max: 500,
+                            message: '详细地址不能超过100字符'
+                        },
+                    }
+                },
+                Remark: {
+                    validators: {
+                        notEmpty: {
+                            message: '简介不能为空'
+                        }
+                    }
+                },
+            }
+        });
+    }
+
+    var fileDataArray = [];
+    var fileDataJson = [];
+    //获取图片附件
+    $.post("/Files/GetFileList", { tableName: 'Base_Company', id: '@Model.SId' }, function (data) {
+        if (data.Flag) {
+            if (data.Data.length > 0) {
+                for (var i = 0; i < data.Data.length; i++) {
+
+                    if (item.ImageType == null) {
+                        var odiv = '<img src="' + data.Data[i].Url + '" alt="Logo" id="ImgShow" style="width: 100px;height: 100px;" />';
+                        $('#fileList').html(odiv);
+                    }
+
+                    var obj = {};//将三个文件信息序列化在全文隐藏域内
+                    obj.GuidId = data.Data[i].FileGuid;
+                    obj.Name = data.Data[i].Name;
+                    obj.Size = data.Data[i].Size;
+                    obj.FileGuid = data.Data[i].FileGuid;
+                    obj.Url = data.Data[i].Url;
+                    obj.ImageType = data.Data[i].ImageType;
+
+                    fileDataArray.push(obj);
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJson").val(fileDataJson);
+            }
+        } else {
+            layer.alert(data.Message, { icon: 2 });
+        }
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'],
+        function () {
+            var layer = layui.layer,
+                form = layui.form,
+                element = layui.element,
+                $ = layui.jquery,
+                laypage = layui.laypage;
+
+            //图标上传
+            var uploader = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+                url: FileResourceURL, // 服务端上传路径
+                max_file_size: MaxPicSize, // 文件上传最大限制。
+                max_file_count: 1, //指示用户可以同时上传文件的最大数量
+                chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+                browse_button: 'btnSelect',//触发上传元素
+                flash_swf_url: '/Scripts/plupload_2_1_2/Moxie.swf',
+                silverlight_xap_url: '/Scripts/plupload_2_1_2/Moxie.xap',
+                multi_selection: false,//	是否可以在文件浏览对话框中选择多个文件
+                //附加参数
+                multipart_params: {
+                    app: 'epm',
+                    crop: true
+                },
+                filters: {
+                    mime_types: [ //只允许上传图片和zip文件
+                    { title: "Image files", extensions: "jpg,png,jpeg,gif" }
+                    ],
+                    max_file_size: MaxPicSize, //最大只能上传400kb的文件
+                    prevent_duplicates: true //不允许选取重复文件
+                },
+                rename: false, // 是否重命名文件
+                init: {
+                    PostInit: function () {
+                        $('#btnUpload').click(function () {
+                            if (uploader.files.length == 0) {
+                                layer.alert("请选择要上传的附件", { icon: 2 });
+                            } else {
+                                uploader.start();
+                                return false;
+                            }
+                        });
+                    },
+                    FilesAdded: function (up, files) {
+                        var type;
+                        plupload.each(files, function (file) {
+                            var typeList = ["jpg", "png", "jpeg", "gif"];
+                            var fileType = File(typeList, file);
+                            if (fileType) {
+                                $('#fileList').html("");
+                                //限定只能上传一个文件
+                                if (files.length > 1) {
+                                    up.removeFile(files[0]);
+                                }
+                                plupload.each(files, function (file) {
+                                    $('#fileList').append('<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>');
+                                });
+                            } else {
+                                files.pop();
+                                layer.alert('上传文件类型仅支持"jpeg","jpg","png","gif"格式，请重新上传', { icon: 2 });
+                            }
+                        });
+                    },
+                    UploadProgress: function (up, file) {
+                        $("#fileBar").show();
+                        element.progress("fileProgress", file.percent + "%");
+                    },
+                    FileUploaded: function (uploader, file, responseObject) {
+                        var data = JSON.parse(responseObject.response);
+                        if (data.file) {
+                            fileDataArray = [];
+                            for (var i = 0; i < data.file.length; i++) {
+
+                                var imgtype = getImageType(data.file[i].Name, data.file[i].Extension);
+                                var imgurl = FileURL + data.file[i].VirtualURL;
+
+                                if (!isThumbnailImage(imgtype)) {
+                                    var odiv = '<img src="' + imgurl + '" alt="Logo" id="ImgShow" style="width: 100px;height: 100px;" />';
+                                    $('#fileList').html(odiv);
+                                }
+
+                                setTimeout(function () {
+                                    $("#fileBar").hide();
+                                    element.progress("fileProgress", "0%");
+                                }, 1500);
+
+                                if (!data.flag) {
+                                    layer.alert("错误,请检查文件格式后重新上传！");
+                                    return;
+                                }
+                                layer.msg("附件上传成功", { time: 1000, icon: 1 });
+                                uploader.removeFile(file);
+
+                                var obj = {};
+                                obj.GuidId = file.id;
+                                obj.Name = data.file[i].Name;
+                                obj.Size = data.file[i].FileSize;
+                                obj.FileGuid = data.file[i].Guid;
+                                obj.Url = imgurl;
+                                obj.ImageType = imgtype;
+
+                                fileDataArray.push(obj);
+                            }
+                            fileDataJson = JSON.stringify(fileDataArray);
+                            $("#fileDataJson").val(fileDataJson);
+                        }
+                    },
+                    Error: function (up, err) {
+                        if (err.code == -600) {
+                            layer.alert('仅支持' + MaxPicSize + '以内文件，请重新上传', { icon: 2 })
+                        }
+                        else if (err.code == -602) {
+                            layer.alert('不允许上传重复文件，请重新上传', { icon: 2 })
+                        }
+                        else {
+                            layer.alert("错误：" + err.code + ": " + err.message);
+                        }
+                    }
+                }
+            });
+            uploader.init();
+
+
+            //监听提交
+            form.on('submit(sub)',
+                function (data) {
+
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (bv.isValid()) {
+                        if ($("#fileDataJson").val() == '') {
+                            layer.alert("单位Logo不能为空", { icon: 2 })
+                        }
+
+                        var search = $("form").serialize(); //序列化表单
+
+                        $.post("Edit?Belong=@ViewBag.Belong",
+                            search,
+                            function (data) {
+                                if (data.Flag) {
+                                    layer.msg("单位信息修改成功", { time: 1000, icon: 1 }, function () {
+                                        window.location.href = "/HcOrganization/Index";//跳转新增页面
+                                    });
+                                } else {
+                                    layer.alert(data.Message, { icon: 2 });
+                                }
+                            });
+
+                    } else {
+                        layer.alert("请检查必填项是否填写完整。", { icon: 1 });
+                    }
+                    return false;
+                });
+
+            //初始化当前数据省市地域（省、市、县）
+            function getRegionList() {
+                $.post("/Organization/RegionList",
+                    { parentCode: "0" },
+                    function (data) { //加载所有省市自治区列表
+                        if (data.Flag) {
+                            for (var i = 0; i < data.Data.length; i++) {
+                                $("#Province").append("<option value='" +
+                                    data.Data[i].RegionCode +
+                                    "'>" +
+                                    data.Data[i].Fullname +
+                                    "</option>")
+                            };
+                            $("#Province").val("@Model.Address".split(",")[0]); //选中当前数据所在省份
+                            $('#Province').addClass("show-tick").selectpicker();
+                            $.post("/Organization/RegionList",
+                                { parentCode: "@Model.Address".split(",")[0] },
+                                function (data) { //加载当前数据所在省份下的所有市级列表
+                                    if (data.Flag) {
+                                        for (var i = 0; i < data.Data.length; i++) {
+                                            $("#City").append("<option value='" +
+                                                data.Data[i].RegionCode +
+                                                "'>" +
+                                                data.Data[i].RegionName +
+                                                "</option>")
+                                        };
+                                        $("#City").val("@Model.Address".split(",")[1]); //选中当前数据所在市
+                                        $('#City').addClass("show-tick").selectpicker();
+                                    }
+                                })
+                            $.post("/Organization/RegionList",
+                                { parentCode: "@Model.Address".split(",")[1] },
+                                function (data) { //加载当前数据所在市下所有的县
+                                    if (data.Flag) {
+                                        for (var i = 0; i < data.Data.length; i++) {
+
+                                            $("#Country").append("<option value='" +
+                                                data.Data[i].RegionCode +
+                                                "'>" +
+                                                data.Data[i].RegionName +
+                                                "</option>");
+                                        };
+                                        $("#Country").val("@Model.Address".split(",")[2]); //选中当前数据所在的县
+                                        $('#Country').addClass("show-tick").selectpicker();
+                                    }
+                                })
+
+                        }
+                    })
+            }
+
+            //获取区域列表（市）
+            $("#Province").change(function () {
+                var value = this.value
+                $.post("/Organization/RegionList",
+                    { parentCode: value },
+                    function (data) {
+                        if (data.Flag) {
+                            $("#City").empty();
+                            $("#City").append("<option value=''>---请选择市---</option>")
+                            $("#Country").empty();
+                            $("#Country").append("<option value=''>---请选择县---</option>")
+                            for (var i = 0; i < data.Data.length; i++) {
+                                $("#City").append("<option value='" +
+                                    data.Data[i].RegionCode +
+                                    "'>" +
+                                    data.Data[i].RegionName +
+                                    "</option>")
+                            };
+                            $('#City').addClass("show-tick").selectpicker();
+                            $('#City').selectpicker("refresh");
+
+                        }
+                    })
+            });
+            //获取区域列表（县）
+            $("#City").change(function () {
+                var value = this.value
+                $.post("/Organization/RegionList",
+                    { parentCode: value },
+                    function (data) {
+                        if (data.Flag) {
+                            $("#Country").empty();
+                            $("#Country").append("<option value=''>---请选择县---</option>");
+                            for (var i = 0; i < data.Data.length; i++) {
+                                $("#Country").append("<option value='" +
+                                    data.Data[i].RegionCode +
+                                    "'>" +
+                                    data.Data[i].RegionName +
+                                    "</option>");
+                            };
+                            $('#Country').addClass("show-tick").selectpicker();
+                            $('#Country').selectpicker("refresh");
+
+                        }
+                    })
+            });
+            //地区选择第三级选定后将地址信息保存至区域字段隐藏域
+            $("#Country").change(function () {
+                value = this.value;
+                $("#Address").val($("#Province").val() + "," + $("#City").val() + "," + value);
+            });
+            getRegionList();
+            //返回按钮事件
+            $(".cancel").on("click",
+                function () {
+                    window.history.go(-1);
+                });
+
+            $('#btnOpenUser').click(function () {
+                @*layer.open({
+                    id: 'iframe-selectuser',
+                    type: 2,
+                    title: '请选择联系人',
+                    area: ['850px', '650px'],
+                    content: '/Common/SelectUsers?companyId=@Model.Id',
+                    btn: ['确定', '取消'],
+                    move: false,
+                    yes: function(index, layero) {
+                        var data = frames['layui-layer-iframe' + index].getSelectData();
+                        if (data.length <= 0) {
+                            layer.alert("请选择联系人。", { icon: 2 });
+                        } else if (data.length > 1) {
+                            layer.alert("只能设置一个人联系人。", { icon: 2 });
+                        } else {
+                            $('#LinkMan').val(data[0].UserName);
+                            $('#LinkPhone').val(data[0].Phone);
+                            $('#LinkManId').val(data[0].Id);
+                            layer.close(index);
+                        }
+                    }
+                });*@
+            });
+        });
+</script>

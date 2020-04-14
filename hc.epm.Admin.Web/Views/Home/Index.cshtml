@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "工程建设管理系统";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工程建设管理系统</title>
+    <!--css start-->
+    <link rel="stylesheet" href="/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/Content/style.css" />
+    <link rel="stylesheet" href="/Content/layui-2.1.2/css/layui.css" />
+    <link href="/Content/layui-2.1.2/css/modules/layer/default/layer.css" rel="stylesheet" />
+    <!--css end-->
+    <!--js start-->
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <script src="/Content/layui-2.1.2/layui.js"></script>
+    <script src="/Scripts/global.js"></script>
+    <script src="/Scripts/js/common.js"></script>
+    <!--[if lt IE 9]>
+    <script src="/Scripts/html5shiv.min.js"></script>
+    <script src="/Scripts/respond.min.js"></script>
+        <![endif]-->
+    <!--js end-->
+</head>
+<body>
+    @{
+        var config = ViewBag.webConfig as hc.epm.DataModel.Basic.Base_Config;
+    }
+    <div class="wrap">
+        <!--header start-->
+        <div class="header">
+            <div class="header-left fl">
+                <img src="~/Images/sxLogo.png" />
+            </div>
+            <div class="header-right fr c">
+                <div class="loginbar fr c">
+                    <div class="icon-user fl"><i class="icon-user"></i>欢迎您 : <b>@ViewBag.UserName</b></div>
+                    <div class="icon-password fl checkright" data-model="PasswordManager" data-right="modify"><i class="icon-password"></i><a style="cursor: pointer" onclick="changePwd()">修改密码</a></div>
+                    @*<div class="icon-editor fl checkright" data-model="EditUserInfo" data-right="modify"><i class="icon-editor"></i><a style="cursor: pointer" onclick="editUserInfo()">修改资料</a></div>*@
+                    <div class="icon-close fl"><i class="icon-close"></i><a style="cursor: pointer" href="/Currency/LogOut">退出</a></div>
+                </div>
+                <ul class="menu fr c" id="navmenu" style="padding-left:50%;"></ul>
+            </div>
+        </div>
+        <!--header end-->
+        <!--content start-->
+        <div class="content c">
+            <!--content-left-->
+            <div class="content-left fl c">
+                <ul class="left-menu" id="childMenu"></ul>
+            </div>
+            <!--content-right--><!--src="/Home/Welcom.cshtml"-->
+            <iframe src="" id="mainFrame" name="mainFrame" frameborder="0"></iframe>
+        </div>
+        <!--content end-->
+        <!--footer start-->
+        <div class="footer">
+            <div>@(config.CopyRight)</div>
+        </div>
+        <!--footer end-->
+    </div>
+</body>
+<script>
+    layui.use(['layer'], function () {
+        var layer = layui.layer;
+    });
+
+    //加载子菜单
+    function changeMenu(pId) {
+        $.post("/Home/LoadChildMenu", { pId: pId }, function (data) {
+           
+            var html = iteratorMenu(data.children, "one");
+            if (html != "") {
+                $("#childMenu").html("");
+                $("#childMenu").append(html);
+            }
+
+        });
+    }
+    //迭代子菜单,如果要实际无限子迭代则需要修改通用的class样式，或者在数据库中保存对应ul和li的class样式
+    function iteratorMenu(child, cla) {
+        var html = "";
+        $.each(child, function (index, item) {
+            //var icon = item.data.icon == "" ? '' : '<em class="icon-left"><img src="' + item.data.icon + '"/></em>';
+            var icon = '<em class="icon-left"><img src="/Images/icon-default.png"/></em>';
+            var target = item.data.target == "" ? '' : 'target="' + item.data.target + '"';
+            var li = '';
+            if (cla == "one") {
+                li = '<li class="level-' + cla + '"><a href="' + item.data.url + '" ' + target + '>' + icon + item.data.display + '</a>';
+            } else {
+                icon = '<em class="icon-left-point icon-point-gray"></em>';
+                li = '<li><a href="' + item.data.url + '" ' + target + '>' + icon + item.data.display + '</a>';
+            }
+            html += (li);
+            if (item.children.length > 0) {
+                html += ('<ul class="level-two">');
+                html += iteratorMenu(item.children, "two");
+                html += ('</ul>');
+            }
+            html += ("</li>");
+        });
+        return html;
+    }
+    $(function () {
+        $(" body").on("click", ".header-right ul.menu>li>a", function () {
+            $(this).addClass("active");
+            $(this).parent().siblings("li").children("a").removeClass("active");
+        })
+        $(" body").on("click", ".left-menu ul.level-two>li>a", function () {
+            $(this).addClass("active");
+            $(this).parent().siblings("li").children("a").removeClass("active");
+            $(this).parent().parent().parent("li").siblings("li").children().children().children("a").removeClass("active");
+
+        })
+        $("body").on("click", ".left-menu .level-one>a", function () {
+            if ($(this).siblings(".level-two").is(':hidden') || $(this).siblings().length == 0) {
+                $(this).addClass("level-two-active");
+                $(this).siblings(".level-two").show(800);
+                $(this).children("b").removeClass('icon-more-gray').addClass('icon-more');
+                $(this).parent().siblings(".level-one").children("a").removeClass("level-two-active");
+                $(this).parent().siblings(".level-one").children("ul").hide(800);
+                $(this).parent().siblings(".level-one").children("a").children("b").removeClass('icon-more').addClass('icon-more-gray');
+            } else {
+                $(this).siblings(".level-two").hide(800);
+                $(this).children("b").removeClass('icon-more').addClass('icon-more-gray')
+            }
+        });
+
+        //加载头部菜单
+        $.post("/Home/LoadNavMenu", { pId: 0 }, function (data) {
+            if (data.Flag) {
+                var firstId = data.Data[0].SId;
+                $.each(data.Data, function (index, item) {
+                    var li = '<li><a href="javascript:void(0);" onclick="changeMenu(\'' + item.SId + '\')">' + item.DisplayName + '</a></li>';
+                    $("#navmenu").append(li);
+                });
+                changeMenu(firstId);
+            } else {
+                layer.alert(data.Message, { icon: 2 });
+            }
+        });
+    });
+    //修改密码
+    function changePwd() {
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("密码修改"),
+            shadeClose: false, //点击遮罩关闭层
+            area: [BigLayerWidth, '340px'],
+            content: '/User/changepwd'
+        });
+    }
+    //修改资料
+    function editUserInfo() {
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("修改资料"),
+            shadeClose: false, //点击遮罩关闭层
+            area: [BigLayerWidth, '530px'],
+            content: '/User/EditInformation'
+        });
+    }
+    //设置iframe标签大小
+    $(window).resize(function () {
+        var width = $(window).width() - $('.content-left').width();
+        $('#mainFrame').width(width - 5);
+        $('#mainFrame').height($('.content-left').height());
+    })
+    var width = $(window).width() - $('.content-left').width();
+    $('#mainFrame').width(width - 5);
+    $('#mainFrame').height($('.content-left').height());
+</script>
+</html>

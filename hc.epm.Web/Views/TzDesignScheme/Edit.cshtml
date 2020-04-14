@@ -1,0 +1,777 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model hc.epm.DataModel.Business.Epm_TzDesignScheme
+
+@{
+    ViewBag.Title = "编辑设计方案";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .btn-pro {
+        width: 15%;
+        height: 35px;
+        border: none;
+        background-color: #c3c3c3 !important;
+        color: white;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    /*.touZ {
+        width:217px!important;
+    }*/
+</style>
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="module-div">
+                <h4>  项目基础信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;margin-bottom:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title">项目名称 ：</td>
+                            <td class="td-div" colspan="3">
+                                <div>@Model.ProjectName</div>
+                                <input type="hidden" id="ProjectName" name="ProjectName" value="@Model.ProjectName" />
+                                <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                                <input type="hidden" id="ApplyTime" name="ApplyTime" value="@Model.ApplyTime" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">站库名称 ：</td>
+                            <td class="td-div">
+                                <div>@Model.StationName</div>
+                                <input type="hidden" id="StationId" name="StationId" value="@Model.StationId" />
+                                <input type="hidden" id="StationName" name="StationName" value="@Model.StationName" />
+                            </td>
+                            <td class="table_title">项目性质 ：</td>
+                            <td class="td-div">
+                                <div>@Model.NatureName</div>
+                                <input type="hidden" id="NatureName" name="NatureName" value="@Model.NatureName" />
+                                <input type="hidden" id="Nature" name="Nature" value="@Model.Nature" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">项目类型：</td>
+                            <td class="td-div">
+                                <div>@Model.ProjectType </div>
+                                <input type="hidden" id="ProjectType" name="ProjectType" value="@Model.ProjectType" />
+                            </td>
+                            <td class="table_title">项目编号：</td>
+                            <td class="td-div">
+                                <div>@Model.ProjectCode</div>
+                                <input type="hidden" id="ProjectCode" name="ProjectCode" value="@Model.ProjectCode" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">地区公司：</td>
+                            <td class="td-div">
+                                <div>@Model.RegionCompany </div>
+                                <input type="hidden" id="RegionCompany" name="RegionCompany" value="@Model.RegionCompany" />
+                            </td>
+                            <td class="table_title">地市公司：</td>
+                            <td class="td-div">
+                                <div>@Model.CompanyName </div>
+                                <input type="hidden" id="CompanyName" name="CompanyName" value="@Model.CompanyName" />
+                                <input type="hidden" id="CompanyId" name="CompanyId" value="@Model.CompanyId" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">估算投资：</td>
+                            <td class="td-div">
+                                <div>@Model.PredictMoney  万元</div>
+                                <input type="hidden" id="PredictMoney" name="PredictMoney" value="@Model.PredictMoney" />
+                            </td>
+                            <td class="table_title">工程费用：</td>
+                            <td class="td-div">
+                                <div>@Model.EngineeringCost  万元</div>
+                                @*<input type="hidden" id="EngineeringCost" name="EngineeringCost" value="@Model.EngineeringCost" />*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">土地费用：</td>
+                            <td class="td-div">
+                                <div>@Model.LandCosts  万元</div>
+                                <input type="hidden" id="LandCosts" name="LandCosts" value="@Model.LandCosts" />
+                            </td>
+                            <td class="table_title">其他费用：</td>
+                            <td class="td-div">
+                                <div>@Model.OtherExpenses  万元</div>
+                                <input type="hidden" id="OtherExpenses" name="OtherExpenses" value="@Model.OtherExpenses" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="module-div">
+                <h4>初设信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 初步设计单位:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input type="text" name="DesignUnit" id="DesignUnit" class="form-control" style="display:inline-block;width:70%;" placeholder="" value="@Model.DesignUnit" readonly />
+                                    <div class="btn-upload">
+                                        <input type="button" id="selSupplie" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择单位" />
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 示范/标注:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    @if (Model.StandarCode != null)
+                                        {
+                                            if (Model.StandarCode == "XXGSPS1")
+                                            {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="StandarCode" value="XXGSPS1" checked />示范加油站（油库）
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="StandarCode" value="GFGSPS2" />标准加油站（油库）
+                                        </label>
+                                            }
+                                            else if (Model.StandarCode == "GFGSPS2")
+                                            {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="StandarCode" value="XXGSPS1" />示范加油站（油库）
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="StandarCode" value="GFGSPS2" checked />标准加油站（油库）
+                                        </label>
+                                            }
+                                        }
+                                        else {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="StandarCode" value="XXGSPS1" />示范加油站（油库）
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="StandarCode" value="GFGSPS2" checked />标准加油站（油库）
+                                        </label>
+                                        }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 上报概算:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control input_unit" name="Estimate" value="@(Model.Estimate.ToString("0.00"))" /> 万元
+                                </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 工程费用:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control input_unit" name="EngineeringCost" value="@(Model.EngineeringCost.ToString("0.00"))" /> 万元
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 工程其他费用：</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="OtheInvestment" value="@(Model.OtheInvestment.ToString("0.00"))" /> 万元
+                                </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 设计单位招标时间：</td>
+                            @if (Model.InviteTime == null)
+                                {
+                                <td class="td-div apply_time">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control position_rel" id="InviteTime" name="InviteTime" onClick="WdatePicker({ el: 'InviteTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('InviteTime', 'NOT_VALIDATED', null).validateField('InviteTime') } })" placeholder="日期选择" value="">
+                                        <i onClick="WdatePicker({ el: 'InviteTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                                    </div>
+                                </td>
+                                }
+                            @if (Model.InviteTime != null)
+                                {
+                                <td class="td-div apply_time">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control position_rel" id="InviteTime" name="InviteTime" onClick="WdatePicker({ el: 'InviteTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('InviteTime', 'NOT_VALIDATED', null).validateField('InviteTime') } })" placeholder="日期选择" value="@(Convert.ToDateTime(Model.InviteTime).ToString("yyyy-MM-dd"))">
+                                        <i onClick="WdatePicker({ el: 'InviteTime' })" class="iconfont" style="bottom: 16px">&#xe7e2;</i>
+                                    </div>
+                                </td>
+                                }
+
+                        </tr>
+                        <tr>
+                            <td class="table_title">设计单位负责人：</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="DesignUnitCharge" value="@Model.DesignUnitCharge" />
+                                </div>
+                            </td>
+                            <td class="table_title">职务：</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="DesignJob" value="@Model.DesignJob" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">项目经理：</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="ProjectManager" value="@Model.ProjectManager" />
+                                </div>
+                            </td>
+                            <td class="table_title">职务：</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="ProjectJob" value="@Model.ProjectJob" />
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="module-div">
+                <h4>主要工程内容</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 占地面积:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="LandArea" value="@(Model.LandArea.ToString("0.00"))" placeholder="" readonly /> 平米
+                                </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 加油机:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="MachineofOilStage" value="@(Model.MachineofOilStage.ToString("0"))" placeholder="" readonly /> 台
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 加气机:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="MachineofGasStage" value="@(Model.MachineofGasStage.ToString("0"))" placeholder="" readonly /> 台
+                                </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 储气机:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="GasWells" value="@(Model.GasWells.ToString("0.00"))" placeholder="" readonly /> 方
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 油罐 :</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="OilTank" value="@(Model.OilTank.ToString("0.00"))" placeholder="" readonly /> 方
+                                </div>
+                            </td>
+                            <td class="table_title"> 罩棚面积:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="Shelter" value="@(Model.Shelter.ToString("0.00"))" placeholder="" readonly /> 平米
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"> 站房面积:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="StationRoom" value="@(Model.StationRoom.ToString("0.00"))" placeholder="" readonly /> 平米
+                                </div>
+                            </td>
+                            <td class="table_title"> 便利店面积:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="ConvenienceRoom" value="@(Model.ConvenienceRoom.ToString("0.00"))" placeholder="" /> 平米
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="module-div">
+                <h4>其他信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 批复概算投资:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="ReleaseInvestmentAmount" value="@(Model.ReleaseInvestmentAmount.ToString("0.00"))" placeholder="" readonly /> 万元
+                                    <input type="hidden" id="ReleaseInvestmentAmount" name="ReleaseInvestmentAmount" value="@Model.ReleaseInvestmentAmount" />
+                                </div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 批复文号:</td>
+                            <td class="td-div">
+                                <div class="form-group">
+                                    <input class="form-control  input_unit" name="ApprovalNo" value="@Model.ApprovalNo" placeholder="" readonly />
+                                    <input type="hidden" id="ApprovalNo" name="ApprovalNo" value="@Model.ApprovalNo" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 其他工程内容:</td>
+                            <td class="td-div" colspan="3">
+                                <div class="form-group">
+                                    <textarea class="form-control" style="resize:none;" name="OtherProject" placeholder="请输入其他内容">@Model.OtherProject</textarea>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i>  项目信息是否与实际同步:</td>
+                            <td class="td-div" colspan="3">
+                                <div class="form-group">
+                                    @if (Model.IsSynchro != null)
+                                        {
+                                            if (Model.IsSynchro == "SFFH1")
+                                            {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsSynchro" value="SFFH1" checked />是
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsSynchro" value="SFFH2" />否
+                                        </label>
+                                            }
+                                            else if (Model.IsSynchro == "SFFH2")
+                                            {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsSynchro" value="SFFH1" />是
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsSynchro" value="SFFH2" checked />否
+                                        </label>
+                                            }
+                                        }
+                                        else {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsSynchro" value="SFFH1" checked />是
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="IsSynchro" value="SFFH2" />否
+                                        </label>
+                                        }
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="module-div">
+                <h4>附件上传</h4>
+                <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody class="fileShow-append">
+                        <tr class="headtr">
+                            <td style="width:300px;">附件类型</td>
+                            <td class="td-div" style="width: 570px!important;">
+                                @Html.Raw(Html.DropDownList("FileType", ViewBag.enclosureType as SelectList, null, new { @class = "form-control sel" }))
+                                <input id="FileType" type="hidden" name="FileType" value="" />
+                            </td>
+                            <td class="table_title text_lf" colspan="3">
+                                <div class="btn-upload" style="display:inline-block">
+                                    <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                    <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                                </div>
+                                <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                            </td>
+                            @*<td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>*@
+                        </tr>
+                        <tr class="headtr">
+                            <th class="table_title" style="width: 219px;">序号</th>
+                            <th class="td-div" style="width: 570px!important;">附件名称</th>
+                            <th class="td-div">附件类型</th>
+                            <th class="td-div">附件归属</th>
+                            <th class="table_title" style="width: 219px;">操作</th>
+                        </tr>
+                        @if (Model.TzAttachs != null && Model.TzAttachs.Count() > 0)
+                            {
+                                foreach (var item in Model.TzAttachs)
+                                {
+                            <tr>
+                                <td><span class="sort">@item.Sort</span></td>
+                                <td class="text_lf"><span>@item.Name</span></td>
+                                <td><span>@item.TypeName</span></td>
+                                <td>
+                                    @if (item.Uploadtype == 1)
+                                            {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                            </label>
+                                            }
+                                            else if (item.Uploadtype == 2)
+                                            {
+                                                if (item.FilesSize < ConstString.TzMaxFileSize())
+                                                {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                            </label>
+
+                                                }
+                                                else {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                            </label>
+                                                }
+                                            }
+                                </td>
+                                <td style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                </td>
+                            </tr>
+                                }
+                            }
+                    </tbody>
+                </table>
+            </div>
+            <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+                <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectApprovalState.WaitSubmitted.GetValue().ToString())" />
+                <input type="button" id="save" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectApprovalState.WaitApproval.GetValue().ToString())" />
+                <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+            </div>
+        </div>
+        <input type="file" id="loadObj" name="loadObj" style="display:none!important" onchange="uploadOpj()">
+
+        <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+
+    //上传附件
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                     </label>
+                                    `
+                        var html2 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                     </label>
+                                   `
+                        var html = (fileObj.size > tzmaxfilesize) ? html1 : html2;
+
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span  class ='sort'> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td>${html}</td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typeno="${obj.TypeNo}" data-typename="${obj.TypeName}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage
+
+
+        $("#selSupplie").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectServiceAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#DesignUnit").val(obj.data[0].Name);
+                        $('#mainForm').data('bootstrapValidator').updateStatus('DesignUnit', 'NOT_VALIDATED', null).validateField('DesignUnit');
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $(".save").click(function () { 
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                var fileDataArray = [];
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    var uploadtype = 0;
+                    var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+
+                    if (uploadtype1 == true) {
+                        uploadtype = 1;
+                    }
+                    if (uploadtype1 == false) {
+                        uploadtype = 2;
+                    }
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $(item).find("#updata").data("typeno"),
+                        TypeName: $(item).find("#updata").data("typename"),
+                        Sort: index + 1,
+                        Uploadtype: uploadtype
+                    })
+                });
+
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+                var search = $("#mainForm").serialize();
+                //点击提交表单验证，点击暂存表单不验证
+                if ($(this).data("state") == "@(PreProjectApprovalState.WaitApproval.GetValue().ToString())") {
+                    //对表单进行验证
+                        var bv = $('#mainForm').data('bootstrapValidator');
+                        bv.validate();
+                        if (!bv.isValid()) {
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                            return;
+                        }
+                    }
+
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                            window.location.href = "/TzDesignScheme/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                    }
+                });
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+    });
+
+    //表单验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            InviteTime: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择单位招标时间'
+                    }
+                }
+            },
+            LandArea: {
+                validators: {
+                    notEmpty: {
+                        message: '占地面积不能为空'
+                    },
+
+                }
+            },
+            LandArea: {
+                validators: {
+                    notEmpty: {
+                        message: '占地面积不能为空'
+                    }
+                }
+            },
+            DesignUnit: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择初步设计单位'
+                    }
+                }
+            },
+            ApprovalNo: {
+                validators: {
+                    notEmpty: {
+                        message: '批复文号不能为空'
+                    }
+                }
+            },
+            MachineofOilStage: {
+                validators: {
+                    notEmpty: {
+                        message: '加油机不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "加油机格式输入错误"
+                    }
+                }
+            },
+            MachineofGasStage: {
+                validators: {
+                    notEmpty: {
+                        message: '加气机不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "加气机格式输入错误"
+                    }
+                }
+            },
+            GasWells: {
+                validators: {
+                    notEmpty: {
+                        message: '储气机不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "储气机格式输入错误"
+                    }
+                }
+            },
+            OilTank: {
+                validators: {
+                    notEmpty: {
+                        message: '油罐不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "油罐格式输入错误"
+                    }
+                }
+            },
+            Estimate: {
+                validators: {
+                    notEmpty: {
+                        message: '上报概算不能为空'
+                    },
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "上报概算格式输入错误"
+                    }
+
+                }
+            },
+            EngineeringCost: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "工程费用格式输入错误"
+                    },
+                    notEmpty: {
+                        message: '工程费用不能为空'
+                    }
+                }
+            },
+            OtheInvestment: {
+                validators: {
+                    regexp: {
+                        regexp: /^\d+(\.\d{0,2})?$/,
+                        message: "工程其他费用格式输入错误"
+                    },
+                    notEmpty: {
+                        message: '工程其他费用不能为空'
+                    }
+                }
+            },
+            OtherProject: {
+                validators: {
+                    notEmpty: {
+                        message: '其他工程内容不能为空'
+                    },
+                }
+            }
+
+        },
+    });
+
+    //返回
+    $("#close").click(function () {
+        window.location.href = "/TzDesignScheme/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+</script>
+
+

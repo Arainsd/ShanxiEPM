@@ -1,0 +1,276 @@
+﻿@{
+    ViewBag.Title = "里程碑";
+}
+<head>
+    <link href="/Content/jqtree/TreeGrid.css" rel="stylesheet">
+    <script src="/Content/jqtree/TreeGrid.js"></script>
+    <script>
+        //断点续传检测
+        function checkUpload(up, file, chunkSize, offset) {
+            var os = offset;
+            if (file.name && chunkSize) {
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: FileContinueURL, //检查是否是断点续传
+                    data: {
+                        name: file.name,
+                        fileSize: file.size,
+                        lastModifiedDate: file.lastModifiedDate.getTime()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        os = Number(data.size);
+                        $("#fileUploadId").val(data.fid);
+                    }
+                });
+            }
+            var url = up.settings.url;
+            var strIndex = url.indexOf('?fId=');
+            if (strIndex > -1) {
+                url = url.substring(0, strIndex);
+            }
+            url = url + '?fId=' + $("#fileUploadId").val();
+            var array = new Array(os, url);
+            return array;
+        }
+    </script>
+    <!--[if lt IE 9]>
+    <script src="/Scripts/html5shiv.min.js"></script>
+    <script src="/Scripts/respond.min.js"></script>
+        <![endif]-->
+    <!--js end-->
+</head>
+<body style="background:white;height: 99%;">
+    <div class="content-right date-wrap fl c">
+        <div class="search mt5" style="display:none;">
+            <form class="layui-form" action="" method="get">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">里程碑名称 : </label>
+                        <div class="layui-input-inline"><input name="name" id="name" placeholder="请输入名称" autocomplete="off" class="layui-input" value="@ViewBag.name" type="text"></div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">是否启用 : </label>
+                        <div class="layui-input-inline">
+                            <select id="State" name="State">
+                                <option value="-1">--请选择--</option>
+                                <option value="1">启用</option>
+                                <option value="0">禁用</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+                </div>
+
+            </form>
+        </div>
+        <div class="main mt5">
+            <div class="btns">
+                <a href="javascript:;" data-module="TypeDictionary" data-right="add" id="add" class="checkright">新 增</a>
+                <a href="javascript:;" data-module="TypeDictionary" data-right="delete" id="delete" class="checkright">删 除</a>
+            </div>
+            <div class="maincontent layui-form" id="maincontent"></div>
+        </div>
+    </div>
+</body>
+<script>
+    $("#State").val(@ViewBag.state);
+    // index加载数据
+    function customCheckBox(row, col) {
+        return '<input type="checkbox" lay-skin="primary"  id="firstinput"/><div class="allinput layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>';
+    };
+    function customLook(row, col) {
+        return '<a href="javascript:;" class="editor-link checkright" data-itemid="' + row.checkboxValue + '" title="编辑" data-module="TypeDictionary" data-right="modify"><i class="glyphicon glyphicon-pencil handle-blue"></i></a>';
+    };
+    function customCheckBox1(row, col) {
+        if (row.State == 0) {
+            return ' <a href="javascript:;" class="StateUpdate"><i class="glyphicon glyphicon-remove-sign handle-red"></i></a>';
+        } else {
+            return ' <a href="javascript:;" class="StateUpdate"><i class="glyphicon glyphicon-ok-sign handle-blue"></i></a>';
+        }
+    };
+    var state = $("#State").val();
+    var name = $("#name").val();
+
+    $.post("GetDataMilepost?name=" + name + "&state=" + state, function (data) {
+        var config = {
+            id: "tg1",
+            width: "100%",
+            renderTo: "maincontent",
+            headerAlign: "left",
+            headerHeight: "30",
+            dataAlign: "left",
+            indentation: "30",
+            folderOpenIcon: "/Content/jqtree/img/folderOpen.png",
+            folderCloseIcon: "/Content/jqtree/img/folderClose.png",
+            hoverRowBackground: "false",
+            folderColumnIndex: "1",
+            itemClick: "itemClickEvent",
+            columns: [{ headerText: '<input lay-filter="allChoose" class="selectall2" type="checkbox" lay-skin="primary" lay-filter="allChoose" /><div class="layui-unselect layui-form-checkbox firstinput" lay-skin="primary"><i class="layui-icon"></i></div>', headerAlign: "center", dataAlign: "center", width: "20", handler: "customCheckBox" },
+                        { headerText: "名称", dataField: "Name", headerAlign: "left", dataAlign: "left", width: "200" },
+                        { headerText: "编码", dataField: "Code", headerAlign: "center", dataAlign: "center", width: "100" },
+                        { headerText: "是否启用", dataField: "State", headerAlign: "center", dataAlign: "center", width: "50", handler: "customCheckBox1" },
+                        { headerText: "排序", dataField: "Sort", headerAlign: "center", dataAlign: "center", width: "50" },
+                        { headerText: "操作", headerAlign: "center", dataAlign: "center", width: "50", handler: "customLook" }
+            ],
+            data: data
+        };
+        //创建一个组件对象
+        var treeGrid = new TreeGrid(config);
+        treeGrid.show();
+        $(".maincontent").find("td").children("a").show();
+        $("#tg1").addClass("layui-table");
+        //input重写
+        $("#maincontent").find(".allinput").bind("click", function () {
+            $(this).toggleClass("layui-form-checked");
+            $(this).children().toggleClass("addpic");
+        });
+        //全选
+        $("#maincontent").find(".firstinput").bind("click", function () {
+            if ($(this).hasClass("layui-form-checked")) {
+                $("#maincontent").find("td .layui-form-checkbox").removeClass("layui-form-checked");
+                $("#maincontent").find("td .layui-form-checkbox").children().removeClass("addpic");
+            } else {
+                $("#maincontent").find("td .layui-form-checkbox").addClass("layui-form-checked");
+                $("#maincontent").find("td .layui-form-checkbox").children().addClass("addpic");
+            }
+        });
+        //状态修改
+        $(".StateUpdate").click(function () {
+            var id = "";
+            var mes = "";
+            var chkItems = $(this).parents("tr");
+            var id = (eval('(' + chkItems.attr("data") + ')').checkboxValue);
+            var stateValue = (eval('(' + chkItems.attr("data") + ')').State);
+            if (stateValue == 0) {
+                var state = false;
+                mes = "是否启用所选择的项？"
+            } else if (stateValue == 1) {
+                var state = true;
+                mes = "是否禁用所选择的项？"
+            }
+            if (id != '') {
+                parent.layer.confirm(mes, { icon: 3 }, function () {
+                    $.post("ChangeState", { id: id, state: state }, function (data) {
+                        if (data.Flag) {
+                            window.location.href = "/Milestone/Index";
+                            parent.layer.msg("操作成功！", { time: 1000, icon: 1 });
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                });
+            }
+        });
+    });
+
+    //查询
+    $("#search").on("click", function () {
+        var selectval = $("#State").val();
+        var inputval = $("#name").val();
+        $("#tg1 tr").each(function (i) {
+            if (i != 0) {
+                var name = eval('(' + $(this).attr("data") + ')').Name;
+                var State = eval('(' + $(this).attr("data") + ')').State;
+                if (inputval) {
+                    if (selectval == "Enable") {
+                        if (name == inputval && State == 1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    } else if (selectval == "Disable") {
+                        if (name == inputval && State == 0) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    } else {
+                        if (name == inputval) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    }
+                } else {
+                    if (selectval == "Enable") {
+                        if (State == 1) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    } else if (selectval == "Disable") {
+                        if (State == 0) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    } else {
+                        $(this).show();
+                    }
+                }
+            }
+        });
+
+    });
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //修改
+        $(".maincontent").on("click", ".editor-link", function () {
+            var checkvalue = eval('(' + $(this).parents("tr").attr("data") + ')').checkboxValue;
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("里程碑管理-编辑"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['900px', '700px'],
+                content: '/Milestone/Edit?id=' + checkvalue,
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+
+        //增加
+        $("#add").click(function () {
+            parent.layer.open({
+                type: 2,
+                title: GetLayerTitle("里程碑管理-添加"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['900px', '700px'],
+                content: '/Milestone/Add',
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $(".addpic").parent().parent().parent().not(".header");
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = (eval('(' + $(this).attr("data") + ')').checkboxValue);
+                ids += hfId + ",";
+            });
+            if (ids != "") {
+                parent.layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("Delete", { ids: ids }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/Milestone/Index?pageIndex=1&" + search;
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            } else {
+                parent.layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,186 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_Company>
+@{
+    ViewBag.Title = "单位管理";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="content-right date-wrap fl c">
+    <div class="search mt5">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称 : </label>
+                    <input type="hidden" name="belong" id="belong" value="@ViewBag.belong" />
+                    <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入单位名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5">
+        <div class="btns">
+            <a href="javascript:;" id="add" class="">新 增</a>
+            <a href="javascript:;" class="" id="delete">删 除</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="5%" class="table-center">
+                            <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                        </th>
+                        <th width="12%" class="table-left">单位编码</th>
+                        <th class="table-left">单位名称</th>
+                        <th width="12%" class="table-left">单位电话</th>
+                        <th width="12%" class="table-left">父单位编码</th>
+                        <th width="12%" class="table-left">父单位名称</th>
+                        <th width="15%" class="table-center">组织机构</th>
+                        <th width="8%" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                @if (item.Type == "Admin")
+                                {
+                                    <td class="table-center">
+                                        <input type="checkbox" lay-skin="primary" disabled="disabled" />
+                                        <input type="hidden" name="id-@item.Id" id="id-@item.Id" value="@item.Id" />
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="table-center">
+                                        <input type="checkbox" lay-skin="primary" name="chName" />
+                                        <input type="hidden" name="id-@item.Id" id="id-@item.Id" value="@item.Id" />
+                                    </td>
+                                }
+                                <td class="table-left">@item.Code</td>
+                                <td class="table-left">@item.Name</td>
+                                <td class="table-left">@item.Phone</td>
+                                <td class="table-left">@item.PreCode</td>
+                                <td class="table-left">@item.PreName</td>
+                                <td class="table-center">
+                                    <a href="/HCOrganization/branch?belong=@item.Type&leftPId=@item.SId&rightPId=@item.SId" class="organization-link text-link" data-itemid="@item.SId" title="组织机构">组织机构</a>&nbsp;&nbsp;
+                                </td>
+                                <td class="table-center">
+                                    @if (item.Type == "Owner" || item.Type == "Supplier")
+                                    {
+                                        <a href="/HCOrganization/edit?id=@item.SId&Belong=@item.Type" class="editor-link " data-itemid="@item.SId" title="编辑" data-module="@(ViewBag.belong)Organization" data-right="modify"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                    }
+                                    <a href="/HCOrganization/detail?id=@item.SId&Belong=@item.Type" class="detail-link " data-itemid="@item.SId" title="详情" data-module="@(ViewBag.belong)Organization" data-right="info"><i class='glyphicon glyphicon-list-alt handle-blue'></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="table-center">
+                                暂无数据
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        laypage.render({
+            elem: 'page',
+            count: @ViewBag.Total,
+            curr:@ViewBag.pageIndex,
+            layout: ['prev', 'page', 'next', 'skip','count', ],
+            jump:function(obj,first){
+                if (!first){
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/HCOrganization/Index?pageIndex=" + curr +"&" + search;
+                }
+            }
+        });
+        //表格全选
+        layui.use('form', function () {
+            var $ = layui.jquery, form = layui.form;
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[name="chName"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+        });
+        //新增单位
+        //（判断是否管理员与专家单位,若存在专家或管理员单位，则不能继续添加）、
+        $("#add").on("click",function(){
+            @*if('@ViewBag.Belong' == "Admin"){//判断当前点击是否是专家或管理员单位
+                $.post("/Organization/HasCompany",{type:'@ViewBag.Belong'},function(data){//判断是否存在单位
+                    if(data.Flag){
+                        if(data.Data != null){
+                            parent.layer.alert("@ViewBag.belongText"+"单位是唯一的，不能继续添加",{icon:6})
+                        }else{
+                            window.location.href = "/Organization/Add?Belong=@ViewBag.Belong&rightPId=0";//跳转新增页面
+                        }
+                    }else{
+                        parent.layer.alert(data.Message,{icon:3})
+                    }
+                })
+            }else{
+                window.location.href = "/Organization/Add?Belong=@ViewBag.Belong&rightPId=0";
+            }*@
+            window.location.href = "/HCOrganization/Add?Belong=@ViewBag.Belong&rightPId=0";
+
+        })
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {//获取选择要删除的项
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if('@ViewBag.Belong' == "Admin"){//管理员单位与专家单位不可删除
+                layer.alert("@ViewBag.belongText"+"单位不可删除！",{icon:6})
+            }else{
+                if (ids != "") {
+                    layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {//批量删除单位
+                        $.post("/HCOrganization/Delete", { ids: ids,belong: '@ViewBag.belong' }, function (data) {
+                            if (data.Flag) {
+                                layer.msg("删除成功", { time: 1000, icon: 1 });
+                                var search = $("form").serialize();
+                                window.location.href = "/HCOrganization/Index?pageIndex=1&" + search;
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    }, function () {
+                        return;
+                    })
+
+                } else {
+                    layer.alert("请先选择要删除的数据", { icon: 2 });
+                }
+            }
+        });
+    });
+</script>

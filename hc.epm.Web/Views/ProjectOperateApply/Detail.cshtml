@@ -1,0 +1,316 @@
+﻿@using hc.epm.ViewModel;
+@model ProjectApprovalView
+@{
+    ViewBag.Title = "Detail";
+}
+
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .pro {
+        display: inline-block;
+        height: 50px;
+        border-bottom: 1px solid black;
+        line-height: 50px;
+        width: 300px;
+        text-align: left;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 250px;
+    }
+
+    .pic {
+        top: 2px;
+        cursor: pointer;
+        left: 220px;
+        font-size: 20px;
+        left: -28px;
+        position: relative;
+    }
+
+
+    .bold-name {
+        font-weight: 800;
+    }
+
+    table td {
+        width: 25%;
+    }
+
+    .timer {
+        width: 200px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+
+    .timer-pic {
+        left: -24px;
+        position: relative;
+    }
+
+    .tera {
+        width: 788px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .add-icon {
+        color: darkseagreen;
+    }
+
+    .file-wrap {
+        height: 35px;
+        width: 245px;
+        margin-top: 20px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+    }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 10px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                /*overflow: hidden;*/
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .iconfont {
+        left: 108px;
+        top: -26px;
+    }
+
+    .btn1 {
+        background-color: #6a6969 !important;
+        color: white;
+        top: -33px;
+        left: 92px;
+        width: 30px;
+    }
+
+        .btn1:hover {
+            color: white;
+        }
+
+    .comPro {
+        width: 65%;
+        margin-top: 25px;
+    }
+
+    .input_unit {
+        margin-top: 10px;
+    }
+    #close {
+         background-color:#6a6969 !important;
+    }
+</style>
+<div class="contentData">
+    <form id="formData">
+        <div class="top-title">
+            <span class="ti">试运行申请表</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tbody>
+                <tr style="height:60px;">
+                    <td class="bold-name">
+                        <div class="btn-upload">
+                            项目名称
+                        </div>
+
+                    </td>
+                    <td class="td-div">
+                        <div>@Model.ProjectPolit.ProjectName</div>
+                    </td>
+
+                    <td>
+                        <div class="btn-upload">
+                            <div class="bold-name">
+                                地市公司名称
+                            </div>
+                        </div>
+                    </td>
+                    <td class="td-div">
+                        <div>@Model.ProjectPolit.CompanyName</div>
+                        <input type="hidden" id="CompanyId" name="CompanyId" />
+                        <input type="hidden" id="Id" name="Id" value="@Model.ProjectPolit.Id" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">开工时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.StartDate == null) {
+                            <div></div>
+                        }
+                        @if (Model.ProjectPolit.StartDate != null)
+                        {
+                            <div>@Convert.ToDateTime(Model.ProjectPolit.StartDate).ToString("yyyy-MM-dd")</div>
+                        }
+                        
+                    </td>
+                    <td class="bold-name">竣工时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.EndDate == null)
+                        {
+                            <div></div>
+                        }
+                        @if (Model.ProjectPolit.EndDate != null)
+                        {
+                            <div>@Convert.ToDateTime(Model.ProjectPolit.EndDate).ToString("yyyy-MM-dd")</div>
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">工程交接验收时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.AcceptDate == null)
+                        {
+                            <div></div>
+                        }
+                        @if (Model.ProjectPolit.AcceptDate != null)
+                        {
+                            <div>@Convert.ToDateTime(Model.ProjectPolit.AcceptDate).ToString("yyyy-MM-dd")</div>
+                        }
+
+                    </td>
+                    <td class="bold-name">验收问题整改完成时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.RectFinishDate == null)
+                        {
+                            <div></div>
+                        }
+                        @if (Model.ProjectPolit.RectFinishDate != null)
+                        {
+                            <div>@Convert.ToDateTime(Model.ProjectPolit.RectFinishDate).ToString("yyyy-MM-dd")</div>
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">计划完成工程决算时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.FinalDate == null)
+                        {
+                            <div></div>
+                        }
+                        @if (Model.ProjectPolit.FinalDate != null)
+                        {
+                            <div>@Convert.ToDateTime(Model.ProjectPolit.FinalDate).ToString("yyyy-MM-dd")</div>
+                        }
+
+                    </td>
+                    <td class="bold-name">计划完成工程审计时间</td>
+                    <td class="td-div">
+                        @if (Model.ProjectPolit.AuditDate == null)
+                        {
+                            <div></div>
+                        }
+                        @if (Model.ProjectPolit.AuditDate != null)
+                        {
+                            <div>@Convert.ToDateTime(Model.ProjectPolit.AuditDate).ToString("yyyy-MM-dd")</div>
+                        }
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="bold-name">消防、环保、安全、专项验收情况及竣工资料是否齐全</td>
+                    <td colspan="3" class="td-div">
+                        <div>@Model.ProjectPolit.FullFiles</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分公司验收意见</td>
+                    <td colspan="3" class="td-div">
+                        <div>@Model.ProjectPolit.AcceptOpinion</div>
+                    </td>
+                </tr>
+                <div class="module-div">
+                    @*<h4>附件信息</h4>*@
+                    <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                        <tbody class="fileShow-append fileShow-append1" id="SCFJ">
+                            <tr class="headtr">
+                                <th class="table_title" style="width: 219px;">序号</th>
+                                <th class="td-div">附件名称</th>
+                                <th class="table_title">附件类型</th>
+                                <th class="td-div">操作</th>
+                            </tr>
+                            @if (Model.ProjectPolit != null)
+                            {
+                                if (Model.ProjectPolit.TzAttachs != null && Model.ProjectPolit.TzAttachs.Count() > 0)
+                                {
+                                    foreach (var item in Model.ProjectPolit.TzAttachs)
+                                    {
+                                        <tr id="${obj.GuidId}">
+                                            <td><span class="font-black sort">@item.Sort</span></td>
+                                            <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                            <td><span class="font-black">@item.TypeName</span></td>
+                                            <td class="td-div" style="text-align:center">
+                                                <a class="fileDel downloadFile" href="javascript:void(0)" data-url="@item.FilePath" data-name="@item.Name" style="color:#337ab7;">下载</a>
+                                                <input type="hidden" class="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </tbody>
+        </table>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        </div>
+    </form>
+</div>
+<script>
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectOperateApply/Index";
+    });
+
+    //下载附件
+    $("body").on("click", ".downloadFile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("name");
+        window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+    });
+</script>

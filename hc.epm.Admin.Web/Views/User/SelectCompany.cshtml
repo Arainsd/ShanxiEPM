@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "SelectProject";
+}
+<style>
+    .layui-laypage a, .layui-laypage span {
+        padding: 0 10px !important;
+    }
+</style>
+<div class="content-right date-wrap fl c" style="margin-top: 10px;">
+    <div class="search mt5" style="padding:5px 10px;">
+        <form class="layui-form" action="" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="width:100px;">单位名称 : </label>
+                    <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入单位名称" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                </div>
+                <label class="layui-form-label">单位类型 : </label>
+                <div class="layui-input-inline">
+                    @Html.DropDownList("type", null, new { @class = "form-control" })
+                   
+                </div>
+                <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" style="margin-left:0px;" />
+            </div>
+        </form>
+    </div>
+    <div class="main mt5" style="padding:5px 10px;">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th width="10%" class="table-center">序号</th>
+                        <th width="80%" class="table-left">单位名称</th>
+                        <th width="10%" class="table-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td class="table-center">@index</td>
+                                <td class="table-left">@item.Name</td>
+                                <td class="table-center">
+                                    <a href="javascript:void(0);" onclick="SelectData(this);" companyid="@item.SId" companyname="@item.Name">选择</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="table-center">
+                                暂无数据
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div id="page"></div>
+    </div>
+</div>
+<script>
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/User/SelectCompany?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    function SelectData(obj) {
+        parent.$("#CompanyId").val($(obj).attr("companyid"));
+        parent.$("#CompanyName").val($(obj).attr("companyname"));
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    }
+</script>

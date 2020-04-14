@@ -1,0 +1,140 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.Common;
+@using hc.epm.ViewModel;
+@model PlanView
+@{
+    ViewBag.Title = "查看施工计划";
+}
+<body>
+@if (Model.Plan == null)
+{
+    <div class="contentData">
+        <div class="tab">
+            该数据已删除或者不存在！
+        </div>
+    </div>
+}
+else {
+    <div class="contentData">
+        <div class="tab">
+            <div class="long-text">
+                <label>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" disabled value="@Model.Plan.ProjectName" id="ProjectName" name="ProjectName" />
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.Plan.ProjectId" />
+                <input type="hidden" id="Id" name="Id" value="@Model.Plan.Id" />
+                <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;计划名称&nbsp;:</label>
+                <input type="text" disabled value="@Model.Plan.Name" id="Name" name="Name" />
+            </div>
+            <div class="long-text">
+                <label>&nbsp;计划批次    &nbsp;:</label>
+                <input type="text" disabled value="@Model.Plan.BatchNo" id="BatchNo" name="BatchNo" />
+            </div>
+            <div class="short-text">
+                <label>&nbsp;计划开始时间&nbsp;:</label>
+                <input type="text" disabled value="@(Model.Plan.StartTime == null ? "" : Convert.ToDateTime(Model.Plan.StartTime).ToString("yyyy-MM-dd"))"id="StartTime" name="StartTime">
+                <i onClick="WdatePicker({ el: 'StartTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="short-text">
+                <label>&nbsp;计划结束时间&nbsp;:</label>
+                <input type="text" disabled id="EndTime" name="EndTime" value="@(Model.Plan.EndTime == null ? "" : Convert.ToDateTime(Model.Plan.EndTime).ToString("yyyy-MM-dd"))">
+                <i onClick="WdatePicker({ el: 'EndTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="intro">
+                <div><label>&nbsp;计划说明&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" disabled>@Model.Plan.PlanContent</textarea>
+                </div>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;关联工程节点&nbsp;:</label>
+                <input type="text" disabled value="@Model.Plan.MilepostName" id="MilepostName" name="MilepostName" />
+                <i class="pic iconfont ii" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+            </div>
+            <div class="long-text">
+                <label>&nbsp;关联BIM&nbsp;:</label>
+                <input type="text" disabled />
+            </div>
+            
+            @*<div class="button-group btn-center">
+                <button type="button" class="exchange">沟通</button>
+            </div>*@
+        </div>
+        <div class="key">
+        </div>
+    </div>
+    <script>
+        //审核
+        $('.audit').on('click', function () {
+            var state = "ApprSuccess";
+            parent.layer.prompt({
+                formType: 2,
+                value: '',
+                title: '请输入审核通过原因'
+            }, function (value, index, elem) {
+                $.post("Reject", { id: '@Model.Plan.Id', reason: value, state: state }, function (data) {
+                    if (data.Flag) {
+                        parent.layer.msg("审核成功", { time: 2000, icon: 1 });
+                        location.href = "/Plan/Index";
+                    } else {
+                        parent.layer.alert(data.Message, { icon: 2 });
+                    }
+                }, "json");
+            }, function () {
+                return;
+            })
+        });
+        //驳回
+        $(".reject").click(function () {
+            var state = "ApprFailure";
+            parent.layer.prompt({
+                formType: 2,
+                title: '请输入驳回理由',
+                yes: function (index, layero) {
+                    // 获取文本框输入的值
+                    var value = layero.find(".layui-layer-input").val();
+                    if (value) {
+                        $.post("Reject", { id: '@Model.Plan.Id', reason: value, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("驳回成功", { time: 2000, icon: 1 });
+                                window.location.href = "/Plan/Index";
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    } else {
+                        parent.layer.alert("请输入驳回理由！", { icon: 2 });
+                    }
+                }
+            });
+        });
+        //废弃
+        $('.discard').on('click', function () {
+            var state = "Discarded";
+            if (id != "") {
+                parent.layer.confirm("确认要废弃所选择的项？", { icon: 3 }, function () {
+                    $.post("Archive", { id: '@Model.Plan.Id', state: state }, function (data) {
+                        if (data.Flag) {
+                            parent.layer.msg("废弃成功", { time: 2000, icon: 1 });
+                            window.location.href = "/Plan/Index?pageIndex=1";
+                        } else {
+                            parent.layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+            }
+        });
+        //沟通
+        $('.exchange').on('click', function () {
+            window.location.href = "/Question/Add?businType=Plan";
+        });
+    </script>
+}
+</body>
+

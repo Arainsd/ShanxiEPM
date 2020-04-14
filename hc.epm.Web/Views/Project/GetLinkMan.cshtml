@@ -1,0 +1,138 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_ProjectCompany
+@{
+    ViewBag.Title = "GetLinkMan";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<link href="~/Resource/plugins/layui-2.1.2/css/layui.css" rel="stylesheet" />
+<style>
+    .long-text {
+        margin-bottom: 10px;
+        height: 35px;
+        margin-left: 80px;
+    }
+
+        .long-text input {
+            height: 25px;
+            display: inline-block;
+            border: 1px solid #C7C7C7;
+            box-sizing: border-box;
+            padding-left: 10px;
+        }
+       .button-group {
+            padding-left: 200px;
+    }
+
+    .button-group button {
+        display: inline-block;
+        font-size: 14px;
+        margin: 30px 0 20px 0;
+        height: 25px;
+        border: none;
+        border-radius: 3px;
+        background-color: #FFA000;
+        color: #FEE9D3;
+        font-weight: 500;
+         width:88px;
+    }
+   .tab > div label {
+    text-align: right;
+    display: inline-block;
+    box-sizing: border-box;
+    padding-right: 15px;
+    width: 150px;
+    height: 35px;
+    line-height: 35px;
+}
+</style>
+<div class="contentData">
+    <form>
+        <div class="tab">
+            <div class="long-text">
+                <label class="label">&nbsp;原项目负责人&nbsp;:</label>
+                <input type="text" id="LinkMan" name="LinkMan" value="@Model.LinkMan" disabled />&nbsp;
+                <input type="hidden" id="Id" name="Id" value="@ViewBag.Id" />
+                <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                <input type="hidden" id="CompanyId" name="CompanyId" value="@Model.CompanyId" />
+                <input type="hidden" id="LinkState" name="LinkState" value="" />
+            </div>
+            <div class="long-text">
+                <label class="label">&nbsp;原项目负责人电话&nbsp;:</label>
+                <input type="text" id="PMPhone" name="PMPhone" value="@Model.LinkPhone" disabled />&nbsp;
+            </div>
+            <div class="long-text">
+                <label class="label">&nbsp;新项目负责人&nbsp;:</label>
+                <input type="text" id="PM_New" name="PM_New" value="@Model.LinkMan_New" disabled />&nbsp;
+            </div>
+            <div class="long-text">
+                <label class="label">&nbsp;新项目负责人电话&nbsp;:</label>
+                <input type="text" id="PMPhone_New" name="PMPhone_New" value="@Model.LinkPhone_New" disabled />&nbsp;
+            </div>
+            <div class="button-group btn-center">
+                <button type="button" class="AuditePass checkright" data-state="@(ApprovalState.ApprSuccess.GetValue().ToString())" data-module="ConProject" data-right="AuditCustomerUser">审核</button>
+                <button type="button" class="AuditeNotPass checkright" data-state="@(ApprovalState.ApprFailure.GetValue().ToString())" data-module="ConProject" data-right="RejectCustomerUser">驳回</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    $(".AuditePass").click(function () {
+        var state = $(this).data("state");
+        $("#LinkState").val(state);
+        var search = $("form").serialize();
+        $.post("AuditeLinkMan", search, function (data) {
+            if (data.Flag) {
+                parent.layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                    //parent.window.location.reload();
+                    var id = $("#Id").val();
+                    var ids = parent.$(".datalist").find(".inputId");
+                    if (ids.length > 0) {
+                        for (var i = 0; i < ids.length; i++) {
+                            if (ids[i].value == id) {
+                                $(ids[i]).parent().parent().find(".LinkMan").text($("#PM_New").val());
+                                $(ids[i]).parent().parent().find(".LinkPhone").text($("#PMPhone_New").val());
+                                $(ids[i]).parent().parent().find(".LinkManAudite").hide();
+                            }
+                        }
+                    }
+                });
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+    });
+    $(".AuditeNotPass").click(function () {
+        var state = $(this).data("state");
+        $("#LinkState").val(state);
+        var search = $("form").serialize();
+        $.post("RejectLinkMan", search, function (data) {
+            if (data.Flag) {
+                parent.layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                    //parent.window.location.reload();
+                    var id = $("#Id").val();
+                    var ids = parent.$(".datalist").find(".inputId");
+                    if (ids.length > 0) {
+                        for (var i = 0; i < ids.length; i++) {
+                            if (ids[i].value == id) {
+                                $(ids[i]).parent().parent().find(".LinkManAudite").hide();
+                            }
+                        }
+                    }
+                });
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+    });
+</script>
+
+
+

@@ -1,0 +1,185 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.epm.UI.Common;
+@model Base_Config
+@{
+    ViewBag.Title = "系统设置编辑";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style>
+    .content-right .layui-form-label {
+        width: 110px;
+    }
+</style>
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> 系统设置 </span> > <span> 系统设置编辑</span>
+    </div>
+    <div class="main mt5">
+        <form class="layui-form" action="" style="width:70%;" id="mainForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><em class="required">*</em>公司名称</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <input type="text" name="Name" id="Name" lay-verify="required" placeholder="请输入公司名称" autocomplete="off" class="layui-input" value="@Model.Name">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">简称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="ShortName" placeholder="请输入简称" autocomplete="off" class="layui-input" value="@Model.ShortName">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><em class="required">*</em>版权声明</label>
+                <div class="layui-input-block">
+                    <input type="text" name="CopyRight" required lay-verify="required" placeholder="请输入版权声明" autocomplete="off" class="layui-input" value="@Model.CopyRight">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><em class="required">*</em>联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="ContractTel" lay-verify="required" placeholder="请输入联系电话" autocomplete="off" class="layui-input" value="@Model.ContractTel">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><em class="required">*</em>Footer说明</label>
+                <div class="layui-input-block">
+                    <input type="text" name="LowRecord" required lay-verify="required" placeholder="请输入Footer说明" autocomplete="off" class="layui-input" value="@Model.LowRecord" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Logo上传</label>
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-primary " id="btnSelect">
+                        <i class="layui-icon" style="font-size:30px;">&#xe622;</i>
+                    </button>
+                    <button class="layui-btn layui-btn-primary " id="btnUpload">
+                        <i class="layui-icon" style="font-size:30px;">&#xe62f;</i>
+                    </button>
+                    <div id="fileList">
+                        @if (!string.IsNullOrEmpty(Model.Logo))
+                        {
+                            <a href="javascript:" id="look" data-img="@Model.Logo">查看</a>
+                        }
+                    </div>
+                    <input type="hidden" name="Logo" id="Logo" value="@Model.Logo" />
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12" style="margin-top:25px">
+                <div class="col-lg-6 col-sm-6" style="text-align:right;margin-bottom:10px">
+                    <input type="button" name="save" id="save" lay-submit="" lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save">
+                </div>
+                <div class="col-lg-6 col-sm-6" style="margin-bottom:10px">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="cancel layui-btn layui-btn-small button-base bg-cancel ">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    //Demo
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery;
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            $.post("Edit", search, function (data) {
+                if (data.Flag) {
+                    parent.layer.msg("系统设置修改成功", { time: 1000, icon: 1 }, function (index) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                        parent.window.frames["mainFrame"].location.reload();
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+
+        });
+
+        //预览图片
+        $("body").on("click", "#look", function () {
+            var img = $(this).data("img");
+            parent.layer.open({
+                type: 1,
+                shadeClose: true, //点击遮罩关闭层
+                area: [BigLayerWidth, '500px'],
+                content: '<img src="' + img + '" />'
+            });
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        //图标上传
+        var uploader = new plupload.Uploader({
+            runtimes: 'html5,flash,silverlight,html4', // 这里是说用什么技术引擎
+            url: FileResourceURL, // 服务端上传路径
+            max_file_size: MaxPicSize, // 文件上传最大限制。
+            max_file_count: 1, //指示用户可以同时上传文件的最大数量
+            chunk_size: 0, // 上传分块每块的大小，这个值小于服务器最大上传限制的值即可,0表示不启用分块。
+            browse_button: 'btnSelect',//触发上传元素
+            flash_swf_url: '/Scripts/plupload_2_1_2/Moxie.swf',
+            silverlight_xap_url: '/Scripts/plupload_2_1_2/Moxie.xap',
+            multi_selection: false,//	是否可以在文件浏览对话框中选择多个文件
+            //附加参数
+            multipart_params: {
+                app: 'epm'
+            },
+            //  这个数组是选择器，就是上传文件时限制的上传文件类型，在chrome下有bug，要等待
+            filters: {
+                mime_types: [ //只允许上传图片和zip文件
+                { title: "Image files", extensions: "jpg,gif,png,pdf" },
+                ],
+                max_file_size: MaxPicSize, //最大只能上传400kb的文件
+                prevent_duplicates: true //不允许选取重复文件
+            },
+            rename: false, // 是否重命名文件
+            init: {
+                PostInit: function () {
+                    $('#btnUpload').click(function () {
+                        uploader.start();
+                        return false;
+                    });
+                },
+                FilesAdded: function (up, files) {
+                    $('#fileList').html("");
+                    //限定只能上传一个文件
+                    if (files.length > 1) {
+                        up.removeFile(files[0]);
+                    }
+                    plupload.each(files, function (file) {
+                        $('#fileList').append('<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>');
+                    });
+                },
+                UploadProgress: function (up, file) {
+                    $("#" + file.id + " b:eq(0)").html('(<span>' + file.percent + "%</span>)");
+                },
+                FileUploaded: function (uploader, file, responseObject) {
+                    var data = JSON.parse(responseObject.response);
+                    for (var i = 0; i < data.file.length; i++) {
+                        var imgurl = FileURL + data.file[i].VirtualURL;
+                        $("#Logo").val(imgurl);
+                        $('#fileList').append('<a href="javascript:" id="look" data-img="' + imgurl + '">查看</a>');
+                    }
+                    uploader.removeFile(file);
+                },
+                Error: function (up, err) {
+                    if (err.code == -600) {
+                        parent.layer.alert('仅支持' + MaxPicSize + '以内文件，请重新上传', { icon: 2 })
+                    }
+                    else if (err.code == -602) {
+                        parent.layer.alert('不允许上传重复文件，请重新上传', { icon: 2 })
+                    }
+                    else {
+                        parent.layer.alert("错误：" + err.code + ": " + err.message);
+                    }
+                }
+            }
+        });
+        uploader.init();
+
+    });
+</script>

@@ -1,0 +1,44 @@
+﻿
+@{
+    Layout = null;
+    Layout = "~/Views/Shared/_LayoutUn.cshtml";
+}
+
+
+<style>
+    .wrap {
+        width: 100%;
+        min-height: 360px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 20px;
+        padding-top:100px;
+    }
+    .wrap a{
+        color:#0000cc;
+    }
+    #sec{
+        color:red;
+    }
+</style>
+
+<div class="wrap">
+    <p style="margin:70px 0;">提示：您的登录已超时。系统将 <span id="sec">5</span> 秒后返回<a href="/"> 登录页</a></p>
+    @*<a href="~/Views/Currency/Login.cshtml"><span class="glyphicon glyphicon-login" aria-hidden="true"></span>返回登录页</a><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> 前往首页</a>*@
+</div>
+
+<script type="text/javascript">
+        function lazyGo() {
+            var sec = $("#sec").text();
+            $("#sec").text(--sec);
+            if (sec > 0)
+                setTimeout("lazyGo();", 1000);
+            else
+                window.location.href = "@Url.Action("Login")";
+        }
+        $(function () {
+
+            setTimeout("lazyGo();", 1000);
+        });
+
+</script>

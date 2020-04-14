@@ -1,0 +1,262 @@
+﻿
+@{
+    ViewBag.Title = "ProjectApplicationEdit";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+
+</style>
+
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label col-12-lf">项目名称<i class="color_red">*</i>：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input id="ProjectName" type="text" name="ProjectName" class="form-control" placeholder="" />
+                        <input id="ProjectId" type="hidden" name="ProjectId" class="form-control" />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">项目性质<i class="color_red">*</i>：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @*@Html.DropDownList("ProjectNatureType", ViewBag.ProjectNature as SelectList, null, new { @class = "form-control" })*@
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="ProjectNatureTypeName" type="hidden" name="ProjectNatureTypeName" value="" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">站库名称<i class="color_red">*</i>：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" id="StationName" name="StationName" class="form-control" placeholder="" readonly />
+                            <input type="hidden" id="StationId" name="StationId" />
+                            <input type="hidden" id="StationCodeInvest" name="StationCodeInvest" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">提出时间<i class="color_red">*</i>：</label>
+                        <div class="col-lg-8 col-sm-8 apply_time">
+                            <input type="text" class=" form-control position_rel" id="ApplyTime" name="ApplyTime" onClick="WdatePicker({ el: 'ApplyTime' })">
+                            <i onClick="WdatePicker({ el: 'ApplyTime' })" class="iconfont ">&#xe7e2;</i>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">地市公司：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" id="CompanyName" name="CompanyName" class="form-control" placeholder="" readonly />
+                            <input type="hidden" id="CompanyId" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">推荐人姓名：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="Recommender" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">推荐人职务：</label>
+                        <div class="col-lg-8 col-sm-8"><input type="text" name="RecommenderJob" class="form-control" placeholder="" /></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-4 col-sm-4 control-label col-12-lf">推荐人单位：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input id="Project_name" type="text" name="RecommenderCompany" class="form-control" placeholder="" />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-4 col-sm-4 control-label col-12-lf">申报人：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="text" name="Declarer" class="form-control" placeholder="" />
+                    </div>
+                    <div class="col-lg-2 col-sm-2">
+                        <div class="form-group size" style="color:red;">
+                            <label>(申报人三人以上以"、"分开) </label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">地理位置<i class="color_red">*</i>：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @*@Html.DropDownList("PositionType", ViewBag.GeographicDosition as SelectList, null, new { @class = "form-control" })*@
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="Position" type="hidden" name="Position" value="" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">项目地理位置<i class="color_red">*</i>：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" name="ProjectPosition" class="form-control" placeholder="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">加油站类别：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            @*@Html.DropDownList("StationType", ViewBag.GasStationType as SelectList, null, new { @class = "form-control" })*@
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="StationTypeCode" type="hidden" name="StationTypeCode" value="" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">估计金额<i class="color_red">*</i>：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="PredictMoney" class="form-control" placeholder="" />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">万元</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">估计气日销量(CNG)：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="PredictDayGas" class="form-control" placeholder="" />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">万元 </label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">估计气日销量(LNG)：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="PredictDayGas2" class="form-control" placeholder="" />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">万元 </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-sm-4 control-label">估计油日销量<i class="color_red">*</i>：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" name="PredictDayOil" class="form-control" placeholder="" />
+                        </div>
+                        <label class="col-lg-2 col-sm-2 size">千方 </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12 col-sm-12 af-na">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label col-12-lf">附件：</label>
+                    <div class="col-lg-9 col-md-9">
+                        <div class="col-lg-6 col-sm-6">
+                            <div class="form-group type-file">
+                                <label class="col-lg-4 col-sm-4 control-label">类型：</label>
+                                <div class="col-lg-8 col-sm-8">
+                                    @*@Html.DropDownList("StationType", ViewBag.GasStationType as SelectList, null, new { @class = "form-control" })*@
+                                    <select class="form-control">
+                                        <option value="value">text</option>
+                                    </select>
+                                    <input id="StationTypeCode" type="hidden" name="StationTypeCode" value="" />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-2" id="fileListFile">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn btn-primary form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#169BD5!important;" value="上传附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                        </div>
+
+                        <div class="col-lg-12 col-sm-12" id="fileListFile">
+                            <div style="margin-top:3px;">
+                                <table class="fileShow" border="1">
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>附件名称</th>
+                                        <th>附件类型</th>
+                                        <th>附件大小</th>
+                                        <th>时间</th>
+                                        <th>操作</th>
+
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>附件名称</td>
+                                        <td>会议纪要</td>
+                                        <td>200k</td>
+                                        <td>2019-10-10</td>
+                                        <td><a href="#">删除</a></td>
+
+                                    </tr>
+                                    @*@foreach (var item in Model.TzAttachs)
+                                        {
+                                            <tr>
+                                                <td>@item.Sort</td>
+                                                <td style="color:blue;"><a href="@item.FilePath" target="_blank">@item.Name</a></td>
+                                                <td>@item.TypeName</td>
+                                                <td>@item.Size</td>
+                                                <td>@item.OperateUserName</td>
+                                                <td>@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))</td>
+                                            </tr>
+                                        }*@
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big " data-state="" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+
+        </div>
+    </form>
+</div>

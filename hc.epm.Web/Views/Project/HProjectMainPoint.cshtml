@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "HProjectMainPoint";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<div>
+    <table class="datalist" id="tb">
+        <tr>
+            @foreach (var col in Model.Columns)
+            {
+                <th>@col</th>
+            }
+        </tr>
+        @foreach (System.Data.DataRow item in Model.Rows)
+            {
+            <tr>
+
+                @foreach (var rows in item.ItemArray)
+                {
+                    <td>@rows</td>
+                }
+            </tr>
+        }
+    </table>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    $(function () {
+        function autoRowSpan(tb, row, col) {
+            var lastValue = "";
+            var value = "";
+            var pos = 1;
+            for (var i = row; i < tb.rows.length; i++) {
+                value = tb.rows[i].cells[col].innerText;
+                if (lastValue == value) {
+                    //tb.rows[i].deleteCell(col + 1);
+                    //tb.rows[i - pos].cells[col + 1].rowSpan = tb.rows[i - pos].cells[col + 1].rowSpan + 1;
+                    tb.rows[i].deleteCell(col);
+                    tb.rows[i - pos].cells[col].rowSpan = tb.rows[i - pos].cells[col].rowSpan + 1;
+                    pos++;
+                } else {
+                    lastValue = value;
+                    pos = 1;
+                }
+            }
+        }
+        autoRowSpan(tb, 0, 0);
+    });
+</script>

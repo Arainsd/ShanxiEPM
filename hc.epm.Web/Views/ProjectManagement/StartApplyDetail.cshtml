@@ -1,0 +1,475 @@
+﻿
+@{
+    ViewBag.Title = "StartApplyDetail";
+}
+
+<style>
+    .file-wrap {
+        height: 35px;
+        width: 300px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .timer_p {
+        position: relative;
+    }
+
+    .timer_c {
+        position: absolute;
+        bottom: 16px;
+        left: 136px;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>申请人信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同报审序号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">erp订单号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>--</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+
+                            <span class="font-black">设计规模或能力</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目建设书批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">估算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">可研报告批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或初步设计批准文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">批复投资或概算投资（万元）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">资金来源</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">当前计划投资情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">计划建设工期（天）</span>
+                        </td>
+                        <td class="td-div">
+                            <div>--</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程项目概况及主要工程内容和主要工程量</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构及人员到位情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设总体部署（或施工组织设计）编制情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">设计单位及图纸落实情况（主要设计单位、施工图交付计划情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">项目经理</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（施工）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工单位落实及施工队伍、机具进场情况（主要施工单位、合同签订情况）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">监理工程师</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">安全考试成绩（监理）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">监理单位、质量监督部门落实情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工前期准备情况（包括征地、拆迁、四通一平等）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">主要设备、材料订货、到货情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">环境影响、劳动安全卫生、消防等审批手续办理情况</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目管理机构（项目经理部或油库项目组）设立的文件、机构组成和职责分工各一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件1-->
+                            <div class="">
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="XMGLJGWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">立项批复或项目初步设计批复文件复印件一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件2-->
+                            <div class="">
+                              
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="LXPFWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">经审批的施工组织设计或工程建设总体部署一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件3-->
+                            <div class="">
+                               
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="SGSJWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">施工进场人员名单及《安全教育合格证》（复印件）</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件4-->
+                            <div class="">
+                               
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="AQJYZWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">分公司与供应厂商确定的主要设备材料交付时间表一份</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件5-->
+                            <div class="">
+                                
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="GYSWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <!--附件6-->
+                            <div class="">
+                               
+                                <div style="width:100%; margin-top:5px;" id="fileList">
+                                    <ul class="fileShow" id="HSEWJ"></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程建设项目，海英提供审查通过后的HSE作业指导书、HSE作业计划书和HSE现场检查表</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <script id="editor2" name="SignIdea" type="text/javascript" style="width:900px;margin:0 auto;"></script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+       
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+    
+    </form>
+</div>

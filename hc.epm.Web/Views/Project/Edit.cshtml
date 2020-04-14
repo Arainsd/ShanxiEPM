@@ -1,0 +1,610 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model Epm_Project
+@{
+    ViewBag.Title = "修改项目";
+}
+<style type="text/css">
+    .tab .upload li {
+        width: 100px;
+    }
+
+    .setbut {
+        width: 120px !important;
+    }
+
+    .supportType {
+        margin-left: 20px;
+        color: #999999;
+    }
+
+    .selectbg {
+        background: #ebebe5;
+    }
+
+</style>
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Edit" class="active">基本信息</li>
+        <li id="ApprovalConstitute">总批复构成</li>
+        <li id="ProjectISP">工程供应商</li>
+        <li id="ProjectMainPoint">工程要点</li>
+        <li id="MilestonePlan">工程节点</li>
+        <li id="TimeManage">工期管理</li>
+        <li id="IsCrossingsManage">外部手续</li>
+    </ul>
+    <div class="tab-view">
+        <input type="hidden" id="code" name="code" />
+        <form id="mainForm" method="post">
+            <div class="tab" id="tab">
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目编号&nbsp;:</label>
+                    <input type="text" id="Code" name="Code" value="@Model.Code" />
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                    <input type="hidden" id="IsDirector" name="IsDirector" value="@ViewBag.IsDirector" />
+                    <input type="hidden" id="userId" value="@Model.ContactUserId" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="Name" name="Name" value="@Model.Name" readonly class="selectbg" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;项目性质&nbsp;:</label>
+                    <select id="ProjectNatureName" name="ProjectNatureName" readonly class="selectbg" autocomplete="off">
+                        <option selected>@Model.ProjectNatureName</option>
+                    </select>
+                    <input type="hidden" id="ProjectNature" name="ProjectNature" value="@Model.ProjectNature" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;站库名称&nbsp;:</label>
+                    <input type="text" id="ProjectSubjectName" name="ProjectSubjectName" value="@Model.ProjectSubjectName" readonly class="selectbg garage" />
+                    <input type="hidden" id="ProjectSubjectId" name="ProjectSubjectId" value="@Model.ProjectSubjectId" />
+                    <input type="hidden" id="ProjectSubjectCode" name="ProjectSubjectCode" value="@Model.ProjectSubjectCode" />
+                    <i class="pic iconfont garage" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                @if (Model.ContactUserId != null && Model.ContactUserId != 0)
+                {
+                    <div class="region">
+                        <label><span class="star">*</span>&nbsp;项目地区&nbsp;:</label>
+                        <select id="Province" name="Province" readonly class="selectbg" autocomplete="off" style="display:none">
+                            <option value="陕西省" data-item="610000">陕西省</option>
+                        </select>
+                        <select id="City" name="City"></select>
+                        <select id="Area" name="Area"></select>
+                    </div>
+                    <div class="long-text">
+                        <label><span class="star">*</span>&nbsp;项目地址&nbsp;:</label>
+                        <input type="text" id="Address" name="Address" value="@Model.Address" autocomplete="off" />
+                    </div>
+                }
+                <div class="long-text">
+                    <label style="margin-left: -68px;width: 188px;"><span class="star">*</span>&nbsp;投资概算（总批复金额）&nbsp;:</label>
+                    <input type="text" id="Amount" name="Amount" value="@Model.Amount.ToString("#0.######")" readonly class="selectbg" /><span>&nbsp;万元</span>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目主题&nbsp;:</label>
+                    <input type="text" id="Description" name="Description" value="@Model.Description" autocomplete="off" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目经理&nbsp;:</label>
+                    <input type="text" id="PMName" name="PMName" value="@Model.PMName" readonly="readonly" autocomplete="off" />
+                    <input type="hidden" id="PMId" name="PMId" value="@Model.PMId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;经理电话&nbsp;:</label>
+                    <input type="text" id="PMPhone" name="PMPhone" value="@Model.PMPhone" maxlength="11" />
+                </div>
+                @if (Model.ProjectNatureName == "新建站")
+                {
+                    <div class="long-text" id="divGasolineDieselRatio">
+                        <label><span class="star">*</span>&nbsp;汽柴比&nbsp;:</label>
+                        <input type="text" id="GasolineDieselRatio" name="GasolineDieselRatio" value="@Model.GasolineDieselRatio" readonly="readonly" disabled class="selectbg" />
+                    </div>
+                }
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;批复文号&nbsp;:</label>
+                    <input type="text" id="ReplyNumber" name="ReplyNumber" value="@Model.ReplyNumber" readonly="readonly" disabled class="selectbg" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;所属分公司&nbsp;:</label>
+                    <input type="text" id="CompanyName" name="CompanyName" value="@Model.CompanyName" readonly="readonly" disabled class="selectbg" autocomplete="off" />
+                    <input type="hidden" id="CompanyId" name="CompanyId" value="@Model.CompanyId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;分公司负责人&nbsp;:</label>
+                    <input type="text" id="ContactUserName" name="ContactUserName" value="@Model.ContactUserName" readonly />
+                    <input type="hidden" id="ContactUserID" name="ContactUserID" value="@Model.ContactUserId" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;负责人电话&nbsp;:</label>
+                    <input type="text" id="ContactPhone" name="ContactPhone" value="@Model.ContactPhone" />
+                </div>
+                @if (Model.ContactUserId != null && Model.ContactUserId != 0)
+                {
+                    <div class="short-text">
+                        <label><span class="star">*</span>&nbsp;立项评审时间&nbsp;:</label>
+                        <input type="text" id="ReplyDate" name="ReplyDate" autocomplete="off" isShowToday="false" onClick="WdatePicker({ el: 'ReplyDate', isShowToday: false })" value="@(Model.ReplyDate == null ? "" : Convert.ToDateTime(Model.ReplyDate).ToString("yyyy-MM-dd"))">
+                        <i class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                    </div>
+                    <div class="upload" style="margin-bottom:0px;">
+                        <div><label>&nbsp;评审资料&nbsp;:</label></div>
+                        <div class="btn-upload">
+                            <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                            <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" />
+                        </div>
+                    </div>
+                    <div style="width:100%;" id="fileListFile">
+                        <ul class="fileShow"></ul>
+                        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                    </div>
+                    <div class="short-text">
+                        <label><span class="star"></span>&nbsp;方案选择&nbsp;:</label>
+                        @Html.DropDownList("BluePrintKey", null, new { @class = "form-control selectpicker show-tick" })
+                        <input type="hidden" name="BluePrintValue" id="BluePrintValue" />
+                    </div>
+                    <div class="intro">
+                        <div><label>&nbsp;工程内容&nbsp;:</label></div>
+                        <div>
+                            <textarea class="sub-description" id="ProjectContent" name="ProjectContent" maxlength="500">@Model.ProjectContent</textarea>
+                        </div>
+                    </div>
+                    <div class="intro">
+                        <div><label>&nbsp;备注&nbsp;:</label></div>
+                        <div>
+                            <textarea class="sub-description" id="Remark" name="Remark" maxlength="500">@Model.Remark</textarea>
+                        </div>
+                    </div>
+                }
+            </div>
+        </form>
+        <div class="button-group btn-center">
+            <button type="button" class="saveBut checkright" data-module="ProjectInfoManage" data-right="SaveBaseProject">保存</button>
+        </div>
+    </div>
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    //油站是否存在编码
+    var PId = $("#Id").val();
+    $.post("/Project/IsStationCode", { projectId: PId }, function (data) {
+        if (!data) {
+            layer.open({
+                skin: 'frame_button'
+                , type: 1
+               , title: "系统提示"
+               , offset: 'auto'
+               , area: ['470px', '170px']
+               , content: '<div style="padding: 20px 100px;">库站信息未同步，请在项目信息中选择站库</div>'
+               , btn: '确定'
+               , btnAlign: 'c' //按钮居中
+               , shade: 0 //不显示遮罩
+               , yes: function () {
+                   layer.closeAll();
+                   $("#ProjectSubjectName").removeAttr("readonly");
+                   $("#ProjectSubjectName").removeClass("selectbg");
+                   SelectOilStation();//调用函数
+               }
+            });
+        }
+    });
+    //选择加油站
+    function SelectOilStation() {
+        $(".garage").click(function () {
+            layer.open({
+                skin: 'frame_button',
+                type: 2,
+                title: GetLayerTitle("选取加油站"),
+                btnAlign: 'c',
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectOilStation',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        $("#ProjectSubjectName").val(obj.data[0].Name);
+                        $("#ProjectSubjectId").val(obj.data[0].Id);
+                        $("#ProjectSubjectCode").val(obj.data[0].Code)
+                        parent.layer.close(index);//关闭窗口
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    }
+    //项目经理
+    $("#PMName").click(function () {
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("选取项目经理"),
+            shadeClose: false, //点击遮罩关闭层
+            area: ['800px', '600px'],
+            content: '/Comm/SelectPM?Type=1',
+            btn: ["确定", "取消"],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var obj = iframeWin.getSelectData();
+                if (obj && obj.flag && obj.data) {
+                    $("#PMName").val(obj.data[0].Name);
+                    $("#PMId").val(obj.data[0].Id);
+                    $("#PMPhone").val(obj.data[0].Phone);
+                    parent.layer.close(index);//关闭窗口
+                } else if (!obj.flag) {
+                    parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                    return false;
+                }
+            },
+            btn2: function (index, layero) {
+                parent.layer.close(index);//关闭窗口
+            },
+            cancel: function (index, layero) {
+            },
+        });
+    });
+    //获取区域列表（省）
+    function getRegionList() {
+        var value = $('#Province').find($("option")).data("item");
+        $.post("/Project/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                $("#City").empty();
+                $("#City").append("<option value=''>请选择</option>")
+                $("#Area").empty();
+                $("#Area").append("<option value=''>请选择</option>")
+                for (var i = 0; i < data.Data.length; i++) {
+                    if ('@Model.City' == data.Data[i].RegionName) {
+                        $("#City").append("<option selected value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                    } else {
+                        $("#City").append("<option value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                    }
+                }
+                $('#City').addClass("show-tick");
+                $('#City').change();
+            }
+        });
+    }
+    //获取区域列表（县）
+    $("#City").change(function () {
+        var value = $('#City option:selected').data("item");
+        $.post("/Project/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                $("#Area").empty();
+                $("#Area").append("<option value=''>请选择</option>");
+                for (var i = 0; i < data.Data.length; i++) {
+                    if ('@Model.Area' == data.Data[i].RegionName) {
+                        $("#Area").append("<option selected value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                    } else {
+                        $("#Area").append("<option value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                    }
+                }
+                $('#Area').addClass("show-tick");
+            }
+        });
+    });
+
+    getRegionList();
+
+    var fileDataArray = [];
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = "ReplyDate";
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileListFile .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+
+    $('#btnUploadFile').click(function () {
+        document.getElementById("loadFile").click();
+    });
+    $(function () {
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = "ApprovalConstitute?projectId=@ViewBag.ProjectId"
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#TimeManage").click(function () {
+            window.location.href = 'TimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'ProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+
+        //获取附件
+        $.post("/Files/GetFileList", { tableName: 'Epm_Project', id: '@ViewBag.ProjectId', tableCol: "ReplyDate" }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    data.Data.forEach(function (item, index, arr) {
+                        if (item.ImageType == null) {
+                            var odiv = '<li id="' + item.GuidId + '">';
+                            odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                            odiv += '<div>' + item.Size + '</div>';
+                            odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                            odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                            odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel" data-val="' + item.GuidId + '">删除</span>'
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+
+                        var obj = {};
+                        obj.Name = item.Name;
+                        obj.GuidId = item.GuidId;
+                        obj.Size = item.Size;
+                        obj.Group = item.Group;
+                        obj.Url = item.Url;
+                        obj.TableColumn = item.TableColumn;
+                        obj.ImageType = item.ImageType;
+                        fileDataArray.push(obj);
+                    });
+                    var fileDataJsonFile = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJsonFile);
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+
+        //删除附件
+        $("#fileListFile").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            var fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+        //电话格式
+        jQuery.validator.addMethod("cellPhone", function (value, element) {
+            var tel = /^(0|86|17951)?1[356789][0-9]{9}$/;
+            return this.optional(element) || (tel.test(value));
+        }, "电话格式有误");
+        if ($("#userId").val() != null && $("#userId").val() != 0) {
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ContactUserName: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    ContactPhone: {
+                        required: true,
+                        cellPhone: true
+                    },
+                    Code: {
+                        required: true,
+                    },
+                    City: {
+                        required: true,
+                    },
+                    Area: {
+                        required: true,
+                    },
+                    Description: {
+                        required: true,
+                    },
+                    PMName: {
+                        required: true,
+                    },
+                    PMPhone: {
+                        required: true,
+                        cellPhone: true
+                    },
+                    Address: {
+                        required: true,
+                    },
+                    ReplyDate: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    ContactUserName: {
+                        required: "项目负责人不能为空",
+                        maxlength: "项目负责人不能大于50个字符",
+                    },
+                    ContactPhone: {
+                        required: "负责人电话不能为空",
+                    },
+                    Code: {
+                        required: "项目编号不能为空",
+                    },
+                    City: {
+                        required: "项目地区不能为空",
+                    },
+                    Area: {
+                        required: "项目地区不能为空",
+                    },
+                    Address: {
+                        required: "项目地址不能为空",
+                    },
+                    Description: {
+                        required: "项目主题不能为空",
+                    },
+                    PMName: {
+                        required: "项目经理不能为空",
+                    },
+                    PMPhone: {
+                        required: "经理电话不能为空",
+                    },
+                    ReplyDate: {
+                        required: "立项评审时间不能为空",
+                    },
+                }
+            });
+        } else {
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ContactUserName: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    ContactPhone: {
+                        required: true,
+                    cellPhone: true
+                    },
+                    Code: {
+                        required: true,
+                    },
+                
+                    Description: {
+                        required: true,
+                    },
+                    PMName: {
+                        required: true,
+                    },
+                    PMPhone: {
+                        required: true,
+                        cellPhone: true
+                    },
+                },
+                messages: {
+                    ContactUserName: {
+                        required: "项目负责人不能为空",
+                        maxlength: "项目负责人不能大于50个字符",
+                    },
+                    ContactPhone: {
+                        required: "负责人电话不能为空",
+                    },
+                    Code: {
+                        required: "项目编号不能为空",
+                    },
+                    Description: {
+                        required: "项目主题不能为空",
+                    },
+                    PMName: {
+                        required: "项目经理不能为空",
+                    },
+                    PMPhone: {
+                        required: "经理电话不能为空",
+                    },
+                }
+            });
+        }
+       
+        //分公司负责人
+        $("#ContactUserName").click(function () {
+            if ($("#CompanyName").val() == "") {
+                layer.alert("未设置分公司，请联系基础平台", { icon: 2 });
+                return false;
+            }
+            layer.open({
+                skin: 'frame_button',
+                type: 2,
+                title: GetLayerTitle("选取分公司负责人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                btnAlign: 'c',
+                content: '/Comm/SelectPM?selectType=1&companyId=' + $("#CompanyId").val(),
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        $("#ContactUserName").val(obj.data[0].Name);
+                        $("#ContactUserID").val(obj.data[0].Id);
+                        $("#ContactPhone").val(obj.data[0].Phone);
+
+                        parent.layer.close(index);//关闭窗口
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+        //数据提交
+        $(".saveBut").click(function () {
+            $(".cityarea").attr("disabled", false);
+            if ($("#mainForm").valid()) {
+                $("#BluePrintValue").val($("#BluePrintKey option:selected").text());
+                var search = $("form").serialize();
+                $.post("Edit", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/Project/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+        });
+    });
+</script>

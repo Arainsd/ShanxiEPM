@@ -1,0 +1,462 @@
+﻿
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@{
+    ViewBag.Title = "甲供物资申请";
+}
+<style>
+    .fr-ta {
+        width: 100%;
+    }
+
+    .ou-ta div {
+        width: 100px;
+    }
+
+    .tab-conten input[type=text],.tab-conten select, .totalamont {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid #c5c5c5;
+        box-sizing: border-box;
+    }
+
+    .tab-conten input[type=number] {
+        width: 100px;
+        height: 29px;
+        padding-left: 3px;
+        border-radius: 3px;
+        border: 1px solid #c5c5c5;
+        box-sizing: border-box;
+    }
+
+    .fr-ta input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tab-icon i {
+        font-size: 24px;
+    }
+
+        .tab-icon i:hover {
+            cursor: pointer;
+        }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>申请信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">标题</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="工程甲供物资订单审批流程-常超超-2019-09-09" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请人</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">申请时间</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">申请部门</span>
+                        </td>
+                        <td class="td-div">
+                            <div>---</div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">分公司</span>
+                        </td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:88%;" placeholder="请选择项目" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择项目" />
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">库站名称</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control" readonly placeholder="根据项目名称自动获取" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">批复文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control" readonly placeholder="根据项目名称自动获取" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:88%;" placeholder="请输入合同名称" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择合同" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">合同报审序号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="根据选择的合同名称自动加载" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">erp订单号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入erp订单号" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入到货联系人" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入到货联系电话" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">到货联系地址</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入到货联系地址" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>供应商信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">供应商名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:88%;" placeholder="请选择供应商名称" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择供应商" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">邮编</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入邮编" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">供应商联系人</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入收件人" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">电话</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入联系电话" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">供应商地址</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="请输入收件地址" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>物资信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr style="text-align:right;height:20px;">
+                        <td colspan="4" class="tab-icon">
+                            <i class="layui-icon tab-add" title="添加" style="color:darkseagreen">&#xe608;</i>
+                            <i class="layui-icon tab-delete" title="删除" style="color:cornflowerblue">&#xe640;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <table class="fr-ta" style="word-break:break-all;word-wrap:break-word;">
+                                <thead>
+                                    <tr class="ou-ta">
+                                        <th>
+                                            <div style="width:20px;"><input type="checkbox" id="allcheck" /></div>
+                                        </th>
+                                        <th><div style="width:40px;">序号</div></th>
+                                        <th><div>物资种类</div></th>
+                                        <th><div>品名</div></th>
+                                        <th><div>规格</div></th>
+                                        <th><div>单价</div></th>
+                                        <th><div>数量</div></th>
+                                        <th><div>金额</div></th>
+                                        <th><div>供应商名称</div></th>
+                                        <th><div>备注</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="addtab">
+                                    <tr class="tab-conten">
+                                        <td><input type="checkbox" /></td>
+                                        <td class="Sort">1</td>
+                                        <td>
+                                            <select>
+                                                <option>1</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="ProductName">
+                                                <option>1</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="Specifications">
+                                                <option>1</option>
+                                            </select>
+                                        </td>
+                                        <td><span class="UnitPrice">158.66</span></td>
+                                        <td><input type="number" class="Number" /></td>
+                                        <td><input type="number" class="Amount" disabled /></td>
+                                        <td><span> 邢台秦星科技有限公司</span>s</td>
+                                        <td><input type="text" class="Note" /></td>
+                                    </tr>
+
+                                </tbody>
+                                <tr style="background-color:#e4e4e4;">
+                                    <td colspan="2">合计</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="text" name="allNumber" class="totalamont"  id="allNumber" style="color:red;border:none;" readonly /></td>
+                                    <td><input type="text" name="Amount" class="totalamont" id="totalamont" style="color:red;border:none;" readonly /></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>下一步信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">分管领导</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="请选择分管领导" />
+                                <div class="btn-upload">
+                                    <input type="button" class="btn" style="position: relative; z-index: 1;width: 150px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择分管领导" />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Staged.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+        </div>
+        <!--附件上传触发-->
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+
+    //添加人员变更
+    $(".tab-add").click(function () {
+        var index;
+        index = $('.addtab').find('tr:last-child').find('.Sort').text();
+        if (index == "") {
+            index = 0;
+            index++;
+        } else {
+            index++;
+        }
+        var tabhtml = `
+                        <tr class ="tab-conten">
+                                        <td><input type="checkbox" /></td>
+                                        <td class ="Sort">${index}</td>
+                                        <td>
+                                            <select>
+                                                <option>1</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class ="ProductName">
+                                                <option>1</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class ="Specifications">
+                                                <option>1</option>
+                                            </select>
+                                        </td>
+                                       <td><span class ="UnitPrice">158.66</span></td>
+                                        <td><input type="number" class ="Number" /></td>
+                                        <td><input type="number" class ="Amount" disabled /></td>
+                                        <td><span> 邢台秦星科技有限公司</span></td>
+                                        <td><input type="text" class ="Note" /></td>
+                                    </tr>
+            `
+        $(".addtab").append(tabhtml);
+    });
+    //删除人员变更
+    $(".tab-delete").click(function () {
+        $(".tab-conten").find("input[type='checkbox']:checked").each(function () {
+            n = $(this).parents("tr").index();  // 获取checkbox所在行的顺序
+            $(".addtab").find("tr:eq(" + n + ")").remove();
+        });
+        $(".tab-conten").each(function (index) {
+            $(this).find(".Sort").text(index + 1);//重新赋值序号
+        });
+        //删除时金额触发计算
+        if ($(".tab-conten").length == 0) {
+            $("#totalamont").val("");
+        } else {
+            $("body .UnitPrice").change();
+        }
+    });
+    //人员变更全选和反选
+    $("#allcheck").click(function () {
+        var isChecked = $("#allcheck").prop("checked");
+        $(".addtab input[type='checkbox']").prop("checked", isChecked);
+    });
+
+    // 单独选项控制全选
+    $(".addtab input[type='checkbox']").click(function () {
+        var allLength = $(".addtab input[type='checkbox']").length;
+        var checkedLength = $(".addtab input[type='checkbox']:checked").length;
+        if (allLength == checkedLength) {
+            $("#allcheck").prop("checked", true);
+        } else {
+            $("#allcheck").prop("checked", false);
+        }
+    });
+
+    //金额计算：数量*单价
+    var moneyArr = [];
+    $("body").on("change", ".Number,.UnitPrice", function () {
+        var money = 0;//总金额
+        var allnum=0;
+        $(".tab-conten").each(function (index, item) {
+            var number = $(item).find($(".Number")).val();
+            var price = $(item).find($(".UnitPrice")).text();
+            var amount = number * price; Number
+            $(item).find(".Amount").val(amount);//金额赋值
+            money += Number($(item).find($(".Amount")).val());//总金额
+            allnum += Number($(item).find($(".Number")).val())//总数量
+        });
+        $("#totalamont").val(money);
+        $("#allNumber").val(allnum);
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/MaterialApplyList";
+    });
+
+
+</script>
+
+

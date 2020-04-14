@@ -1,0 +1,286 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model IEnumerable<Base_User>
+@{
+    ViewBag.Title = "会员管理";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a>  </span> > <span> 会员管理 </span> > <span>用户检索</span>
+    </div>
+    <div class="container-fluid search mt5 " style="min-height:700px;padding:0px">
+        <div class="table-wrap no-padding" style="padding:0px">
+            <form class="layui-form company-wrap" action="" method="get">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <input type="hidden" name="CompanyId" id="CompanyId" value="@ViewBag.CompanyId" />
+                        <label class="layui-form-label">用户名 : </label>
+                        <div class="layui-input-inline"><input type="text" name="name" id="name" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="@ViewBag.name" /></div>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="hidden" name="Belong" id="Belong" value="@ViewBag.Belong" />
+                        <input type="hidden" name="Id" id="Id" value="@ViewBag.Id" />
+                        <label class="layui-form-label">锁定状态 : </label>
+                        <div class="layui-input-inline">
+                            @Html.DropDownList("IsLock")
+                        </div>
+                    </div>
+                    <input type="submit" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+                </div>
+            </form>
+            <hr style="width:98%;margin: 20px auto">
+            <div class="btns padding20">
+                <a href="javascript:;" data-module="UserRetrieve" data-right="delete" id="delete" class="">删 除</a>           
+            </div>
+            <div class="layui-form padding20">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="table-center">
+                                <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                            </th>
+                            <th width="6%" class="table-center">序号</th>
+                            <th width="7%" class="table-left">用户名</th>
+                            <th width="10%"class="table-left">登录账号</th>
+                            <th width="10%" class="table-left">电话号码</th>
+                            @*<th width="10%" class="table-left">CA标识</th>
+                            <th class="table-left">企业名称</th>*@                          
+                            <th width="8%" class="table-center">锁定状态</th>
+                            <th width="8%" class="table-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 0;
+                        }
+                        @if (Model != null && Model.Count() > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td class="table-center">
+                                        <input type="checkbox" lay-skin="primary" />
+                                        <input type="hidden" name="id-@item.SId" id="id-@item.SId" value="@item.SId" />
+                                    </td>
+                                    <td class="table-center">@index</td>
+                                    <td class="table-left">@item.UserName</td>
+                                    <td class="table-left">@item.UserAcct</td>
+                                    <td class="table-left">@item.Phone</td>
+                                    @*<td class="table-left">@(item.CASN == "" ? "暂未绑定CA" : item.CASN)</td>
+                                    <td class="table-left">@item.CompanyName</td>*@
+                                    <td class="table-center">
+                                        @if (item.IsLock)
+                                        {
+                                            <a href="javascript:;" class="change-state " data-itemid="@item.SId" data-value="@item.IsLock" title="账户已锁定" data-module="AdminUserManager" data-right="unLock"><i class='glyphicon glyphicon-lock handle-red'></i></a>
+                                        }
+                                        else {
+                                            <a href="javascript:;" class="change-state " data-itemid="@item.SId" data-value="@item.IsLock" title="账户正常" data-module="AdminUserManager" data-right="unLock"><i class='glyphicon glyphicon-lock handle-blue'></i></a>
+                                        }
+
+                                    </td>
+
+                                    <td class="table-center">
+                                        <a href="javascript:;" class="editor-link " data-itemid="@item.SId" title="编辑" data-module="AdminUserManager" data-right="modify"><i class='glyphicon glyphicon-pencil handle-blue'></i></a>
+                                        <a href="javascript:;" class="detail-link " data-itemid="@item.SId" title="详情" data-module="AdminUserManager" data-right="info"><i class='glyphicon glyphicon-list-alt handle-blue'></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="table-center">
+                                    暂无数据
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="page"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //表格全选
+        layui.use('form', function () {
+            var $ = layui.jquery, form = layui.form;
+
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+        });
+        laypage.render({
+            elem: 'page',
+            count: @ViewBag.Total,
+            curr: @ViewBag.pageIndex,
+            layout: ['prev', 'page', 'next', 'skip', 'count', ],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/HcUser/UserRetrieve?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //删除
+        $("#delete").click(function () {
+            var chkItems = $('.layui-table tbody input[type="checkbox"]:checked');
+            var ids = "";
+            chkItems.each(function (index, item) {
+                var hfId = $(this).parent().find("input[type='hidden']");
+                ids += hfId.val() + ",";
+            });
+            if (ids != "") {
+                layer.confirm("确认要删除所选择的项？", { icon: 3 }, function () {
+                    $.post("/HcUser/Delete", { ids: ids, belong: '@ViewBag.Belong' }, function (data) {
+                        if (data.Flag) {
+                            layer.msg("删除成功", { time: 1000, icon: 1 });
+                            var search = $("form").serialize();
+                            window.location.href = "/HcUser/Index?pageIndex=1&" + search;
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    }, "json");
+                }, function () {
+                    return;
+                })
+
+            } else {
+                layer.alert("请先选择要删除的数据", { icon: 2 });
+            }
+        });
+    });
+
+   
+    //分配角色
+    $(".set-role").click(function () {
+        var id = $(this).data("itemid");
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("用户角色分配"),
+            shadeClose: false, //点击遮罩关闭层
+            area: [BigLayerWidth, '665px'],
+            content: '/HcUser/setrole?Belong=Admin&Id=' + id 
+        });
+    });
+    //接口人变更
+    $(".set-InterFaceUser").click(function () {
+        var id = $(this).data("itemid");
+        var name = $(this).data("itemname");
+        var userId = $(this).data("itemuserid");
+        var ischange = $(this).data("itemischange");
+        if(ischange == "False"){
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("接口人变更"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '550px'],
+                content: '/HcUser/SetInterFaceUser?id=' + id + "&name="+ name+ "&userId="+ userId
+            });
+        }else{
+            layer.alert("此用户已是该企业的接口人，无需变更。", { icon: 1 });
+        }
+
+    });
+    //锁定状态切换
+    $(".change-state").click(function () {
+        var id = $(this).data("itemid");
+        var value = $(this).data("value");
+        var mes = "";
+        var state = (value == "True");
+
+        if (id != '') {
+            if (value == "False") {
+                mes = "确认锁定该用户？"
+            } else {
+                mes = "确认解锁该用户？"
+            }
+            layer.confirm(mes, { icon: 3 }, function () {
+                $.post("/HcUser/EditState", { id: id }, function (data) {
+                    if (data.Flag) {
+                        parent.location.reload();
+                        layer.msg("操作成功！", { time: 100, icon: 1 })
+                    } else {
+                        layer.alert(data.Message, { icon: 2 })
+                    }
+                })
+            })
+        }
+    })
+    //修改
+    $(".editor-link").click(function () {
+        var id = $(this).data("itemid");
+        if (id != "") {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("用户管理-编辑"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '530px'],
+                content: '/HcUser/Edit?Belong=Admin&Id=' + id
+            });
+        }
+    });
+    //详情
+    $(".detail-link").click(function () {
+        var id = $(this).data("itemid");
+        if (id != "") {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("用户管理-详情"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [BigLayerWidth, '400px'],
+                content: '/HcUser/Detail?Belong=Admin&Id=' + id
+            });
+        }
+    });
+    //查看接口人授权书
+    $(".checkInterFaceUser").on("click",function(){
+        var check = $(this).data("value");
+        var id = $(this).data("itemid");
+        var name = $(this).data("itemname");
+        var userId = $(this).data("itemuserid");
+        if(check == "True"){
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("查看接口人信息"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [SmallLayerWidth, '400px'],
+                content: '/HcUser/BrowseInterfaceUser?companyId=' + id + "&userId="+ userId+ "&userName="+ name
+            });
+        }
+    })
+    //CA绑定
+    $(".CABinding").on("click",function(){
+        var id = $(this).data("itemid");
+        if(id != ""){
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("用户管理-CA绑定"),
+                shadeClose: false, //点击遮罩关闭层
+                area: [SmallLayerWidth, '400px'],
+                content: '/HcUser/CABinding?id=' + id
+            })
+        }
+    })
+</script>

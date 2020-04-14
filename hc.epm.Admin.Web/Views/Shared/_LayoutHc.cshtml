@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/style.css" />
+    <link rel="stylesheet" href="~/Content/css/main.css" />
+    <link rel="stylesheet" href="~/Content/layui-2.1.2/css/layui.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap_control/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrapValidator.css" />
+    <link rel="stylesheet" href="~/Content/ztest.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap_control/build.css" />
+    <style>
+        /*去掉bootstrap.min.css验证消息的margin-bottom*/
+        .help-block {
+            margin-top: 3px;
+            margin-bottom: 0;
+        }
+        /*验证图标样式bootstrap.min.css*/
+        .form-horizontal .has-feedback .form-control-feedback {
+            top: 0;
+            right: 15px;
+        }
+
+        .has-success .form-control-feedback {
+            color: #3c763d;
+        }
+
+        .has-error .form-control-feedback {
+            color: #a94442;
+        }
+
+        .has-feedback .form-control-feedback {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            line-height: 34px;
+            text-align: center;
+        }
+
+        .form-control[disabled], .form-control[readonly] {
+            background-color: #fff;
+        }
+    </style>
+    <!--css end-->
+    <!--js start-->
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/json2.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/global.js"></script>
+    <script src="~/Scripts/js/common.js"></script>
+    <script src="/Scripts/bootstrapValidator.js"></script>
+    <script src="~/Content/layui-2.1.2/layui.js"></script>
+    <script src="~/Content/My97DatePicker/WdatePicker.js"></script>
+    <script src="~/Content/ueditor/ueditor.config.js"></script>
+    <script src="~/Content/ueditor/ueditor.all.min.js"></script>
+    <!--控件美化,下拉框和单选框-->
+    <script src="~/Content/bootstrap_control/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/plupload_2_1_2/moxie.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/plupload_2_1_2/plupload.dev.js" type="text/javascript"></script>
+    <script src="~/Scripts/plupload_2_1_2/zh_CN.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+<script>
+
+    //权限检查
+    $(function () {
+        $('input').attr("autocomplete", "off");
+    });
+</script>
+</html>

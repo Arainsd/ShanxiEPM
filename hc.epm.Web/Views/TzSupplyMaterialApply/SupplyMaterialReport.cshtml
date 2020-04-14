@@ -1,0 +1,115 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel
+@model List<SupplyMaterialReportView>
+@{
+    ViewBag.Title = "SupplyMaterialReport";
+}
+
+<div class="contentData">
+
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <td colspan="7" style="font-size:18px;">项目<span style="color:red;">@ViewBag.Total</span>个</td>
+                </tr>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">项目名称</th>
+                    <th width="100">分公司</th>
+                    <th width="100">站库名称</th>
+                    <th width="100">供应商数量</th>
+                    <th width="100">采购物资数量</th>
+                    <th width="100">验收物资数量</th>
+                    <th width="100">申请时间</th>
+                </tr>
+            </thead>
+
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>
+                                <span class="projectname" data-id="@item.ProjectId" style="cursor:pointer;color:blue;">@item.ProjectName</span>
+                            </td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.StationName</td>
+                            <td>@item.CompanyNumber</td>
+                            <td>@item.Number</td>
+                            <td>@item.AcceptNumber</td>
+                            <td>@item.Time</td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="7" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+
+    <div class="list-tab" style="margin-top:20px;display:none;" id="supplywrap">
+        <table class="datalist" id="" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <td colspan="6" style="font-size:18px;">供应商<span style="color:red;" class="supplucount">0</span>个</td>
+                </tr>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="200">供应商名称</th>
+                    <th width="100">供应商电话</th>
+                    <th width="100">物资种类</th>
+                    <th width="100">采购数量</th>
+                    <th width="100">验收数量</th>
+                </tr>
+            </thead>
+
+            <tbody id="supply"></tbody>
+        </table>
+    </div>
+  
+</div>
+<script>
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzSupplyMaterialApply/SupplyMaterialReport?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+
+
+        //获取供应商
+        $("body").on("click", "#tbody .projectname", function () {
+            var id = $(this).data("id");
+            window.location.href = "/TzSupplyMaterialApply/SupplyList?projectId=" + id;
+        });
+    });
+</script>

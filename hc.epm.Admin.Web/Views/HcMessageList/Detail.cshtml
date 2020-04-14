@@ -1,0 +1,37 @@
+﻿@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Msg
+@using System.Collections.Generic;
+@model Msg_Message
+@{
+    ViewBag.Title = "站内消息详情";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style>
+    .con-link a {
+        color: #428bca;
+    }
+</style>
+<div class="content-right date-wrap fl c" style="min-height:400px; width:97%; overflow:hidden;">
+    <div class="main mt5" style="min-height:400px; width:97%;">
+        <div class="info-group row" style="padding-top:30px">
+            <div class="col-lg-12 col-sm-12 " style="height:60px">
+                <div class="col-lg-12 col-sm-12" style="margin-top:5px">
+                    <label class="col-lg-2 col-sm-2 control-label" style="text-align:right; width:12%;">标题：</label>
+                    <div class="col-lg-9 col-sm-9 mt8" style="width:87%;">
+                        <span>@Model.Title</span><span>(@(Model.SendTime))</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="height:60px">
+                <div class="col-lg-12 col-sm-12 con-link" style="margin-top:5px">
+                    <label class="col-lg-2 col-sm-2 control-label" style="text-align:right; width:12%;">内容：</label>
+                    <div class="col-lg-9 col-sm-9 mt8" style="width:87%;">
+                        <span>@Html.Raw(Model.Contents)</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

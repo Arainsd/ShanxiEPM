@@ -1,0 +1,377 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model Epm_ProjectCompany
+@{
+    ViewBag.Title = "AddPerson";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<style>
+    .long-text {
+        margin-bottom: 10px;
+        height: 35px;
+        margin-left: 80px;
+    }
+
+    select, input {
+        width: 226px;
+        height: 35px;
+        display: inline-block;
+        border: 1px solid #C7C7C7;
+        box-sizing: border-box;
+        padding-left: 10px;
+    }
+
+    .button-group button {
+        display: inline-block;
+        font-size: 16px;
+        letter-spacing: 3px;
+        margin: 30px 0 20px 0;
+        width: 89px;
+        height: 29px;
+        border: none;
+        border-radius: 3px;
+        background-color: #FFA000;
+        color: #FEE9D3;
+        font-weight: 500;
+        margin-left: 190px;
+    }
+
+    span.validaterror {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        background: url(/Resource/images/ic_fail.png) no-repeat;
+        background-size: 20px 20px;
+        background-position: 10px center;
+        font-weight: 500;
+        color: #FF2525;
+        padding-left: 33px;
+        font-size: 16px;
+    }
+
+    span.validatevalid {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        background: url(/Resource/images/ic_success.png) no-repeat;
+        background-size: 22px 22px;
+        background-position: 10px center;
+    }
+
+    .star {
+        color: red;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text Supervisor" style="margin-left: 81px;">
+                <label id="labPMTextName">本省负责人：</label>
+                @Html.DropDownList("UserList", null, new { @class = "form-control selectpicker show-tick" })
+                <input type="hidden" id="PMId_New" name="PMId_New" value="@Model.PMId_New" data-projectid="@Model.CompanyId" class="inputId"/>
+                <input type="hidden" id="PM_New" name="PM_New" value="@Model.PM_New" />
+                <input type="hidden" name="CompanyId" id="CompanyId" value="@Model.CompanyId" />
+            </div>
+            <div class="long-text Supervisor su-tel" style="margin-left: 81px;">
+                <label id="labPMTextPhone">本省负责人电话：</label>
+                <input type="text" id="PMPhone_New" name="PMPhone_New" value="@(string.IsNullOrEmpty(Model.PMPhone)?ViewBag.pmPhone:Model.PMPhone)" />
+            </div>
+            <div class="long-text Design" style="margin-left: 81px;">
+                <label id="labTextName">现场负责人：</label>
+                @Html.DropDownList("LinkUserList", null, new { @class = "form-control selectpicker show-tick" })
+                <input type="hidden" id="LinkManId_New" name="LinkManId_New" value="@Model.LinkManId" data-projectid="@Model.ProjectId" class="inputId"/>
+                <input type="hidden" id="LinkMan_New" name="LinkMan_New" value="@Model.LinkMan" />
+            </div>
+            <div class="long-text Design ne-tel" style="margin-left: 81px;">
+                <label id="labTextPhone">现场负责人电话：</label>
+                <input type="text" id="LinkPhone_New" name="LinkPhone_New" value="@(string.IsNullOrEmpty(Model.LinkPhone)?ViewBag.linkPhone:Model.LinkPhone)" />
+            </div>
+            <div class="button-group btn-center">
+                <button type="button" class="saveBut" id="saveBut">提交</button>
+                <input type="hidden" id="Id" name="Id" value="@ViewBag.Id" />
+                <input type="hidden" id="isUpdate" name="isUpdate" value="@ViewBag.isUpdate" />
+            </div>
+        </div>
+        <input type="hidden" id="Type" value="@ViewBag.type" />
+    </form>
+</div>
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/scripts/jquery.validate.js"></script>
+<script>    
+    $(function () {
+        var textcon;
+        var textcon1;
+        $("#UserList").change(function () {
+            textcon = $("#UserList option:selected").text();
+            if (textcon == "正常缺位" || textcon == "异常缺位") {
+                $(".su-tel").hide();
+            } else {
+                $(".su-tel").show();
+            }
+        });
+        $("#LinkUserList").change(function () {
+            textcon1 = $("#LinkUserList option:selected").text();
+            if (textcon1 == "正常缺位" || textcon == "异常缺位") {
+                $(".ne-tel").hide();
+            } else {
+                $(".ne-tel").show();
+            }
+        });
+        var type = $("#Type").val();
+        if (type == "监理") {
+            $(".Supervisor").show();
+            $(".Design").show();
+
+            $("#labPMTextName").text("总监：");
+            $("#labPMTextPhone").text("总监电话：");
+            $("#labTextName").text("现场监理：");
+            $("#labTextPhone").text("现场监理电话：");
+
+            $("#labPMTextName").parent().removeAttr("style");
+            $("#labPMTextName").parent().attr("style", "margin-left:139px");
+            $("#labPMTextPhone").parent().removeAttr("style");
+            $("#labPMTextPhone").parent().attr("style", "margin-left:109px");
+
+            $("#labTextName").parent().removeAttr("style");
+            $("#labTextName").parent().attr("style", "margin-left:109px");
+            $("#labTextPhone").parent().removeAttr("style");
+            $("#labTextPhone").parent().attr("style", "margin-left:79px");
+        }
+        else if (type == "设计费" || type == "地勘" || type == "危废处置") {
+            $(".Supervisor").show();
+            $(".Design").hide();
+
+            $("#labPMTextName").text("本省地区负责人：");
+            $("#labPMTextPhone").text("本省地区负责人电话：");
+
+            $("#labPMTextName").parent().removeAttr("style");
+            $("#labPMTextName").parent().attr("style", "margin-left:85px");
+            $("#labPMTextPhone").parent().removeAttr("style");
+            $("#labPMTextPhone").parent().attr("style", "margin-left:55px");
+        }
+        else if (type == "土建" || type == "内衬") {
+            $(".Supervisor").show();
+            $(".Design").show();
+
+            $("#labPMTextName").text("项目经理：");
+            $("#labPMTextPhone").text("项目经理电话：");
+            $("#labTextName").text("现场负责人：");
+            $("#labTextPhone").text("现场负责人电话：");
+
+            $("#labPMTextName").parent().removeAttr("style");
+            $("#labPMTextName").parent().attr("style", "margin-left:109px");
+            $("#labPMTextPhone").parent().removeAttr("style");
+            $("#labPMTextPhone").parent().attr("style", "margin-left:79px");
+
+            $("#labTextName").parent().removeAttr("style");
+            $("#labTextName").parent().attr("style", "margin-left:99px");
+            $("#labTextPhone").parent().removeAttr("style");
+            $("#labTextPhone").parent().attr("style", "margin-left:69px");
+
+        }
+        else if (type == "安装" || type == "包装" || type == "加固" || type == "油罐清洗费") {
+            $(".Supervisor").show();
+            $(".Design").show();
+
+            $("#labPMTextName").text("本省地区负责人：");
+            $("#labPMTextPhone").text("本省地区负责人电话：");
+            $("#labTextName").text("现场负责人：");
+            $("#labTextPhone").text("现场负责人电话：");
+
+            $("#labPMTextName").parent().removeAttr("style");
+            $("#labPMTextName").parent().attr("style", "margin-left:84px");
+            $("#labPMTextPhone").parent().removeAttr("style");
+            $("#labPMTextPhone").parent().attr("style", "margin-left:55px");
+
+            $("#labTextName").parent().removeAttr("style");
+            $("#labTextName").parent().attr("style", "margin-left:109px");
+            $("#labTextPhone").parent().removeAttr("style");
+            $("#labTextPhone").parent().attr("style", "margin-left:80px");
+        }
+        else //if (type == "网架" || type == "油罐" || type == "管线" || type == "发电机" || type == "液位仪" || type == "加油机" || type == "配电柜")
+        {
+            $(".Design").hide();
+            $(".Supervisor").show();
+
+            $("#labPMTextName").text("本省地区负责人：");
+            $("#labPMTextPhone").text("本省地区负责人电话：");
+
+            $("#labPMTextName").parent().removeAttr("style");
+            $("#labPMTextName").parent().attr("style", "margin-left:84px");
+            $("#labPMTextPhone").parent().removeAttr("style");
+            $("#labPMTextPhone").parent().attr("style", "margin-left:55px");
+        }
+    })
+    $("#UserList").click(function () {
+        $("#PMId_New").val($("#UserList option:selected").val());
+        $("#PM_New").val($("#UserList option:selected").text());
+        var hidPmId = $("#PMId_New").val();
+        var projectid = $(this).parents("tr").find(".inputId").data("projectid");
+        var CompanyId = $("input:hidden[name='CompanyId']").val();
+        $.post("GetUserByCompanyId?companyId=" + CompanyId, function (data) {
+            if (data.Flag == "0") {
+                $("#PMPhone_New").val(data.Data.Phone);
+            }
+        });
+    });
+
+    $("#LinkUserList").click(function () {
+        $("#LinkManId_New").val($("#LinkUserList option:selected").val());
+        $("#LinkMan_New").val($("#LinkUserList option:selected").text());
+        //var companyId = $(this).parents("tr").find(".inputId").data("projectid");
+        var hidLinkId = $("#LinkUserList").val();
+        var CompanyId = $("input:hidden[name='CompanyId']").val();
+        $.post("GetUserByCompanyId?companyId=" + CompanyId, function (data) {
+            if (data.Flag == "0") {
+                $("#LinkPhone_New").val(data.Data.Phone);
+            }
+        });
+        console.log(hidLinkId)
+    });
+
+    $("#saveBut").click(function () {
+        var type = $("#Type").val();
+        var mobile = /^((1[3,4,5,6,7,8,9][0-9]{1})+\d{8})$/
+
+        $("#PMId_New").val($("#UserList option:selected").val());
+        $("#PM_New").val($("#UserList option:selected").text());
+        $("#LinkManId_New").val($("#LinkUserList option:selected").val());
+        $("#LinkMan_New").val($("#LinkUserList option:selected").text());
+
+        var PMId_New = $("#PMId_New").val();
+        var PMPhone_New = $("#PMPhone_New").val();
+        var LinkId_New = $("#LinkManId_New").val();
+        var LinkPhone_New = $("#LinkPhone_New").val();
+
+        if (type == "监理") {
+            textcon = $("#UserList option:selected").text();
+            textcon1 = $("#LinkUserList option:selected").text();
+            if (PMId_New == "") {
+                parent.layer.alert("总监为空", { icon: 2 });
+                return;
+            }
+            if (textcon != "正常缺位" && textcon != "异常缺位") {
+                if (PMPhone_New.length != 11 || !mobile.test(PMPhone_New)) {
+                    parent.layer.alert("总监电话格式错误", { icon: 2 });
+                    return;
+                }
+            } 
+
+            if (LinkId_New == "") {
+                parent.layer.alert("现场监理为空", { icon: 2 });
+                return;
+            }
+            if (textcon1 != "正常缺位" && textcon1 != "异常缺位") {
+                if (LinkPhone_New.length != 11 || !mobile.test(LinkPhone_New)) {
+                    parent.layer.alert("现场监理电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+        } else if (type == "设计费" || type == "地勘" || type == "危废处置") {
+            textcon = $("#UserList option:selected").text();
+            textcon1 = $("#LinkUserList option:selected").text();
+            if (PMId_New == "") {
+                parent.layer.alert("本省地区负责人", { icon: 2 });
+                return;
+            }
+            if (textcon != "正常缺位" && textcon != "异常缺位") {
+                if (PMPhone_New.length != 11 || !mobile.test(PMPhone_New)) {
+                    parent.layer.alert("本省地区负责人电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+        } else if (type == "土建" || type == "内衬") {
+            textcon = $("#UserList option:selected").text();
+            textcon1 = $("#LinkUserList option:selected").text();
+            if (PMId_New == "") {
+                parent.layer.alert("项目经理为空", { icon: 2 });
+                return;
+            }
+            if (textcon != "正常缺位" && textcon != "异常缺位") {
+                if (PMPhone_New.length != 11 || !mobile.test(PMPhone_New)) {
+                    parent.layer.alert("项目经理电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+            if (LinkId_New == "") {
+                parent.layer.alert("现场负责人为空", { icon: 2 });
+                return;
+            }
+            if (textcon1 != "正常缺位" && textcon1 != "异常缺位") {
+                if (LinkPhone_New.length != 11 || !mobile.test(LinkPhone_New)) {
+                    parent.layer.alert("现场负责人电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+
+        } else if (type == "安装" || type == "包装" || type == "加固" || type == "油罐清洗费") {
+            textcon = $("#UserList option:selected").text();
+            textcon1 = $("#LinkUserList option:selected").text();
+            if (PMId_New == "") {
+                parent.layer.alert("本省地区负责人为空", { icon: 2 });
+                return;
+            }
+            if (textcon != "正常缺位" && textcon != "异常缺位") {
+                if (PMPhone_New.length != 11 || !mobile.test(PMPhone_New)) {
+                    parent.layer.alert("本省地区负责人电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+            if (LinkId_New == "") {
+                parent.layer.alert("现场负责人为空", { icon: 2 });
+                return;
+            }
+            if (textcon1 != "正常缺位" && textcon1 != "异常缺位") {
+                if (LinkPhone_New.length != 11 || !mobile.test(LinkPhone_New)) {
+                    parent.layer.alert("现场负责人电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+        } else //if (type == "网架" || type == "油罐" || type == "管线" || type == "发电机" || type == "液位仪" || type == "加油机" || type == "配电柜")
+        {
+            textcon = $("#UserList option:selected").text();
+            textcon1 = $("#LinkUserList option:selected").text();
+            if (PMId_New == "") {
+                parent.layer.alert("本省地区负责人为空", { icon: 2 });
+                return;
+            }
+            if (textcon != "正常缺位" && textcon != "异常缺位") {
+                if (PMPhone_New.length != 11 || !mobile.test(PMPhone_New)) {
+                    parent.layer.alert("本省地区负责人电话格式错误", { icon: 2 });
+                    return;
+                }
+            }
+        }
+
+        var search = $("form").serialize();
+
+        $.post("ProjectISPUpdate", search, function (data) {
+            if (data.Flag) {
+                parent.layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                    parent.window.location.reload();
+                    var id = $("#Id").val();
+                    var ids = parent.$(".datalist").find(".inputId");
+                    if (ids.length > 0) {
+                        for (var i = 0; i < ids.length; i++) {
+                            if (ids[i].value == id) {
+                                if ($("#isUpdate").val() == "1") {
+                                    $(ids[i]).parent().parent().find(".PMEdit").hide();
+                                    $(ids[i]).parent().parent().find(".LinkManEdit").hide();
+                                } else {
+                                    $(ids[i]).parent().parent().find(".PMEdit").hide();
+                                    $(ids[i]).parent().parent().find(".LinkManEdit").hide();
+                                }
+                                return;
+                            }
+                        }
+                    }
+                });
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+    });
+</script>

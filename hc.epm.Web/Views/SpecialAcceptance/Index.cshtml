@@ -1,0 +1,213 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Business;
+@model List<Epm_SpecialAcceptance>
+@{
+    ViewBag.Title = "专项验收列表";
+}
+<style>
+    #stateLab {
+        padding-left: 28px;
+    }
+
+    table thead > tr > th:nth-child(n+2) {
+        min-width: 90px;
+    }
+
+    table thead > tr > th:nth-child(1) {
+        width: 40px;
+    }
+
+    table thead > tr > th:last-child {
+        width: 120px;
+    }
+</style>
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div><label>项目名称 :&nbsp;</label><input type="text" name="projectTitle" id="projectTitle" value="@ViewBag.projectTitle"></div>
+                <div>
+                    <label>开始时间 :&nbsp;</label><input type="text" id="startTime" name="startTime" onClick="WdatePicker({ el: 'startTime' })" value="@ViewBag.startTime">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+                <div>
+                    <label id="timeLabel">结束时间 :&nbsp;</label><input type="text" id="endTime" name="endTime" onClick="WdatePicker({ el: 'endTime' })" value="@ViewBag.endTime">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="pic iconfont" width="20" height="30">&#xe7e2;</i>
+                </div>
+            </div>
+            <div>
+                <div><label>验收标题 :&nbsp;</label><input type="text" name="title" id="title" value="@ViewBag.specialtitle"></div>
+                <div>
+                    <label id="stateLab">状态 : </label>
+                    @Html.DropDownList("state", ViewBag.ApprovalState as SelectList, new { @class = "form-control selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" class="add checkright" data-module="SpecialAcceptance" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="SpecialAcceptance" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目名称</th>
+                    <th>验收标题</th>
+                    <th>验收内容</th>
+                    <th>验收次数</th>
+                    <th>验收单位</th>
+                    <th>验收人员</th>
+                    <th>验收时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - 1) * 10;
+                    int Enabled = int.Parse(ApprovalState.Enabled.GetValue().ToString());
+                    int WaitAppr = int.Parse(ApprovalState.WaitAppr.GetValue().ToString());
+                    int ApprSuccess = int.Parse(ApprovalState.ApprSuccess.GetValue().ToString());
+                    int ApprFailure = int.Parse(ApprovalState.ApprFailure.GetValue().ToString());
+                    int Discarded = int.Parse(ApprovalState.Discarded.GetValue().ToString());
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.Title</td>
+                            <td>@(item.Content = item.Content.Length > 10 ? (item.Content.Substring(0, 10) + "......") : item.Content)</td>
+                            <td>@item.Num</td>
+                            <td>@item.RecCompanyName</td>
+                            <td>@item.RecUserName</td>
+                            <td>@(item.RecTime == null ? "" : Convert.ToDateTime(item.RecTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(((ApprovalState)item.State).GetText())</td>
+                            @if (@item.State == Enabled)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SpecialAcceptance" data-right="Info">查看</a>
+                                    <a href="javascript:" class="Edit checkright" data-module="SpecialAcceptance" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="SpecialAcceptance" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            else if (@item.State == WaitAppr)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SpecialAcceptance" data-right="Info">查看</a>
+                                </td>
+                            }
+                            else if (@item.State == ApprSuccess)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SpecialAcceptance" data-right="Info">查看</a></td>
+                            }
+                            else if (@item.State == ApprFailure)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SpecialAcceptance" data-right="Info">查看</a>
+                                    <a href="javascript:" class="Edit checkright" data-module="SpecialAcceptance" data-right="Modify">修改</a>
+                                    <a href="javascript:;" class="Discarded checkright" data-module="SpecialAcceptance" data-right="Invalid">废弃</a>
+                                </td>
+                            }
+                            else if (@item.State == Discarded)
+                            {
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="SpecialAcceptance" data-right="Info">查看</a>
+                                    <a href="javascript:;" class="Delete checkright" data-module="SpecialAcceptance" data-right="Delete">删除</a>
+                                </td>
+                            }
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+<script>
+    $("#ApprovalState").change(function () {
+        $("#state").val($("#ApprovalState").val());
+    });
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    //search = decodeURIComponent(search, true)
+                    window.location.href = "/SpecialAcceptance/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //新增
+        $(".add").click(function () {
+            window.location.href = "/SpecialAcceptance/Add";
+        });
+        //修改
+        $(".Edit").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/SpecialAcceptance/Edit?id=" + id;
+        });
+        //查看
+        $(".Detail").click(function () {
+            var id = $(this).parents("tr").find(".inputId").data("id");
+            window.location.href = "/SpecialAcceptance/Detail?id=" + id;
+        });
+        //废弃
+        $(".Discarded").click(function () {
+            var that = this;
+            layer.confirm("是否废弃", { icon: 3 }, function () {
+                var id = $(that).parents("tr").find(".inputId").data("id");
+                $.post("/SpecialAcceptance/Discard", { id}, function(result) {
+                    if(result.Flag) {
+                        layer.msg("操作成功", { icon: 1 });
+                        window.location.reload();
+                        return false;
+                    }
+                    layer.alert(result.Message, { icon: 2 })
+                });
+            });
+        });
+        //删除
+        $(".Delete").click(function () {
+            var that = this;
+            layer.confirm("是否删除", { icon: 3 }, function () {
+                var id = $(that).parents("tr").find(".inputId").data("id");
+                $.post("/SpecialAcceptance/Delete", { id}, function(result) {
+                    if(result.Flag) {
+                        layer.msg("操作成功", { icon: 1 });
+                        window.location.reload();
+                        return false;
+                    }
+                    layer.alert(result.Message, { icon: 2 });
+                });
+            });
+        });
+    });
+</script>

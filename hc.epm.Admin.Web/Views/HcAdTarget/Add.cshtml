@@ -1,0 +1,225 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@{
+    ViewBag.Title = "广告位新增";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<div class="container">
+
+    <form class="form-horizontal bv-form" id="mainForm">
+        <div class="row">
+            <div class="col-lg-6 col-sm-6  form-group">
+                <label class="col-lg-5 col-sm-5 control-label"><em class="required">*</em>广告位编码：</label>
+                <div class="col-lg-7 col-sm-7">
+                    <input type="text" class="form-control" name="TargetNum" id="TargetNum" placeholder="请输入广告位编码" />
+                    <input type="hidden" id="Num" name="Num" value="BiddingAgent" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6  form-group">
+                <label class="col-lg-4 col-sm-4 control-label">价格(元)：</label>
+                <div class="col-lg-8 col-sm-8">
+                    <input type="text" name="Price" id="Price" placeholder="请输入价格" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 form-group">
+                <label class="col-lg-5 col-sm-5 control-label"><em class="required">*</em>广告位名称：</label>
+                <div class="col-lg-7 col-sm-7">
+                    <input type="text" class="form-control" name="Name" id="Name" placeholder="请输入广告位名称" />
+                    <input type="hidden" id="Name" name="Name" value="BiddingAgent" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 form-group">
+                <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>显示数量：</label>
+                <div class="col-lg-8 col-sm-8">
+                    <input type="text" name="ShowCount" id="ShowCount" placeholder="请输入数量" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-6 form-group">
+                <label class="col-lg-5 col-sm-5 control-label"><em class="required">*</em>高度(px)：</label>
+                <div class="col-lg-7 col-sm-7">
+                    <input type="text" class="form-control" name="Hight" id="Hight" placeholder="请输入高度" />
+                    <input type="hidden" id="Height" name="Height" value="BiddingAgent" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 form-group">
+                <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>长度(px)：</label>
+                <div class="col-lg-8 col-sm-8">
+                    <input type="text" name="Lenght" id="Lenght" placeholder="请输入长度" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-6 col-sm-6">
+                <label class="col-lg-5 col-sm-5 control-label" style="margin-left:-13px;"><em class="required">*</em>是否启用 : </label>
+                <div class="col-lg-7 col-sm-7">
+                    <select class="form-control selectpicker  show-tick" id="State" name="State" tabindex="-98">
+                        <option value="false">禁用</option>
+                        <option value="true">启用</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="form-group row mb25" style="margin-bottom:30px;margin-left:20px">
+            <label class="col-lg-2 col-sm-2 control-label">描述 : </label>
+            <div class="col-lg-9 col-sm-9" style="padding-left: 10px; padding-right: 20px;">
+                <textarea name="Description" id="Description" class="form-control" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" placeholder="请输入描述"></textarea>
+                <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Description" data-bv-result="NOT_VALIDATED" style="display: none;">描述内容不能为空</small>
+            </div>
+        </div>
+
+        <div class="form-group row mb25" style="margin-bottom:30px;margin-left:20px">
+            <label class="col-lg-2 col-sm-2 control-label">备注 : </label>
+            <div class="col-lg-9 col-sm-9" style="padding-left: 10px; padding-right: 20px;">
+                <textarea name="Remark" id="Remark" class="form-control" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" placeholder="请输入备注说明"></textarea>
+                <small class="help-block" data-bv-validator="notEmpty" data-bv-for="Description" data-bv-result="NOT_VALIDATED" style="display: none;">备注不能为空</small>
+            </div>
+        </div>
+
+        <div class="form-group row mb25" style="margin-top:25px;margin-left:20px">
+            <div class="col-lg-12 col-sm-12" style="text-align:center;">
+                <input type="button" name="save" id="save" lay-submit="" lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save">
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                TargetNum: {
+                    validators: {
+                        notEmpty: {
+                            message: '广告位编码不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '广告位编码长度不能超过100字符'
+                        },
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '广告位名称不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '广告位名称不能超过100字符'
+                        },
+                    }
+                },
+                Lenght: {
+                    validators: {
+                        notEmpty: {
+                            message: '长度不能为空'
+                        },
+                        stringLength: {
+                            max: 4,
+                            message: '长度不能超过4个字符'
+                        },
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '只能是大于0的数字'
+                        }
+                    }
+                },
+                ShowCount: {
+                    validators: {
+                        notEmpty: {
+                            message: '显示数量不能为空'
+                        },
+                        stringLength: {
+                            max: 4,
+                            message: '显示数量不能超过4个字符'
+                        },
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '只能是大于0的数字'
+                        }
+                    }
+                },
+                Hight: {
+                    validators: {
+                        notEmpty: {
+                            message: '高度不能为空'
+                        },
+                        stringLength: {
+                            max: 4,
+                            message: '高度不能超过4个字符'
+                        },
+                        regexp: {
+                            regexp: /^[0-9]+$/,
+                            message: '只能是大于0的数字'
+                        }
+                    }
+                },
+                Price: {
+                    validators: {
+                        regexp: {
+                            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                            message: '请输入正确的价格'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();
+
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("广告位添加成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return true;
+            } else {
+                layer.alert("验证未通过。", { icon: 5 });
+            }
+            return false;
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+

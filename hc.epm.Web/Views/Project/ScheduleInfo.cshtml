@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "ScheduleInfo";
+}
+<link href="/Resource/jqtree/TreeGrid.css" rel="stylesheet" />
+<link href="~/Resource/css/gartt.css" rel="stylesheet" />
+<link href="~/Resource/css/prettify.min.css" rel="stylesheet" />
+<style>
+    .container {
+        display: flex;
+        padding: 0;
+    }
+
+        .container > div:nth-child(1) {
+            flex: 7;
+        }
+
+        .container > div:nth-child(2) {
+            flex: 3;
+        }
+
+        .container > div img {
+            width: 99%;
+            height: 100%;
+        }
+
+    .dataPanel {
+        left: 0 !important;
+        min-width: 1018px !important;
+    }
+</style>
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage">工期管理</li>
+        <li id="DetailMilestonePlan">工程节点</li>
+        <li id="ScheduleInfo" class="active">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video">视频集成</li>
+    </ul>
+    <div>
+        <div class="gantt_ot">
+            <div class="gantt"></div>
+        </div>
+    </div>
+</div>
+<script src="/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="/Resource/jqtree/TreeGrid.js"></script>
+<script src="~/Resource/scripts/jquery.fn.gantt.js" charset="utf-8"></script>
+<script src="~/Resource/scripts/prettify.min.js"></script>
+<script>
+    $(function () {
+        $("#Detail").click(function () {
+            window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailApprovalConstitute").click(function () {
+            window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectMainPoint").click(function () {
+            window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailTimeManage").click(function () {
+            window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailMilestonePlan").click(function () {
+            window.location.href = 'DetailMilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectISP").click(function () {
+            window.location.href = 'DetailProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectData").click(function () {
+            window.location.href = 'DetailProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#ContractInfo").click(function () {
+            window.location.href = 'ContractInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ChangeInfo").click(function () {
+            window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#VisaInfo").click(function () {
+            window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#QuestionInfo").click(function () {
+            window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailCrossingsManage").click(function () {
+            window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#video").click(function () {
+            window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+        });
+        $.get('/ConstructionPlan/GetGantt?id=@ViewBag.ProjectId', function (result) {
+            if (result.Flag == true) {
+                //初始化gantt
+                $(".gantt").gantt({
+                    source: result.Data,
+                    navigate: 'scroll',//buttons  scroll
+                    scale: "days",// months  weeks days  hours
+                    maxScale: "months",
+                    minScale: "days",
+                    itemsPerPage: 10000
+                });
+            }
+        }, 'json');
+    });
+</script>

@@ -1,0 +1,153 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model Base_User
+@{
+    ViewBag.Title = "用户详情";
+}
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a>  </span> > <span> 用户管理 </span> > <span> 用户详情</span>
+    </div>
+    <div class="main mt5">
+        <table class="layui-table detail-table">
+            <tbody>
+                <tr>
+                    <td width="120px" class="table-right">用户编码</td>
+                    <td width="250px" class="table-left">@Model.UserCode</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">性别</td>
+                    @if (@Model.Sex)
+                    {
+                        <td width="250px" class="table-left">男</td>
+                    }
+                    else {
+                        <td width="250px" class="table-left">女</td>
+                    }
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">账号</td>
+                    <td width="250px" class="table-left">@Model.UserAcct</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">用户名</td>
+                    <td width="250px" class="table-left">@Model.UserName</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">所属企业</td>
+                    <td width="250px" class="table-left">@ViewBag.CompanyName</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">锁定状态</td>
+                    @if (Model.IsLock == true)
+            {
+                        <td width="250px" class="table-left" style="color:red">已锁定</td>
+                    }
+                    else {
+                        <td width="250px" class="table-left" style="color:green">未锁定</td>
+                    }
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">联系电话</td>
+                    <td width="250px" class="table-left">@Model.Phone</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">电子邮箱</td>
+                    <td width="250px" class="table-left">@Model.Email</td>
+                </tr>
+                @*<tr>
+                    <td width="120px" class="table-right">微信</td>
+                    <td width="250px" class="table-left">@Model.WebChat</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">QQ</td>
+                    <td width="250px" class="table-left">@Model.QQ</td>
+                </tr>*@
+                <tr>
+                    <td width="120px" class="table-right">出生日期</td>
+                    <td width="250px" class="table-left">@(Model.BirthDate.HasValue ? Model.BirthDate.Value.ToString("yyyy-MM-dd") : "")</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">毕业院校</td>
+                    <td width="250px" class="table-left">@Model.University</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">专业名称</td>
+                    <td width="250px" class="table-left">@Model.Major</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">学历</td>
+                    <td width="250px" class="table-left">@Model.Education</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">现住址</td>
+                    <td width="250px" class="table-left">@Model.Address</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">职称</td>
+                    <td width="250px" class="table-left">@Model.ProfessionalValue</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">岗位</td>
+                    <td width="250px" class="table-left">@Model.PostValue</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">职业资质</td>
+                    <td width="250px" class="table-left">@Model.ProfessionalQualificationValue</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">开始职业日期</td>
+                    <td width="250px" class="table-left">@(Model.OccupationalStartTime.HasValue ? Model.OccupationalStartTime.Value.ToString("yyyy-MM-dd") : "")</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">职业简述</td>
+                    <td width="250px" class="table-left">@Model.OccupationalContent</td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">职业证书/岗位证书</td>
+                    <td width="250px" class="table-left"><div style="width:100%;" id="ZYZZ"></div></td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">省份正正反面</td>
+                    <td width="250px" class="table-left"><div style="width:100%;" id="SFZ"></div></td>
+                </tr>
+                <tr>
+                    <td width="120px" class="table-right">照片</td>
+                    <td width="250px" class="table-left"><div style="width:100%;" id="CZ"></div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="layui-form-item row btn-save bottom-20">
+    <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-save cancel" />
+</div>
+<script>
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+
+        //获取图片附件
+        $.post("/Files/GetFileList", { tableName: 'Base_User', id: '@Model.SId' }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    data.Data.forEach(function (item, index, arr) {
+                        if (item.ImageType != null) {
+                            var odiv = '<img src="' + FileURL + "/" + item.Url + '" />';
+                            $('#' + item.TableColumn).append(odiv);
+                        }
+                    });
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            window.location.href = "/User/Index";
+        });
+    });
+</script>

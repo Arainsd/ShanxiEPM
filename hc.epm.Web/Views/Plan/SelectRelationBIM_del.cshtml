@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "SelectRelationBIM";
+}
+
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab" style="padding:0">
+            <div class="intro" style="height:700px">
+                <div><label><span class="star">*</span>&nbsp;选择模型&nbsp;:</label></div>
+                <div>
+                    @Html.DropDownList("BimList", null, new { @class = "form-control selectpicker  show-tick" })
+                    <input type="hidden" name="BIMAddress" value="@ViewBag.BIMAddress" id="BIMAddress" />
+                    <input type="hidden" name="planId" value="1013046784555094016" id="planId" />
+                    <input type="hidden" name="planName" value="1好柱子OK" id="planName" />
+                    <input type="hidden" name="BIMId" value="" id="BIMId" />
+                    <input type="hidden" name="BIMName" value="" id="BIMName" />
+                    <div class="model" style="position:relative;margin-top:20px;height:680px"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/Resource/scripts/3dEngine.js"></script>   
+<script>
+
+    var planId = $("#planId").val();
+    var planName = $("#planName").val();
+    var BIMId;
+    var BIMName
+    window.onload = function () {
+        var data = $("#BIMAddress").val();
+        BIMId = $("option:selected").val();
+        BIMName = $("option:selected").text();
+        if (data == false) {
+            imgModel()
+        } else {
+            BIMmodel(data)
+        }
+    }
+
+    $("select").change(function () {
+        BIMId = $(this).val()
+        BIMName = $("option:selected").text();
+        //要触发的事件
+        $.post("GetBimUrl", { id: BIMId }, function (data) {
+            if (data == "" || data == null) {
+                $(".model").html("");
+                imgModel()
+            } else {
+                $(".model").html("");
+                BIMmodel(data)
+            }
+        });
+    });
+    function imgModel() {
+        var odv = "<div><img src='/Resource/images/moxing.jpg' style='width:100%;height:100%'/>";
+        odv += "<div style='position:absolute;top:45%;left:45%;color:red' id='mx'><h3 style='font-size:24px'>模型正在轻量化中...</h3></div>"
+        odv += " </div>"
+        $(".model").append(odv)
+    }
+    function BIMmodel(data) {
+        var odv = '<div id="webglContainer" style="height:100%;width:100%"></div>';
+        $(".model").append(odv);
+        var models = [{ id: BIMId, file: BimFileURL + data }]   //获取到对应的数据
+        var ModelFIle = models[0].file;
+        var ID = models[0].id;
+        EngineInit("webglContainer"); //初始化画布
+        function initAddModel() {
+            if (models.length > 0) {
+                AddModel(ModelFIle, ID); //添加模型
+            }
+            else {
+                alert("模型未加载")
+            }
+        };
+        initAddModel();
+        $.post("GetPlanComponentList", { bimId: BIMId, planId: planId }, function (data) {
+            console.log(data)
+            var IDs
+            for (var i = 0; i < data.length; i++) {
+                IDs = data[i].BIMComponentId + "#" +IDs;
+            }
+            SetActorColor(IDs, 0, 0, 255);
+        });
+
+    }
+</script>
+

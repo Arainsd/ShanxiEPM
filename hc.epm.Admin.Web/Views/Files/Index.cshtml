@@ -1,0 +1,73 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model IEnumerable<Base_Files>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="content-right date-wrap fl c" style="width:96%;min-height: 500px;position: relative;">
+
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th width="80" style="text-align:center">序号</th>
+                <th style="text-align:center">附件名称</th>
+                <th width="15%" style="text-align:center">大小</th>
+                <th width="35%" style="text-align:center">时间</th>
+                <th width="15%" style="text-align:center">下载</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int index = 0;
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td class="table-center">@index</td>
+                        <td class="table-center">@item.Name</td>
+                        @if ((int.Parse(item.Size) / 1024) <= 1024)
+                        {
+                            <td class="table-center">@(int.Parse(item.Size) / 1024) Kb</td>
+                        }
+                        else
+                        {
+                            <td class="table-center">@(int.Parse(item.Size) / 1024 / 1000) Mb</td>
+                        }
+                        <td class="table-center">@item.CreateTime</td>
+                        <td class="table-center"><a href="javascript:;" data-guid="@item.FileGuid" title="下载" style="color:#1B98B8" class="loadFile">下载</a></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="layui-form-item row btn-save" style="position: absolute;bottom: 20px;">
+        <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+    </div>
+
+</div>
+
+<script>
+    //下载附件方法
+    $(".loadFile").on("click", function () {
+        var FileGuid = $(this).data("guid");
+        window.location.href = FileDownLoadURL + FileGuid;
+    })
+    //关闭弹窗
+    $('.cancel').on("click", function () {
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);//关闭窗口
+    });
+</script>
+
+

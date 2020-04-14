@@ -1,0 +1,225 @@
+﻿@using hc.Plat.Common.Global
+@using hc.epm.ViewModel;
+@{
+    var userRights = Session[ConstStr_Session.CurrUserRight] as List<WebRightNode>;
+}
+<style>
+    .consFirst:hover {
+        color: #3b87df;
+        font-weight: bold;
+    }
+</style>
+
+
+<div class="nav">
+    <div class="subnav">
+        <div class="subnavRight">
+            <a href="@Url.Action("SignIndex", "Home")" style="cursor:pointer;"><img src="~/Resource/images/sxLogo.png" /></a>
+        </div>
+        <ul class="subnavLeft" id="subnavLid">
+            @if (userRights == null)
+            {
+                <li>
+                    <a href="@Url.Action("Login", "Currency")" class="consFirst">首页</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Login", "Currency")" class="consFirst">工程管理</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Login", "Currency")" class="consFirst">过程管理</a>
+                </li>
+                <li id="style-li" title="质量安全">
+                    <a href="@Url.Action("Login", "Currency")" class="consFirst">质量安全</a>
+                </li>
+                @*<li>
+                        <a href="@Url.Action("Login", "Currency")" class="consFirst">个人中心</a>
+                    </li>*@
+            }
+            else
+            {
+                if (userRights.Any())
+                {
+                    foreach (var userRight in userRights)
+                    {
+                        <li>
+                            <a href="@userRight.Url" target="@userRight.Target" class="consFirst">@userRight.Name</a>
+                            @if (userRight.ChildNode.Any() && userRight.ChildNode.Count > 0)
+                            {
+                                <ul class="consProject">
+                                    @foreach (var childRight in userRight.ChildNode)
+                                    {
+                                        <li>
+                                            <a href="@childRight.Url" target="@childRight.Target">
+                                                @childRight.Name
+                                                @if (childRight.ChildNode.Count() > 0)
+                                                {
+                                                    <span class="menu-right-img"><img src="~/Resource/images/menu-right.png" alt="" /></span>
+                                                }
+                                            </a>
+                                            @if (childRight.ChildNode.Count() > 0)
+                                            {
+                                                var childRightThree = childRight.ChildNode.Where(t => t.Remark == null).ToList();
+                                                var childRightThree1 = childRight.ChildNode.Where(t => t.Remark == "1").ToList();
+                                                var childRightThree2 = childRight.ChildNode.Where(t => t.Remark == "2").ToList();
+                                                var childRightThree3 = childRight.ChildNode.Where(t => t.Remark == "3").ToList();
+                                                var childRightThree4 = childRight.ChildNode.Where(t => t.Remark == "4").ToList();
+
+                                                //预留
+                                                var childRightThree5 = childRight.ChildNode.Where(t => t.Remark == "5").ToList();
+                                                var childRightThree6 = childRight.ChildNode.Where(t => t.Remark == "6").ToList();
+                                                var childRightThree7 = childRight.ChildNode.Where(t => t.Remark == "7").ToList();
+                                                var childRightThree8 = childRight.ChildNode.Where(t => t.Remark == "8").ToList();
+
+                                                <ul class="thirdProject">
+                                                    <li>
+                                                        @if (childRightThree.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree1.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree1)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree2.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree2)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree3.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree3)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree4.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree4)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+
+                                                        @*预留*@
+                                                        @if (childRightThree5.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree5)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree6.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree6)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree7.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree7)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                        @if (childRightThree8.Count > 0)
+                                                        {
+                                                            <p>
+                                                                <span class="bai-shu"><img src="~/Resource/images/bai-shu.png" /></span>
+                                                                @foreach (var thirdChild in childRightThree8)
+                                                                {
+                                                                    <a href="@thirdChild.Url" target="@thirdChild.Target" class="consFirst">@thirdChild.Name</a>
+                                                                }
+                                                            </p>
+                                                        }
+                                                    </li>
+                                                </ul>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+            }
+        </ul>
+    </div>
+</div>
+<script>
+    //style-li
+    $("#subnavLid li").hover(
+        function () {
+            $(this).find(".consProject").show();
+            $(this).find("a").css({});
+        },
+        function () {
+            $(this).find(".consProject").hide();
+        }
+    );
+
+
+    //三级
+    $(".consProject li").hover(
+      function () {
+          $(this).find(".thirdProject").show();
+      },
+      function () {
+          $(this).find(".thirdProject").hide();
+      }
+    );
+
+    $("#selecthead li").click(function () {
+        $(this).siblings().css({
+            "color": "#0e90ee",
+            "background": "#fbfbfd",
+            "border": "1px solid #0e90ee"
+        });
+        $(this).css({
+            "background": "#cf3438",
+            "border": "1px solid #cf3438"
+        });
+        $(this).siblings().children().css({
+            "color": "#0e90ee"
+        });
+        $(this).children().css({
+            "color": "#fff"
+        });
+        $("#newsleft-bottomid ul").eq($(this).index()).show();
+        $("#newsleft-bottomid ul").eq($(this).index()).siblings().hide();
+    });
+    $("#style-li ul").removeClass("consProject").addClass("hh");
+    $(".consProject ul").css("display", "none");
+</script>

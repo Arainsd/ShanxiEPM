@@ -1,0 +1,361 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@model Epm_Project
+
+@{
+    ViewBag.Title = "工期管理";
+}
+<style>
+    .selectbg {
+        background: #ebebe5;
+    }
+
+    .tab .long-text input {
+        width: 230px;
+    }
+</style>
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Edit">基本信息</li>
+        <li id="ApprovalConstitute">总批复构成</li>
+        <li id="ProjectISP">工程供应商</li>
+        <li id="ProjectMainPoint">工程要点</li>
+        <li id="MilestonePlan">工程节点</li>
+        <li id="TimeManage" >工期管理</li>
+        @*<li id="ProjectData">项目资料</li>*@
+        <li id="IsCrossingsManage">外部手续</li>
+    </ul>
+    <form id="mainForm">
+        <div class="tab">
+            @*<input type="hidden" id="Id" name="Id" value="@Model.Id" />*@
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;实际停业时间&nbsp;:</label>
+                <input type="text" id="ShutdownTime" name="ShutdownTime" onClick="WdatePicker({ el: 'ShutdownTime' })" value="@(Model.ShutdownTime == null ? "" : Convert.ToDateTime(Model.ShutdownTime).ToString("yyyy-MM-dd"))">
+                <i onClick="WdatePicker({ el: 'ShutdownTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            @*<div class="upload" style="margin-bottom:0px;">
+                <div><label>&nbsp;停业申请&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile" class="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                </div>
+            </div>*@
+            <div style="width:100%; margin-top:5px;" id="fileList">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJson" id="fileDataJson">
+            </div>
+            <div class="long-text">
+                <label for="PlanWorkStartTime">&nbsp;计划开工时间&nbsp;:</label>
+                <input type="text" id="PlanWorkStartTime" name="PlanWorkStartTime" class="selectbg" autocomplete="off" value="@(Model.PlanWorkStartTime == null ? "" : Convert.ToDateTime(Model.PlanWorkStartTime).ToString("yyyy-MM-dd"))" readonly />
+            </div>
+            <div class="long-text">
+                <label for="PlanWorkEndTime">&nbsp;计划完工时间&nbsp;:</label>
+                <input type="text" id="PlanWorkEndTime" name="PlanWorkEndTime" class="selectbg" autocomplete="off" value="@(Model.PlanWorkEndTime == null ? "" : Convert.ToDateTime(Model.PlanWorkEndTime).ToString("yyyy-MM-dd"))" readonly />
+            </div>
+            <div class="long-text">
+                <label for="Limit">&nbsp;工期(天)&nbsp;:</label>
+                <input type="text" id="Limit" name="Limit" autocomplete="off" value="@Model.Limit" readonly class="selectbg" />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;计划开业时间&nbsp;:</label>
+                <input type="text" id="PlanOpeningTime" name="PlanOpeningTime" onClick="WdatePicker({ el: 'PlanOpeningTime' })" value="@(Model.PlanOpeningTime == null ? "" : Convert.ToDateTime(Model.PlanOpeningTime).ToString("yyyy-MM-dd"))">
+                <i onClick="WdatePicker({ el: 'PlanOpeningTime' })" class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="long-text">
+                <label for="">&nbsp;计划停业时长&nbsp;:</label>
+                <input type="text" id="PlanShutdowLimit" name="PlanShutdowLimit" autocomplete="off" value="@Model.PlanShutdowLimit" readonly class="selectbg" />&nbsp;天
+            </div>
+            <div class="upload" style="margin-bottom:0px;">
+                <div><label>&nbsp;会议纪要&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile1" class="btnUploadFile" style="position: relative; z-index: 1;margin-top: 5px;height: 25px;width: 100px;font-size: 16px;" value="上传附件" />
+                    <input type="file" id="loadFile1" name="loadFile1" style="display:none" onchange="uploadFile1()">
+                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                </div>
+            </div>
+            <div style="width:100%; margin-top:5px;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+        </div>
+    </form>
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<script>
+    //获取附件
+    $.post("/Files/GetFileList", { tableName: 'Epm_Project', id: '@ViewBag.ProjectId', tableCol: "Stop" }, function (data) {
+        if (data.Flag) {
+            if (data.Data.length > 0) {
+                data.Data.forEach(function (item, index, arr) {
+                    if (item.ImageType == null) {
+                        var odiv = '<li id="' + item.GuidId + '">';
+                        odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                        odiv += '<div>' + item.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel fileDelone" data-val="' + item.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileList .fileShow').append(odiv);
+                    }
+
+                    var obj = {};
+                    obj.Name = item.Name;
+                    obj.GuidId = item.GuidId;
+                    obj.Size = item.Size;
+                    obj.Group = item.Group;
+                    obj.Url = item.Url;
+                    obj.TableColumn = item.TableColumn;
+                    obj.ImageType = item.ImageType;
+                    fileDataArray.push(obj);
+                });
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJson").val(fileDataJson);
+            }
+        } else {
+            parent.layer.alert(data.Message, { icon: 2 });
+        }
+    });
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = "Stop";
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel fileDelone" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileList .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJson").val(fileDataJson);
+            }
+        });
+    }
+
+    //获取附件
+    $.post("/Files/GetFileList", { tableName: 'Epm_Project', id: '@ViewBag.ProjectId', tableCol: "Meeting" }, function (data) {
+        if (data.Flag) {
+            if (data.Data.length > 0) {
+                data.Data.forEach(function (item, index, arr) {
+                    if (item.ImageType == null) {
+                        var odiv = '<li id="' + item.GuidId + '">';
+                        odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                        odiv += '<div>' + item.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel fileDeltwo" data-val="' + item.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileListFile .fileShow').append(odiv);
+                    }
+
+                    var obj = {};
+                    obj.Name = item.Name;
+                    obj.GuidId = item.GuidId;
+                    obj.Size = item.Size;
+                    obj.Group = item.Group;
+                    obj.Url = item.Url;
+                    obj.TableColumn = item.TableColumn;
+                    obj.ImageType = item.ImageType;
+                    fileDataArray1.push(obj);
+                });
+                var fileDataJsonFile = JSON.stringify(fileDataArray1);
+                $("#fileDataJsonFile").val(fileDataJsonFile);
+            }
+        } else {
+            parent.layer.alert(data.Message, { icon: 2 });
+        }
+    });
+    var fileDataArray1 = [];
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = "Meeting";
+                    fileDataArray1.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel fileDeltwo" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileListFile .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray1);
+                $("#fileDataJsonFile").val(fileDataJson);
+            }
+        });
+    }
+    $(function () {
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+
+        $('#btnUploadFile1').click(function () {
+            document.getElementById("loadFile1").click();
+        });
+
+        $("#Edit").click(function () {
+            window.location.href = 'Edit?projectId=@ViewBag.ProjectId';
+        });
+        $("#ApprovalConstitute").click(function () {
+            window.location.href = 'ApprovalConstitute?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectMainPoint").click(function () {
+            window.location.href = 'ProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#MilestonePlan").click(function () {
+            window.location.href = 'MilestonePlan?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectISP").click(function () {
+            window.location.href = 'ProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#ProjectData").click(function () {
+            window.location.href = 'ProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#IsCrossingsManage").click(function () {
+            window.location.href = 'CrossingsManage?projectId=@ViewBag.ProjectId';
+        });
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                ShutdownTime: {
+                    required: true,
+                    date: true
+                },
+                PlanOpeningTime: {
+                    required: true,
+                    date: true
+                }
+            },
+            messages: {
+                ShutdownTime: {
+                    required: "实际停业时间不能为空",
+
+                },
+                PlanOpeningTime: {
+                    required: "计划开业时间不能为空"
+                }
+            }
+
+        });
+        //数据提交
+        $(".saveBut").click(function () {
+            if ($("#mainForm").valid()) {
+                var search = $("form").serialize();
+                $.post("TimeManage", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+        });
+
+        //计划停业时长
+        $("#PlanOpeningTime,#ShutdownTime").blur(function () {
+            var strStartTime = $("#PlanOpeningTime").val();
+            var endTime = $("#ShutdownTime").val();
+            if (strStartTime == "" || endTime == "") {
+                $("#PlanShutdowLimit").val(0);
+            }
+            else {
+                var startNum = parseInt(strStartTime.replace(/-/g, ''), 10);
+                var endNum = parseInt(endTime.replace(/-/g, ''), 10) + 1;
+                if (endNum > startNum) {
+                    $("#PlanShutdowLimit").val("0");
+                    return;
+                }
+                else {
+                    $("#PlanShutdowLimit").val(DateDiff(strStartTime, endTime));  //调用/计算两个日期天数差的函数，通用
+                }
+            }
+        });
+
+        //删除附件
+        $("#fileList").on("click", ".fileDelone", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJson").val(fileDataJson);
+        });
+
+        //删除附件
+        $("#fileListFile").on("click", ".fileDeltwo", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray1 = fileDataArray1.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            var fileDataJsonFile = JSON.stringify(fileDataArray1);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+    });
+</script>

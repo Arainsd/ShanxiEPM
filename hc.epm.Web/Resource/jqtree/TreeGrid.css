@@ -1,0 +1,82 @@
+body {
+    font-size: 14px;
+}
+
+.TreeGrid {
+    font-size: 14px;
+    border-collapse: collapse;
+}
+
+    .TreeGrid .header {
+        background-color: #f2f2f2;
+        font-size: 14px;
+        height: 39px;
+        border: none;
+        box-shadow: none;
+    }
+
+    .TreeGrid tr {
+        height: 39px;
+    }
+
+        .TreeGrid tr:hover {
+            background: #f2f2f2;
+        }
+
+    .TreeGrid td {
+        border: 1px solid #E6E6FA;
+        padding: 4px 3px 2px 3px;
+    }
+
+    .TreeGrid tr td:nth-child(2) {
+        width: 300px;
+        text-indent: 10px;
+    }
+
+    .TreeGrid a {
+        text-decoration: none;
+        color: black;
+    }
+
+        .TreeGrid a:hover {
+            color: blue;
+        }
+
+    .TreeGrid .image_hand {
+        border: 0;
+        cursor: hand;
+        align: absmiddle;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .TreeGrid .image_nohand {
+        border: 0;
+        align: absmiddle;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    .TreeGrid .row_hover {
+        background-color: #E6E6FA;
+    }
+
+/*.TreeGrid .row_active{
+	background-color: #E0FFFF;
+}*/
+.btns {
+    height: 40px;
+}
+
+.main mt5 {
+    overflow: auto;
+}
+
+.maincontent {
+    width: 100%;
+    height: auto;
+}
+
+.addpic {
+    background: url(/Content/jqtree/img/addpic.jpg) no-repeat 1px 1px;
+}

@@ -1,0 +1,765 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@{
+    ViewBag.Title = "项目批复信息记录";
+}
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div" colspan="3">
+                            <div>汉城加油站项目立项申请</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>汉城加油站</div>
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>新建</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>西安市汉城路81号</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>2019-09-23</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司</td>
+                        <td class="td-div">
+                            <div>西安市汉城路81号</div>
+                        </td>
+                        <td class="table_title">估计金额</td>
+                        <td class="td-div">
+                            <div>2000万元</div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>油气销量信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">估计油日销量</td>
+                        <td class="td-div">
+                            <div>2000</div>
+                        </td>
+                        <td class="table_title">估计气日销量（CNG）</td>
+                        <td class="td-div">
+                            <div>300千方</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">估计气日销量（LNG）</td>
+                        <td class="td-div" colspan="3">
+                            <div>300千方</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>项目批复信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title font-black">
+                            <span class="font-black"> 限上/限下</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" checked />地区公司限上项目
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" />地区公司限下项目
+                                </label>
+                            </div>
+                        </td>
+                        <td class="table_title font-black">
+                            <span class="font-black">示范/标准</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" checked />示范加油站（油库）
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="LimitType" />标准加油站（油库）
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">项目编号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="" />
+                                <input id="" type="hidden" name="" class="form-control" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">生成批复（请示）文号</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="" class="form-control " placeholder="" />
+                                <input id="" type="hidden" name="" class="form-control" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">拟稿人</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="" />
+                            <div class="btn-upload">
+                                <input type="button" data-type="ngr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">会签人</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="" />
+                            <div class="btn-upload">
+                                <input type="button" data-type="hqr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">签发人</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="" />
+                            <div class="btn-upload">
+                                <input type="button" data-type="qfr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">现场负责人</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="" />
+                            <div class="btn-upload">
+                                <input type="button" data-type="xcfzr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">决策负责人</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="" />
+                            <div class="btn-upload">
+                                <input type="button" data-type="jcfzr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">运营人</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Declarer" class="form-control" style="display:inline-block;width:66%;" placeholder="" />
+                            <div class="btn-upload">
+                                <input type="button" data-type="yyr" class="btn selectUser" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>可研批复信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">总投资</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />万元<i style="color:white;">/</i>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">合同款</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" placeholder="" class="form-control input_unit" />万元
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">工程费用</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />万元<i style="color:white;">/</i>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">土地费用</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" placeholder="" class="form-control input_unit" />万元
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">其他费用</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />万元<i style="color:white;">/</i>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">首次取得投资计划日期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <input type="text" class="form-control position_rel" onClick="WdatePicker({ el: '' })">
+                            <i onClick="WdatePicker({ el: '' })" class="iconfont ">&#xe7e2;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">已下达计划</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />万元<i style="color:white;">/</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">上传计划明细</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" name="JHMX" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                                <tbody class="fileShow-append" id="JHMX">
+                                    <tr class="headtr">
+                                        <th class="table_title" style="width: 219px;">序号</th>
+                                        <th class="td-div">附件名称</th>
+                                        <th class="td-div">操作</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>设施设备</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">加油机</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" style="width:43%;" />台
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" style="width:43%;" />枪
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">加气机</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" style="width:43%;" />台
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" style="width:43%;" />枪
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">罩棚</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" />平
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">油罐</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" />方
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">站房</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" />平
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">油罐数量</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" />个
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">储气井（气罐）</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" />方
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地费用支付类型</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" checked />分年支付
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" />一次性支付
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" />逐年递增支付
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" />其他
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">资产类型</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" checked />全资
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" />合资
+                            </label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地性质</span>
+                        </td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="Position" type="hidden" name="Position" value="" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">土地用途</span>
+                        </td>
+                        <td class="td-div">
+                            <select class="form-control">
+                                <option value="value">text</option>
+                            </select>
+                            <input id="Position" type="hidden" name="Position" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地面积</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />平米<i style="color:white;">/</i>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">今年预计付款</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="PredictDayGas2" placeholder="" class="form-control input_unit" />万元
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">土地费用备注</span>
+                        </td>
+                        <td class="table_title" colspan="3">
+                            <div class="form-group">
+                                <textarea rows="4" class="form-control"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">预计达销时间</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />年<i style="color:white;">/</i>
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">可研编制单位</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="Recommender" class="form-control" placeholder="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">柴油日销量（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />吨
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">汽油日销量（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />吨
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">柴汽比</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />%
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">气日销量 CNG（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />方
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">气日销量 LNG（扩建项目此处填增量）</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />千方
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">投资回收期</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />年
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">内部收益率</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />%
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">非油年收入</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />万元
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span class="font-black">非油年成本</span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />万元
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">预计投运时间  </span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control input_unit" placeholder="" />（格式：200101）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">可研批复日期  </span>
+                        </td>
+                        <td class="td-div">
+                            <input type="text" name="" class="form-control" placeholder="" />
+                        </td>
+                        <td class="table_title">
+                            <span class="font-black">是否有工程信息</span>
+                        </td>
+                        <td class="td-div">
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" checked />是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="LimitType" />否
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>附件信息</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append" id="SCFJ">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件类型</td>
+                        <td class="td-div" style="width: 409px!important;">
+                            <select class="form-control" id="fileType">
+                                @*id="fileType"后面要根据数据库的字段改*@
+                                <option value="value">text</option>
+                            </select>
+                        </td>
+                        <td class="table_title" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" name="SCFJ" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px; background-color:#c3c3c3!important;color:white;" value="选择附件" />
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+                        <td class="td-div"><div class="color_red text_lf">附件类型仅支持：doc,pdf,excel,ppt,png等</div></td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="table_title">附件类型</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Staged.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="close" value="取&nbsp;&nbsp;&nbsp;消" class="layui-btn layui-btn-big " />
+        </div>
+        <!--附件上传触发-->
+        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+    function uploadFile() {
+        if ($("#loadFile")[0].files.length == 0) {
+            return;
+        }
+        var fileObj = $("#loadFile")[0].files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        var column = $("#loadFile").attr("fileListId");
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TableColumn = column;
+                    var sort;//附件排序变量
+                    if (column == "JHMX") {
+                        obj.TypeNo = "";
+                        obj.TypeName = "";
+                        sort = $('#JHMX').find('tr:last-child').find('.sort').text();
+                    } else if (column == "SCFJ") {
+                        obj.TypeNo = $("#fileType").find("option:selected").val();
+                        obj.TypeName = $("#fileType").find("option:selected").text()
+                        sort = $('#SCFJ').find('tr:last-child').find('.sort').text();
+                    }
+
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv;
+                        //附件排序判断
+                        if (sort == "") {
+                            sort = 0;
+                            sort++;
+                        } else {
+                            sort++;
+                        }
+                        if (column == "JHMX") {
+                            odiv = `
+                                 <tr>
+                                        <td><span class ="font-black sort">${sort}</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a href="javascript:void(0)" style="color:#337ab7;" class ="fileDel">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}" data-tablecolumn="${obj.TableColumn}">
+                                        </td>
+                                    </tr>
+                           `
+                        } else if (column == "SCFJ") {
+                            odiv = `
+                                 <tr>
+                                        <td><span class ="font-black sort">${sort}</span></td>
+                                        <td class ="text_lf td-div"><span class ="font-black">${obj.Name}</span></td>
+                                        <td><span class ="font-black">${obj.TypeName}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a href="javascript:void(0)" style="color:#337ab7;" class ="fileDel">删除</a>
+                                       <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typename="${obj.TypeName}" data-typeno="${obj.TypeNo}" data-tablecolumn="${obj.TableColumn}">
+                                        </td>
+                                    </tr>
+                           `
+                        }
+
+                        $("#" + column).append(odiv);
+                    }
+                }
+
+            }
+        });
+    }
+    $(function () {
+        $('#btnUploadFile,#btnUploadFile1').click(function () {
+            $("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择各负责人
+        $(".selectUser").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择人员"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?companyId=@ViewBag.UnitID',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        //拟稿人
+                        if (_this.data("type") == "ngr") {
+
+                        }
+                            //会签人
+                        else if (_this.data("type") == "hqr") {
+
+                        }
+                            //签发人
+                        else if (_this.data("type") == "qfr") {
+
+                        }
+                            //现场负责人
+                        else if (_this.data("type") == "xcfzr") {
+
+                        }
+                            //决策负责人
+                        else if (_this.data("type") == "jcfzr") {
+
+                        }
+                            //运营人
+                        else if (_this.data("type") == "yyr") {
+
+                        }
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //数据提交
+        $("#save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    TableColumn: $(item).find("#updata").data("tablecolumn"),
+                    TypeNo: $(item).find("#updata").data("typeno"),
+                    TypeName: $(item).find("#updata").data("typename"),
+                    Sort: $(item).find(".sort").text()
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            console.log(fileDataArray)
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+
+            var search = $("form").serialize();
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/ProjectManagement/ProjectManagementList";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+            }
+        });
+
+    });
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/ProjectManagement/ProjectManagementList";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parent().parent().remove();
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+</script>

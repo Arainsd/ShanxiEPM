@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "项目投资比";
+    Layout = "~/Views/Shared/_LayoutPageH5.cshtml";
+}
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="~/Resource/css/bootstrap.css" rel="stylesheet" />
+<link href="//at.alicdn.com/t/font_842616_7gmaah0ij2h.css" rel="stylesheet" />
+<style>
+    #container {
+        height: 400px;
+    }
+
+        #container #main {
+            border-bottom: 5px solid #f2f2f2;
+            border-top: 10px solid #f2f2f2;
+            padding-top: 10px;
+        }
+
+    #main > div, canvas {
+        width: 100% !important;
+    }
+
+    .proportion {
+        width: 33.33%;
+        padding: 0px 0px 3px 10px;
+        float: left;
+        border-bottom: 5px solid #f2f2f2;
+        border-right: 5px solid #f2f2f2;
+        color: #666;
+        font-family: "SimHei";
+        font-weight: 700;
+    }
+
+        .proportion > span {
+            color: #999;
+            font-family: "Microsoft YaHei";
+            font-weight: 400;
+        }
+
+        .proportion:nth-child(3n+3) {
+            border-right: 10px solid #fff;
+        }
+
+    .iconfont {
+        padding-left: 10px;
+    }
+
+    .top {
+        width: 100%;
+        padding: 10px 0 0;
+        color: #555;
+    }
+
+    .icon-lvsejiantou- {
+        color: #FFA11D;
+    }
+
+    .icon-jusejiantou- {
+        color: #17CD23;
+    }
+</style>
+<style>
+     @("@")media only screen and (max-width: 320px){
+    .top {
+        font-size: 20px !important;
+    }
+    .iconfont,.age{font-size: 12px;}
+
+}
+      @("@")media only screen and (min-width: 320px){
+    .top {
+        font-size: 20px !important;
+    }
+     .iconfont,.age{font-size: 12px;}
+}
+     @("@")media only screen and (min-width: 401px){
+    .top {
+        font-size: 20px !important;
+    }
+      .iconfont,.age{font-size: 14px;}
+}
+ @("@")media only screen and (min-width: 428px){
+    .top {
+        font-size: 25px !important;
+    }
+       .iconfont,.age{font-size: 16px;}
+}
+ @("@")media only screen and (min-width: 481px){
+    .top {
+        font-size: 26.75px !important;
+    }
+       .iconfont,.age{font-size: 18px;}
+}
+ @("@")media only screen and (min-width: 569px){
+    .top {
+        font-size: 30px !important;
+    }
+      .iconfont,.age{font-size: 20px;}
+}
+ @("@")media only screen and (min-width: 641px){
+    .top {
+        font-size: 35px !important;
+    }
+       .iconfont,.age{font-size: 22px;}
+}
+     @("@")media only screen and (min-width: 750px){
+    .top {
+        font-size: 40px !important;
+    }
+       .iconfont,.age{font-size: 24px;}
+}
+</style>
+<div id="container">
+    <div id="main" style="height:100%"></div>
+    <div style="font-size:12px">
+        <div class="proportion"><div class="top"><span>35%</span><span class="iconfont icon-lvsejiantou-"></span></div><span class="age">2013投资占比</span></div>
+        <div class="proportion"><div class="top"><span>35%</span><span class="iconfont icon-jusejiantou-"></span></div><span class="age">2014投资占比</span></div>
+        <div class="proportion"><div class="top"><span>35%</span><span class="iconfont icon-iconfontjianhao01"></span></div><span class="age">2015投资占比</span></div>
+        <div class="proportion"><div class="top"><span>35%</span><span class="iconfont icon-lvsejiantou-"></span></div><span class="age">2013投资占比</span></div>
+        <div class="proportion"><div class="top"><span>35%</span><span class="iconfont icon-jusejiantou-"></span></div><span class="age">2014投资占比</span></div>
+        <div class="proportion"><div class="top"><span>35%</span><span class="iconfont icon-iconfontjianhao01"></span></div><span class="age">2015投资占比</span></div>
+    </div>
+</div>
+<script src="/Resource/scripts/echarts.min.js"></script>
+
+<script>
+
+    var myChart = echarts.init(document.getElementById('main'));
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption({
+        title: {
+            text: 'kpi投资比图',
+            textStyle: {
+                fontSize: 25,
+                color: "#333",
+                fontFamily: "Microsoft YaHei",
+            }
+        },
+        tooltip: {},
+        legend: {
+            data: [{
+                name: '投资比',
+                textStyle: {
+                    color: '#999',
+                    fontSize: 18,
+                    fontFamily: "Microsoft YaHei"
+                },
+            }],
+            right: 30,
+            textStyle: {
+                fontSize: 16
+            }
+        },
+        xAxis: {
+            data: ["2013", "2014", "2015", "2016", "2017", "2018","2019"]
+        },
+        yAxis: {},
+        series: [{
+            name: '投资比',
+            type: 'line',
+            lineStyle: {
+                width: 4
+            },
+            smooth: 0.4
+            ,
+            data: [5, 13, 36, 15, 10, 20,77]
+        }]
+    });
+    window.onresize = myChart.resize;
+</script>

@@ -1,0 +1,107 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<Epm_SupervisorLog>
+@{
+    ViewBag.Title = "监理日志列表";
+}
+
+<div class="contentData">
+    <div class="form-select c">
+        <form>
+            <div>
+                <label>项目名称 : </label>
+                <input type="text" name="projectName" id="projectName" value="@ViewBag.ProjectName" maxlength="100">
+            </div>
+            <div class="form-sub">
+                <button type="button" id="Add" class="checkright" data-module="LogManage" data-right="Add">新 增</button>
+                <button type="submit" class="checkright" data-module="LogManage" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <div>
+            <table class="datalist">
+                <thead>
+                    <tr>
+                        <th width="50">序号</th>
+                        <th width="150">项目名称</th>
+                        <th width="100">日期</th>
+                        <th width="50">天气</th>
+                        <th width="100">工作内容</th>
+                        <th width="100">新开工程节点</th>
+                        <th width="100">新完工程节点</th>
+                        <th width="50">状态</th>
+                        <th width="50">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td style="display:none">
+                                    <input type="hidden" class="inputId" data-id="@item.Id" />
+                                </td>
+                                <td>@index</td>
+                                <td>@item.ProjectName<input type="hidden" value="@item.ProjectId" /></td>
+                                <td>@(item.SubmitTime == null ? "" : Convert.ToDateTime(item.SubmitTime).ToString("yyyy-MM-dd"))</td>
+                                <td>@item.TypeName</td>
+                                <td>@item.Content</td>
+                                <td>@item.PlanName</td>
+                                <td>@item.NextPlanName</td>
+                                <td>@(((ApprovalState)item.State).GetText())</td>
+                                <td>
+                                    <a href="javascript:;" class="Detail checkright" data-module="LogManage" data-right="Info">查看</a>
+                                    @*@if ((ApprovalState)item.State == ApprovalState.WaitAppr)
+                                        {
+                                            <a href="javascript:;" class="Detail checkright" data-module="LogManage" data-right="Info">审核</a>
+                                        }*@
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/SupervisorLog/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    //新增
+    $("#Add").on("click", function () {
+        window.location.href = "/SupervisorLog/Add";
+    });
+    //查看
+    $(".Detail").on("click", function () {
+        var id = $(this).parents("tr").find($(".inputId")).data("id");
+        window.location.href = "/SupervisorLog/Detail?id=" + id;
+    });
+
+</script>

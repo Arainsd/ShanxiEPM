@@ -1,0 +1,186 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_User
+
+@{
+    Layout = "~/Views/Shared/_CALayout.cshtml";
+    ViewBag.Title = "用户绑定CA";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+
+    .audit-info .form-control-feedback {
+        right: -463px;
+    }
+
+    .audit-state .form-control-feedback {
+        right: 120px;
+    }
+</style>
+<div class="container" style="margin-top:30px;margin-bottom:20px">
+    <div class="row" style="margin-right:0">
+        <form class="form-horizontal " id="mainForm">
+            <input type="hidden" name="auditId" id="auditId" value="@Model.SId" />
+            <div class="col-lg-12 col-sm-12 mb25 row">
+                <div class="form-group col-lg-11 col-sm-11 ">
+                    <label class="col-lg-3 col-sm-3 control-label" style="width:30%;text-align:right">企业名称：</label>
+                    <div style="display:inline-block">
+                        <span class='text-link' style='margin-top:8px;display:inline-block'>@ViewBag.companyName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 row">
+                <div class="form-group col-lg-11 col-sm-11 ">
+                    <label class="col-lg-3 col-sm-3 control-label" style="width:30%;text-align:right">用户名：</label>
+                    <div style="display:inline-block">
+                        <span class='text-link' style='margin-top:8px;display:inline-block'>@Model.UserAcct</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 mb25 row">
+                <div class="form-group col-lg-11 col-sm-11 ">
+                    <label class="col-lg-3 col-sm-3 control-label" style="width:30%;text-align:right">CA证书：</label>
+                    <div style="display:inline-block;width:270px">
+                        <select name="CertList" id="CertList" class="form-control selectpicker show-tick"></select>
+                    </div>
+                    <div class="col-lg-5 col-sm-5"></div>
+                </div>
+            </div>
+        </form>
+        <div class="layui-form-item row btn-save" style="margin-top:55px">
+            <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-small button-base bg-save" />
+            <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    /*********************************************************获取证书信息 start*****************************************************/
+    function initCertList() {
+        var certs = filterCert("", "", "");
+        $("#CertList").empty();
+        var count = certs.size();
+        if (count <= 0) {
+            $("#CertList").append("<option value='0'>查询结果为空");
+            return;
+        }
+        for (var i = 0; i < count; i++) {
+            var cert = certs.get(i);
+            var cn = getCNFromSubject(cert);
+            addOption(cert.serialNumber(), cn);
+        }
+        try {
+
+        } catch (e) {
+            if (e instanceof TCACErr) {
+                alert(e.toStr());
+            } else {
+                alert("初始化证书到下拉列表失败 !!!");
+            }
+        }
+    }
+    // 从Certificate对象中获取CN
+    // cert : Certificate对象
+    function getCNFromSubject(cert) {
+        try {
+            var t = cert.subject().match(/(S(?!N)|L|O(?!U)|OU|SN|CN|E)=([^=]+)(?=, |$)/g);
+            for (var i = 0; i < t.length; i++) {
+                if (t[i].indexOf("CN=") === 0)
+                    return t[i].substr(3, t[i].length);
+            }
+            return null;
+        } catch (e) {
+            if (e instanceof TCACErr) {
+                alert(e.toStr());
+            } else {
+                alert("获取CN失败!!!");
+            }
+        }
+    }
+    // 从["id==CertList"]中获取当前选择的证书
+    // 返回Certificate对象
+    function getSelectedCert() {
+        try {
+            var certs = CertStore.listAllCerts(); // 此处可能会有性能问题
+            var selectedCertSN = $("[id=CertList]").attr("value");
+            var r = certs.bySerialnumber(selectedCertSN);
+            return r.get(0);
+        } catch (e) {
+            if (e instanceof TCACErr) {
+                alert(e.toStr());
+            } else {
+                alert("没有找到证书");
+            }
+        }
+    }
+    //追加下拉option
+    function addOption(oValue, oName) {
+        var sid = document.getElementById("CertList");
+        var myOption = document.createElement("option");
+        sid.appendChild(myOption);
+        myOption.text = oName;
+        myOption.value = oValue;
+    }
+    // CertList的onChange
+    function onCertListChange() {
+        try {
+            var cert = getSelectedCert();
+            displayCertInfo(cert);
+        } catch (e) {
+            if (e instanceof TCACErr) {
+                alert(e.toStr());
+            } else {
+                alert("Here is Error !!!");
+            }
+        }
+    }
+    // 显示Certificate对象的详细信息
+    function displayCertInfo(cert) {
+        try {
+            var publk = "";
+            publk += cert.publicKeyAlg() + "  |  ";
+            publk += cert.publicKeySize();
+            $("#SubjectDN").text(cert.subject());
+            $("#IssuerDN").text(cert.issuer());
+            $("#signAlg").text(cert.signAlg());
+            $("#publicKeyAlg").text(publk);
+            $("#CertSerial").text(cert.serialNumber());
+        } catch (e) {
+            if (e instanceof TCACErr) {
+                alert(e.toStr());
+            } else {
+                alert("没有找到证书!!!");
+            }
+        }
+    }
+    $(document).ready(function () {
+        initCertList();
+    });
+    /*********************************************************获取证书信息 end*****************************************************/
+    //点击保存
+    layui.use(['layer'], function () {
+        var layer = layui.layer;
+        $("#save").on("click", function () {
+            var casn = $("#CertList").val();
+            $.post("/User/CABinding", { id: '@Model.SId', casn: casn,belong:'@ViewBag.belong' }, function (data) {
+                if (data.Flag) {
+                    var index = parent.layer.msg("绑定CA成功", { icon: 1, time: 1000 }, function () {
+                        parent.layer.close(index);
+                        var layerIndex = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(layerIndex);//关闭窗口
+                        parent.window.frames["mainFrame"].location.reload();
+                    })
+                } else {
+                    parent.layer.alert(data.Message, { icon: 2 });
+                }
+            })
+        })
+    })
+    //关闭弹窗
+    $(".cancel").on("click", function () {
+        var layerIndex = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(layerIndex);//关闭窗口
+    })
+</script>

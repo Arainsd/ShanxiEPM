@@ -1,0 +1,817 @@
+﻿@using System.Collections.Generic;
+@using hc.Plat.Common.Extend
+@using hc.epm.ViewModel;
+@{
+    ViewBag.Title = "新增监理日志";
+}
+<style>
+    .butt {
+        width: 48px;
+        background: #32a5f8;
+        color: white;
+        border: none;
+        height: 28px;
+        border-radius: 3px;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" name="ProjectName" id="ProjectName" value="@ViewBag.ProjectName" readonly="readonly" />
+                <input type="hidden" name="ProjectId" id="ProjectId" value="@ViewBag.ProjectId" />
+                <i class="pic iconfont " width="20" height="30" style="cursor:pointer;left:595px;">&#xe76a;</i>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;提报日期&nbsp;:</label>
+                <input type="text" id="SubmitTime" name="SubmitTime" value="@ViewBag.SubmitTime" readonly style="background-color:#EBEBE4">
+                <i class="pic iconfont SubmitTimePic " width="50" height="70" style="cursor:pointer">&#xe7e2;</i>
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;天气&nbsp;:</label>
+                <input type="text" name="TypeName" id="TypeName" value="" />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;风力&nbsp;:</label>
+                <input type="text" id="WindPower" name="WindPower">
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;气温&nbsp;:</label>
+                <input type="text" id="Temperature" name="Temperature">
+            </div>
+            <div class="short-text">
+                <label><span class="star"></span>&nbsp;新开工程节点&nbsp;:</label>
+                <div class="" style="margin-left: 122px;margin-top: -38px;">
+                    <select class="combox" id="PlanId1" name="PlanId1" multiple></select>
+                    <input type="hidden" name="PlanId" id="PlanId" />
+                    <input type="hidden" id="PlanName" name="PlanName">
+                </div>
+            </div>
+            <div class="short-text">
+                <label>&nbsp;新完工程节点&nbsp;:</label>
+                <div class="" style="margin-left: 122px;margin-top: -38px;">
+                    <select class="combox" id="NextPlanId1" name="NextPlanId1" multiple></select>
+                    <input type="hidden" name="NextPlanId" id="NextPlanId" />
+                    <input type="hidden" id="NextPlanName" name="NextPlanName">
+                </div>
+            </div>
+            <div class="short-text">
+                <label>&nbsp;施工天数&nbsp;:</label>
+                第<span style="padding:0 5px" class="ConstructionDate">@ViewBag.ConstructionDate</span>天(总工期<span style="padding:0 5px">@ViewBag.Total</span>天)
+            </div>
+            <div>
+                <label><span class="star">*</span>&nbsp;施工单位&nbsp;:</label>
+                <input type="button" value="添加施工单位" style="width:100px!important" id="unit" />
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:122px;width:80%">
+                    <thead>
+                        <tr>
+                            <th width="30%">单位名称</th>
+                            <th width="10%">姓名</th>
+                            <th width="30%">身份</th>
+                            <th width="10%">入场许可</th>
+                            <th width="10%">是否到场</th>
+                            <th width="10%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="unit"></tbody>
+                </table>
+                <input type="hidden" name="Builder" id="Builder" value="" />
+            </div>
+            <div class="intro" style="margin-bottom:30px">
+                <div><label for="ChangeContent"><span class="star">*</span>&nbsp;今日工作内容&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Content" name="Content"></textarea>
+                </div>
+            </div>
+            <div class="intro" style="margin-bottom:25px">
+                <div><label><span class="star">*</span>&nbsp;明日计划&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="TomorrowProject" name="TomorrowProject"></textarea>
+                </div>
+            </div>
+            @if (ViewBag.Day <= 0)
+            {
+                <div class="short-text">
+                    <label>&nbsp;进度&nbsp;:</label>
+                    <span>正常</span>
+                    <input type="text" id="Schedule" name="Schedule" style="display:none" value="@ViewBag.Day">
+                </div>
+            }
+            else
+            {
+                <div class="short-text">
+                    <label>&nbsp;进度&nbsp;:</label>
+                    <span>延期</span><span style="padding:0 5px">@ViewBag.Day</span><span>天</span>
+                    <input type="text" id="Schedule" name="Schedule" style="display:none" value="@ViewBag.Day">
+                </div>
+                <div class="intro">
+                    <div><label>&nbsp;原因&nbsp;:</label></div>
+                    <div>
+                        <textarea class="sub-description" id="Reason" name="Reason"></textarea>
+                    </div>
+                </div>
+            }
+            <div class="intro" style="margin-top:15px;display:none;">
+                <div><label>&nbsp;备注&nbsp;:</label></div>
+                <div>
+                    <textarea class="sub-description" id="Remark" name="Remark"></textarea>
+                </div>
+            </div>
+            <div class="upload" style="margin-bottom:0px;">
+                <div><label><span class="star">*</span>&nbsp;附件上传&nbsp;:</label></div>
+                <div class="btn-upload">
+                    <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                    <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                </div>
+            </div>
+            <div style="width:100%;" id="fileList">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJson" id="fileDataJson">
+            </div>
+            <br /><br />
+            <div id="workDiv" style="margin-top: -50px;">
+
+            </div>
+            <div style="width:100%;" id="fileListFile">
+                <ul class="fileShow"></ul>
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+            </div>
+            <input type="hidden" name="fileDataJsonWorkId" id="fileDataJsonWorkId" value="" />
+            <input type="hidden" name="Type" id="Type" />
+            <input type="hidden" name="WorkId" id="Type" />
+            <div class="button-group btn-center">
+                <button type="button" class="saveBut">提交</button>
+                <input type="file" id="workloadFile" name="workloadFile" show="" json="" style="display:none" onchange="uploadFile2()">
+            </div>
+            <input type="hidden" value="@(ViewBag.Str)" id="str" />
+            <input type="hidden" value="@(ViewBag.PlanId)" id="hidPlanId" />
+            <input type="hidden" value="@(ViewBag.NextPlanId)" id="hidNextPlanId" />
+        </div>
+    </form>
+</div>
+<!--选择单位-->
+<div id="convertcom" style="display:none;width:360px;margin-top:20px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:100px;height:60px;">单位名称 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("CompanyId", null, new { @class = "form-control selectpicker show-tick compa" })
+                        <input type="hidden" name="CompanyName" id="CompanyName" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!--选择工种-->
+<div id="convert" style="display:none;width:360px;margin-top:20px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:100px;height:60px;">工种类型 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        @Html.DropDownList("jobes", null, new { @class = "form-control selectpicker show-tick" })
+                        <input type="hidden" name="workPeopleTypeName" id="workPeopleTypeName" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!--添加工种-->
+<div id="convertAdd" style="display:none;width:360px;margin-top:20px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:100px;height:60px;">工种类型 : </label>
+            <div class="layui-input-block">
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" id="addtype" placeholder="请填写工种" style="height:30px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="~/Resource/plugins/layui-2.1.2/lay/modules/layer.js"></script>
+<link href="~/Resource/css/select2.css" rel="stylesheet" />
+<script src="~/Resource/scripts/select2.js"></script>
+<script>
+    function String2XML() {
+        var xmlstring=$("#str").val();
+        if(xmlstring!=""){
+            // for IE
+            if (window.ActiveXObject) {
+                var xmlobject = new ActiveXObject("Microsoft.XMLDOM");
+                xmlobject.async = "false";
+                xmlobject.loadXML(xmlstring);
+            }
+                // for other browsers
+            else {
+                var parser = new DOMParser();
+                var xmlobject = parser.parseFromString(xmlstring, "text/xml");
+            }
+            //获得根节点
+            var root=xmlobject.documentElement;
+            var names=root.getElementsByTagName("forecast");
+            var hw=names[0].firstChild.childNodes[1].firstChild.data; //高温
+            hw=hw.replace("高温","");
+            var dw=names[0].firstChild.childNodes[2].firstChild.data; //低温
+            dw=dw.replace("低温","");
+            var tq=names[0].firstChild.childNodes[3].firstChild.firstChild.data; //天气
+            var fl=names[0].firstChild.childNodes[3].childNodes[1].firstChild.data; //风向
+            var jb=names[0].firstChild.childNodes[3].childNodes[2].firstChild.data;  //级别
+            jb=jb.replace("<![CDATA[<","").replace("]]>","").replace("<","");
+
+            $("#TypeName").val(tq);
+            $("#WindPower").val(fl+jb);
+            $("#Temperature").val(dw+"~"+hw);
+        }
+    }
+    $(function(){
+        var planIdList =$("#hidPlanId").val();
+        if(planIdList!=""&&planIdList!=null){
+            planIdList=JSON.parse(planIdList);
+        }
+        var nextPlanIdList =$("#hidNextPlanId").val();
+
+        if(nextPlanIdList!=""){
+            nextPlanIdList=JSON.parse(nextPlanIdList);
+        }
+        //新开工程节点
+        $('#PlanId1').select2({
+            placeholder: "请至少选择一个",
+            tags: true,
+            createTag: function (decorated, params) {
+                return null;
+            },
+            width: '492px',
+            data:planIdList,
+            language: {
+                noResults: function (params) {
+                    return "暂无数据";
+                }
+            }
+        });
+
+        //新完工程节点
+        $('#NextPlanId1').select2({
+            placeholder: "请至少选择一个",
+            tags: true,
+            createTag: function (decorated, params) {
+                return null;
+            },
+            width: '492px',
+            data:nextPlanIdList,
+            language: {
+                noResults: function (params) {
+                    return "暂无数据";
+                }
+            }
+        });
+
+    })
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        //限制上传的文件必须为图片
+
+        var str = fileObj.name.split(".");
+        var strName = str[1];
+        if (strName == "jpg" || strName == "jpeg"|| strName == "png") {
+            var formFile = new FormData();
+            formFile.append("file", fileObj);
+            var path = formFile;
+        } else {
+            layer.msg("必须上传图片", { time: 1000, icon: 2 });
+            return;
+        }
+
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<li id="' + obj.GuidId + '">';
+                        odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                        odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                        odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                        odiv += '</li>';
+                        $('#fileList .fileShow').append(odiv);
+                    }
+                }
+                fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJson").val(fileDataJson);
+                $("#loadFile").val("");
+            }
+        });
+    }
+
+    function uploadFile2() {
+        if (document.getElementById("workloadFile").files.length == 0) {
+            return;
+        }
+        var showObj = $("#" + $("#workloadFile").attr("show"));
+        var jsonObj = $("#" + $("#workloadFile").attr("json"));
+
+        var fileObj = document.getElementById("workloadFile").files[0];
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            async: false,
+            data: formFile,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+
+                    var fileDataArray = JSON.parse($(jsonObj).val());
+                    fileDataArray.push(obj);
+                    var fileDataJson = JSON.stringify(fileDataArray);
+                    $(jsonObj).val(fileDataJson);
+
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        var odiv = '<span id="' + obj.GuidId + '">';
+                        odiv += '<span><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></span>';
+                        odiv += '<span style="text-align:right; width:80px;margin-right: 35px;margin-left: 35px;">' + obj.Size + '</span>';
+                        odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                        odiv += '<span style="margin-left:5px;cursor: pointer;color:blue" class="fileDelWork" data-val="' + obj.GuidId + '" data-json="' + $("#workloadFile").attr("json") + '">删除</span>';
+                        odiv += '<br/></span>';
+                        $(showObj).append(odiv);
+                    }
+                }
+                $("#workloadFile").val("");
+            }
+        });
+    }
+
+    function getWorkInfo(){
+        var projectId=$("#ProjectId").val();
+        var submitTime=$("#SubmitTime").val();
+        if(projectId!=""&&projectId!="0"){
+            $.post("/SupervisorLog/GetWorkInfo1?projectId=" + projectId+"&submitTime="+submitTime, function (data) {
+                if(data.length>0){
+                    var htmlw="";
+                    for (var i = 0; i < data.length; i++) {
+                        htmlw+='<div class="short-text"><label><span class="star"></span>&nbsp;危险作业&nbsp;:</label>';
+                        htmlw+='<input type="hidden" id="hidworkId__'+data[i].WorkId+'" class="hidworkId" value="'+data[i].WorkId+'" />';
+                        if(data[i].State==35){
+                            htmlw+='<input type="hidden" value="2" />';
+                        }else{
+                            htmlw+='<input type="hidden" value="1" />';
+                        }
+                        var TaskName=data[i].WorkContent==null?"暂无数据":data[i].WorkContent;
+                        htmlw+='<label id="WorkName" style="width: 70%;text-align: left;">'+TaskName+'</label></div>';
+                        htmlw+='<div class="short-text"><label><span class="star"></span>&nbsp;作业时间&nbsp;:</label>';
+                        htmlw+='<label id="WorkTime" style="width: 70%;text-align: left;">'+new Date(formatDateByJson(data[i].WorkStartTime)).Format("yyyy-MM-dd")  +'</label></div>';
+
+                        if(data[i].State==35){
+                            htmlw+='<div class="upload" id="workUpload"><div><label><span class="star">*</span>&nbsp;上传作业实景&nbsp;:</label></div>';
+                            htmlw+='<input type="hidden" id="workJson__'+data[i].WorkId+'" class="workJson" value="[]" />';
+                            htmlw+='<a href="javascript:;" class="btnUpload" style="cursor:pointer;color:blue;margin-top: 8px;">上传作业实景</a>';
+                            htmlw+='<div id="work_'+data[i].WorkId+'" class="divWorkId" style="margin-top: 45px;margin-left: -85px;line-height: 32px;"></div>';
+                            htmlw+='</div></div>';
+                        }
+                        htmlw+='<hr/>';
+                    }
+                    $('#workDiv').append(htmlw);
+                }
+            });
+        }
+    }
+
+    $(function () {
+        getWorkInfo();
+
+        var projectId=$("#ProjectId").val();
+        if(projectId!=0){
+            String2XML();
+        }
+
+        //作业时景附件上传
+        $("body").on("click",".btnUpload",function(){
+            var jsonfileId = $(this).prev().attr("id");//附件id
+            var showAreaId = $(this).next().attr("id");//显示文件id
+
+            $("#workloadFile").attr("show", showAreaId).attr("json", jsonfileId);
+            $("#workloadFile").click();
+        });
+
+        //删除附件
+        $("body").on("click", ".fileDelWork", function () {
+            $(this).parent("span").remove();
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            var jsonObj = $("#" + $(this).data("json"));
+            var fileDataArray = JSON.parse($(jsonObj).val());
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            });
+            var fileJson = JSON.stringify(fileDataArray);
+            $(jsonObj).val(fileJson);
+        });
+
+        $('#btnUploadFile').click(function () {
+            document.getElementById("loadFile").click();
+        });
+        //表单验证
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            rules: {
+                ProjectName: {
+                    required: true,
+                    maxlength: 254
+                },
+                WindPower: {
+                    required: true,
+                    maxlength: 50
+                },
+                Temperature: {
+                    required: true,
+                    maxlength: 50
+                },
+                PlanId: {
+                    required: true
+                },
+                Content: {
+                    required: true,
+                    maxlength: 500
+                },
+                TomorrowProject: {
+                    required: true,
+                    maxlength: 500
+                },
+                TypeNo:{
+                    required: true,
+                },
+                Reason:{
+                    maxlength: 500
+                },
+                Remark:{
+                    maxlength: 500
+                },
+            },
+            messages: {
+                ProjectName: {
+                    required: "项目名称不能为空",
+                    maxlength: "项目名称长度不能大于254个字符"
+                },
+                WindPower: {
+                    required: "风力不能为空",
+                    maxlength: "风力不能大于50个字符"
+                },
+                Temperature: {
+                    required: "气温不能为空",
+                    maxlength: "气温不能大于50个字符"
+                },
+                PlanId: {
+                    required: "在建里程碑不能为空"
+                },
+                Content: {
+                    required: "今日工作内容不能为空",
+                    maxlength: "今日工作内容不能大于500个字符"
+                },
+                TomorrowProject: {
+                    required: "明日计划不能为空",
+                    maxlength: "明日计划不能大于500个字符"
+                },
+                TypeNo:{
+                    required: "天气不能为空",
+                },
+                Reason:{
+                    maxlength: "原因不能大于500个字符"
+                },
+                Remark:{
+                    maxlength: "备注不能大于500个字符"
+                }
+
+            }
+        });
+    });
+
+    //选择在建项目
+    $("#ProjectName").click(function () {
+        layer.open({
+            type: 2,
+            title: GetLayerTitle("选择项目"),
+            shadeClose: false, //点击遮罩关闭层
+            area: ['800px', '600px'],
+            content: '/Comm/SelectProjectAll',
+            btn: ["确定", "取消"],
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var obj = iframeWin.getSelectData();
+                if (obj && obj.flag && obj.data) {
+                    layer.close(index);
+                    $("#ProjectName").val(obj.data[0].Name);
+                    $("#ProjectId").val(obj.data[0].Id);
+                    window.location.href = "/SupervisorLog/Add?projectId=" + obj.data[0].Id + "&projectName=" + obj.data[0].Name;
+                }
+                else if (!obj.flag) {
+                    parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                    return false;
+                }
+            }
+        });
+
+    });
+    //提交数据
+    //声明变量
+    var arr=[],
+        CompanyName,
+        CompanyId,
+        ManagerName,
+        Permit,BePresent,
+        workPeopleTypeId,
+        workPeopleTypeName,
+        obj;
+    $(".saveBut").click(function () {
+        arr=[];
+
+        var workFilePath = [];
+        $("#workDiv .hidworkId").each(function(index,item){
+            var st=item;
+            workFilePath.push({
+                Id: $(item).val(),
+                Type: $(item).next().val(),
+                workFile: $(item).parent().next().next().find(".workJson")=="undefined"?"":$(item).parent().next().next().find(".workJson").val()
+            });
+        })
+        //$("#fileDataJsonWorkId").val(workFilePath);
+
+        //新开工程节点
+        var planNewList=$("#PlanId1").select2("data"); //多选
+        var planNewListId="";
+        var planNewListName="";
+        for(var i=0;i<planNewList.length;i++){
+            if(planNewList[i].selected){
+                planNewListId+=planNewList[i].id+",";
+                planNewListName+=planNewList[i].text+",";
+            }
+        }
+        $("#PlanId").val(planNewListId.substring(0,planNewListId.length-1));
+        $("#PlanName").val(planNewListName.substring(0,planNewListName.length-1));
+
+        //新完工程节点
+        var nextPlanNewList=$("#NextPlanId1").select2("data"); //多选
+        var nextPlanNewListId="";
+        var nextPlanNewListName="";
+        for(var i=0;i<nextPlanNewList.length;i++){
+            if(nextPlanNewList[i].selected){
+                nextPlanNewListId+=nextPlanNewList[i].id+",";
+                nextPlanNewListName+=nextPlanNewList[i].text+",";
+            }
+        }
+        $("#NextPlanId").val(nextPlanNewListId.substring(0,nextPlanNewListId.length-1));
+        $("#NextPlanName").val(nextPlanNewListName.substring(0,nextPlanNewListName.length-1));
+
+        workFilePath = JSON.stringify(workFilePath);
+        $("#fileDataJsonWorkId").val(workFilePath);
+        if ($("#mainForm").valid()) {
+            if ( $("tbody tr").length > 0) {
+                for (var i = 0;j = $(".unit .dynamictr").length, i < j; i++) {
+                    var trvalue=$(".unit .dynamictr").eq(i).find('td');
+                    CompanyName = trvalue.eq(0).find('#CompanyName').text();
+                    CompanyId = trvalue.eq(0).find('#CompanyId').val();
+                    ManagerName = trvalue.eq(1).find('#manager').val();
+                    ManagerId = trvalue.eq(1).find('#managerId').val();
+                    workPeopleTypeName = trvalue.eq(2).find('#workPeopleTypeName').text();
+                    Permit = trvalue.eq(3).find('select option:selected').val();
+                    BePresent =trvalue.eq(4).find('select option:selected').val();
+                    if (CompanyId != "" && ManagerName != ""&& Permit != "" && BePresent != "" &&workPeopleTypeName!="") {
+                        obj = {
+                            CompanyId:CompanyId,
+                            CompanyName:CompanyName,
+                            ManagerName:ManagerName,
+                            ManagerId: ManagerId,
+                            Permit: Permit,
+                            BePresent: BePresent,
+                            workPeopleTypeName:workPeopleTypeName
+                        }
+                        arr.push(obj);
+
+                    } else {
+                        layer.alert("请填写完整的施工单位内容！", { icon: 7 });
+                        return false
+                    }
+                }
+                if (@ViewBag.Day > 0) {
+                    if($("#Reason").val()!=""){
+                        arr = JSON.stringify(arr);
+                        $("#Builder").val(arr);
+                        var search = $("form").serialize();
+                        $.post("Add", search, function (data) {
+                            if (data.Flag) {
+                                layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                    window.location.href = "/SupervisorLog/Index";
+                                });
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+                    }else{
+                        layer.alert("请填写延期原因！", { icon: 7 });
+                    }
+                }else{
+                    arr = JSON.stringify(arr);
+                    $("#Builder").val(arr);
+                    var fileDataJson=$("#fileDataJson").val();
+
+                    if(fileDataJson==""){
+                        layer.alert("请上传附件！", { icon: 7 });
+                        return;
+                    }
+                    var search = $("form").serialize();
+                    $.post("Add", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/SupervisorLog/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+            } else {
+                layer.alert("请添加施工单位！", { icon: 7 });
+            }
+        }
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //添加施工单位
+        $("#unit").click(function () {
+            var _this=$(this);
+            layer.open({
+                type: 1,
+                title: '请选择单位',
+                content: $('#convertcom'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    //施工单位Id+名称
+                    var CompanyId = $("#convertcom dl").find($(".layui-this")).attr("lay-value");
+                    var CompanyName=$("#convertcom dl").find($(".layui-this")).text();
+                    var ProjectId=$("#ProjectId").val();
+                    //请求改单位下的信息
+                    $.post("/SupervisorLog/CompanyInfo", {companyId:CompanyId,projectId:ProjectId}, function (data) {
+                        var data=data.personnelList;
+                        for(var i=0;i<data.length;i++){
+                            var str;
+                            var name= data[i].name==null?"":data[i].name;
+                            var id= data[i].id==null?"":data[i].id;
+                            var type= data[i].type==null?"":data[i].type;
+                            str +='<tr class="dynamictr">';
+                            str += '<td><span id="CompanyName">'+CompanyName+'</span><input type="hidden" id="CompanyId" value="'+CompanyId+'"/></td>';
+                            str +='<td><input type="text" style="height: 30px;width: 100px;padding-left:6px;" maxlength="50" id="manager" value="'+name+'" placeholder="请输入姓名"><input type="hidden" value="'+id+'" id="managerId"></td>';
+                            str +='<td><span id="workPeopleTypeName">'+type+'</span></td>';
+                            str +='<td><select style="height: 30px;width: 100px;"><option value="是" selected>是</option><option value="否">否</option></select></td>';
+                            str +='<td><select style="height: 30px;width: 100px;"><option value="是" selected>是</option><option value="否">否</option></select></td>';
+                            str +='<td>删除</td>';
+                            str +='</tr>';
+                        }
+                        var strtradd='<tr><td colspan="9"><a href="javascript:" style="cursor:pointer;color:blue;" class="addcompany">添加</a></td></tr>';
+                        $(".unit").append(str);
+                        $(".unit").append(strtradd);
+                    });
+                    layer.close(index);
+                }
+            });
+        });
+
+        //点击添加施工单位数据
+        $("body").on("click", ".unit .addcompany", function () {
+            var CompanyName = $(this).parent().parent().prev().find("#CompanyName").text();
+            var CompanyId=$(this).parent().parent().prev().find("#CompanyId").val();
+            var stradd=` <tr class="dynamictr">
+                       <td>
+                         <span id="CompanyName">${CompanyName}</span><input type="hidden" id="CompanyId" value="${CompanyId}"/>
+                       </td>
+                       <td>
+                          <input type="text" style="height: 30px;width: 100px;padding-left:6px;" maxlength="50" id="manager" placeholder="请输入姓名">
+                          <input type="hidden" value="" id="managerId">
+                       </td>
+                       <td>
+                           <input type="button" value="选择" class="select-type butt">
+                           <input type="button" value="添加" class="add-type butt">
+                           <span id="workPeopleTypeName"></span>
+                          </td>
+                       <td>
+                           <select style="height: 30px;width: 100px;">
+                               <option value="是" selected>是</option>
+                               <option value="否">否</option>
+                           </select>
+                       </td>
+                       <td>
+                            <select style="height: 30px;width: 100px;">
+                               <option value="是" selected>是</option>
+                               <option value="否">否</option>
+                           </select>
+                       </td>
+                       <td>
+                           <a href="javascript:" class ="delete-Three" style="cursor:pointer;color:blue;">删除</a>
+                       </td>
+                   </tr>
+                   `
+            $(this).parent().parent().before(stradd);
+        });
+        //选择工种
+        $("body").on("click", ".datalist .unit .select-type", function () {
+            var _this=$(this);
+            layer.open({
+                type: 1,
+                title: '请选择工种',
+                content: $('#convert'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var workPeopleTypeName=$("#convert dl").find($(".layui-this")).text();
+                    _this.parent().find("#workPeopleTypeName").text(workPeopleTypeName);
+                    layer.close(index);
+                }
+            });
+        });
+        //添加工种
+        $("body").on("click", ".datalist .unit .add-type", function () {
+            var _this=$(this);
+            layer.open({
+                type: 1,
+                title: '请添加工种',
+                content: $('#convertAdd'),
+                btn: ['确认', '取消'],
+                skin: 'demo-class',
+                yes: function (index, layero) {
+                    var workPeopleTypeName=$("#addtype").val();
+                    _this.parent().find("span").text(workPeopleTypeName);
+                    layer.close(index);
+                }
+            });
+        });
+        //删除附件
+        $("#fileList").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr1) {
+                return item.GuidId != id
+            })
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJson").val(fileDataJson);
+        });
+
+        //删除附件
+        $("#fileListFile").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray1 = fileDataArray1.filter(function (item, index, arr1) {
+                return item.GuidId != id
+            })
+            var fileDataJsonFile = JSON.stringify(fileDataArray1);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+        //删除
+        $("tbody").on("click", ".delete-Three", function () {
+            $(this).parent().parent().remove();
+        })
+    });
+</script>

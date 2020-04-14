@@ -1,0 +1,112 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@using hc.epm.UI.Common;
+@model List<Epm_Contract>
+@{
+    ViewBag.Title = "ContractInfo";
+}
+<div class="contentData">
+    <ul class="tab-list">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage">工期管理</li>
+        <li id="DetailMilestonePlan">工程节点</li>
+        <li id="ScheduleInfo">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo" class="active">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video">视频集成</li>
+    </ul>
+    <div style="margin-top:40px;">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="30">序号</th>
+                    <th width="100">合同名称</th>
+                    <th width="100">甲方</th>
+                    <th width="100">乙方</th>
+                    <th width="70">合同金额<br>(万元)</th>
+                    <th width="80">签订时间</th>
+                    <th width="70">合同类型</th>
+                    <th width="60">状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                    {
+                        int index = 0;
+                        foreach (var item in Model)
+                        {
+                            index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.Name</td>
+                            <td>@item.FirstPartyName</td>
+                            <td>@item.SecondPartyName</td>
+                            <td>@item.Amount.ToString("#0")</td>
+                            <td>@(item.SignTime == null ? "" : Convert.ToDateTime(item.SignTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(((ContractType)item.ContractType).GetText())</td>
+                            <td class="state">@(((ApprovalState)item.State).GetText())</td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="8">暂无数据</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $("#Detail").click(function () {
+        window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailApprovalConstitute").click(function () {
+        window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailProjectMainPoint").click(function () {
+        window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailTimeManage").click(function () {
+        window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailMilestonePlan").click(function () {
+        window.location.href = 'DetailMilestonePlan?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailProjectISP").click(function () {
+        window.location.href = 'DetailProjectISP?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailProjectData").click(function () {
+        window.location.href = 'DetailProjectData?projectId=@ViewBag.ProjectId';
+    });
+    $("#ScheduleInfo").click(function () {
+        window.location.href = 'ScheduleInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#ChangeInfo").click(function () {
+        window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#VisaInfo").click(function () {
+        window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#QuestionInfo").click(function () {
+        window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+    });
+    $("#DetailCrossingsManage").click(function () {
+        window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+    });
+    $("#video").click(function () {
+        window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+    });
+</script>

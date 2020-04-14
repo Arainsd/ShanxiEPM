@@ -1,0 +1,498 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+
+@model List<TzProjectScheduleView>
+
+@{
+    ViewBag.Title = "项目进度报表";
+}
+
+@*
+    时间：2019.12.06
+
+    甲方强烈要求此页面的设计效果！！！
+    开发组 反对无效！！！
+*@
+
+
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+
+<style>
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .form-sub {
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+
+    .step-ul {
+        position: relative;
+        margin: 10px 0;
+    }
+
+        .step-ul > li {
+            display: inline-block;
+            width: 52px;
+            position:relative;
+        }
+
+            .step-ul > li > img {
+                position: relative;
+                z-index: 9;
+            }
+
+            .step-ul > li > div {
+                font-size: 10px !important;
+                color: #686868;
+                margin-top: 8px;
+            }
+
+            .step-ul > li p {
+                width: 50px;
+                height: 6px;
+                background-color: #cfcccc;
+                position: absolute;
+                left: 36px;
+                top: 10px;
+            }
+
+    .color-green {
+        color: #49cd43 !important;
+    }
+    .bg-green{
+        background-color: #49cd43!important;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">库站名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" name="stationName" value="@ViewBag.stationName" placeholder="请输入库站名称">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">项目性质 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                @Html.DropDownList("ProjectNature", ViewBag.ProjectNature as SelectList, null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-sub" style="display:flow-root;margin-bottom: 25px;">
+                <button type="submit" id="btnsel" style="float:right">查 询</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="list-tab">
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th width="50">序号</th>
+                    <th width="230">项目名称</th>
+                    <th width="880">项目当前进度</th>
+                </tr>
+            </thead>
+
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            @*<td style="display:none">
+                                    <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                                </td>*@
+                            <td>@index</td>
+                            <td><div style="width:230px;text-align:left;">@item.ProjectName</div></td>
+                            @*<td>@item.ProjectStage</td>*@
+                            <td>
+                                <ul class="step-ul">
+                                    @*项目提出*@
+                                    @if (item.TzProjectProposal)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step1.png" alt="" />
+                                            <div class="color-green">项目提出</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart1.png" alt="" />
+                                            <div>项目提出</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*项目勘探*@
+                                    @if (item.TzResearchOfEngineering)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step2.png" alt="" />
+                                            <div class="color-green">项目勘探</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart2.png" alt="" />
+                                            <div>项目勘探</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*初次谈判/土地谈判*@
+                                    @if (item.Nature != "JIG" && item.Nature != "GIJ")
+                                    {
+                                        if (item.Nature == "CANGU" || item.Nature == "HEZI" || item.Nature == "HEZUO" || item.Nature == "KONGG" || item.Nature == "KUOJ" || item.Nature == "QIANJ" || item.Nature == "SHOUG" || item.Nature == "ZUL")
+                                        {
+                                            if (item.TzFirstNegotiation)
+                                            {
+                                                <li>
+                                                    <img src="~/Resource/images/step3.png" alt="" />
+                                                    <div class="color-green">初次谈判</div>
+                                                    <p class="bg-green"></p>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li>
+                                                    <img src="~/Resource/images/progressChart3.png" alt="" />
+                                                    <div>初次谈判</div>
+                                                    <p></p>
+                                                </li>
+                                            }
+                                        }
+                                        if (item.Nature == "XINJ")
+                                        {
+                                            if (item.TzLandNegotiation)
+                                            {
+                                                <li>
+                                                    <img src="~/Resource/images/step3.png" alt="" />
+                                                    <div class="color-green">土地谈判</div>
+                                                    <p class="bg-green"></p>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li>
+                                                    <img src="~/Resource/images/progressChart3.png" alt="" />
+                                                    <div>土地谈判</div>
+                                                    <p></p>
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart3.png" alt="" />
+                                            <div>初次/土地</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*评审材料*@
+                                    @if (item.TzFormTalkFile)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step4.png" alt="" />
+                                            <div class="color-green">评审材料</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart4.png" alt="" />
+                                            <div>评审材料</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*评审信息*@
+                                    @if (item.TzProjectReveiews)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step5.png" alt="" />
+                                            <div class="color-green">评审信息</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart5.png" alt="" />
+                                            <div>评审信息</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*上会材料*@
+                                    @if (item.MeetingFileReport)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step6.png" alt="" />
+                                            <div class="color-green">上会材料</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart6.png" alt="" />
+                                            <div>上会材料</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*项目批复*@
+                                    @if (item.TzProjectApprovalInfo)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step7.png" alt="" />
+                                            <div class="color-green">项目批复</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart7.png" alt="" />
+                                            <div>项目批复</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*设计方案*@
+                                    @if (item.TzDesignScheme)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step8.png" alt="" />
+                                            <div class="color-green">设计方案</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart8.png" alt="" />
+                                            <div>设计方案</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*图纸会审*@
+                                    @if (item.TzConDrawing)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step9.png" alt="" />
+                                            <div class="color-green">图纸会审</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart9.png" alt="" />
+                                            <div>图纸会审</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*招标管理*@
+                                    @if (item.TzBidResult)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step10.png" alt="" />
+                                            <div class="color-green">招标管理</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart10.png" alt="" />
+                                            <div>招标管理</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*物资申请*@
+                                    @if (item.TzSupplyMaterialApply)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step11.png" alt="" />
+                                            <div class="color-green">物资申请</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart11.png" alt="" />
+                                            <div>物资申请</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*开工申请*@
+                                    @if (item.TzProjectStartApply)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step12.png" alt="" />
+                                            <div class="color-green">开工申请</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart12.png" alt="" />
+                                            <div>开工申请</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*施工管理*@
+                                    @if (item.TzConstruceManage)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step13.png" alt="" />
+                                            <div class="color-green">施工管理</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart13.png" alt="" />
+                                            <div>施工管理</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*试运行*@
+                                    @if (item.TzProjectPolit)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step15.png" alt="" />
+                                            <div class="color-green">试运行</div>
+                                            <p class="bg-green"></p>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart15.png" alt="" />
+                                            <div>试运行</div>
+                                            <p></p>
+                                        </li>
+                                    }
+
+                                    @*竣工管理*@
+                                    @if (item.TzCompletedManage)
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/step14.png" alt="" />
+                                            <div class="color-green">竣工管理</div>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <img src="~/Resource/images/progressChart14.png" alt="" />
+                                            <div>竣工管理</div>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                }
+                else {
+                    <tr>
+                        <td colspan="13" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;"></div>
+</div>
+
+<script>
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            theme: '#6a6969',
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzProProgressChart/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+</script>

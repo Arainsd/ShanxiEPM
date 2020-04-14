@@ -1,0 +1,148 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model EPM_AIUserFace
+@{
+    ViewBag.Title = "人脸信息";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal " id="mainForm">
+            <div class="col-lg-12 col-sm-12" style="height:60px">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>姓名 : </label>
+                    <div class="col-lg-3 col-sm-3">
+                        <input type="text" class="form-control" value="@ViewBag.UserName" readonly style="background-color:#ebebe5" />
+                        <input type="hidden" value="@ViewBag.UserId" id="UserId" name="UserId" />
+                        <input type="hidden" name="ImageInfo" id="ImageInfo" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>人脸照片：</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <img id="ImageId" src="@(Model==null?"":Model.ImageBase64)" style='width: 200px;height: 200px;cursor: pointer;' />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required"></em>&nbsp;</label>
+                    <div class="col-lg-6 col-sm-6">
+                        <input type="button" id="btnUploadFile" name="btnUploadFile" value="上传照片" />
+                        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item row btn-save" style="margin-top:60px">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+                <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var fileDataArray = [];
+    function uploadFile() {
+        if (document.getElementById("loadFile").files.length == 0) {
+            return;
+        }
+        var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        var imgUrl = "";
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    fileDataArray.push(obj);
+
+                    if (data[i].ImageType == null) {
+                        imgUrl = obj.Url;
+                    }
+                }
+                $("#loadFile").val("");
+                $("#ImageInfo").val(imgUrl);
+            }
+        });
+    }
+    $('#loadFile').on('change', function (e) {
+        // 检查是否是图片
+        var filePath = $(this).val();
+        //获取并记录图片的base64编码
+        var reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]); // 读出 base64
+        reader.onloadend = function () {
+            // 图片的 base64 格式, 可以直接当成 img 的 src 属性值
+            var dataURL = reader.result;//base64
+            // 显示图片
+            $('#ImageId').attr('src', dataURL);
+        };
+    });
+    function getBase64Image(img) {
+        debugger;
+        var canvas = document.createElement("canvas");
+        canvas.width = 200;
+        canvas.height = 200;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
+        var dataURL = canvas.toDataURL("image/" + ext);
+
+
+        return dataURL;
+
+    }
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, laypage = layui.laypage;
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            $.post("AddUserFace", search, function (data) {
+                if (data.Flag) {
+                    $("#save").attr("disabled", "disabled");
+                    $("#save").val("请等待")
+                    var layerIndex = parent.layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);//关闭窗口
+                        parent.layer.close(layerIndex);
+                        window.location.href = "/User/Index";//跳转新增页面
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+        });
+
+        $(function () {
+            $('#btnUploadFile').click(function () {
+                document.getElementById("loadFile").click();
+            });
+        });
+
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+</script>

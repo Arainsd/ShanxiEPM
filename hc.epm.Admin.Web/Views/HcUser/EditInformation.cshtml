@@ -1,0 +1,195 @@
+﻿
+@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_User
+@{
+    ViewBag.Title = "会员编辑";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+<style>
+    .btn-group {
+        margin-top: 0px !important;
+        text-align: left !important;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal " id="mainForm">
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>用户名 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="hidden" name="PassTime" value="@ViewBag.currentTime" />
+                        <input type="hidden" name="LastLoginTime" value="@ViewBag.currentTime" />
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="text" name="UserName" id="UserName" placeholder="请输入用户名" class="form-control" value="@Model.UserName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>用户编码：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="UserCode" id="UserCode" placeholder="请输入编码" class="form-control" value="@Model.UserCode" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 ">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>性别：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        @if (Model.Sex == true)
+                        {
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="inlineRadio1" value=true name="Sex" checked>
+                                <label for="inlineRadio1"> 男 </label>
+                            </div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="inlineRadio2" value=false name="Sex">
+                                <label for="inlineRadio2">女  </label>
+                            </div>
+                        }
+                        else {
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="inlineRadio1" value=true name="Sex">
+                                <label for="inlineRadio1"> 男 </label>
+                            </div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="inlineRadio2" value=false name="Sex" checked>
+                                <label for="inlineRadio2">女  </label>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>登录账号：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="UserAcct" id="UserAcct" placeholder="请输入登录账号" class="form-control" value="@Model.UserAcct" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 ">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>电子邮箱：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="Email" id="Email" placeholder="请输入电子邮箱" class="form-control" value="@Model.Email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label">联系电话：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="Phone" id="Phone" placeholder="请输入联系电话" class="form-control" value="@Model.Phone" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 ">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label">QQ：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="QQ" id="QQ" placeholder="请输入QQ" class="form-control" value="@Model.QQ" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item row btn-save" style="margin-top:120px">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                UserName: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                    }
+                },
+                UserAcct: {
+                    validators: {
+                        notEmpty: {
+                            message: '登录账号不能为空'
+                        },
+                    }
+                },
+                UserCode: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户编码不能为空'
+                        }
+                    }
+                },
+                Phone: {
+                    validators: {
+                        notEmpty: {
+                            message: "联系电话不能为空"
+                        },
+                        regexp: {
+                            regexp: /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/,
+                            message: "联系电话格式有误"
+                        }
+                    }
+                },
+                Email: {
+                    validators: {
+                        emailAddress: {
+                            message: '邮箱格式不正确'
+                        }
+                    }
+                },
+                QQ: {
+                    validators: {
+                        digits: {
+                            message: 'QQ号码只能是数字'
+                        }
+                    }
+                },
+            }
+        });
+    }
+        layui.use(['layer', 'form', 'element'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element;
+            //监听提交
+            form.on('submit(sub)', function (data) {
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+                if (bv.isValid()) {
+                    var search = $("form").serialize();
+                    $.post("EditInformation", search, function (data) {
+                        if (data.Flag) {
+                            $("#save").attr("disabled", "disabled");
+                            $("#save").val("请等待")
+                            var layerIndex = layer.msg("个人信息编辑成功", { time: 1000, icon: 1 }, function () {
+                                var index = layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);//关闭窗口
+                                parent.layer.close(layerIndex);
+                                parent.location.reload();
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                }
+
+                return false;
+
+            });
+            //关闭弹出iframe层
+            $('.cancel').on("click", function () {
+                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                parent.layer.close(index);//关闭窗口
+            });
+        });
+
+</script>

@@ -1,0 +1,538 @@
+﻿@using hc.epm.DataModel.Basic;
+@using hc.epm.DataModel.Business
+@model Base_User
+@{
+    ViewBag.Title = "UserDetail";
+    var ImageBase64 = "";
+    List<Epm_SignInformation> signList = ViewBag.SignList;
+}
+
+<style>
+    .breadcrumb {
+        display: none;
+    }
+
+    .file-wrap {
+        height: 35px;
+        width: 300px;
+        margin-top: 5px;
+        margin-left: 34px;
+        border: 1px solid #D9D8D8;
+        line-height: 35px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .file-wrap:hover {
+            cursor: pointer;
+        }
+
+    .fileShow {
+        height: auto;
+        overflow: hidden;
+    }
+
+        .fileShow li {
+            width: 50%;
+            float: left;
+            text-align: left;
+            padding-left: 34px;
+            color: blue;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+            .fileShow li span {
+                display: inline-block;
+                height: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .fileShow li i {
+                color: black;
+            }
+
+    .timer_p {
+        position: relative;
+    }
+
+    .timer_c {
+        position: absolute;
+        bottom: 16px;
+        left: 136px;
+    }
+
+    #start, #management {
+        display: inline-block;
+        padding: 6px 16px;
+        margin-bottom: 0;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        color: #00ccff;
+        border-color: #00ccff;
+        background-color: #fff;
+        border-bottom: 1px solid #00ccff;
+    }
+
+    .topBox {
+        border-bottom: 2px solid #00ccff;
+    }
+
+    #start {
+        border-right: 0;
+        margin-right: 0;
+        background-color: #00ccff;
+        color: #fff;
+    }
+
+    #management {
+        border-left: 0;
+        margin-left: -3px;
+        border-right-color: #00ccff;
+    }
+
+    #content {
+        margin-bottom: 2px;
+    }
+
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+        padding-top: 0 !important;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+    .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+
+    #reply {
+        margin-right: 660px;
+    }
+
+    .se-but {
+        margin-left: 20px;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="box" style="width: 1200px; padding: 0; margin: auto; height: 30px; background-color:#f5f5f5;"><img src="/Resource/images/ic_home.png" /> 您的位置：<a href="javascript:void(0)" target="_self" onclick="jump()">人员管理列表</a> > <a>查看</a></div>
+<div class="contentData" id="content">
+    <div class="topBox">
+        <button id="start" class="col-lg-pull-3">人员信息</button>
+        <button id="management">考勤信息</button>
+    </div>
+</div>
+<div class="contentData" id="contentOne">
+    <form class="form-horizontal" id="mainForm">
+        <div class="row">
+            <div class="module-div">
+                <h4>人员信息</h4>
+                <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                    <tbody>
+                        <tr>
+                            <td class="table_title"> 用户编码:</td>
+                            <td class="td-div">
+                                    <div>@Model.UserCode</div>
+                                <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                                <input type="hidden" name="Id" value="@Model.Id" />
+                            </td>
+                            <td class="table_title" rowspan="4">人员照片：</td>
+                            <td class="td-div" rowspan="4">
+                                <div class="btn-upload" style="display:inline-block;">
+                                    @{
+                                        if (Model.fileList != null && Model.fileList.Count() > 0)
+                                        {
+                                            foreach (var item in Model.fileList)
+                                            {
+                                                if (item.TableColumn == "SSRYGLZP")
+                                                {
+                                                    ImageBase64 = item.imageUrl;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    <img id="ImageId" class="ImageId" src="@ImageBase64" style="padding: 5px;width:150px;height:150px;cursor: pointer;margin-left: 10px;">
+                                    <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">性别:</td>
+                            <td class="td-div">
+                                <div>@(Model.Sex == true ? "男" : "女")</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 用户名称:</td>
+                            <td class="td-div">
+                                <div>@Model.UserName</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"> 登录账号:</td>
+                            <td class="td-div">
+                                <div>@Model.UserAcct</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"> 登录密码:</td>
+                            <td class="td-div">
+                                <div>@Model.PassWord</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"><i class="color_red">*</i> 联系电话：</td>
+                            <td class="td-div">
+                                <div>@Model.Phone</div>
+                            </td>
+                            <td class="table_title"> 所属单位：</td>
+                            <td class="td-div apply_time">
+                                <div>@Model.CompanyName</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">电子邮箱：</td>
+                            <td class="td-div">
+                                <div>@Model.Email</div>
+                            </td>
+                            <td class="table_title">出生年月：</td>
+                            <td class="td-div">
+                                @if (Model.BirthDate == null)
+                                {
+                                    <div></div>
+                                }
+                                @if (Model.BirthDate != null)
+                                {
+                                    <div>@Convert.ToDateTime(Model.BirthDate).ToString(" yyyy-MM-dd")</div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">毕业学校：</td>
+                            <td class="td-div">
+                                <div>@Model.University</div>
+                            </td>
+                            <td class="table_title">专业名称：</td>
+                            <td class="td-div">
+                                <div>@Model.Major</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">学历：</td>
+                            <td class="td-div">
+                                <div>@Model.Education</div>
+                            </td>
+                            <td class="table_title">项目地区：</td>
+                            <td class="td-div">
+                                <div>@Model.addressName</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">职称：</td>
+                            <td class="td-div">
+                                <div>@Model.Professional</div>
+                            </td>
+                            <td class="table_title"><i class="color_red">*</i> 岗位：</td>
+                            <td class="td-div">
+                                <div>@Model.Post</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">职业性质：</td>
+                            <td class="td-div">
+                                <div>@Model.ProfessionalQualification</div>
+                            </td>
+                            <td class="table_title">开始职业日期：</td>
+                            <td class="td-div">
+                                @if (Model.OccupationalStartTime == null)
+                                {
+                                    <div></div>
+                                }
+                                @if (Model.OccupationalStartTime != null)
+                                {
+                                    <div>@Convert.ToDateTime(Model.OccupationalStartTime).ToString(" yyyy-MM-dd")</div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title">人员成绩：</td>
+                            <td class="td-div">
+                                <div>@Model.achievement</div>
+                            </td>
+                            <td class="table_title">成绩有效期：</td>
+                            <td class="td-div">
+                                @if (Model.achievementStartTime != null || Model.achievementEndTime != null)
+                                {
+                                    <div>@(Convert.ToDateTime(Model.achievementStartTime).ToString(" yyyy-MM-dd"))-@(Convert.ToDateTime(Model.achievementEndTime).ToString(" yyyy-MM-dd"))</div>
+                                }
+                                @if (Model.achievementStartTime == null || Model.achievementEndTime == null)
+                                {
+                                    <div></div>
+                                }
+                                @*<div class="timeGroup">
+                                        <input type="text" class="form-control" id="achievementStartTime" name="achievementStartTime" value="@Model.achievementStartTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="">
+                                    </div>
+                                    -
+                                    <div class="timeGroup">
+                                        <input type="text" class="form-control" id="achievementEndTime" name="achievementEndTime" value="@Model.achievementEndTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'achievementStartTime\')}', })" placeholder="">
+                                    </div>*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_title"> 职业简述:</td>
+                            <td class="td-div" colspan="3">
+                                <div>@Model.OccupationalContent</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="module-div">
+            <h4>证照类型</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">证件编号</th>
+                        <th class="td-div">颁发单位</th>
+                        <th class="td-div">获证日期</th>
+                        <th class="td-div">有效期至</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model.fileList != null)
+                    {
+                        if (Model.fileList != null && Model.fileList.Count() > 0)
+                        {
+                            foreach (var item in Model.fileList)
+                            {
+                                if (item.TableColumn != "SSRYGLZP")
+                                {
+                                    index++;
+                                    <tr id="${obj.GuidId}">
+                                        <td><span>@index</span></td>
+                                        <td class="text_lf"><span>@item.Name</span></td>
+                                        <td><span>@item.TypeName</span></td>
+                                        <td><span><input type="text" class="form-control  input_unit" style="width:100%" name="CredentialsNumber" id="CredentialsNumber" placeholder="请输入证件编号" value="@item.CredentialsNumber" /></span></td>
+                                        <td><span><input type="text" class="form-control  input_unit" style="width:100%" name="IssueUnit" id="IssueUnit" placeholder="请输入颁发单位" value="@item.IssueUnit" /></span></td>
+                                        <td><span><input type="text" class="form-control  input_unit" name="GetCertificateTime" id="GetCertificateTime" style="text-align: left;border-radius: 4px;" autocomplete="off" value="@(item.GetCertificateTime==null?"":Convert.ToDateTime(item.GetCertificateTime).ToString("yyyy-MM-dd"))" /></span></td>
+                                        <td><span><input type="text" class="form-control  input_unit" name="TermofvalidityTime" id="TermofvalidityTime" style="text-align: left;border-radius: 4px;" autocomplete="off" value="@(item.TermofvalidityTime==null?"":Convert.ToDateTime(item.TermofvalidityTime).ToString("yyyy-MM-dd"))" /></span></td>
+                                        <td style="text-align:center">
+                                            <a class="fileDel downloadFile" href="javascript:void(0)" style="color:#337ab7;" data-url="@item.Url" data-name="@item.Name">下载</a>
+                                            <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.Url" data-src="@item.Url" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString(" yyyy-MM-dd"))" data-typename="@item.TypeName" data-tablecolumn="@item.TableColumn">
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="button-group btn-center">
+            <button type="button" class="closes" id="closes" style="background-color:#6a6969; color:#fff;">返回</button>
+        </div>
+
+        <input type="file" id="loadFile" name="loadFile" style="display:none;" onchange="uploadFile()">
+        <input type="file" id="loadFile1" name="loadFile1" style="display:none;" onchange="uploadFile1()">
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+
+<div class="contentData" id="contentTwo" style="display:none">
+    <form class="form-horizontal" id="mainForm1" method="get">
+        <div class="row list-box" style="margin:10px -15px">
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="control-label col-lg-3 col-sm-3">时间 : </label>
+                    <div class="col-lg-8 col-sm-8 control-label-div">
+                        <div class="timeGroup">
+                            <input type="text" class="form-control" id="time" name="startTime" value="@ViewBag.time" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                            <i onClick="WdatePicker({ el: 'time' })" class="iconfont pic">&#xe7e2;</i>
+                        </div>
+                        -
+                        <div class="timeGroup">
+                            <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'time\')}', })" placeholder="终止时间">
+                            <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="control-label col-lg-3 col-sm-3">打卡项目 : </label>
+                    <div class="col-lg-8 col-sm-8 control-label-div form-sub">
+                        <input class="form-control" type="text" name="projectName" value="@ViewBag.projectName" placeholder="请输入项目名称">
+                        <input class="form-control" type="text" name="id" id="id" value="@Model.SId" style="display:none;">
+                        <button type="submit" class="se-but" onclick="Getactive()">查 询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+
+                <tr>
+                    <th class="table-center">序号</th>
+                    <th class="table-center">姓名</th>
+                    <th class="table-center">岗位</th>
+                    <th class="table-center">打卡项目</th>
+                    <th class="table-center">打卡时间</th>
+                    <th class="table-center">打卡照片</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @{
+                    int index1 = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (signList != null && signList.Count() > 0)
+                {
+                    foreach (var item in ViewBag.SignList)
+                    {
+                        index1++;
+                        <tr>
+                            <td>@index1</td>
+                            <td>@item.userName</td>
+                            <td>@item.jobInfo</td>
+                            <td>@item.projectName</td>
+                            <td>@item.SignTime</td>
+                            <td><img class="sign-img" src="@item.picStrength" style="height:40px;width:40px;" /></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div id="page" style="text-align:right; margin-right:5px;"></div>
+
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big " />
+        </div>
+
+        <input type="file" id="loadFile1" name="loadFile" style="display:none" onchange="uploadFile()" fileListId="" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile1" />
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+    function jump() {
+        window.history.back();
+    }
+    
+    window.onload = function () {
+        //菜单切换
+        $("#start").click(function () {
+            $("#contentOne").show();
+            $("#contentTwo").hide();
+            $(this).css({ "background-color": "#00ccff", "color": "#fff" })
+            $("#management").css({ "background-color": "#fff", "color": "#00ccff" })
+        });
+        $("#management").click(function () {
+            $("#contentTwo").show();
+            $("#contentOne").hide();
+            $(this).css({ "background-color": "#00ccff", "color": "#fff" })
+            $("#start").css({ "background-color": "#fff", "color": "#00ccff" })
+        });
+
+        //外部
+        $('#btnUploadFile').click(function () {
+            //$("#loadFile").attr("fileListId", $(this).attr("name"));
+            document.getElementById("loadFile").click();
+        });
+    }
+    $("#closes").click(function () {
+        window.history.back(-1);
+    });
+    $("#close").click(function () {
+        window.history.back(-1);
+    });
+    //下载附件
+    $("body").on("click", ".downloadFile", function () {
+        var path = $(this).data("url");
+        var fileName = $(this).data("name");
+        window.location.href = "/Download/DownLoadHB?path=" + path + "&fileName=" + fileName;
+    });
+    layui.use(['element', 'laypage'], function () {
+        var element = layui.element, laypage = layui.laypage, $ = layui.jquery;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/User/UserDetail?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,44 @@
+﻿@using hc.epm.DataModel.Business;
+@using hc.Plat.Common.Extend;
+@using hc.epm.Common;
+@model Epm_OilStation
+@{
+    ViewBag.Title = "加油站详情";
+    Layout = "~/Views/Shared/_LayoutHc.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="main mt5">
+            <form class="form-horizontal bv-form" id="mainForm">
+                <table class="layui-table" style="table-layout: fixed">
+                    <tbody>
+                        <tr>
+                            <td width="120px" class="table-right">编号</td>
+                            <td width="250px" class="table-left">@Model.Code</td>
+                        </tr>
+                        <tr>
+                            <td width="80px" class="table-right">名称</td>
+                            <td width="250px" class="table-left">@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <td width="120px" class="table-right">简介</td>
+                            <td width="250px" class="table-left">@Model.Description</td>
+                        </tr>
+                        <tr>
+                            <td width="120px" class="table-right">地址</td>
+                            <td width="250px" class="table-left">@Model.Address</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    //返回上一页面
+    $(".cancel").on("click", function () {
+        window.history.go(-1);
+    })
+</script>

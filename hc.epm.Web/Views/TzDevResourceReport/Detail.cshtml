@@ -1,0 +1,297 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@using hc.epm.DataModel.Business;
+@model Epm_TzDevResourceReport
+@{
+    ViewBag.Title = "加油（气）站开发资源上报流程详情";
+}
+
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 950px;
+        border-radius: 5px;
+        padding: 0 5px;
+        text-align: left;
+    }
+
+    .pic {
+        top: 2px;
+        cursor: pointer;
+        left: 220px;
+        font-size: 20px;
+        left: -28px;
+        position: relative;
+    }
+
+    .input_text {
+        border: none;
+    }
+
+        .input_text input {
+            height: 35px;
+            width: 209px;
+        }
+
+    .bold-name {
+        font-weight: 800;
+        width: 15%;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .table-flex td {
+    }
+
+    .time_icon {
+        position: relative;
+    }
+
+        .time_icon i {
+            position: absolute;
+            right: 11px;
+            bottom: 12px;
+        }
+
+    .input_texts input {
+        padding: 0 3px;
+    }
+
+    .datalist tr td {
+        padding: 5px 2px;
+    }
+
+        .datalist tr td input {
+            text-align: center !important;
+        }
+
+    .form-control {
+        padding: 6px 0px 6px 0px !important;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="top-title">
+            <span class="ti">加油（气）站开发资源上报流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;width: 1213px;">
+            <tr>
+                <td class="bold-name" colspan="2">标题</td>
+                <td style="text-align:center;" colspan="13">
+                    <div class="form-group">
+                        <span>@Model.Title</span>
+                        <input type="hidden" id="TitleID" name="TitleID" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold-name" colspan="2">申报人</td>
+                <td colspan="4">
+                    <span>@Model.ApplyUser</span>
+                </td>
+                <td class="bold-name" colspan="1">申报日期</td>
+                <td colspan="8">
+                    <span style="margin-right:5px;">@Model.ApplyDate</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold-name" colspan="2">申报单位</td>
+                <td colspan="4">
+                    <span>@Model.CompanyName</span>
+                </td>
+                <td class="bold-name" colspan="1"></td>
+                <td colspan="8"></td>
+            </tr>
+        </table>
+        <table class="datalist" id="table_flex" style="word-break:break-all;word-wrap:break-word;width: 1213px;">
+            <tr>
+                <td colspan="14" style="text-align:right;border-top:none!important;">
+                  
+                </td>
+            </tr>
+            <tr class="bold-name table_th" style="background-color:#e4e4e4;">
+                <th style="width:4%;">序号</th>
+                <th style="width:90px">地市</th>
+                <th style="width:95px;">区县</th>
+                <th width="145px">项目名称</th>
+                <th width="145px">项目位置</th>
+                <th width="135px">项目性质</th>
+                <th width="140px">预计总投资额(万元)</th>
+                <th style="width:85px">可研销售</th>
+                <th style="width: 70px;">汽柴比</th>
+                <th style="width: 117px;">列为意向站时间</th>
+                <th style="width: 117px;">计划立项时间</th>
+                <th style="width: 88px;">业主姓名</th>
+                <th style="width: 136px;">业主电话</th>
+                <th style="width: 115px;">备注</th>
+            </tr>
+            @if (Model.TzDevResourceReportItem != null && Model.TzDevResourceReportItem.Count() > 0)
+            {
+                int index = 0;
+                foreach (var item in Model.TzDevResourceReportItem)
+                {
+                    index++;
+                    <tr class="input_texts">
+                        <td class="number"><span>@index</span></td>
+                        @*地市*@
+                        <td>
+                            <span>@item.Cities</span>
+                        </td>
+                        @*区县*@
+                        <td>
+                            <span>@item.County</span>
+                        
+                        </td>
+                        @*项目名称*@
+                        <td><span>@item.ProjectName</span></td>
+                        @*项目位置*@
+                        <td><span>@item.ProjectAdress</span></td>
+                        @*项目性质*@
+                        <td>
+                           <span>@item.ProjectTypeName</span>
+                        </td>
+                        @*预计总投资额(万元)*@
+                        <td><span>@item.ProjectedInvestment</span></td>
+                        @*可研销售*@
+                        <td><span>@item.ResearchSales</span></td>
+                        @*汽柴比*@
+                        <td><span>@item.GasFuelRatio</span></td>
+                        <td class="time_icon">
+                           <span>@Convert.ToDateTime(item.FixHour).ToString("yyyy-MM-dd")</span>
+                        </td>
+                        <td class="time_icon">
+                            <span>@Convert.ToDateTime(item.PlanningTime).ToString("yyyy-MM-dd")</span>
+                        </td>
+                        @*业主姓名*@
+                        <td>
+                            <span>@item.OwnerName</span>
+                        </td>
+                        @*业主电话*@
+                        <td><span>@item.OwnerPhone</span></td>
+                        @*备注*@
+                        <td><span>@item.Remark</span></td>
+                    </tr>
+
+                }
+            }
+        </table>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;width:1213px;">
+            <tr class="top-title" style="background-color: #e4e4e4;">
+                <td class="ti" colspan="14">下一步工作</td>
+            </tr>
+            <tr>
+                <td class="bold-name">部门负责人</td>
+                <td style="text-align:center;" colspan="3">
+                    <div class="sel-pro input_text">
+                        <div class="input_div form-group">
+                            <span style="line-height: 40px;">@Model.DepLeaderName</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold-name">分管领导</td>
+                <td style="text-align:center;" colspan="3">
+                    <div class="sel-pro input_text">
+                        <div class="input_div  form-group">
+                            <span  style="line-height: 40px;">@Model.LeaderName</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="background-color:#e4e4e4;">签字意见</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div style="text-align:left;">
+                        @Html.Raw(Model.SignIdea)
+                    </div>
+                  
+                    <input type="hidden" name="SignIdea" id="SignIdea" />
+                </td>
+            </tr>
+        </table>
+       
+    </form>
+</div>
+
+
+<script>
+    //获取区域列表（省）
+    function getRegionList() {
+        var value = $('.Province').find($("option")).data("item");
+        $.post("/Project/RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                for(var j=0;j<@Model.TzDevResourceReportItem.Count();j++){
+                    $(".Citys-" + (j+1 )).empty();
+                    $(".Citys-" + (j+1)).append("<option value=''>请选择</option>");
+
+
+                    var citys = $(".citys-" + (j+1)).val();
+                    for (var i = 0; i < data.Data.length; i++) {
+                        if (citys == data.Data[i].RegionName) {
+                            $(".Citys-" + (j+1)).append("<option selected value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                            break;
+                        } else {
+                            $(".Citys-" + (j+1 )).append("<option value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                        }
+                    }
+
+                    $('.Citys-' + (j+1 )).addClass("show-tick");
+                    $('.Citys-' + (j+1 )).change();
+                }
+            }
+        });
+    }
+
+
+
+    ////富文本编辑器实例化
+    UE.getEditor('editor', {
+        toolbars: [[//工具条
+           'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+        'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+        'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+        'strikethrough', 'superscript', 'subscript', 'removeformat',
+        'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+        'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+        'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]]
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor", {
+        //initialFrameHeight: 40
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+
+
+
+    
+</script>

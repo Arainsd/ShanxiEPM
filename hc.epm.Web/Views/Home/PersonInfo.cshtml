@@ -1,0 +1,56 @@
+﻿
+@model hc.epm.ViewModel.UserView
+@{
+    ViewBag.Title = "个人中心";
+    Layout = "~/Views/Shared/_LayoutPersonInfo.cshtml";
+}
+
+<div class="mine" style="margin-bottom:100px;">
+    <div class="c user">
+        <div class="fl user-pic">
+            <img src="~/Resource/images/tx.png" style="height:120px; width:120px;" />
+        </div>
+        <ul class="fl user-infor">
+            <li>
+                <span>登录账号 : </span><span style="color:#777777">@Model.UserName</span>
+            </li>
+            <li>
+                <span>所需机构 : </span><span>@Model.CompanyName</span>
+            </li>
+            <li>
+                <span>最近一次登录 : </span><span>@(Model.LastLoginTime == null ? "" : Convert.ToDateTime(Model.LastLoginTime).ToString("yyyy-MM-dd hh:mm:ss"))</span>
+            </li>
+            <li>
+                <span>最近登录地址 : </span>@*<span>陕西西安</span>*@
+            </li>
+        </ul>
+    </div>
+    <ul class="account-infor">
+        <li class="c">
+            <div>昵称<span></span></div>
+            <div> : </div>
+            <div>@Model.UserName</div>
+        </li>
+        <li class="c">
+            <div>真实姓名<span></span></div>
+            <div> : </div>
+            <div>@Model.RealName</div>
+        </li>
+        <li class="c">
+            <div>性别<span></span></div>
+            <div> : </div>
+            <div>男</div>
+        </li>
+        <li class="c">
+            <div>邮箱<span></span></div>
+            <div> : </div>
+            <div>@Model.Email</div>
+        </li>
+        <li class="c">
+            <div>手机号<span></span></div>
+            <div> : </div>
+            <div>@Model.Phone</div>
+        </li>
+    </ul>
+
+</div>

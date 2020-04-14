@@ -1,0 +1,141 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model List<ChangeView>
+@{
+    ViewBag.Title = "变更列表";
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<link href="/Resource/css/layui.css" rel="stylesheet" />
+<style type="text/css">
+    .contentData {
+        padding: 0px 20px;
+    }
+
+    .form-select {
+        margin-bottom: 0px;
+    }
+
+    .datalist th {
+        height: 40px;
+    }
+
+    .datalist td {
+        height: 36px;
+    }
+</style>
+<div class="form-select c">
+    <form>
+        <div>
+            <div style="width:36%; float:left; margin:15px 10px 0px;">
+                <label>变更名称 : </label> <input type="text" name="Name" id="Name" value="@ViewBag.name">
+                <input type="hidden" name="projectId" id="projectId" value="@ViewBag.projectId" />
+            </div>
+            <div class="form-sub" style="width:auto; margin-top:15px;">
+                <button type="submit" class="checkright" data-module="Change" data-right="Browse">查 询</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+        <thead>
+            <tr>
+                <th width="60">
+                    <input type="checkbox" id="selectAll" />
+                </th>
+                <th width="40">序号</th>
+                <th>项目名称</th>
+                <th>变更号</th>
+                <th>变更名称</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @{
+                int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+            }
+            @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="@item.Id" data-projectName="@item.ProjectName" data-ChangeNo="@item.ChangeNo" data-ChangeName="@item.ChangeName" />
+                        </td>
+                        <td>@index</td>
+                        <td>@item.ProjectName<input type="hidden" value="@item.ProjectId" /></td>
+                        <td class="ChangeNo" value="@item.ChangeNo">@item.ChangeNo</td>
+                        <td>@item.ChangeName</td>
+                    </tr>
+                }
+            }
+            else {
+                <tr>
+                    <td colspan="5" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="page" style="text-align:right; margin-right:5px;">
+</div>
+
+
+<script src="~/Resource/scripts/jquery-1.10.2.js"></script>
+<script src="~/Resource/plugins/layui-2.1.2/layui.js"></script>
+<script type="text/javascript">
+    //若无数据隐藏分页组件
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/Visa/ChangeList?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    });
+    function getSelectData() {
+        var result = {
+            flag: true,
+            msg: '',
+            data: []
+        };
+        $('#tbody :checkbox[name="checkbox"]:checked').each(function (index) {
+            result.data.push({
+                Id: $(this).val() || '',
+                ProjectName: $(this).data('projectname') || '',
+                ChangeNo: $(this).data('changeno') || '',
+                ChangeName: $(this).data('changename') || ''
+            });
+        });
+
+        if (result.data.length === 0) {
+            result.flag = false;
+            result.msg = '请选择变更信息！';
+        } else {
+            var selectType = '@ViewBag.SelectType';
+            if (selectType === '1' && result.data.length > 1) {
+                result.flag = false;
+                result.msg = '一次只能选择一条资料信息！！';
+            }
+        }
+        return result;
+    }
+</script>

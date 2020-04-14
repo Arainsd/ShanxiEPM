@@ -1,0 +1,70 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_Config
+@{
+    ViewBag.Title = "系统设置详情";
+}
+<style>
+    .tdright {
+        text-align: right !important;
+    }
+
+    .tdleft {
+        text-align: left !important;
+    }
+</style>
+<div class="content-right date-wrap fl c">
+    <div class="main mt5">
+        <table class="layui-table">
+            <tbody>
+
+                <tr>
+
+                    <td style="width:150px;" class="tdright">公司名称</td>
+                    <td class="tdleft" style="word-wrap:break-word; word-break:break-all;">@Model.Name</td>
+
+                </tr>
+                <tr>
+
+                    <td class="tdright">简称</td>
+                    <td class="tdleft" style="word-wrap:break-word; word-break:break-all;">@Model.ShortName</td>
+
+                </tr>
+                <tr>
+
+                    <td class="tdright">版权声明</td>
+                    <td class="tdleft" style="word-wrap:break-word; word-break:break-all;">@Model.CopyRight</td>
+
+                </tr>
+                <tr>
+
+                    <td class="tdright">联系电话</td>
+                    <td class="tdleft">@Model.ContractTel</td>
+
+                </tr>
+                <tr>
+
+                    <td class="tdright">Footer说明</td>
+                    <td class="tdleft" style="word-wrap:break-word; word-break:break-all;">@Model.LowRecord</td>
+
+                </tr>
+                @*<tr>
+
+                    <td style="vertical-align:top;" class="tdright">Logo</td>
+                    <td class="tdleft">
+                        <img src="@Model.Logo" />
+                    </td>
+
+                </tr>*@
+                <tr>
+                    <td colspan="2" align="center">
+                        <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="编&nbsp;&nbsp;&nbsp;辑" class="layui-btn layui-btn-small button-base bg-save" onclick="location.href='Edit'" />
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" id="mainForm">
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;"><em class="required">*</em>编号 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="No" id="No" placeholder="请输入编号" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>接口名称 : </label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="Name" id="Name" placeholder="请输入接口名称" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-12 col-sm-12">
+                    <label class="col-lg-2 col-sm-2 control-label" style="margin-left:-10px;"><em class="required">*</em>接口服务器 : </label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input type="text" name="Servers" id="Servers" placeholder="请输入接口服务器" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>邮件协议 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="MailProtocol" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="MailProtocol" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>SSL端口号 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="SSL" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="SSL" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="padding-left:0px;margin-left:-5px;"><em class="required">*</em>接口用户名 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="UserName" id="UserName" placeholder="请输入接口用户名" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>接口密码 : </label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="PassWord" id="PassWord" placeholder="请输入接口密码" autocomplete="off" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>返回值状态码说明 : </label>
+                <div class="col-lg-10 col-sm-10">
+                    <textarea name="ReturnValDes" style="width:100%;min-height:100px;padding:5px 10px;border-color: #ccc" id="ReturnValDes" placeholder="请输入内容"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12" style="margin-bottom:30px;">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label" style="margin-left:-5px;">启用/禁用 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsEnable", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label">是否确认 : </label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("IsConfirm", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12" style="overflow:hidden;top:80px;">
+                <div class="col-lg-6 col-sm-6" style="text-align:right">
+                    <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                </div>
+                <div class="col-lg-6 col-sm-6">
+                    <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script>
+    window.onload = function () {
+        //自定义验证规则
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                No: {
+                    validators: {
+                        notEmpty: {
+                            message: '编号不能为空'
+                        },
+                    }
+                },
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: '接口名称不能为空'
+                        },
+                    }
+                },
+                Servers: {
+                    validators: {
+                        notEmpty: {
+                            message: '接口服务器不能为空'
+                        }
+                    }
+                },
+                MailProtocol: {
+                    validators: {
+                        notEmpty: {
+                            message: '邮件协议不能为空'
+                        }
+                    }
+                },
+                SSL: {
+                    validators: {
+                        notEmpty: {
+                            message: 'SSL端口号不能为空'
+                        }
+                    }
+                },
+                UserName: {
+                    validators: {
+                        notEmpty: {
+                            message: '接口用户名不能为空'
+                        }
+                    }
+                },
+                PassWord: {
+                    validators: {
+                        notEmpty: {
+                            message: '接口密码不能为空'
+                        }
+                    }
+                },
+                ReturnValDes: {
+                    validators: {
+                        notEmpty: {
+                            message: '返回值状态码说明不能为空'
+                        }
+                    }
+                },
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+        //   监听提交
+        form.on('submit(sub)', function (data) {
+            var search = $("form").serialize();
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");
+                        $("#save").val("请等待")
+                        var layerIndex = parent.layer.msg("邮件接口设置添加成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.layer.close(layerIndex);
+                            parent.window.frames["mainFrame"].location.reload();
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+                return false;
+            }
+
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>

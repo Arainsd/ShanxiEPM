@@ -1,0 +1,192 @@
+﻿@using hc.epm.UI.Common;
+@using hc.epm.DataModel.Basic;
+@model Base_Account
+@{
+    ViewBag.Title = "企业账户修改";
+}
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal " id="mainForm">
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>税号：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="TaxNum" id="TaxNum" placeholder="请输入税号" class="form-control" value="@Model.TaxNum"/>
+                        <input type="hidden" name="Id" id="Id" value="@Model.SId" />
+                        <input type="hidden" name="CompanyId" id="CompanyId" value="@Model.CompanyId" />
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>开户银行：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="OpenBank" id="OpenBank" placeholder="请输入开户银行" class="form-control" value="@Model.OpenBank"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label">账户类型：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        @Html.DropDownList("Type", null, new { @class = "form-control selectpicker  show-tick" })
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>银行账号：</label>
+                    <div class="col-lg-4 col-sm-4">
+                        <input type="text" name="Account" id="Account" placeholder="请输入银行账号" class="form-control" value="@Model.Account"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <label class="col-lg-4 col-sm-4 control-label"><em class="required">*</em>电话：</label>
+                    <div class="col-lg-8 col-sm-8">
+                        <input type="text" name="Phone" id="Phone" placeholder="请输入电话" class="form-control" value="@Model.Phone"/>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>是否默认：</label>
+                    <div class="col-lg-4 col-sm-4">
+                       
+                        @if (Model.IsDefault)
+                        {
+                            <input type="checkbox" lay-skin="primary" value=true name="IsDefault" checked /><span>是</span>
+                            <input type="checkbox" lay-skin="primary" value=false name="IsDefault" /><span>否</span>
+
+                        }
+                        else
+                        {
+                            <input type="checkbox" lay-skin="primary" value=false name="IsDefault" /><span>是</span>
+                            <input type="checkbox" lay-skin="primary" value=false name="IsDefault" checked/><span>否</span>
+
+                        }
+
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-12 col-sm-12 form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>地址：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input type="text" name="Address" id="Address" placeholder="请输入地址" class="form-control" value="@Model.Address"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-12 col-sm-12 form-group">
+                    <label class="col-lg-2 col-sm-2 control-label"><em class="required">*</em>说明：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <textarea name="Remark" id="Remark" placeholder="请输入内容" class="form-control" rows="4">@Model.Remark</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item row btn-save  btn-group-position">
+                <input type="button" name="save" id="save" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-small button-base bg-save" />
+                <input type="button" name="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+            </div>
+
+        </form>
+    </div>
+</div>
+<script>
+    //自定义验证规则
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            OpenBank: {
+                validators: {
+                    notEmpty: {
+                        message: '开户银行不能为空'
+                    },
+                }
+            },
+            TaxNum: {
+                validators: {
+                    notEmpty: {
+                        message: '税号不能为空'
+                    },
+
+                }
+            },
+            Account: {
+                validators: {
+                    notEmpty: {
+                        message: '银行账号不能为空'
+                    },
+                }
+            },
+            Address: {
+                validators: {
+                    notEmpty: {
+                        message: '地址不能为空'
+                    },
+                }
+            },
+            Phone: {
+                validators: {
+                    notEmpty: {
+                        message: '电话不能为空'
+                    },
+                }
+            },
+            Remark: {
+                validators: {
+                    notEmpty: {
+                        message: '说明内容不能为空'
+                    }
+                }
+            }
+        }
+    });
+    //复选框单选
+    $("input[name='IsDefault']").click(function () {
+        if ($(this).is(':checked')) {
+            $(this).attr('checked', true).siblings().attr('checked', false);
+            //alert($(this).val());
+        } else {
+            $(this).attr('checked', false).siblings().attr('checked', false);
+        }
+    });
+    
+    layui.use(['layer', 'form', 'element'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element;
+       
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            if (bv.isValid()) {
+                var search = $("form").serialize();
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        $("#save").attr("disabled", "disabled");
+                        $("#save").val("请等待")
+                        parent.layer.msg("企业账户修改成功", { time: 1000, icon: 1 }, function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);//关闭窗口
+                            parent.window.location.href = "/Account/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 }); 
+                    }
+                });
+            };
+            return false;
+
+        });
+        //关闭弹出iframe层
+        $('.cancel').on("click", function () {
+            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+            parent.layer.close(index);//关闭窗口
+        });
+    });
+
+</script>

@@ -1,0 +1,118 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.Common
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model List<InspectView>
+@{
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+<div class="contentData">
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="200">得失分单位</th>
+                    @*<th width="70">得失分个人</th>*@
+                    <th width="150">具体要求</th>
+                    <th width="50">检查结果</th>
+                    <th width="70">整改负责人</th>
+                    <th width="50">得分</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    index++;
+                <tr>
+                    <td style="display:none">
+                        <input type="hidden" class="inputId" data-id="@item.InspectId" data-checkId="@item.CheckId" />
+                    </td>
+                    <td>@item.GainLossCompanyName</td>
+                    @*<td>@item.GainLossUserName</td>*@
+                    <td>@item.CheckName</td>
+                    <td>@(item.Choice == true ? "不通过" : "通过")</td>
+                    <td>@(item.InspectItemIdStr == null ? "" : item.InspectItemIdStr)</td>
+                    <td>
+                        @if (!ViewBag.FCGZY.Contains(item.CheckName))
+                                {
+                                <span>@(item.Score.Value.ToString("#.##") + "/" + item.ScoreMax)</span>
+                                }
+                                else
+                                {
+                                <a href="javascript:;" style="color: blue;text-decoration-line: underline;" class="DetailInfo checkright" data-module="Change" data-right="Info">
+                                    @(item.Score.Value.ToString("#.##") + "/" + item.ScoreMax)
+                                </a>
+                                }
+                    </td>
+                </tr>
+                    }
+                }
+                else {
+                <tr>
+                    <td colspan="10" class="table-center">
+                        暂无数据
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <form method="get">
+            <input type="hidden" value="@ViewBag.inspectItemId" id="inspectItemId" name="inspectItemId" />
+            <input type="hidden" value="@ViewBag.gainLossCompanyId" id="gainLossCompanyId" name="gainLossCompanyId" />
+        </form>
+    </div>
+    @*<div id="page" style="text-align:right; margin-right:5px;">
+        </div>*@
+</div>
+@section scripts
+    {
+    <script>
+
+        //若无数据隐藏分页组件
+        if ('@ViewBag.Total' == 0) {
+            $("#page").hide();
+        }
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            //分页
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                jump: function (obj, first) {
+                    if (!first) {
+                        //得到了当前页，用于向服务端请求对应数据
+                        var curr = obj.curr;
+                        var search = $("form").serialize();
+                        window.location.href = "/Monitor/IndexItem?pageIndex=" + curr + "&" + search;
+                    }
+                }
+            });
+        });
+
+        //查看
+        $("tbody").on("click", ".DetailInfo", function () {
+            var id = $(this).parents("tr").find($(".inputId")).data("id");
+            var checkId = $(this).parents("tr").find($(".inputId")).data("checkid");
+            parent.layer.open({
+                type: 2,
+                title: parent.GetLayerTitle("复查、复核/非常规作业明细列表"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['900px', '550px'],
+                content: '/Monitor/IndexWorkItem?InspectId=' + id + "&checkId=" + checkId,
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    </script>
+}

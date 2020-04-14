@@ -1,0 +1,130 @@
+﻿@using hc.epm.DataModel.Business;
+@model List<Epm_Question>
+@using hc.epm.Common;
+@{
+    ViewBag.Title = "问题列表";
+}
+<style>
+    table thead > tr > th:nth-child(n+2) {
+        min-width: 90px;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-select c">
+        <form id="mainForm" method="get">
+            <div>
+                <div>
+                    <label>项目名称 : </label><input type="text" autocomplete="off" name="projectTitle" value="@ViewBag.projectTitle" maxlength="100">
+                    <input type="hidden" name="projectId" value="@ViewBag.projectId" />
+                </div>
+                <div><label>问题 : </label><input type="text" name="title" id="title" autocomplete="off" value="@ViewBag.questionTitle" maxlength="100"></div>
+                <div>
+                    <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业务类型 : </label>
+                    @Html.DropDownList("businessType", ViewBag.BusinessType as SelectList, new { @class = "selectpicker  show-tick" })
+                </div>
+            </div>
+            <div class="form-sub">
+                <button type="button" class="add " data-module="Question" data-right="Add">新 增</button>
+                <button type="submit" class="" data-module="Question" data-right="Browse">查 询</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目名称</th>
+                    <th>问题</th>
+                    <th>业务类型</th>
+                    <th>问题类型</th>
+                    <th>重大事故</th>
+                    <th>是否关闭</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.Title</td>
+                            <td>@item.BusinessTypeName</td>
+                            <td>@item.ProblemTypeName</td>
+                            @if (@item.IsAccident == true)
+                            {
+                                <td>是</td>
+                            }
+                            else {
+                                <td>否</td>
+                            }
+                            @if (@item.State == (int)(EnumState.Normal))
+                            {
+                                <td>未关闭</td>
+                            }
+                            else {
+                                <td>已关闭</td>
+                            }
+                            <td>
+                                <a href="javascript:;" class="Detail" data-module="Question" data-right="Info">查看</a>
+                            </td>
+                            <td style="display:none">
+                                <input type="hidden" data-id="@item.Id" id="inputId" />
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="11">暂无数据</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+
+    </div>
+</div>
+<script>
+    if ('@ViewBag.Total' == 0) {
+        $("#page").hide();
+    }
+    $(function () {
+        layui.use(['layer', 'form', 'element', 'laypage'], function () {
+            var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+            laypage.render({
+                elem: 'page',
+                count: '@ViewBag.Total',
+                curr: '@ViewBag.pageIndex',
+                layout: ['prev', 'page', 'next', 'skip', 'count'],
+                jump: function (obj, first) {
+                    if (!first) {
+                        //得到了当前页，用于向服务端请求对应数据
+                        var curr = obj.curr;
+                        var search = $("form").serialize();
+                        window.location.href = "/Question/Index?pageIndex=" + curr + "&" + search;
+                    }
+                }
+            });
+            //增加
+            $(".add").click(function () {
+                window.location.href = "/Question/Add";
+            })
+            //详情
+            $(".Detail").click(function () {
+                var id = $(this).parents("tr").find("#inputId").data("id");
+                window.location.href = "/Question/Detail?id=" + id;
+            })
+        })
+    })
+</script>

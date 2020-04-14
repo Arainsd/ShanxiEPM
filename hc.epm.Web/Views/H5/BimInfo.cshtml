@@ -1,0 +1,165 @@
+﻿@*
+    项目-模型-进入模型
+    http://localhost:50468/h5/biminfo?id=1063227489339445248
+    http://localhost:50468/h5/biminfo?id=Epm_Bim.Id
+*@
+@{
+    ViewBag.Title = "模型";
+    Layout = "~/Views/Shared/_LayoutPageH5.cshtml";
+}
+<style>
+    .box {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: #000;
+    }
+
+    .main {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .event {
+        position: absolute;
+        top: 13%;
+        left: 3%;
+    }
+
+    .bar {
+        float: left;
+        margin-right: 5px;
+    }
+
+    .event .bars {
+        display: none;
+        float: left;
+        margin: 0;
+    }
+</style>
+<script src="/Resource/scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/Resource/scripts/global.js"></script>
+
+<script src="/Resource/scripts/3d.js"></script>
+<body>
+    <div style="" class="box">
+        <div id="webglContainer" style="width:100%;height:100%;" class="main"></div>
+        <div class='work' style="position:absolute; display:none;">
+            <a href="javascript:;" style='color:white; width: 60px; line-height: 25px;display:inline-block;text-decoration:none;text-shadow: 2px -2px 2px #666;'>提问</a>
+        </div>
+        <div class="event">
+            <button class="bar">菜单</button>
+            <p class="bars">
+                <button class="top" title="aaa">顶视角</button>
+                <button class="bottom">底视角</button>
+                <button class="front">前视角</button>
+                <button class="back">后视角</button>
+                <button class="left">左视角</button>
+                <button class="right">右视角</button>
+                <button class="translucence">半透明</button>
+                <button class="disassembly">模型拆分</button>
+                <button class="recover">模型恢复</button>
+            </p>
+        </div>
+        <input type="hidden" value="@ViewBag.BimId" id="BimID" />
+        <input type="hidden" value="" id="ProjectId" />
+        <input type="hidden" value="" id="selectcomponentId" />
+        <input type="hidden" value="" id="selectposition" />
+    </div>
+
+    <script>
+        $(function () {
+            var result = EngineInit("webglContainer"); //初始化画布
+            //加载模型，如果加载多个模型，需一个一个加载
+            var id = $("#BimID").val();//ID开发自定义，用于后面操作模型
+            AddModel(BimFileURL + "@ViewBag.BIMAddress", id);
+            SetClickMode(3);//点击模式设置
+        });
+
+        //获取坐标
+        function OnClickPosition(position) {
+            $("#selectposition").val(position);
+            //3157.9013671875,-47.87890625,-298.1455078125,0.7853981633974483,0,0.7853981633974483,1646.6454696193578,-3130.3899929737827,9415.35349693735
+        }
+
+        //获取构件ID
+        function OnSelectionChanged(id) {
+            var componentId = $("#selectcomponentId").val();
+            if (componentId != id) {
+                if (componentId != "")
+                    SetActorColor(componentId, 255, 255, 255);
+
+                SetActorColor(id, 0, 0, 255);//构件批量着色
+                $("#selectcomponentId").val(id);
+            }
+        }
+
+        //模型加载完成监听事件
+        function OnLoadModelEnd(id) {
+            //按钮区域
+            $(".bar").click(function () {
+                $(".bars").slideToggle();
+            });
+            $(".top").click(function () {
+                SetViewPort('top');
+            });
+            $(".front").click(function () {
+                SetViewPort('front');
+            });
+            $(".bottom").click(function () {
+                SetViewPort('bottom');
+            });
+            $(".back").click(function () {
+                SetViewPort('back');
+            });
+            $(".left").click(function () {
+                SetViewPort('left');
+            });
+            $(".right").click(function () {
+                SetViewPort('right');
+            });
+            $(".translucence").click(function () {
+                SetModelAlpha(id, 0.2);
+            });
+            var num = 0
+            $(".disassembly").click(function () {
+                num += 0.1
+                PopOut(num)
+            });
+            $(".recover").click(function () {
+                ZoomFitAll();
+                SetModelAlpha(id, 1);
+                PopOut(0)
+                num = 0
+            });
+
+            //提问
+            $("canvas").click(function (e) {
+                var x = e.pageX;
+                var y = e.pageY;
+                var componentId = $("#selectcomponentId").val();
+                var position = $("#selectposition").val();
+                if (componentId != "" && position != "") {
+                    $(".work").css({ "left": x - 5, "top": y + 3 }).show();
+                }
+            });
+        }
+
+        $(".work").on("click", "a", function () {
+            $(".work").hide();
+        }).on("click", function () {
+            var bimId = $("#BimID").val();
+            var componentId = $("#selectcomponentId").val();
+            var position = $("#selectposition").val();
+            var obj = { "ComponentId": componentId, "ComponentPosition": position, "BIMId": bimId, BIMName: "移动端模型" };
+
+            var positionObjList = [];
+            positionObjList.push(obj);
+            var strobj = JSON.stringify(positionObjList);
+            window.location.pathname = "model:" + strobj;
+        });
+    </script>
+</body>

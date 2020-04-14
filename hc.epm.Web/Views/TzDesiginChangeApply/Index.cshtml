@@ -1,0 +1,361 @@
+﻿@using hc.epm.DataModel.Business;
+@using System.Collections.Generic;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@model List<Epm_TzDesiginChangeApply>
+@{
+    ViewBag.Title = "建设工程设计变更查询列表";
+}
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<style>
+    .list-box > div {
+        margin: 10px 0;
+    }
+
+    .control-label {
+        font-weight: 500;
+        margin-top: 5px;
+        padding-right: 0;
+        padding-left: 0;
+        width: 22%;
+    }
+
+    .control-label-div {
+        width: 78%;
+    }
+
+    .timer-pic {
+        position: absolute;
+        top: 9px;
+        left: 100px;
+    }
+
+    .timeGroup {
+        width: 47%;
+        display: inline-block;
+        position: relative;
+    }
+
+        .timeGroup > i {
+            position: absolute;
+            top: 9px;
+            right: 6px;
+        }
+
+      .form-sub {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .form-sub > button, .wrap-but > button {
+            width: 150px;
+            height: 35px;
+            border: none;
+            background-color: #6a6969;
+            color: #fff;
+        }
+
+    .list-tab {
+        margin: 20px 0;
+    }
+</style>
+<div class="contentData">
+    @*<div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label class="unit">建设单位 : </label><input type="text" id="seleId" name="constructionUnit" value="@ViewBag.constructionUnit" placeholder="请输入建设单位">
+                </div>
+                <div class="plan_time">
+                    <label>申请日期 : </label>
+                    &nbsp;&nbsp;从&nbsp;&nbsp;
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); } })" placeholder="请选择提出起始时间">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                    至<span style="padding-right:25px;"></span><input type="text" class="timer se-in" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}' })" placeholder="请选择提出起始时间" />
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label class="unit">工程名称 : </label><input type="text" id="projectName" name="projectName" value="@ViewBag.projectName" placeholder="请输入工程名称">
+                </div>
+                <div>
+                    <label class="unit">施工名称 : </label><input type="text" id="workUnit" name="workUnit" value="@ViewBag.workUnit" placeholder="请输入施工单位">
+                </div>
+                <div>
+                    <label class="unit">设计单位 : </label><input type="text" id="designUnit" name="designUnit" value="@ViewBag.designUnit" placeholder="请输入设计单位">
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label class="unit">监理单位 : </label><input type="text" id="supervisionUnit" name="supervisionUnit" value="@ViewBag.supervisionUnit" placeholder="请输入监理单位">
+                </div>
+
+            </div>
+
+            <div class="form-sub">
+                <button type="button" id="reply" class="" data-module="" data-right="Check">批复</button>
+                <button type="button" class="add" id="Add">新增</button>
+                <button type="submit" id="search">搜索</button>
+            </div>
+        </form>
+    </div>*@
+    <div class="form-query">
+        <form method="get">
+
+            <div class="module-div">
+                <h4>查询条件</h4>
+                <div class="row list-box" style="margin:10px -15px">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">建设单位 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" id="seleId" name="constructionUnit" value="@ViewBag.constructionUnit" placeholder="请输入建设单位">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">申请日期 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="起始时间">
+                                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                                -
+                                <div class="timeGroup">
+                                    <input type="text" class="form-control" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="终止时间">
+                                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic">&#xe7e2;</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-3">工程名称 : </label>
+                            <div class="col-lg-8 col-sm-8 control-label-div">
+                                <input class="form-control" type="text" id="projectName" name="projectName" value="@ViewBag.projectName" placeholder="请输入工程名称">
+                            </div>
+                        </div>
+                    </div>
+                 
+                        <div class="col-lg-4 col-sm-4" style="margin-top:10px;">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-sm-3">施工名称 : </label>
+                                <div class="col-lg-8 col-sm-8 control-label-div">
+                                    <input class="form-control" type="text" id="workUnit" name="workUnit" value="@ViewBag.workUnit" placeholder="请输入施工单位">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-4" style="margin-top:10px;">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-sm-3">设计单位 : </label>
+                                <div class="col-lg-8 col-sm-8 control-label-div">
+                                    <input class="form-control" type="text" id="designUnit" name="designUnit" value="@ViewBag.designUnit" placeholder="请输入设计单位">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-4" style="margin-top:10px;">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-sm-3">监理单位 : </label>
+                                <div class="col-lg-8 col-sm-8 control-label-div">
+                                    <input class="form-control" type="text" id="supervisionUnit" name="supervisionUnit" value="@ViewBag.supervisionUnit" placeholder="请输入监理单位">
+                                </div>
+                            </div>
+                        </div>
+                  
+                </div>
+            </div>
+            <div class="form-sub">
+                <div class="wrap-but">
+                    <button type="button" id="reply" class="" data-module="" data-right="Check">批复</button>
+                    <button type="button" class="add" id="Add">新增</button>
+                </div>
+                <button type="submit" id="search">搜索</button>
+            </div>
+        </form>
+    </div>
+    <div class="list-tab">
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="50">
+                        <div><input type="checkbox" id="allcheck" /></div>
+                    </th>
+                    <th width="180">标题</th>
+                    <th width="180">工程名称</th>
+                    <th width="180">建设单位</th>
+                    <th width="120">合同造价(万元)</th>
+                    <th width="140">变更增、减造价(万元)</th>
+                    <th width="130">申请日期</th>
+                    <th width="100">审核状态</th>
+                    <th width="120">当前审核人</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none">
+                                <input type="hidden" class="inputId" data-id="@item.Id" data-sid="@item.SId" />
+                            </td>
+                            <td><input type="checkbox" value="@item.SId" data-state="@((PreProjectState)item.State)" /></td>
+                            <td>@item.Title</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.ConstructionUnit</td>
+                            <td>@item.InvestmentCost</td>
+                            <td>@item.ChangeCost</td>
+                            <td>
+                                @if (item.ApplyDate != null)
+                                {@(Convert.ToDateTime(item.ApplyDate).ToString("yyyy-MM-dd"))
+                                }
+                            </td>
+                            <td class="state">@(((PreProjectState)item.State).GetText())</td>
+                            <td>@item.ApprovalName</td>
+                            <td>
+                                @if (item.State == 0)
+                                {
+                                    <a class="edit" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">修改</a>
+                                }
+                                else
+                                {
+                                    <a class="detail" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">查看</a>
+                                }
+
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="14" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+
+<script>
+    //新增
+    $("#Add").on("click", function () {
+        window.location.href = "/TzDesiginChangeApply/Add";
+    });
+
+    //修改
+    $(".edit").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/TzDesiginChangeApply/Edit?id=" + id;
+    });
+
+    //详情
+    $(".detail").on("click", function () {
+        var id = $(this).parents("tr").find(".inputId").data("sid");
+        window.location.href = "/TzDesiginChangeApply/Detail?id=" + id;
+    })
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzDesiginChangeApply/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+        //批复
+        $("#reply").click(function () {
+            var flag = true,
+                state = "ApprovalSuccess", //已批复状态
+                ids = "",
+                chkItems = $('#tbody input[type="checkbox"]:checked');
+
+            if (chkItems.length > 0) {
+                chkItems.each(function (index, item) {
+                    if ($(this).data("state") != "WaitApproval") {
+                        layer.msg('请选择状态为待审核的项目！', { time: 3000, icon: 2 });
+                        flag = false;
+                        return false;
+                    }
+                    else {
+                        ids += $(this).val();
+                        ids += ",";
+                    }
+                });
+
+                ids = ids.substr(0, ids.lastIndexOf(","));
+
+                if (flag) {
+                    parent.layer.confirm('确认要批复所选择的项目？', { icon: 3 }, function () {
+                        $.post("UpdateState", { ids: ids, state: state }, function (data) {
+                            if (data.Flag) {
+                                parent.layer.msg("批复成功", { time: 2000, icon: 1 });
+                                location.reload();
+                            } else {
+                                parent.layer.alert(data.Message, { icon: 2 });
+                            }
+                        }, "json");
+                    });
+                }
+            }
+            else {
+                layer.msg('请选择要批复的项目！', { time: 3000, icon: 2 });
+            }
+
+        });
+        //建设单位
+        //$("#seleId").on("click", function () {
+        //    layer.open({
+        //        type: 2,
+        //        title: GetLayerTitle("选择建设单位"),
+        //        shadeClose: false, //点击遮罩关闭层
+        //        area: ['800px', '600px'],
+        //        content: '/Comm/SelectBranchCompany?selectType=1',
+        //        btn: ["确定", "取消"],
+        //        yes: function (index, layero) {
+        //            var iframeWin = window[layero.find('iframe')[0]['name']];
+        //            var obj = frames['layui-layer-iframe' + index].getSelectData();
+        //            if (obj.flag === false) {
+        //                layer.alert(obj.msg, { icon: 2 });
+        //            } else {
+        //                $("#seleId").val(obj.data[0].Name);
+        //            }
+        //            layer.close(index);
+        //        },
+        //        btn2: function (index, layero) {
+        //            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        //            parent.layer.close(index);//关闭窗口
+        //        },
+        //        cancel: function (index, layero) {
+        //        },
+        //    });
+
+        //})
+    });
+</script>
+
+

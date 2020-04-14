@@ -1,0 +1,71 @@
+﻿@using hc.Plat.Common.Extend;
+@using hc.epm.DataModel.Msg
+@using System.Collections.Generic;
+
+@model Msg_SMS
+@{
+    ViewBag.Title = "短信发送记录";
+}
+<style>
+    .con-link a {
+        color: #428bca;
+    }
+</style>
+<div class="content-right date-wrap fl c">
+    <div class="top-url">
+        <span><a href="/home/welcome" target="mainFrame">首页</a> </span> > <span> <a href="">短信发送记录</a> </span>
+    </div>
+    <div class="main mt5" style="min-height:680px">
+        <div class="info-group row" style="padding-top:30px">
+            <div class="col-lg-12 col-sm-12 " style="height:60px">
+                <div class="col-lg-12 col-sm-12" style="margin-top:5px">
+                    <label class="col-lg-2 col-sm-2 control-label" style="margin-left:64px;text-align:right">   接收者：</label>
+                    <div class="col-lg-9 col-sm-9 mt8">
+                        <span>@Model.ReceiveId</span><span></span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-12 col-sm-12 " style="height:60px">
+                <div class="col-lg-12 col-sm-12 con-link" style="margin-top:5px">
+                    <label class="col-lg-2 col-sm-2 control-label" style="margin-left:64px;text-align:right">内容：</label>
+                    <div class="col-lg-9 col-sm-9 mt8">
+                        <span>@Html.Raw(Model.SmsCon)</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-form-item row  btn-save" style="margin-top:310px">
+            <input type="button" name="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-small button-base bg-cancel cancel" />
+        </div>
+    </div>
+
+</div>
+<script>
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //返回上一页
+        $(".cancel").on("click", function () {
+            window.history.go(-1);
+        })
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

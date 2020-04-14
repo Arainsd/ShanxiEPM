@@ -1,0 +1,33 @@
+﻿@using hc.epm.DataModel.Business;
+@model Epm_SignInformation
+@{
+    ViewBag.Title = "GetSignDetail";
+}
+
+<div class="contentData">
+    <form id="mainForm">
+        <div class="tab">
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;用户名称&nbsp;:</label>
+                <input type="text" value="@Model.userName" readonly="readonly" disabled />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                <input type="text" value="@Model.projectName" readonly="readonly" disabled />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;加油站名称&nbsp;:</label>
+                <input type="text" value="@Model.gasstationName" readonly="readonly" disabled />
+            </div>
+            <div class="long-text">
+                <label><span class="star">*</span>&nbsp;岗位信息&nbsp;:</label>
+                <input type="text" value="@Model.jobInfo" readonly="readonly" disabled />
+            </div>
+            <div class="short-text">
+                <label><span class="star">*</span>&nbsp;人脸照片&nbsp;:</label>
+                <span><img src="@(Model==null?"":Model.picStrength)" style='width: 200px;height: 200px;cursor: pointer;' /></span>
+            </div>
+        </div>     
+    </form>
+</div>
+

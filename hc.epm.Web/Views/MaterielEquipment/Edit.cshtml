@@ -1,0 +1,547 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model MaterielView
+@{
+    ViewBag.Title = "材料设备验收编辑";
+}
+<style>
+    .input-group-addon {
+        cursor: pointer;
+        color: #6a6969;
+        font-size: 20px;
+    }
+
+    .datalist input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData">
+    <form class="form-horizontal" id="mainForm">
+
+        <div class="module-div">
+            <h4>验收信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>项目名称</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="ProjectName" id="ProjectName" class="form-control" style="display:inline-block;width:80%;" readonly autocomplete="off" placeholder="请选择项目" value="@Model.Epm_Materiel.ProjectName" readonly />
+                                <div class="btn-upload">
+                                    <input type="button" id="selproject" class="btn" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择项目" />
+                                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.Epm_Materiel.ProjectId" />
+                                    <input type="hidden" name="Id" id="Id" value="@Model.Epm_Materiel.Id" />
+                                </div>
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">接收地点</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="" type="text" name="ReceiveAddress" class="form-control " placeholder="请输入接收地点" value="@Model.Epm_Materiel.ReceiveAddress" />
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">接收日期</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                <input type="text" class="form-control position_rel" id="ReceiveTime" name="ReceiveTime" onClick="WdatePicker({ el: 'ReceiveTime', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ReceiveTime', 'NOT_VALIDATED', null).validateField('ReceiveTime') } })" value="@(Model.Epm_Materiel.ReceiveTime==null?"":Convert.ToDateTime(Model.Epm_Materiel.ReceiveTime).ToString("yyyy-MM-dd"))" placeholder="日期选择">
+                                <i onClick="WdatePicker({ el: 'ReceiveTime' })" class="iconfont">&#xe7e2;</i>
+                            </div>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span class="font-black">接收内容</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea rows="4" class="form-control" name="Remark" placeholder="请输入接收内容">@Model.Epm_Materiel.Remark</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>甲供物资单</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <input type="text" name="SupMatApplyName" id="SupMatApplyName" class="form-control" style="display:inline-block;width:80%;" readonly autocomplete="off" placeholder="请选择甲供物资单" value="@Model.Epm_Materiel.SupMatApplyName" />
+                                <div class="btn-upload">
+                                    <input type="button" id="selMaterial" class="btn" style="position: relative; z-index: 1;width: 140px;font-size: 16px;" value="选择甲供物资单" />
+                                    <input type="hidden" name="SupMatApplyId" id="SupMatApplyId" value="@Model.Epm_Materiel.SupMatApplyId" />
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>物资信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <thead>
+                    <tr>
+                        <th width="50">序号</th>
+                        <th width="200">名称</th>
+                        <th width="100">型号</th>
+                        <th width="200">供应商</th>
+                        <th width="100">设备数量</th>
+                        <th width="100">已验收总数量</th>
+                        <th width="100">待验收数量</th>
+                        <th width="80">操作</th>
+                    </tr>
+
+                </thead>
+                <tbody class="addtab">
+                    @{
+                        int index = 0;
+                    }
+                    @if (Model.MaterielDetails != null && Model.MaterielDetails.Count() > 0)
+                    {
+                        foreach (var item in Model.MaterielDetails)
+                        {
+                            index++;
+                            <tr class="tab-conten">
+                                <td class='Sort'>@index</td>
+                                <td class="Name">@item.Name</td>
+                                <td class="Model">@item.Model</td>
+                                <td class="Unit">@item.Unit</td>
+                                <td class="Qty">@item.Qty</td>
+                                <td class="UseSum">@item.TotalUseSum</td>
+                                <td>
+                                    <div class="input-group">
+                                        <span class="input-group-addon reduce">-</span>
+                                        <input type="text" value="@item.StayUseSum" oninput="value=value.replace(/[^\d]/g,'')" class="form-control wait" />
+                                        <span class="input-group-addon increase">+</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="color:blue; cursor: pointer;" class="delete">删除</span>
+                                    <input type="hidden" class="SupMatApplyListId" value="@item.SupMatApplyListId">
+                                    <input type="hidden" class="TotalUseSum" value="@item.UseSum" />
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:220px;">附件上传</td>
+
+                        <td class="table_title" colspan="3" style="text-align:left;">
+                            <div class="btn-upload">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div">附件名称</th>
+                        <th class="td-div">操作</th>
+                    </tr>
+                    @if (Model.FileList != null && Model.FileList.Count() > 0)
+                    {
+                        foreach (var item in Model.FileList)
+                        {
+                            <tr id="${obj.GuidId}">
+                                <td><span class="font-black">1</span></td>
+                                <td class="text_lf td-div"><span class="font-black">@item.Name</span></td>
+                                <td class="td-div" style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.Url" data-src="@item.Url" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big" />
+        </div>
+        <input type="hidden" name="MaterielDetail" id="MaterielDetail" />
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+<script>
+
+    window.onload = function () {
+
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],
+            fields: {
+                ProjectName: {
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        },
+
+                    }
+                },
+                ReceiveAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '接收地点不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '接收地点不能超过100字符'
+                        },
+                    }
+                },
+                ReceiveTime: {
+                    validators: {
+                        notEmpty: {
+                            message: '接收日期不能为空'
+                        }
+                    }
+                },
+                Remark: {
+                    validators: {
+                        notEmpty: {
+                            message: '接收内容不能为空'
+                        },
+                    }
+                },
+                SupMatApplyName: {
+                    validators: {
+                        notEmpty: {
+                            message: '甲供物资单不能为空'
+                        },
+                    }
+                },
+
+            }
+        });
+    }
+    $('#btnUploadFile1').click(function () {
+        document.getElementById("loadFile1").click();
+    });
+    function uploadFile1() {
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+                        //附件排序判断
+                        var sort;
+                        sort = $('.fileShow-append').find('tr:last-child').find('.sort').text();
+                        if (sort == "") {
+                            sort = 0;
+                            sort++;
+                        } else {
+                            sort++;
+                        }
+                        var odiv = `
+                                     <tr id="${obj.GuidId}">
+
+                                        <td><span class ="font-black sort"> `+ index + ` </span></td>
+                                        <td class ="text_lf td-div"><span >${obj.Name}</span></td>
+                                        <td class ="td-div" style="text-align:center">
+                                        <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                        <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" >
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+
+                }
+
+            }
+        });
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+
+
+        //选择项目
+        $("#selproject").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectProjectAll',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#ProjectId").val(obj.data[0].TzProjectId);
+                        $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                      .updateStatus('ProjectName', 'NOT_VALIDATED', null)
+                      .validateField('ProjectName');
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+        //选择物资清单
+        $("#selMaterial").click(function () {
+            if ($("#ProjectName").val() == "") {
+                layer.msg("请先选择项目", { icon: 2 });
+                return;
+            }
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择甲供物资单"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                skin: 'frame_button',
+                btnAlign: 'c',
+                content: '/Comm/SelectTzSupplyMaterialApply?projectId=' + $("#ProjectId").val(),
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#SupMatApplyName").val(obj.data[0].ApplyTitle);
+                        $("#SupMatApplyId").val(obj.data[0].Id);
+                        $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                       .updateStatus('SupMatApplyName', 'NOT_VALIDATED', null)
+                       .validateField('SupMatApplyName');
+                        var id = obj.data[0].Id;
+                        $(".addtab").empty();//清空上次动态添加的内容
+                        //根据物资清单ID获取物资信息数据
+                        $.post("GetTzSupMatApplyList", { id: id }, function (data) {
+                            var Html = "";
+                            var sort;
+                            sort = $('.addtab').find('tr:last-child').find('.Sort').text();
+                            if (sort == "") {
+                                sort = 0;
+                                sort++;
+                            } else {
+                                sort++;
+                            }
+                            for (var i = 0; i < data.length; i++) {
+                                Html = `<tr class="tab-conten">
+                                        <td class ='Sort'>${sort}</td>
+                                        <td class ="Name">${data[i].SupMatManagement}</td>
+                                        <td class ="Model">${data[i].Specification}</td>
+                                        <td class ="Unit">${data[i].SupplierName}</td>
+                                        <td class ="Qty">${data[i].Number}</td>
+                                        <td class ="UseSum">${data[i].UseSum}</td>
+                                        <td>
+                                            <div class ="input-group">
+                                                <span class ="input-group-addon reduce">-</span>
+                                                <input type="number" value="${data[i].StayUseSum}" title="待验收数量不能大于设备数量" class ="form-control wait" />
+                                                <span class ="input-group-addon increase">+</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                        <span style="color:blue; cursor: pointer;" class ="delete">删除</span>
+                                       <input type="hidden" class ="SupMatApplyListId" value="${data[i].SId}">
+                                       <input type="hidden" class ="TotalUseSum" value="0">
+                                        </td>
+                                     </tr> `;
+                                $(".addtab").append(Html);
+
+                            }
+                        });
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        /*
+        1.物资薪资待验收数量计算
+        2.待验收数量+验收数量=设备数量
+        */
+        var Qtydom;// 设备数量
+        var waitdom;// 待验收数量
+        var UseSumdom;//验收数量
+
+        //验收数量点击减少按钮
+        $("body").on("click", ".addtab tr .reduce", function () {
+            waitdom = $(this).parent().find(".wait")
+            Qtydom = $(this).parents("tr").find(".Qty")
+            if (parseInt(waitdom.val()) > 0) {
+                waitdom.val(parseInt(waitdom.val()) - 1);
+            }
+        });
+        //验收数量点击增加按钮
+        $("body").on("click", ".addtab tr .increase", function () {
+            UseSumdom = $(this).parents("tr").find(".UseSum");
+            waitdom = $(this).parent().find(".wait")
+            Qtydom = $(this).parents("tr").find(".Qty");
+            var m = parseInt(Qtydom.text()) - parseInt(UseSumdom.text());
+            if (parseInt(waitdom.val()) < m) {
+                waitdom.val(parseInt(waitdom.val()) + 1);
+            }
+        });
+        //待验收数量不能大于设备数量
+        $("body").on("keyup", ".addtab tr .wait", function () {
+            waitdom = $(this).parent().find(".wait")
+            Qtydom = $(this).parents("tr").find(".Qty")
+            if (parseInt(waitdom.val()) > parseInt(Qtydom.text())) {
+                waitdom.val("");
+                layer.msg("待验收数量不能大于设备数量", { icon: 2 });
+            }
+        });
+        //删除物资信息
+        $("body").on("click", ".addtab tr .delete", function () {
+            $(this).parents("tr").remove();
+        });
+
+        //数据提交
+        $(".save").click(function () {
+            var fileDataArray = [];
+            $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                fileDataArray.push({
+                    Name: $(item).find("#updata").data("name"),
+                    GuidId: $(item).find("#updata").data("id"),
+                    Size: $(item).find("#updata").data("size"),
+                    Group: $(item).find("#updata").data("group"),
+                    FilePath: $(item).find("#updata").data("url"),
+                    Sort: $(item).find(".sort").text()
+                })
+            });
+            var fileDataJson = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJson);
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+
+            var MaterielDetail = [];
+            $(".tab-conten").each(function (index, item) {
+                var m = $(item).find(".Qty").text();
+                var y = $(item).find(".wait").val();
+                var x = $(item).find(".UseSum").text();
+                var sum = $(item).find(".TotalUseSum").val(),
+                TotalUseSum = parseInt(m) - parseInt(y) - parseInt(x);
+                MaterielDetail.push({
+                    SupMatApplyListId: $(item).find(".SupMatApplyListId").val(),
+                    Name: $(item).find(".Name").text(),
+                    Model: $(item).find(".Model").text(),
+                    Unit: $(item).find(".Unit").text(),
+                    Qty: $(item).find(".Qty").text(),
+                    StayUseSum: $(item).find(".wait").val(),
+                    UseSum: $(item).find(".UseSum").text(),
+                    TotalUseSum: parseInt(sum) + TotalUseSum
+                });
+            });
+            $("#MaterielDetail").val(JSON.stringify(MaterielDetail));//赋值
+
+            //点击提交表单验证，点击暂存表单不验证
+            if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                //对表单进行验证
+                var bv = $('#mainForm').data('bootstrapValidator');
+                bv.validate();
+                if (!bv.isValid()) {
+                    return;
+                }
+            }
+            var search = $("form").serialize();
+            //if (bv.isValid()) {
+            $.post("Edit", search, function (data) {
+                if (data.Flag) {
+                    layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                        window.location.href = "/MaterielEquipment/Index";
+                    });
+                } else {
+                    layer.alert(data.Message, { icon: 2 });
+                }
+            });
+            //}
+        });
+
+
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+
+    //返回
+    $("#close").click(function () {
+        window.location.href = "/MaterielEquipment/Index";
+    });
+</script>

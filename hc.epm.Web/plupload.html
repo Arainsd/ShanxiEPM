@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+        <tbody id="btnGroup0" class="fileShow-append">
+            <tr class="headtr">
+                <td style="width:300px;">附件类型</td>
+                <td class="td-div" style="width: 570px!important;">
+                    <input id="FileType" type="hidden" name="FileType" value="" />
+                </td>
+                <td class="table_title text_lf" colspan="3">
+                    <div class="btn-upload" style="display:inline-block">
+                        <input type="button" id="btnUploadFile" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                        <input type="button" id="get" value="取值" />
+                    </div>
+                </td>
+            </tr>
+            <tr class="headtr">
+                <th class="table_title" style="width: 219px;">序号</th>
+                <th class="td-div" style="width: 570px!important;">附件名称</th>
+                <th class="td-div">附件类型</th>
+                <th class="td-div">附件归属</th>
+                <th class="table_title" style="width: 219px;">操作</th>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+        <tbody id="btnGroup1" class="fileShow-append">
+            <tr class="headtr">
+                <td style="width:300px;">附件类型</td>
+                <td class="td-div" style="width: 570px!important;">
+                    <input id="FileType" type="hidden" name="FileType" value="" />
+                </td>
+                <td class="table_title text_lf" colspan="3">
+                    <div class="btn-upload" style="display:inline-block">
+                        <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                        <!--<input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">-->
+                        <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                        <input type="button" id="upload" value="上传" />
+                        <input type="button" id="get" value="取值" />
+                    </div>
+                </td>
+            </tr>
+            <tr class="headtr">
+                <th class="table_title" style="width: 219px;">序号</th>
+                <th class="td-div" style="width: 570px!important;">附件名称</th>
+                <th class="td-div">附件类型</th>
+                <th class="td-div">附件归属</th>
+                <th class="table_title" style="width: 219px;">操作</th>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="Resource/scripts/jquery-1.10.2.min.js"></script>
+    <script src="Resource/plugins/layui-2.1.2/layui.all.js"></script>
+    <script src="Resource/scripts/plupload_2_1_2/plupload.full.min.js"></script>
+    <script src="Resource/scripts/global.js"></script>
+    <script src="Resource/scripts/comm.js"></script>
+    <script src="Resource/scripts/hc.fileUpload.js"></script>
+    <script type="text/javascript">
+
+
+        var btns = new Array('btnUploadFile', 'btnUploadFile1');
+
+        $.each(btns, function (index, item) {
+            // 初始化附件
+            $('#btnGroup' + index).InitUploader({
+                browerButton: item,
+                listContainer: '#btnGroup' + index + '.fileShow-append'
+            });
+        })
+
+        $('#get').click(function () {
+
+            // 获取已上传的附件
+            var data = $('#btnGroup').InitUploader('getData');
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" href="/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/Content/style.css" />
+    <link rel="stylesheet" href="/Content/index.css" />
+    <link rel="stylesheet" href="/Content/layui/css/layui.css" />
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="/Content/layui/layui.js"></script>
+    <script src="/Content/layui/lay/modules/form.js"></script>
+    <script src="/Content/layui/lay/modules/layer.js"></script>
+    <script src="/Scripts/Admin/e-bidding-common.js"></script>
+</head>
+<body>
+    <div class="content-right date-wrap fl c">
+        <div class="top-url">
+            <span>首页 </span> > <span> 数据基础 </span> > <span> 数据字典</span>
+        </div>
+        <div class="search mt5">
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">功能名称 : </label>
+                        <div class="layui-input-inline"><input type="text" name="name" placeholder="请输入功能名称" autocomplete="off" class="layui-input" /></div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">功能类型 : </label>
+                        <div class="layui-input-inline">
+                            <select name="type">
+                                <option>请选择</option>
+                                <option value="0">站点</option>
+                                <option value="1">模块</option>
+                            </select>
+                            <div class="layui-unselect layui-form-select">
+                                <div class="layui-select-title">
+                                    <input type="text" placeholder="请选择" class="layui-input layui-unselect" />
+                                    <i class="layui-edge"></i>
+                                </div>
+                                <dl class="layui-anim layui-anim-upbit">
+                                    <dd lay-value="0">站点</dd>
+                                    <dd lay-value="1">模块</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">确认状态 : </label>
+                        <div class="layui-input-inline">
+                            <select name="state">
+                                <option>请选择</option>
+                                <option value="0">已确定</option>
+                                <option value="1">未确认</option>
+                            </select>
+                            <div class="layui-unselect layui-form-select">
+                                <div class="layui-select-title">
+                                    <input type="text" placeholder="请选择" class="layui-input layui-unselect" />
+                                    <i class="layui-edge"></i>
+                                </div>
+                                <dl class="layui-anim layui-anim-upbit">
+                                    <dd lay-value="0">已确认</dd>
+                                    <dd lay-value="1">未确认</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">启用禁用状态 : </label>
+                        <div class="layui-input-inline">
+                            <select name="enable">
+                                <option>请选择</option>
+                                <option value="0">启用</option>
+                                <option value="1">禁用</option>
+                            </select>
+                            <div class="layui-unselect layui-form-select">
+                                <div class="layui-select-title">
+                                    <input type="text" placeholder="请选择" class="layui-input layui-unselect" />
+                                    <i class="layui-edge"></i>
+                                </div>
+                                <dl class="layui-anim layui-anim-upbit">
+                                    <dd lay-value="0">启用</dd>
+                                    <dd lay-value="1">禁用</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="button" class="layui-btn layui-btn-radius layui-btn-warm" lay-filter="search" value="搜 索" />
+                </div>
+
+            </form>
+        </div>
+        <div class="main mt5">
+            <div class="btns">
+                <a href="javascript:;" class="add-organization">新 增</a>
+                <a href="javascript:;">确 认</a>
+                <a href="javascript:;">删 除</a>
+            </div>
+            <div class="layui-form">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="50" />
+                        <col width="100" />
+                        <col width="100" />
+                        <col width="100" />
+                        <col width="100" />
+                        <col width="100" />
+                        <col width="100" />
+                        <col width="250" />
+                        <col width="100" />
+                        <col width="80" />
+                        <col width="80" />
+                        <col width="80" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" lay-skin="primary" lay-filter="allChoose" />
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                            </th>
+                            <th>序号</th>
+                            <th>编码</th>
+                            <th>名称</th>
+                            <th>Rightflog</th>
+                            <th>上级名称</th>
+                            <th>功能类型</th>
+                            <th>链接地址</th>
+                            <th>功能ToolTip</th>
+                            <th>确认状态</th>
+                            <th>启用/禁用</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" lay-skin="primary" />
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                            </td>
+                            <td>1</td>
+                            <td>120000</td>
+                            <td>组织机构</td>
+                            <td>增加</td>
+                            <td>功能管理</td>
+                            <td>模块</td>
+                            <td></td>
+                            <td>功能管理</td>
+                            <td><a href="javascript:;" class="is-confirm"><i class="confirm"></i></a></td>
+                            <td><a href="javascript:;" class="is-enable"><i class="enable"></i></a></td>
+                            <td><a href="javascript:;" class="editor editor-link"><i class="editor"></i></a></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" lay-skin="primary" />
+                                <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div>
+                            </td>
+                            <td>1</td>
+                            <td>120000</td>
+                            <td>组织机构</td>
+                            <td>增加</td>
+                            <td>功能管理</td>
+                            <td>模块</td>
+                            <td></td>
+                            <td>功能管理</td>
+                            <td><a href="javascript:;" class="is-confirm"><i class="confirm"></i></a></td>
+                            <td><a href="javascript:;" class="is-enable"><i class="enable"></i></a></td>
+                            <td><a href="javascript:;" class="editor editor-link"><i class="editor"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           
+            <div id="page"></div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    //分页
+    layui.use(['laypage', 'layer'], function(){
+        var laypage = layui.laypage
+        ,layer = layui.layer;
+
+        laypage({
+            cont: 'page'
+     ,pages: 100
+     ,skip: true
+        });
+    });
+    //表格全选
+    layui.use('form', function () {
+        var $ = layui.jquery, form = layui.form();
+
+        //全选
+        form.on('checkbox(allChoose)', function (data) {
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function (index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+    });
+    //新增弹出
+    $('.add-organization').on('click', function () {
+        //父页面弹出一个iframe层
+            parent.layer.open({
+                type: 2,
+                title: ReturnTittle('组织结构'),
+                maxmin: true,
+                shadeClose: false, //点击遮罩关闭层
+                area: ['750px', '420px'],
+                content: 'add.html'
+            });
+    })
+    //详情弹出
+    $('.editor-link').on('click', function () {
+        //父页面弹出一个iframe层
+        parent.layer.open({
+            type: 2,
+            title: ReturnTittle('组织结构'),
+            maxmin: true,
+            shadeClose: false, //点击遮罩关闭层
+            area: ['750px', '420px'],
+            content: 'detail.html'
+        });
+    })
+</script>
+</html>

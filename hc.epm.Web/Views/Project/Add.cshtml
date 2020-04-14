@@ -1,0 +1,455 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@{
+    ViewBag.Title = "新增项目";
+}
+<div class="contentData">
+    <div class="tab-view">
+        <input type="hidden" id="code" name="code" />
+        <form id="mainForm" method="post">
+            <div class="tab" id="tab">
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="Name" name="Name" value="" /><a id="AProjectName" href="javascript:">选择项目</a>
+                </div>
+                <div class="long-text">
+                    <input type="hidden" id="State" name="State" />
+                    <label><span class="star">*</span>&nbsp;项目编号&nbsp;:</label>
+                    <input type="text" id="Code" name="Code" value="" />
+                    <input type="hidden" id="Id" name="Id" value="" />
+                </div>
+                <div class="short-text">
+                    <label><span class="star">*</span>&nbsp;项目性质&nbsp;:</label>
+                    @*<select id="ProjectNature" name="ProjectNature">
+                        <option value="01">新建站</option>
+                        <option value="02">租赁改造</option>
+                        <option value="03">收购改造</option>
+                        <option value="04">拆迁重建</option>
+                        <option value="05">改扩建</option>
+                        <option value="06">检维修</option>
+                        <option value="07">安全隐患治理</option>
+                        <option value="08">技术改造</option>
+                        <option value="09">油气回收</option>
+                    </select>*@
+                    @Html.DropDownList("ProjectNature", ViewBag.ProjectNature as SelectList, null, new { @class = "form-control" })
+                    <input type="hidden" id="ProjectNatureName" name="ProjectNatureName" />
+                </div>
+                <div class="long-text garage">
+                    <label><span class="star">*</span>&nbsp;工程主体&nbsp;:</label>
+                    <input type="text" id="ProjectSubjectName" name="ProjectSubjectName" value="" readonly="readonly" autocomplete="off" />
+                    <input type="hidden" id="ProjectSubjectId" name="ProjectSubjectId" value="" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="region">
+                    <label><span class="star">*</span>&nbsp;项目地区&nbsp;:</label>
+                    <select id="Province" name="Province" style="display:none;">
+                        <option value="陕西省" data-item="610000">陕西省</option>
+                    </select>
+                    <select id="City" name="City"></select>
+                    <select id="Area" name="Area"></select>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目地址&nbsp;:</label>
+                    <input type="text" id="Address" name="Address" value="" />
+                </div>
+                <div class="long-text">
+                    <label style="margin-left: -68px;width: 188px;"><span class="star">*</span>&nbsp;投资概算（总批复金额）&nbsp;:</label>
+                    <input type="text" id="Amount" name="Amount" value="" /><span>万元</span>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目主题&nbsp;:</label>
+                    <input type="text" id="Description" name="Description" value="" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;项目经理&nbsp;:</label>
+                    <input type="text" id="PMName" name="PMName" value="" readonly="readonly" autocomplete="off" />
+                    <input type="hidden" id="PMId" name="PMId" value="" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;经理电话&nbsp;:</label>
+                    <input type="text" id="PMPhone" name="PMPhone" value="" maxlength="11" />
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;所属分公司&nbsp;:</label>
+                    <input type="text" id="CompanyName" name="CompanyName" value="" readonly="readonly" autocomplete="off" />
+                    <input type="hidden" id="CompanyId" name="CompanyId" value="" />
+                    <input type="hidden" id="Code" name="Code" value="" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                </div>
+                <div class="long-text">
+                    <label><span class="star">*</span>&nbsp;批复文号&nbsp;:</label>
+                    <input type="text" id="ReplyNumber" name="ReplyNumber" value="" />
+                </div>
+                <div class="long-text" style="display:none;" id="divGasolineDieselRatio">
+                    <label><span class="star">*</span>&nbsp;汽柴比&nbsp;:</label>
+                    <input type="text" id="GasolineDieselRatio" name="GasolineDieselRatio" />
+                </div>
+            </div>
+        </form>
+        <div class="button-group btn-center">
+            <button type="button" class="saveBut" data-state="@(ProjectState.NoStart.GetValue().ToString())">提交</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        var projectNature = $("#ProjectNature option:selected").val();
+
+        if (projectNature == "01") {
+            $("#divGasolineDieselRatio").show();
+        } else {
+            $("#divGasolineDieselRatio").hide();
+        }
+
+        $("#ProjectNature").click(function () {
+            projectNature = $("#ProjectNature option:selected").val();
+            if (projectNature == "01") {
+                $("#divGasolineDieselRatio").show();
+            } else {
+                $("#divGasolineDieselRatio").hide();
+            }
+        });
+
+        //获取区域列表（省）
+        function getRegionList() {
+            var value = $('#Province option:selected').data("item");
+            $.post("/Project/RegionList", { parentCode: value }, function (data) {
+                if (data.Flag) {
+                    $("#City").empty();
+                    $("#City").append("<option value=''>请选择</option>")
+                    $("#Area").empty();
+                    $("#Area").append("<option value=''>请选择</option>")
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#City").append("<option value='" + data.Data[i].RegionName + "'  data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+                    $('#City').addClass("show-tick");
+                }
+            })
+        }
+
+        //获取区域列表（县）
+        $("#City").change(function () {
+            var value = $('#City option:selected').data("item");
+            $.post("/Project/RegionList", { parentCode: value }, function (data) {
+                if (data.Flag) {
+                    $("#Area").empty();
+                    $("#Area").append("<option value=''>请选择</option>");
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $("#Area").append("<option value='" + data.Data[i].RegionName + "'    data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+                    $('#Area').addClass("show-tick");
+                }
+            })
+        });
+
+        getRegionList();
+
+        jQuery.validator.addMethod("cellPhone", function (value, element) {
+            var tel = /^(0|86|17951)?1[356789][0-9]{9}$/;
+            return this.optional(element) || (tel.test(value));
+        }, "电话号码格式错误");
+
+        jQuery.validator.addMethod("isCodereg", function (value, element) {
+            var codereg = /^[a-zA-Z0-9_]{0,}$/;
+            return this.optional(element) || (codereg.test(value));
+        }, "此字段不能含有中文或特殊字符");
+
+
+        $("#mainForm").validate({
+            errorClass: "validaterror",
+            validClass: "validatevalid",
+            errorElement: "span",
+            success: function (label) {
+                label.addClass("validatevalid").html("&nbsp;");
+            },
+            rules: {
+                Code: {
+                    required: true,
+                    isCodereg: true,
+                    maxlength: 50
+                },
+                Name: {
+                    required: true,
+                    maxlength: 254
+                },
+                City: {
+                    required: true
+                },
+                Area: {
+                    required: true
+                },
+                ProjectSubjectName: {
+                    required: true
+                },
+                Amount: {
+                    required: true,
+                    maxlength: 4
+                },
+                Address: {
+                    required: true,
+                    maxlength: 254,
+                },
+                PMName: {
+                    required: true,
+                    maxlength: 50
+                },
+                PMPhone: {
+                    required: true,
+                    cellPhone: true
+                },
+
+                CompanyName: {
+                    required: true,
+                    maxlength: 50
+                },
+                ReplyNumber: {
+                    required: true,
+                    //isCodereg: true,
+                    maxlength: 50
+                }, 
+                GasolineDieselRatio: {
+                    required: true,
+                    //isCodereg: true,
+                    //maxlength: 5
+                    }, 
+            },
+            messages: {
+                Code: {
+                    required: "项目编码不能为空",
+                    maxlength: "项目编码不能大于50个字符"
+                },
+                Name: {
+                    required: "项目名称不能为空",
+                    maxlength: "项目名称不能大于254个字符"
+                },
+                City: {
+                    required: "项目地区不能为空",
+                },
+                Area: {
+                    required: "项目地区不能为空",
+                },
+                ProjectSubjectName: {
+                    required: "工程主体不能为空",
+                },
+                Amount: {
+                    required: "合同款不能为空",
+                    maxlength: "项目金额不能超过4位"
+                },
+                Address: {
+                    required: "项目地址不能为空",
+                    maxlength: "项目地址不能大于254个字符"
+                },
+                PMName: {
+                    required: "项目经理不能为空"
+                },
+                PMPhone: {
+                    required: "经理电话不能为空"
+                },
+                CompanyName: {
+                    required: "所属分公司不能为空"
+                },
+                ReplyNumber: {
+                    required: "批复文号不能为空",
+                    maxlength: "批复文号不能超过50个字符"
+                },
+                GasolineDieselRatio: {
+                    required: "汽柴比不能为空",
+                    //maxlength: "汽柴比位不能大于三位的数字"
+                },
+            }
+        });
+        //数据提交
+        $(".saveBut").click(function () {
+            if ($("#mainForm").valid()) {
+                var mobile = /^((1[3,5,7,8][0-9]{1})+\d{8})$/;
+
+                if (!mobile.test($("#PMPhone").val())) {
+                    layer.alert("项目经理电话格式错误", { icon: 2 });
+                    return false;
+                }
+                //if (!mobile.test($("#ContactPhone").val())) {
+                //    layer.alert("负责人电话格式错误", { icon: 2 });
+                //    return false;
+                //}
+                if ($("#ProjectNature option:selected").val() == "01" && $("#GasolineDieselRatio").val() == "") {
+                    layer.alert("汽柴比不能为空", { icon: 2 });
+                    return false;
+                }
+
+                $("#ProjectNatureName").val($("#ProjectNature option:selected").text())
+
+                var state = $(this).data("state");
+                $("#State").val(state);
+
+                var search = $("form").serialize();
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/Project/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+            }
+        });
+    });
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //工程主体
+        $(".garage").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选取加油站"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectOilStation',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        $("#ProjectSubjectName").val(obj.data[0].Name);
+                        $("#ProjectSubjectId").val(obj.data[0].Id);
+                        parent.layer.close(index);//关闭窗口
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //选择工程项目
+        $("#AProjectName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '700px'],
+                content: '/Comm/SelectReformRecord',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#ProjectName").val(obj.data[0].Name);
+                        $("#DataId").val(obj.data[0].Id);
+
+                        $.post("GetProjectInfo", { id: obj.data[0].Id }, function (data) {
+                            if (data.type != "0") {
+                                debugger
+                                var model = data.data;
+                                if (data.type == "1") {
+                                    $("#Name").val(model.ReformRecord.ProjectName);
+                                    $("#ReplyNumber").val(model.ReformRecord.ItemNumber);
+                                    $("#Amount").val(model.ReformRecord.ItemMoney);
+                                    $("#ProjectNature").val("KUOJ");
+                                    $("#ProjectNatureName").val("扩建");
+                                    $("#ProjectSubjectName").val(model.ReformRecord.StationName);
+                                    $("#ProjectSubjectId").val(model.StationIds);
+                                    $("#Description").val(model.ReformRecord.ProjectName);
+                                    $("#CompanyName").val(model.ReformRecord.CompanyName);
+                                    $("#CompanyId").val(model.CompanyIds);
+                                } else {
+                                    $("#Name").val(model.TzProjectProposal.ProjectName);
+                                    $("#ReplyNumber").val(model.TzProjectApprovalInfo.DesignApprovalNumber);
+                                    $("#Amount").val(model.TzProjectApprovalInfo.ReplyInvestment);
+                                    $("#ProjectNature").val(model.TzProjectProposal.projectNature);
+                                    $("#ProjectNatureName").val(model.TzProjectProposal.ProjectSubjectName);
+                                    $("#ProjectSubjectName").val(model.TzProjectProposal.StationName);
+                                    $("#ProjectSubjectId").val(model.StationIds);
+                                    $("#Description").val(model.TzProjectProposal.ProjectName);
+                                    $("#CompanyName").val(model.TzProjectProposal.CompanyName);
+                                    $("#CompanyId").val(model.CompanyIds);
+                                }
+                            } else {
+                                layer.alert(data.Message, { icon: 2 });
+                            }
+                        });
+
+                        //$('#mainForm').data('bootstrapValidator')//重新验证inputName
+                        //  .updateStatus('ProjectName', 'NOT_VALIDATED', null)
+                        //  .validateField('ProjectName');
+                    }
+
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //项目经理
+        $("#PMName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选取项目经理"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectPM?Type=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = iframeWin.getSelectData();
+                    if (obj && obj.flag && obj.data) {
+                        $("#PMName").val(obj.data[0].Name);
+                        $("#PMId").val(obj.data[0].Id);
+                        $("#PMPhone").val(obj.data[0].Phone);
+                        parent.layer.close(index);//关闭窗口
+                    } else if (!obj.flag) {
+                        parent.layer.msg(obj.msg, { time: 1000, icon: 2 });
+                        return false;
+                    }
+                },
+                btn2: function (index, layero) {
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+        //所属分公司
+        $("#CompanyName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择单位"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['800px', '600px'],
+                content: '/Comm/SelectBranchCompany?selectType=1',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#CompanyName").val(obj.data[0].Name);
+                        $("#CompanyId").val(obj.data[0].Id);
+                        $("#code").val(obj.data[0].Code);
+                        layer.close(index);
+                    }
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+    });
+</script>

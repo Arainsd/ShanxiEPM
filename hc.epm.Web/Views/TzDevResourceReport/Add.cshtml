@@ -1,0 +1,629 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@{
+    ViewBag.Title = "加油（气）站开发资源上报流程";
+}
+
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        width: 950px;
+        border-radius: 5px;
+        padding: 0 5px;
+        text-align: left;
+    }
+
+    .pic {
+        top: 2px;
+        cursor: pointer;
+        left: 220px;
+        font-size: 20px;
+        left: -28px;
+        position: relative;
+    }
+
+    .input_text {
+        border: none;
+    }
+
+        .input_text input {
+            height: 35px;
+            width: 209px;
+        }
+
+    .bold-name {
+        font-weight: 800;
+        width: 15%;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .table-flex td {
+    }
+
+    .time_icon {
+        position: relative;
+    }
+
+        .time_icon i {
+            position: absolute;
+            right: 11px;
+            bottom: 12px;
+        }
+
+    .input_texts input {
+        padding: 0 3px;
+    }
+
+
+    .form-control {
+        padding: 6px 0px 6px 2px !important;
+    }
+</style>
+<div class="contentData">
+    <form id="mainForm">
+        <div class="top-title">
+            <span class="ti">加油（气）站开发资源上报流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;width: 1213px;">
+            <tr>
+                <td class="bold-name" colspan="2">标题</td>
+                <td style="text-align:center;" colspan="13">
+                    <div class="form-group">
+                        <span>@ViewBag.Title</span>
+                        <input type="hidden" id="TitleID" name="TitleID" />
+                        <input type="hidden" name="Title" value="@ViewBag.Title" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold-name" colspan="2">申报人</td>
+                <td colspan="4">
+                    <span>@ViewBag.ApplyUser</span>
+                    <input type="hidden" name="ApplyUser" value="@ViewBag.ApplyUser" />
+                    <input type="hidden" name="ApplyUserId" value="@ViewBag.ApplyUserId" />
+
+                </td>
+                <td class="bold-name" colspan="1">申报日期</td>
+                <td colspan="8">
+                    <span style="margin-right:5px;">@ViewBag.ApplyDate</span>
+                    <input type="hidden" name="ApplyDate" value="@ViewBag.ApplyDate" />
+                </td>
+            </tr>
+            <tr>
+                <td class="bold-name" colspan="2">申报单位</td>
+                <td colspan="4">
+                    <span>@ViewBag.CompanyName  @ViewBag.Department</span>
+                    <input type="hidden" name="CompanyName" value="@ViewBag.CompanyName" />
+                    <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                    <input type="hidden" name="CompanyId" value="@ViewBag.Department" />
+                    <input type="hidden" name="DepartmentID" value="@ViewBag.DepartmentID" />
+                </td>
+                <td class="bold-name" colspan="1"></td>
+                <td colspan="8"></td>
+            </tr>
+        </table>
+        <table class="datalist" id="table_flex" style="word-break:break-all;word-wrap:break-word;width: 1213px;">
+            <tr>
+                <td colspan="14" style="text-align:right;border-top:none!important;">
+                    <i class="layui-icon tab-add" title="添加" style="color:darkseagreen;font-size: 25px;">&#xe608;</i>
+                    <i class="layui-icon tab-delete" title="删除" style="color:cornflowerblue;    font-size: 25px;">&#xe640;</i>
+                </td>
+            </tr>
+            <tr class="bold-name table_th" style="background-color:#e4e4e4;">
+                <th style="width:4%;">序号</th>
+                <th style="width:110px">地市</th>
+                <th style="width:95px;">区县</th>
+                <th width="145px">项目名称</th>
+                <th width="145px">项目位置</th>
+                <th width="120px">项目性质</th>
+                <th width="140px">预计总投资额(万元)</th>
+                <th style="width:85px">可研销售</th>
+                <th style="width: 70px;">汽柴比</th>
+                <th style="width: 117px;">列为意向站时间</th>
+                <th style="width: 117px;">计划立项时间</th>
+                <th style="width: 88px;">业主姓名</th>
+                <th style="width: 136px;">业主电话</th>
+                <th style="width: 115px;">备注</th>
+            </tr>
+            <tr class="input_texts first">
+                <td class="number"><input type="checkbox" class="check_box" /><span>1</span></td>
+                @*地市*@
+                <td>
+                    <select id="Province" name="Province" class="Province" style="display:none;">
+                        <option value="陕西省" data-item="610000">陕西省</option>
+                    </select>
+                    <select id="City" name="Cities" class="form-control City"></select>
+                    <input type="hidden" name="CityCode" id="CityCode" class="CityCode" value="" />
+                </td>
+                @*区县*@
+                <td>
+                    <div class="form-group">
+                        <input class="form-control County" type="text" name="County" value="" autocomplete="off" />
+                    </div>
+                </td>
+                @*项目名称*@
+                <td>
+                    <div class="form-group">
+                        <input class="form-control ProjectName" type="text" name="ProjectName" value="" autocomplete="off" />
+                    </div>
+                </td>
+                @*项目位置*@
+                <td>
+                    <div class="form-group">
+                        <input class="form-control ProjectAdress" type="text" name="ProjectAdress" value="" autocomplete="off" />
+                    </div>
+                </td>
+                @*项目性质*@
+                <td>
+                    @Html.DropDownList("ProjectNatureType", ViewBag.ProjectNature as SelectList, null, new { @class = "form-control ProjectNatureType " })
+                    <input id="ProjectTypeName" type="hidden" name="ProjectTypeName" value="" class="ProjectTypeName" />
+                    <input id="ProjectType" type="hidden" name="ProjectType" value="" class="ProjectType" />
+                </td>
+                @*预计总投资额(万元)*@
+                <td>
+                    <div class="form-group">
+                        <input class="form-control ProjectedInvestment" type="text" name="ProjectedInvestment" value="" autocomplete="off" />
+                    </div>
+                </td>
+                @*可研销售*@
+                <td>
+                    <div class="form-group">
+                        <input class="form-control ResearchSales" type="text" name="ResearchSales" value="" autocomplete="off" />
+                    </div>
+                </td>
+                @*汽柴比*@
+                <td>
+                    <div class="form-group">
+                        <input class="form-control GasFuelRatio" type="text" name="GasFuelRatio" value="" autocomplete="off" />
+                    </div>
+                </td>
+                <td class="time_icon">
+                    <input type="text" class="timer form-control FixHour" id="FixHour" name="FixHour" onClick="WdatePicker({ el: 'FixHour' })">
+                </td>
+                <td class="time_icon">
+                    <input type="text" class="timer form-control PlanningTime" id="PlanningTime" name="PlanningTime" onClick="WdatePicker({ el: 'PlanningTime' })">
+                </td>
+                @*业主姓名*@
+                <td><input class="form-control OwnerName" type="text" name="OwnerName" value="" autocomplete="off" /></td>
+                @*业主电话*@
+                <td><input class="form-control OwnerPhone" type="text" name="OwnerPhone" value="" autocomplete="off" /></td>
+                @*备注*@
+                <td><input class="form-control Remark" type="text" name="Remark" value="" autocomplete="off" /></td>
+            </tr>
+        </table>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <tr class="top-title" style="background-color: #e4e4e4;">
+                <td class="ti" colspan="14">下一步工作</td>
+            </tr>
+            <tr>
+                <td class="bold-name"><span style="display:inline-block;width:165px;">部门负责人</span></td>
+                <td style="text-align:center;" colspan="2">
+                    <div class="sel-pro input_text">
+                        <div class="input_div form-group" style="width:255px;">
+                            <input type="text" class="selectUser form-control" id="DepLeaderName" name="DepLeaderName" data-type="1" />
+                            <input type="hidden" name="DepLeaderId" id="DepLeaderId" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="bold-name">分管领导</td>
+                <td style="text-align:center;" colspan="2">
+                    <div class="sel-pro input_text">
+                        <div class="input_div  form-group" style="width:255px;">
+                            <input type="text" name="LeaderName" id="LeaderName" data-type="2" class="timer selectUser form-control" />
+                            <input type="hidden" name="LeaderID" id="LeaderID" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="background-color:#e4e4e4;">签字意见</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <script type="text/plain" id="editor" style="width:1200px;height:200px;">
+                    </script>
+                    <input type="hidden" name="SignIdea" id="SignIdea" />
+                </td>
+            </tr>
+        </table>
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big button-base bg-save save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big button-base bg-save save" data-state="@(XtBusinessDataState.Staged.GetValue().ToString())" />
+            <input type="button" id="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-big button-base bg-cancel cancel" />
+            <input type="hidden" name="State" id="State" />
+
+            @*项目信息*@
+            <input type="hidden" id="tzDevResourceReportItem" name="tzDevResourceReportItem" />
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+    //新增获取地市
+    function getRegionListAdd() {
+        var value = $('.Province').find($("option")).data("item");
+        $.post("RegionList", { parentCode: value }, function (data) {
+            if (data.Flag) {
+                var num = $(".input_texts td:first-child span").text();
+                if (num == 1) {
+                    $(".City").empty();
+                    $(".City").append("<option value=''>请选择</option>")
+                    for (var i = 0; i < data.Data.length; i++) {
+                        $(".City").append("<option value='" + data.Data[i].RegionName + "'  data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+                    };
+                    $('.City').addClass("show-tick");
+                } else {
+                    var trNum = $("#table_flex tr").length - 3;
+                    for (var j = 0; j < trNum ; j++) {
+                        $(".City" + (trNum - 1)).empty();
+                        $(".City" + (trNum - 1)).append("<option value=''>请选择</option>");
+                        for (var i = 0; i < data.Data.length; i++) {
+                            $(".City" + (trNum - 1)).append("<option value='" + data.Data[i].RegionName + "' data-item='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>");
+                        }
+                        $('.City' + (trNum - 1)).addClass("show-tick");
+                        $('.City' + (trNum - 1)).change();
+                    }
+
+                }
+            }
+        });
+    }
+
+    getRegionListAdd()
+
+    window.onload = function () {
+
+        $('#mainForm').bootstrapValidator({
+            excluded: [':hidden'],
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                //ProjectName: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '不能为空'
+                //        },
+                //    }
+                //},
+                //ProjectAdress: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '不能为空'
+                //        },
+                //    }
+                //},
+                //County: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '不能为空'
+                //        },
+                //    }
+                //},
+                //GasFuelRatio: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '不能为空'
+                //        },
+                //        regexp: {
+                //            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,5})?$)|(^(0){1,5}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                //            message: "格式错误"
+                //        }
+                //    }
+                //},
+                //ResearchSales: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '不能为空'
+                //        },
+                //        regexp: {
+                //            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,5})?$)|(^(0){1,5}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                //            message: "格式错误"
+                //        }
+                //    }
+                //},
+                //ProjectedInvestment: {
+                //    validators: {
+                //        notEmpty: {
+                //            message: '不能为空'
+                //        },
+                //        regexp: {
+                //            regexp: /(^[1-9]([0-9]+)?(\.[0-9]{1,5})?$)|(^(0){1,5}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                //            message: "格式错误"
+                //        }
+                //    }
+                //},
+                DepLeaderName: {
+                    validators: {
+                        notEmpty: {
+                            message: '部门负责人不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '部门负责人不能超过50字符'
+                        },
+                    }
+                },
+                LeaderName: {
+                    validators: {
+                        notEmpty: {
+                            message: '分管领导不能为空'
+                        },
+                        stringLength: {
+                            max: 100,
+                            message: '分管领导不能超过50字符'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    ////富文本编辑器实例化
+    UE.getEditor('editor', {
+        toolbars: [[//工具条
+           'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+        'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+        'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+        'strikethrough', 'superscript', 'subscript', 'removeformat',
+        'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+        'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+        'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]]
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor", {
+        //initialFrameHeight: 40
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+
+
+
+    //关闭
+    $("#close").click(function () {
+        window.location.href = "/TzDevResourceReport/Index";
+    });
+    //添加
+    $(".tab-add").on("click", function () {
+        var index;
+        index = $('#table_flex').find('tr:last-child').find('.number span').text();
+        if (index == "") {
+            index = 0;
+            index++;
+        } else {
+            index++;
+        }
+        var indexs = $("#table_flex tr").length - 3;
+        var html = `
+            <tr class ="input_texts">
+                <td class="number"><input type="checkbox" class="check_box"/><span>`+ index + `</span></td>
+              @*地市*@
+                <td>
+                    <select id="Province" name="Province" style="display:none;" class ="Province">
+                                <option value="陕西省" data-item="610000">陕西省</option>
+                            </select>
+                            <select id="City" class = "form-control City`+ indexs + ` City" name="Cities"></select>
+                              <input type="hidden" name="CityCode" id="CityCode" class ="CityCode" value="" />
+
+
+                </td>
+                @*区县*@
+                <td>
+                <div class="form-group">
+                <input class ="form-control County" type="text" name="County" value="" autocomplete="off" />
+                </div>
+                </td>
+                @*项目名称*@
+                <td>
+                 <div class ="form-group">
+                <input class ="form-control ProjectName" type="text" name="ProjectName" value="" autocomplete="off" />
+                </div>
+                </td>
+                @*项目位置*@
+                <td>
+                 <div class ="form-group">
+                <input class ="form-control ProjectAdress" type="text" name="ProjectAdress" value="" autocomplete="off" />
+                </div>
+                </td>
+                @*项目性质*@
+                <td>
+                    @Html.DropDownList("ProjectNatureType", ViewBag.ProjectNature as SelectList, null, new { @class = "form-control ProjectNatureType`+ indexs + `" })
+                    <input id="ProjectTypeName" type="hidden" name="ProjectTypeName" value="" class = "ProjectTypeName ProjectTypeName`+ indexs + `" />
+                    <input id="ProjectType" type="hidden" name="ProjectType" value="" class = "ProjectType ProjectType`+ indexs + `" />
+                </td>
+                @*预计总投资额(万元)*@
+                <td>
+                  <div class ="form-group">
+                <input class ="form-control ProjectedInvestment" type="text" name="ProjectedInvestment" value="" autocomplete="off" />
+                </div>
+                </td>
+                @*可研销售*@
+                <td>
+                  <div class ="form-group">
+                <input class ="form-control ResearchSales" type="text" name="ResearchSales" value="" autocomplete="off" />
+                </div>
+                </td>
+                @*汽柴比*@
+                <td>
+                  <div class ="form-group">
+                <input class ="form-control GasFuelRatio" type="text" name="GasFuelRatio" value="" autocomplete="off" />
+                </div>
+                </td>
+                <td class="time_icon">
+                    <input type="text" class ="timer form-control FixHour" id= "FixHour`+ index + `" name= "FixHour` + index + `" onClick= "WdatePicker({ el: 'FixHour` + index + `' })" >
+                </td>
+                <td class="time_icon">
+                    <input type="text" class = "timer form-control PlanningTime" id= "PlanningTime`+ index + `" name= "PlanningTime` + index + `" onClick= "WdatePicker({ el: 'PlanningTime` + index + `' })" >
+                </td>
+                @*业主姓名*@
+                <td><input class="form-control OwnerName" type="text" name="OwnerName" value="" autocomplete="off" /></td>
+                @*业主电话*@
+                <td><input class="form-control OwnerPhone"  type="text" name="OwnerPhone" value="" autocomplete="off" /></td>
+                @*备注*@
+                <td><input class="form-control Remark" type="text" name="Remark" value="" autocomplete="off" /></td>
+            </tr>
+            `;
+        $("#table_flex tbody").append(html);
+        getRegionListAdd();
+    });
+
+
+    //删除
+    $(".tab-delete").on("click", function () {
+        $("#table_flex tr").each(function () {
+            if ($('.check_box').is(':checked')) {
+                $that = $('.check_box');
+                $.each($that, function (index, item) {
+                    if (item.checked) {
+                        $(this).parent().parent().remove();
+                    }
+                })
+
+            }
+
+        });
+    })
+
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //选择部门负责人
+        $(".selectUser").click(function () {
+            var _this = $(this);
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择项目"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?companyId=@ViewBag.UnitID',
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        if (_this.data("type") == "1") {
+                            $("#DepLeaderName").val(obj.data[0].Name);
+                            $("#DepLeaderId ").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                            .updateStatus('DepLeaderName', 'NOT_VALIDATED', null)
+                            .validateField('DepLeaderName');
+                        } else if (_this.data("type") == "2") {
+                            $("#LeaderName").val(obj.data[0].Name);
+                            $("#LeaderID ").val(obj.data[0].Id);
+                            $('#mainForm').data('bootstrapValidator')//重新验证inputName
+                            .updateStatus('LeaderName', 'NOT_VALIDATED', null)
+                            .validateField('LeaderName');
+                        }
+
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+
+        //数据提交
+        $(".save").click(function () {
+            var cities = $('.City option:selected').data("item");
+            $('.City option:selected').parent().siblings("input[name='CityCode']").val(cities);
+
+            var projectTypeName = $('.ProjectNatureType option:selected').val();
+            var projectTypeNames = $('.ProjectNatureType option:selected').text();
+            $('.ProjectNatureType option:selected').parent().siblings("input[name='ProjectTypeName']").val(projectTypeNames);
+            $('.ProjectNatureType option:selected').parent().siblings("input[name='ProjectType']").val(projectTypeName);
+            var tzDevResourceReportItem = [];
+            $('.input_texts').each(function (index, item) {
+                var cities = $('.City' + index + ' option:selected').data("item");
+                var cuty = $('.City' + index + ' option:selected').val();
+                $('.City' + index + ' option:selected').parent().siblings("input[name='Cities']").val(cuty);
+                $('.City' + index + ' option:selected').parent().siblings("input[name='CityCode']").val(cities);
+
+                var projectTypeName = $('.ProjectNatureType' + index + ' option:selected').val();
+                var projectTypeNames = $('.ProjectNatureType' + index + ' option:selected').text();
+                $('.ProjectNatureType' + index + ' option:selected').parent().siblings("input[name='ProjectTypeName']").val(projectTypeNames);
+                $('.ProjectNatureType' + index + ' option:selected').parent().siblings("input[name='ProjectType']").val(projectTypeName);
+
+                tzDevResourceReportItem.push({
+                    Number: index + 1,
+                    Cities: $(item).find(".City").val(),
+                    CityCode: $(item).find($(".CityCode")).val(),
+                    County: $(item).find($(".County")).val(),
+                    ProjectName: $(item).find($(".ProjectName")).val(),
+                    ProjectAdress: $(item).find($(".ProjectAdress")).val(),
+                    ProjectTypeName: $(item).find($(".ProjectTypeName")).val(),
+                    ProjectType: $(item).find(".ProjectType").val(),
+                    ProjectedInvestment: $(item).find($(".ProjectedInvestment")).val(),
+                    ResearchSales: $(item).find($(".ResearchSales")).val(),
+                    GasFuelRatio: $(item).find($(".GasFuelRatio")).val(),
+                    FixHour: $(item).find($(".FixHour")).val(),
+                    PlanningTime: $(item).find($(".PlanningTime")).val(),
+                    OwnerName: $(item).find($(".OwnerName")).val(),
+                    OwnerPhone: $(item).find($(".OwnerPhone")).val(),
+                    Remark: $(item).find($(".Remark")).val(),
+                });
+                $("#tzDevResourceReportItem").val(JSON.stringify(tzDevResourceReportItem));//赋值
+            });
+
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+            var search = $("form").serialize();
+            if (bv.isValid()) {
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            window.location.href = "/TzDevResourceReport/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                    }
+                });
+
+            }
+        });
+    });
+</script>

@@ -1,0 +1,554 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model MonitorView
+@{
+    ViewBag.Title = "修改安全检查";
+}
+<style>
+    #convert .mu > li, #convert .two ul > li, #convert .tree ul > li {
+        line-height: 25px;
+        text-align: left;
+        overflow: hidden;
+        color: #000;
+    }
+
+        #convert .mu > li a {
+            display: block;
+            line-height: 25px;
+        }
+
+    a:hover {
+        color: #000;
+        text-decoration: none;
+    }
+
+    /*#convert ul {
+        width: 100%;
+    }*/
+
+    #convert .two {
+        width: 34%;
+        position: absolute;
+        left: 33%;
+        top: 1px;
+        margin-top: 40px;
+    }
+
+        #convert .two ul {
+            /*width: 258px;*/
+        }
+
+        #convert .two a {
+            margin: 0px 12px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /*width: 250px;*/
+        }
+
+    a {
+        padding-left: 4px;
+    }
+
+    #convert .three {
+        position: absolute;
+        left: 99%;
+        top: 1px;
+        width: 91%;
+    }
+
+        #convert .three ul li {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /*width: 250px;*/
+        }
+
+    .company {
+        width: 30%;
+        height: 30px;
+    }
+</style>
+<body>
+    <div class="contentData">
+        <form id="mainForm">
+            <div class="tab">
+                <div class="long-text">
+                    <label for="PrejectName">&nbsp;项目名称&nbsp;:</label>
+                    <input type="text" id="ProjectName" name="ProjectName" value="@Model.Monitor.ProjectName" readonly="readonly" />
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="ProjectId" id="ProjectId" value="@Model.Monitor.ProjectId" />
+                    <input type="hidden" name="Id" id="Id" value="@Model.Monitor.Id" />
+                </div>
+                <div class="short-text">
+                    <label>&nbsp;检查日期&nbsp;:</label>
+                    <input type="text" id="MonitorTime" name="MonitorTime" readonly value="@(Model.Monitor.MonitorTime == null ? "" : Convert.ToDateTime(Model.Monitor.MonitorTime).ToString("yyyy-MM-dd"))">
+                    <i class="pic iconfont" width="20" height="30" style="cursor:pointer">&#xe7e2;</i>
+                </div>
+                <div class="long-text">
+                    <label for="Title">&nbsp;检查标题&nbsp;:</label>
+                    <input type="text" id="Title" name="Title" value="@Model.Monitor.Title" />
+                </div>
+                <div class="long-text MonitorCompanyName">
+                    <label>&nbsp;检查单位&nbsp;:</label>
+                    <input type="text" id="MonitorCompanyName" name="MonitorCompanyName" readonly value="@Model.Monitor.MonitorCompanyName">
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="MonitorCompanyId" id="MonitorCompanyId" value="@Model.Monitor.MonitorCompanyId" />
+                </div>
+                <div class="long-text MonitorUserName">
+                    <label>&nbsp;检查人&nbsp;:</label>
+                    <input type="text" id="MonitorUserName" name="MonitorUserName" readonly value="@Model.Monitor.MonitorUserName">
+                    <i class="pic iconfont ff" width="20" height="30" style="cursor:pointer; left:596px;">&#xe76a;</i>
+                    <input type="hidden" name="MonitorUserId" id="MonitorUserId" value="@Model.Monitor.MonitorUserId" />
+                </div>
+                <div>
+                    <label><span class="star">*</span>&nbsp;问题&nbsp;:</label>
+                    <input type="button" value="添加问题" style="width:100px!important" id="work" />
+                    <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-left:120px;width:88%">
+                        <thead>
+                            <tr>
+                                <th width="30%">问题</th>
+                                <th width="25%">整改单位</th>
+                                <th width="15%">要求整改完成日期</th>
+                                <th width="10%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.MonitorDetails != null && Model.MonitorDetails.Count() > 0)
+                            {
+                                foreach (var item in Model.MonitorDetails)
+                                {
+                                    <tr>
+                                        <td>@item.Name<input type="hidden" name="QuestionId" value="@item.QuestionId" /></td>
+                                        <td>@item.RectifCompanyName<input type="hidden" name="RectifCompanyName" value="@item.RectifCompanyId" /></td>
+                                        <td>@(item.Deadline == null ? "" : Convert.ToDateTime(item.Deadline).ToString("yyyy-MM-dd"))</td>
+                                        <td>
+                                            <a href="javascript:" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="Work" id="Work" value="" />
+                </div>
+                <div class="upload" style="margin-bottom:0px;">
+                    <div><label>&nbsp;附件上传&nbsp;:</label></div>
+                    <div class="btn-upload">
+                        <input type="button" id="btnUploadFile" style="position: relative; z-index: 1;" value="上传附件" />
+                        <input type="file" id="loadFile" name="loadFile" style="display:none" onchange="uploadFile()">
+                       </div>
+                </div>
+                <div style="width:100%;" id="fileListFile">
+                    <ul class="fileShow"></ul>
+                    <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile">
+                </div>
+                <div class="button-group btn-center">
+                    <input type="hidden" name="ComponentIds" id="ComponentIds" />
+                    <button type="button" class="saveBut" data-state="@(RectificationState.WaitRectification.GetValue().ToString())">提交</button>
+                    <input type="hidden" name="State" id="State" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="width:100%;height:100%;background-color:#000;opacity:0.3;display:none;position:absolute;z-index:99;top:0px" class="issue"></div>
+    <div style="width:800px;border:1px solid #e4e4ef;height:600px;z-index:99;position:absolute;top:20%;left:35%;display:none;background-color:#fff" class="issue">
+        <div style="background-color:#f8f8f8;padding:10px;margin-bottom:10px;font-weight:500;font-size:18px">检查项<span class="fr close" style="cursor:pointer">X</span></div>
+        <div id="convert" style="position:relative;padding:0 10px 10px 10px;height:335px;overflow:auto">
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+                <thead>
+                    <tr>
+                        <th width="">大类</th>
+                        <th width="">小类</th>
+                        <th width="">检查项</th>
+                    </tr>
+                </thead>
+                <tbody class="unit">
+                    <tr>
+                        <td style="width:259px">
+                            <ul class="mu">
+                                @if (ViewBag.Work.Count > 0 && ViewBag.Work != null)
+                                {
+                                    foreach (var item in ViewBag.Work)
+                                    {
+                                        <li>
+                                            <a href="javascript:;" class="broad">@item.Name</a>
+                                            <div class="two" style="display:none">
+                                                <ul>
+                                                    @if (item.children.Count > 0 && item.children != null)
+                                                    {
+                                                        foreach (var itemOne in item.children)
+                                                        {
+                                                            <li>
+                                                                <a href="javascript:;">@itemOne.Name</a>
+                                                                <div class="three" style="display:none">
+                                                                    <ul>
+                                                                        @if (itemOne.children.Count > 0 && itemOne.children != null)
+                                                                        {
+                                                                            foreach (var itemTwo in itemOne.children)
+                                                                            {
+                                                                                <li>
+                                                                                    <input type="checkbox" value="@itemTwo.Name" class="week" data-id="@itemTwo.Id" />@itemTwo.Name
+                                                                                    <input type="hidden" value="@itemTwo.Id" class="workid week" />
+                                                                                </li>
+                                                                            }
+                                                                        }
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </td>
+                        <td style="width:259px"></td>
+                        <td style="width:259px"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div style="padding: 5px 10px;margin-bottom:10px">
+            <label>&nbsp;整改单位&nbsp;:</label>
+            @Html.DropDownList("CompanyId", null, new { @class = "form-control selectpicker  show-tick company" })
+            <input type="hidden" name="CompanyName" id="CompanyName" />
+        </div>
+        <div style="border:1px solid #e4e4e1;height:100px;margin:10px;width:97%" class="dv">
+            <span class="sp"></span>
+            <span class="spid" style="display:none"></span>
+        </div>
+        <input type="button" name="name" value="确认" class="btn" style="display: inline-block; width: 80px; height: 30px;border: none;border-radius: 3px;background-color: #FFA000; color: #FEE9D3;margin: 5px 10px; float: right;cursor: pointer" />
+    </div>
+    <script>
+        var broad = $(".broad");
+        for (var i = 0; i < broad.length; i++) {
+            var atext = broad.eq(i).text();
+            if (atext.length > 16) {
+                var astext = atext.substr(0, 16) + "...";
+                broad.eq(i).text(astext)
+            }
+        }
+        var fileDataArray = [];
+        function uploadFile() {
+            if (document.getElementById("loadFile").files.length == 0) {
+                return;
+            }
+            var fileObj = document.getElementById("loadFile").files[0]; // js 获取文件对象
+            var formFile = new FormData();
+            formFile.append("file", fileObj);
+            var path = formFile;
+
+            $.ajax({
+                url: "/Upload/UploadHB",
+                type: "POST",
+                data: path,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var obj = {};
+                        obj.Name = data[i].Name;
+                        obj.GuidId = data[i].GuidId;
+                        obj.Size = data[i].Size;
+                        obj.ImageType = data[i].ImageType;
+                        obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                        obj.Url = data[i].ResponseObject.FDFS_NAME;
+                        fileDataArray.push(obj);
+
+                        if (data[i].ImageType == null) {
+                            var imgUrl = getFileImg(obj.Name);
+                            var odiv = '<li id="' + obj.GuidId + '">';
+                            odiv += '<div><img src="' + imgUrl + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + obj.Name + '</a></div>';
+                            odiv += '<div style="text-align:right; width:80px;">' + obj.Size + '</div>';
+                            odiv += '<span style="margin-left:20px;">' + data[i].UploadName + '</span>';
+                            odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd") + '</span>';
+                            odiv += '<span style="margin-left:20px;cursor: pointer;color:blue" class="fileDel" data-val="' + obj.GuidId + '">删除</span>'
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+                    }
+                    fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJson);
+                    $("#loadFile").val("");
+                }
+            });
+        }
+        $(function () {
+            $('#btnUploadFile').click(function () {
+                document.getElementById("loadFile").click();
+            });
+            $("#mainForm").validate({
+                errorClass: "validaterror",
+                validClass: "validatevalid",
+                errorElement: "span",
+                success: function (label) {
+                    label.addClass("validatevalid").html("&nbsp;");
+                },
+                rules: {
+                    ProjectName: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    Title: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    MonitorCompanyName: {
+                        required: true,
+                        maxlength: 254
+                    },
+                    MonitorUserName: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    MonitorTime: {
+                        required: true,
+                        date: true
+                    }
+                },
+                messages: {
+                    ProjectName: {
+                        required: "项目名称不能为空",
+                        maxlength: "标题长度不能大于254"
+                    },
+                    Title: {
+                        required: "标题不能为空",
+                        maxlength: "标题长度不能大于254"
+                    },
+
+                    MonitorCompanyName: {
+                        required: "检查单位名称不能为空",
+                        maxlength: "检查单位长度不能大于254",
+                    },
+                    MonitorUserName: {
+                        required: "检查人员不能为空",
+                        maxlength: "检查人员长度不能大于50"
+                    },
+                    MonitorTime: {
+                        required: "检查时间不能为空",
+                        date: "日期格式错误"
+                    }
+                }
+            })
+        });
+
+        //删除附件
+        $("#fileListFile").on("click", ".fileDel", function () {
+            $(this).parents("li").remove();
+            var toremove = '';
+            var id = $(this).data("val");
+            //----删除初始文件对应的值
+            fileDataArray = fileDataArray.filter(function (item, index, arr) {
+                return item.GuidId != id
+            })
+            fileDataJsonFile = JSON.stringify(fileDataArray);
+            $("#fileDataJsonFile").val(fileDataJsonFile);
+        });
+
+        //获取附件
+        $.post("/Files/GetFileList", { tableName: 'Epm_Monitor', id: '@Model.Monitor.Id' }, function (data) {
+            if (data.Flag) {
+                if (data.Data.length > 0) {
+                    data.Data.forEach(function (item, index, arr) {  
+                        if (item.ImageType == null) {
+                            var odiv = '<li id="' + item.GuidId + '">';
+                            odiv += '<div class="downloadFile"><img src="' + getFileImg(item.Name) + '" style="width: 20px;height: 20px;cursor: pointer;" class="imgShow"/><a href="javascript:;" target="_blank">' + item.Name + '</a></div>';
+                            odiv += '<div>' + item.Size + '</div>';
+                            odiv += '<span style="margin-left:20px;">' + item.CreateUserName + '</span>';
+                            odiv += '<span style="margin-left:20px;">' + new Date(formatDateByJson(item.CreateTime)).Format("yyyy-MM-dd") + '</span>';
+                            odiv += '<span style="margin-left:30px;cursor: pointer;color:blue" class="fileDel" data-val="' + item.GuidId + '">删除</span>';
+                            odiv += '<input type="hidden" class="hiddenArea" data-group="' + item.Group + '" data-url="' + item.Url + '" data-filename="' + item.Name + '">';
+                            odiv += '</li>';
+                            $('#fileListFile .fileShow').append(odiv);
+                        }
+
+                        var obj = {};
+                        obj.Name = item.Name;
+                        obj.GuidId = item.GuidId;
+                        obj.Size = item.Size;
+                        obj.Group = item.Group;
+                        obj.Url = item.Url;
+                        obj.TableColumn = item.TableColumn;
+                        obj.ImageType = item.ImageType;
+                        fileDataArray.push(obj);
+                    })
+                    fileDataJson = JSON.stringify(fileDataArray);
+                    $("#fileDataJsonFile").val(fileDataJson);
+                }
+            } else {
+                parent.layer.alert(data.Message, { icon: 2 });
+            }
+        });
+
+        $("#convert").on("click", "a", function () {
+            $(this).parent().siblings().find("a").css("backgroundColor", "#fff");
+            $(this).css("backgroundColor", "#ebebe5");
+            $(this).parent().siblings().find("div").hide();
+            $(this).siblings("div").eq(0).show();
+        })
+        $("input.week").each(function () {//给所有的input绑定事件
+            $(this).click(function () {
+                var l = []; //创建空数组l
+                var a = []; //创建空数组l
+                $("input.week:checked").each(function (i) { l[i] = this.value; a[i] = $(this).data("id") });
+                //将所有的选中的值存放l
+                $(".dv .sp").text(l.join(","));//将数据值联合字符串给显示对象附值
+                $(".dv .spid").text(a.join(","));//将数据值联合字符串给显示对象附值
+            })
+        })
+        //选择问题
+        $("#work").on("click", function () {
+            var hasSelectCompany = '@ViewBag.HasSelectCompany';
+            var projectid = $("#ProjectId").val();
+            if (hasSelectCompany != "True") {
+                if (projectid != "") {
+                    $.get("Add", { projectId: projectid }, function (data) {
+                        if (data.Flag) {
+                            $('#CompanyId').empty().append('<option value="">请选择</option>');
+                            $.each(data.Data, function (index, item) {
+                                $('#CompanyId').append('<option value="' + item.CompanyId + '">' + item.CompanyName + '</option>');
+                            })
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                    $(".issue").show();
+                } else {
+                    layer.alert("请先选择项目！", { icon: 3 });
+                }
+            } else {
+                $(".issue").show();
+            }
+        });
+        //关闭问题
+        $(".close").click(function () {
+            $(".dv .sp").text("");
+            $(".dv .spid").text("");
+            $("input.week[type=checkbox]").attr("checked", false);
+            $(".two").hide();
+            $(".three").hide();
+            $(".issue").hide();
+            $("a").css("backgroundColor", "#fff");
+        })
+        //删除问题
+        $('tbody').on('click', '.delete', function () {
+            var tr = $(this).parent().parent().remove()
+        });
+        //问题赋值
+        $('.btn').on('click', function () {
+            var tr = $(".dv .sp").text();
+            var trid = $(".dv .spid").text();
+            var company = $(".company option:selected").text();
+            var companyId = $(".company option:selected").val();
+            $(".issue").hide();
+            tr = tr.split(",");
+            trid = trid.split(",");
+            if (companyId != "") {
+                if (tr != "") {
+                    var array = [], arr = [];
+                    var trs = $(".unit tr");
+                    for (var i = 0; i < trs.length; i++) {
+                        var name = trs.eq(i).find("td").eq(0).text();
+                        var val = trs.eq(i).find("td").eq(0).find("input[type=text]").val();
+                        array.push(name);
+                        arr.push(val);
+                    }
+                    for (var i = 0; i < tr.length; i++) {
+                        if (array.indexOf(tr[i]) == -1 && arr.indexOf(tr[i]) == -1) {
+                            var td = `
+                        <tr>
+                            <td>
+                            <input type="text" value="${tr[i]}" style="width:100%;height:30px" readonly>
+                             <input type="hidden" value="${trid[i]}" style="width:100%;height:30px" readonly>
+                            </td>
+                            <td>
+                             <input type="text" value="${company}" style="width:100%;height:30px" readonly>
+                             <input type="hidden" value="${companyId}" style="width:100%;height:30px" readonly>
+                            </td>
+                            <td style="position:relative">
+                               <input type="text" id=${tr[i]} onClick="WdatePicker({ el: ${tr[i]} })" autocomplete="off" style="width:100%;height:100%;">
+                                <i onClick="WdatePicker({ el: ${tr[i]} })" class ="pic iconfont" width="20" height="30" style="cursor:pointer;top:10px;left:140px;position:absolute">&#xe7e2; </i>
+                            </td>
+                            <td>
+                                <a href="javascript:" class ="delete">删除</a>
+                            </td>
+                        </tr>
+                        `
+                            $('tbody').append(td);
+                            $(".dv .sp").text("");
+                            $(".dv .spid").text("");
+                            $("input.week[type=checkbox]").attr("checked", false);
+                            $(".two").hide();
+                            $(".three").hide();
+                        } else {
+                            layer.alert("选择了重复的整改问题！", { icon: 7 });
+                        }
+                    }
+                } else {
+                    layer.alert("请选择整改问题！", { icon: 7 });
+                    $(".issue").show();
+                }
+
+            } else {
+                layer.alert("请选择整改单位！", { icon: 3 });
+                $(".issue").show();
+            }
+        });
+        var obj = {}, arr = [];
+        //数据提交
+        $(".saveBut").click(function () {
+            if ($("#mainForm").valid()) {
+                //列表验证
+                if ($(".unit tr").length > 0) {
+                    for (var i = 0; tr = $(".unit tr"), i < tr.length; i++) {
+                        var type = tr.eq(i).find('td').eq(0).find("input ").eq(0).attr("type");
+                        if (type == "text") {
+                            var issue = tr.eq(i).find('td').eq(0).find('input').eq(0).val();
+                            var issueID = tr.eq(i).find('td').eq(0).find('input').eq(1).val();
+                            var unit = tr.eq(i).find('td').eq(1).find('input').eq(0).val();
+                            var unitID = tr.eq(i).find('td').eq(1).find('input').eq(1).val();
+                            var time = tr.eq(i).find('td').eq(2).find('input').val();
+                        } else {
+                            var issue = tr.eq(i).find('td').eq(0).text();
+                            var unit = tr.eq(i).find('td').eq(1).text();
+                            var issueID = tr.eq(i).find('td').eq(0).find('input').val();
+                            var unitID = tr.eq(i).find('td').eq(1).find('input').val();
+                            var time = tr.eq(i).find('td').eq(2).text();
+                        }
+                        if (time != "") {
+                            obj = { Name: issue, RectifCompanyName: unit, Deadline: time }
+                            arr.push(obj)
+                        } else {
+                            layer.alert("请填写要求整改完成时间！", { icon: 3 });
+                            return false
+                        }
+                    }
+                    arr = JSON.stringify(arr);
+                    $("#Work").val(arr);
+                    var state = $(this).data("state");
+                    $("#State").val(state);
+                    var search = $("form").serialize();
+                    $.post("Edit", search, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/Monitor/IndexAQ";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                } else {
+                    layer.alert("请选择整改问题！", { icon: 3 });
+                }
+            }
+
+        });
+    </script>
+</body>

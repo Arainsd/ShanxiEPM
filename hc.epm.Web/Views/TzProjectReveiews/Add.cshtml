@@ -1,0 +1,530 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@using hc.epm.ViewModel;
+@model TzProjectReveiewsView
+@{
+    ViewBag.Title = "项目评审记录";
+}
+<style>
+    .check {
+        width: 30%;
+        display: inline-block;
+    }
+    #ReveiewDate{
+        width:92% !important;
+    }
+</style>
+<link href="~/Resource/css/ProjectManagement.css" rel="stylesheet" />
+<div class="contentData" id="mainForm">
+    <form class="form-horizontal">
+        <div class="module-div">
+            <h4>项目基本信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">项目名称</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.ProjectName</div>
+                            <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.TzProjectProposal.Id" />
+                        </td>
+                        <td class="table_title">项目性质</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.NatureName</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">站库名称</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.StationName</div>
+                        </td>
+                        <td class="table_title">提出时间</td>
+                        <td class="td-div">
+                            <div>@(Convert.ToDateTime(Model.TzProjectProposal.ApplyTime).ToString("yyyy-MM-dd"))</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">地理位置</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.Position</div>
+                        </td>
+                        <td class="table_title">估计金额</td>
+                        <td class="td-div">
+                            <div>@Model.TzProjectProposal.PredictMoney.ToString("0.00") 万元</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">所属地市公司</td>
+                        <td colspan="3" align="left">
+                            <div>@Model.TzProjectProposal.CompanyName</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>评审信息</h4>
+            <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>评审时间</span>
+                        </td>
+                        <td class="td-div apply_time">
+                            <div class="form-group">
+                                @if (Model.TzProjectReveiews.ReveiewDate == null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="ReveiewDate" name="ReveiewDate" onClick="WdatePicker({ el: 'ReveiewDate', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ReveiewDate', 'NOT_VALIDATED', null).validateField('ReveiewDate') } })" placeholder="日期选择" value="">
+                                    <i onClick="WdatePicker({ el: 'ReveiewDate' })" style="bottom:25px;left:82%;cursor:pointer" class="iconfont">&#xe7e2;</i>
+                                }
+                                @if (Model.TzProjectReveiews.ReveiewDate != null)
+                                {
+                                    <input type="text" class="form-control position_rel" id="ReveiewDate" name="ReveiewDate" onClick="WdatePicker({ el: 'ReveiewDate', onpicked: function () { $('#mainForm').data('bootstrapValidator').updateStatus('ReveiewDate', 'NOT_VALIDATED', null).validateField('ReveiewDate') } })" placeholder="日期选择" value="@(Convert.ToDateTime(Model.TzProjectReveiews.ReveiewDate).ToString("yyyy-MM-dd"))">
+                                    <i onClick="WdatePicker({ el: 'ReveiewDate' })" style="bottom:25px;left:82%;cursor:pointer;" class="iconfont">&#xe7e2;</i>
+                                }
+
+                            </div>
+                        </td>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>评审地点</span>
+                        </td>
+                        <td class="td-div">
+                            <div class="form-group">
+                                <input id="Address" type="text" name="Address" class="form-control " placeholder="" value="@Model.TzProjectReveiews.Address" />
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>主持人</span>
+                        </td>
+                        <td class="td-div" colspan="2">
+                            <div class="form-group">
+                                <input id="" type="text" name="HostUser" class="form-control " placeholder="" value="@Model.TzProjectReveiews.HostUser" />
+
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>特邀专家</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea rows="4" class="form-control" name="InvitedExperts" maxlength="500">@Model.TzProjectReveiews.InvitedExperts</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>参会人员</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea rows="4" class="form-control" name="Attendees" maxlength="200">@Model.TzProjectReveiews.Attendees</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span> 项目完善内容</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                <textarea rows="4" class="form-control" name="PerfectContent" maxlength="500">@Model.TzProjectReveiews.PerfectContent</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <i class="color_red_x">*</i>
+                            <span>其他信息</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+
+                                @if (Model.TzProjectReveiews.OtherInfo != null)
+                                {
+                                    foreach (var item in ViewBag.OtherInfo)
+                                    {
+                                        if (Array.IndexOf(Model.TzProjectReveiews.OtherInfo.Split(','), item.No) == -1)
+                                        {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="OtherInfos[]" value="@item.No" />@item.Name
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="OtherInfos[]" value="@item.No" checked />@item.Name
+                                            </label>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (var item in ViewBag.OtherInfo)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="OtherInfos[]" value="@item.No" />@item.Name
+                                        </label>
+                                    }
+                                }
+                                <input type="hidden" name="OtherInfo" id="OtherInfo" value="@Model.TzProjectReveiews.OtherInfo" />
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_title">
+                            <span>评审结论</span>
+                        </td>
+                        <td class="td-div" colspan="3">
+                            <div class="form-group">
+                                @foreach (var item in ViewBag.ConclusionCode)
+                                {
+                                    if (Model.TzProjectReveiews.ConclusionCode != null)
+                                    {
+                                        if (Model.TzProjectReveiews.ConclusionCode == item.No)
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ConclusionCode" data-code="LandPaymentType" autocomplete="off" value="@item.No" checked>@item.Name
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="radio-inline">
+                                                <input type="radio" name="ConclusionCode" data-code="LandPaymentType" autocomplete="off" value="@item.No">@item.Name
+                                            </label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label class="radio-inline">
+                                            <input type="radio" name="ConclusionCode" data-code="LandPaymentType" autocomplete="off" value="@item.No" checked>@item.Name
+                                        </label>
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="module-div">
+            <h4>附件上传</h4>
+            <table class="datalist fileShow" style="word-break:break-all;word-wrap:break-word;margin-top:10px;">
+                <tbody class="fileShow-append">
+                    <tr class="headtr">
+                        <td style="width:300px;">附件类型</td>
+                        <td class="td-div" style="width: 570px!important;">
+                            @Html.Raw(Html.DropDownList("FileType", ViewBag.AnnexType as SelectList, null, new { @class = "form-control sel" }))
+                            <input id="FileType" type="hidden" name="FileType" value="" />
+                        </td>
+                        <td class="table_title text_lf" colspan="3">
+                            <div class="btn-upload" style="display:inline-block">
+                                <input type="button" id="btnUploadFile1" class="btnUploadFile btn  form-control" style="position: relative; z-index: 1;width: 100px;font-size: 16px;" value="选择附件" />
+                                <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+                                <span style="vertical-align:bottom; margin-left:15px; color:#B7B7B7;"></span>
+                            </div>
+                            <div class="color_red" style="display:inline-block;margin-left:20px;">附件类型仅支持：doc,pdf,excel,ppt,png等</div>
+                        </td>
+                    </tr>
+                    <tr class="headtr">
+                        <th class="table_title" style="width: 219px;">序号</th>
+                        <th class="td-div" style="width: 570px!important;">附件名称</th>
+                        <th class="td-div">附件类型</th>
+                        <th class="td-div">附件归属</th>
+                        <th class="table_title" style="width: 219px;">操作</th>
+                    </tr>
+                    @if (Model.TzProjectReveiews.TzAttachs != null && Model.TzProjectReveiews.TzAttachs.Count() > 0)
+                    {
+                        foreach (var item in Model.TzProjectReveiews.TzAttachs)
+                        {
+                            <tr>
+                                <td><span class ='sort'>@item.Sort</span></td>
+                                <td class="text_lf"><span>@item.Name</span></td>
+                                <td><span>@item.TypeName</span></td>
+                                <td>
+                                    @if (item.Uploadtype == 1)
+                                    {
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                        </label>
+                                    }
+                                    else if (item.Uploadtype == 2)
+                                    {
+                                        if (item.FilesSize < ConstString.TzMaxFileSize())
+                                        {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" />上传到投资系统
+                                            </label>
+
+                                        }
+                                        else {
+
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                            </label>
+                                        }
+                                    }
+                                </td>
+                                <td style="text-align:center">
+                                    <a class="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                    <input type="hidden" id="updata" data-id="@item.Id" data-url="@item.FilePath" data-src="@item.FilePath" data-name="@item.Name" data-size="@item.Size" data-time="@(Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd"))" data-type="@item.TypeName" data-typeno="@item.TypeNo" data-typename="@item.TypeName">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="暂&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitSubmitted.GetValue().ToString())" />
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提交审核" class="layui-btn layui-btn-big save" data-state="@(PreProjectState.WaitApproval.GetValue().ToString())" />
+            <input type="button" id="close" value="返&nbsp;&nbsp;&nbsp;回" class="layui-btn layui-btn-big "/>
+        </div>
+        <input type="file" id="loadFile1" name="loadFile1" style="display:none!important" onchange="uploadFile1()">
+        <!--附件数据-->
+        <input type="hidden" name="fileDataJsonFile" id="fileDataJsonFile" />
+        <!--状态数据-->
+        <input type="hidden" name="State" id="State" />
+    </form>
+</div>
+
+<script>
+    $('#btnUploadFile1').click(function () {
+        //获取附件类型的val
+        var fileTypeVal = $("#FileType").val();
+        if (fileTypeVal != "") {
+            document.getElementById("loadFile1").click();
+        }
+        else {
+            layer.alert("请选择附件类型", { icon: 2 });
+        }
+    });
+
+    //用于标记附件是否上传完成 isFlagFile
+    var isFlagFile = true;
+    function uploadFile1() {
+        isFlagFile = false;
+        var fileObj = document.getElementById("loadFile1").files[0]; // js 获取文件对象
+        var formFile = new FormData();
+        formFile.append("file", fileObj);
+        var path = formFile;
+        $.ajax({
+            url: "/Upload/UploadHB",
+            type: "POST",
+            data: path,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var index = $(".fileShow-append tr").length - 1;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.Name = data[i].Name;
+                    obj.GuidId = data[i].GuidId;
+                    obj.Size = data[i].Size;
+                    obj.ImageType = data[i].ImageType;
+                    obj.Group = data[i].ResponseObject.FDFS_GROUP;
+                    obj.Url = data[i].ResponseObject.FDFS_NAME;
+                    obj.TypeNo = $("#FileType").val();
+                    obj.TypeName = $("#FileType").find("option:checked").text()
+                    if (data[i].ImageType == null) {
+                        var imgUrl = getFileImg(obj.Name);
+
+                        //附件归属
+                        var html1 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" disabled />上传到投资系统
+                                     </label>
+                                    `
+                        var html2 = `<label class ="checkbox-inline">
+                                         <input type="checkbox" name="Uploadtype1" value="" checked />上传到投资系统
+                                     </label>
+                                   `
+                        var html = (fileObj.size > tzmaxfilesize) ? html1 : html2;
+
+                        //附件列表
+                        var odiv = `
+                                    <tr id="${obj.GuidId}">
+                                        <td><span  class ='sort'> `+ index + ` </span></td>
+                                        <td class ="text_lf"><span >${obj.Name}</span></td>
+                                        <td><span>${obj.TypeName}</span></td>
+                                        <td>${html}</td>
+                                        <td style="text-align:center">
+                                            <a class ="fileDel" href="javascript:void(0)" style="color:#337ab7;">删除</a>
+                                            <input type="hidden" id="updata" data-id="${obj.GuidId}" data-url="${obj.Url}" data-src="${imgUrl}" data-name="${obj.Name}" data-size="${obj.Size}" data-upname="${data[i].UploadName}" data-time="${new Date(formatDateByJson(data[i].UploadDate)).Format("yyyy-MM-dd")}" data-group="${obj.Group}" data-typeno="${obj.TypeNo}" data-typename="${obj.TypeName}">
+                                        </td>
+                                    </tr>
+                           `
+                        index++;
+                        $('.fileShow-append').append(odiv);
+                    }
+                }
+                return isFlagFile = true;
+            }
+        });
+    }
+
+    //验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        fields: {
+            ReveiewDate: {
+                validators: {
+                    notEmpty: {
+                        message: '评审时间不能为空'
+                    }
+                }
+            },
+            Address: {
+                validators: {
+                    notEmpty: {
+                        message: '评审地点不能为空'
+                    }
+                }
+            },
+            Attendees: {
+                validators: {
+                    notEmpty: {
+                        message: '参会人员不能为空'
+                    },
+                    stringLength: {
+                        max: 200,
+                        message: "只能输入200个字符"
+                    }
+                }
+            },
+            HostUser: {
+                validators: {
+                    notEmpty: {
+                        message: '主持人不能为空'
+                    }
+                }
+            },
+            PerfectContent: {
+                validators: {
+                    notEmpty: {
+                        message: '项目完善内容不能为空'
+                    },
+                    stringLength: {
+                        max: 500,
+                        message: "只能输入500个字符"
+                    }
+                }
+            },
+            'OtherInfos[]': {
+                validators: {
+                    choice: {
+                        min: 5,
+                        max: 5,
+                        message: '其他信息必须全部选中'
+                    }
+                }
+            },
+        },
+    });
+
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //数据提交
+        $(".save").click(function () {
+            //附件是否上传完成 isFlagFile
+            if (isFlagFile) {
+                $(".save").addClass("layui-btn-disabled");
+                $(".save").attr("disabled", "disabled");
+
+                //其他信息
+                var OtherInfo = [];
+                $("input[name='OtherInfos[]']:checked").each(function (i) {
+                    OtherInfo.push($(this).val());
+                });
+                $("#OtherInfo").val(OtherInfo);
+                var fileDataArray = [];
+                $(".fileShow-append tr:not(.headtr)").each(function (index, item) {
+                    var uploadtype = 0;
+                    var uploadtype1 = $(this).find("input[name='Uploadtype1']").is(':checked');
+
+                    if (uploadtype1 == true) {
+                        uploadtype = 1;
+                    }
+                    if (uploadtype1 == false) {
+                        uploadtype = 2;
+                    }
+                    fileDataArray.push({
+                        Name: $(item).find("#updata").data("name"),
+                        GuidId: $(item).find("#updata").data("id"),
+                        Size: $(item).find("#updata").data("size"),
+                        Group: $(item).find("#updata").data("group"),
+                        FilePath: $(item).find("#updata").data("url"),
+                        TypeNo: $(item).find("#updata").data("typeno"),
+                        TypeName: $(item).find("#updata").data("typename"),
+                        Sort: index + 1,
+                        Uploadtype: uploadtype
+                    })
+                });
+
+                var fileDataJson = JSON.stringify(fileDataArray);
+                $("#fileDataJsonFile").val(fileDataJson);
+
+                $("#State").val($(this).data("state"))//提交或保存的状态值
+                var search = $("form").serialize();
+
+                //点击提交表单验证，点击暂存表单不验证
+                if ($(this).data("state") == "@(PreProjectState.WaitApproval.GetValue().ToString())") {
+                    //对表单进行验证
+                    var bv = $('#mainForm').data('bootstrapValidator');
+                    bv.validate();
+                    if (!bv.isValid()) {
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                        return;
+                    }
+                }
+                $.post("Add", search, function (data) {
+                    if (data.Flag) {
+                        layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                            $(".save").removeClass("layui-btn-disabled");
+                            $(".save").removeAttr("disabled");
+                            window.location.href = "/TzProjectReveiews/Index";
+                        });
+                    } else {
+                        layer.alert(data.Message, { icon: 2 });
+                        $(".save").removeClass("layui-btn-disabled");
+                        $(".save").removeAttr("disabled");
+                    }
+                });
+            }
+            else {
+                layer.msg("附件上传中，请稍后提交。", { time: 3000, icon: 2 });
+            }
+        });
+
+    });
+    //返回
+    $("#close").click(function () {
+        window.location.href = "/TzProjectReveiews/Index";
+    });
+
+    //删除附件
+    $("body").on('click', '.fileDel', function () {
+        $(this).parents("tr").remove();
+        document.getElementById('loadFile1').value = null;
+        $(".fileShow-append tr:not(.headtr)").each(function (index) {
+            $(this).find(".sort").text(index + 1);//重新赋值附件排序
+        });
+    });
+</script>

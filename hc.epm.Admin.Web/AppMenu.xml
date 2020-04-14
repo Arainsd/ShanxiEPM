@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package>
+  <RootNode>
+    <node id="XTGL" caption="系统管理" color="#F74461" />
+		<node id="YHQX" caption="用户权限" color="#EDDE8B"/>
+		<node id="XSGL" caption="消息管理" color="#FF4040"/>
+  </RootNode>
+  <XTGL>
+		<node id="XMZL" caption="项目资料" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcDataConfig/index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="LCB" caption="里程碑" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcMilestone/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="JYZ" caption="加油站" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcOilStation/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="GGW" caption="广告位" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcAdTarget/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="GGTFJL" caption="广告投放记录" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcAdPutRecord/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="JCMB" caption="检查模板" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcTemplate/Index?TypeNo=AQJC" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="SJZD" caption="数据字典" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcTypeDictionary/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="SSDQ" caption="省市地区" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcRegion/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="XTRZ" caption="系统日志" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcLog/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+  </XTGL>
+  <YHQX>
+		<node id="HTCDSZ" caption="后台菜单设置" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcRight/Index?belong=Admin" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="QTCDSZ" caption="前台菜单设置" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcRight/Index?belong=Owner" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="JSGL" caption="角色管理" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcRole/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="ZZJG" caption="组织机构" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcOrganization/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="YGGL" caption="用户管理" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcUser/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+  </YHQX>
+  <XSGL>
+		<node id="XXHJ" caption="消息环节" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcMessageSection/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+		<node id="XXFSCL" caption="消息发送策略" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcMessageStrategy/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="DXMB" caption="短信模板" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcSMSTemplete/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="DXJKSZ" caption="短信接口设置" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcSMSSetting/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="ZNXXMB" caption="站内消息模板" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcMessageTemplete/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+    <node id="ZNXXJL" caption="站内消息记录" forms="BDP_IFrame" contentView="BDP_IFrame.form1" url="http://10.206.129.185:8012/HcMessageList/Index" icon="ImageSpace/bdp_icon/bdp_entering.png" GNBH=""/>
+  </XSGL>
+</package>

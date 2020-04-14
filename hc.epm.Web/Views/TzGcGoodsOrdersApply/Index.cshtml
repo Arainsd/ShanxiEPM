@@ -1,0 +1,164 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.ViewModel;
+@model List<TzGcGoodsOrdersItemView>
+
+<style>
+    .plan_time {
+        width: 57% !important;
+    }
+
+    .unit {
+        width: 93px;
+        display: inline-block !important;
+        text-align: right;
+        margin-right: 3px;
+    }
+    #MaterialNumber{
+         padding: 0;
+        display: inline-block;
+    }
+</style>
+
+<div class="contentData">
+    <div class="form-select c">
+        <form method="get">
+            <div>
+                <div>
+                    <label>标<span style="padding:0 13px;"></span>题 : </label><input type="text" name="title" value="@ViewBag.title" placeholder="">
+                </div>
+                <div>
+                    <label><span style="padding:0 7px;"></span>申请单位 : </label><input type="text" name="companyName" value="@ViewBag.companyName" placeholder="">
+                </div>
+                <div>
+                    <label>项目名称 : </label><input type="text" name="projectName" value="@ViewBag.projectName" placeholder="">
+                </div>
+            </div>
+         <div>
+             <div>
+                 <label>物资种类 : </label> @Html.DropDownList("MaterialNumber", ViewBag.MaterialNumber as SelectList, null, new { @class = "form-control" })
+             </div>
+             <div>
+                 <label>供应商名称 : </label><input type="text" name="supplierName" value="@ViewBag.supplierName" placeholder="">
+             </div>
+         </div>
+            <div>
+                <div class="plan_time">
+                    <label>申请日期 : </label>
+                    <input type="text" class="timer se-in" id="startTime" name="startTime" value="@ViewBag.startTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { $('#endTime').val(''); }})" placeholder="请选择起始时间">
+                    <i onClick="WdatePicker({ el: 'startTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                    ~<span style="padding-right:25px;"></span><input type="text" class="timer se-in" id="endTime" name="endTime" value="@ViewBag.endTime" onfocus=this.blur() onClick="WdatePicker({ onpicked: function (dp) { }, minDate: '#F{$dp.$D(\'startTime\')}', })" placeholder="请选择结束时间">
+                    <i onClick="WdatePicker({ el: 'endTime' })" class="iconfont pic timer-pic">&#xe7e2;</i>
+                </div>
+
+            </div>
+            <div class="form-sub">
+                <button type="button" class="add" id="Add">新增</button>
+                <button type="submit" id="search">搜索</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th width="80">序号</th>
+                    <th width="180">标题</th>
+                    <th width="180">申请单位</th>
+                    <th width="180">项目名称</th>
+                    <th width="120">物资物种</th>
+                    <th width="200">供应商名称</th>
+                    <th width="120">金额</th>
+                    <th width="120">申请时间</th>
+                    <th width="110">当前状态</th>
+                    <th width="100">当前审批人</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = (ViewBag.pageIndex - (ViewBag.pageIndex - 1)) * ((ViewBag.pageIndex - 1) * 10);
+                  
+                }
+                @if (Model != null && Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td style="display:none;">
+                                <input type="hidden" class="inputId" data-id="@item.Id" />
+                            </td>
+                            <td>@index</td>
+                            <td>@item.Title</td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.ProjectName</td>
+                            <td>@item.MaterialName</td>
+                            <td>@item.SupplierName</td>
+                            <td>@item.Amount</td>
+                            <td>@(Convert.ToDateTime(item.ApplyDate).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.StateName</td>
+                            <td>@item.ApprovalName</td>
+                            <td>
+                                @if (item.State == 0)
+                                {
+                                    <a class="edit" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">修改</a>
+                                }
+                                else
+                                {
+                                    <a class="detail" style="margin: 4px 6px;cursor:pointer;color:#0000FF;">查看</a>
+                                }
+                            </td>
+                        </tr>
+                       
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="13" class="table-center">
+                            暂无数据
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div id="page" style="text-align:right; margin-right:5px;">
+    </div>
+</div>
+
+<script>
+    //新增
+    $("body").on("click",".add", function () {
+        window.location.href = "/TzGcGoodsOrdersApply/Add";
+    });
+    //查看
+    $("body").on("click", ".detail", function () {
+        var id = $(this).parents("tr").find(".inputId").data("id");
+        window.location.href = "/TzGcGoodsOrdersApply/Detail?id=" + id
+    });
+    //修改
+    $("body").on("click", ".edit", function () {
+        var id = $(this).parents("tr").find(".inputId").data("id");
+        window.location.href = "/TzGcGoodsOrdersApply/Edit?id=" + id
+    });
+    layui.use(['layer', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+        //分页
+        laypage.render({
+            elem: 'page',
+            count: '@ViewBag.Total',
+            curr: '@ViewBag.pageIndex',
+            layout: ['prev', 'page', 'next', 'skip', 'count'],
+            jump: function (obj, first) {
+                if (!first) {
+                    //得到了当前页，用于向服务端请求对应数据
+                    var curr = obj.curr;
+                    var search = $("form").serialize();
+                    window.location.href = "/TzGcGoodsOrdersApply/Index?pageIndex=" + curr + "&" + search;
+                }
+            }
+        });
+    })
+</script>

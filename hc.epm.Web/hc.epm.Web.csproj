@@ -1,0 +1,1531 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{49CD406A-4068-4530-B264-5BA0A435DAE4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>hc.epm.Web</RootNamespace>
+    <AssemblyName>hc.epm.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNetCasClient, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetCasClient.1.2.0\lib\net45\DotNetCasClient.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="hc.epm.Common">
+      <HintPath>..\..\..\ServicePush\hc.epm.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.DataModel.BaseCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ServicePush\hc.epm.DataModel.BaseCore.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.epm.DataModel.Basic">
+      <HintPath>..\..\..\ServicePush\hc.epm.DataModel.Basic.dll</HintPath>
+    </Reference>
+    <Reference Include="hc.Plat.Common.Global">
+      <HintPath>..\..\..\ServicePush\hc.Plat.Common.Global.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqToExcel">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\lib\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\lib\Microsoft.Office.Interop.Word.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Data.Linq">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Interfaces">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ApplicationInsights">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AttendanceReportController.cs" />
+    <Compile Include="Controllers\BimController.cs" />
+    <Compile Include="Controllers\ChangeController.cs" />
+    <Compile Include="Controllers\CommController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\CompletionAcceptanceController.cs" />
+    <Compile Include="Controllers\CompletionAcceptanceResUploadController.cs" />
+    <Compile Include="Controllers\ConstructionPlanController.cs" />
+    <Compile Include="Controllers\ContractController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
+    <Compile Include="Controllers\DrawController.cs" />
+    <Compile Include="Controllers\DelayPlanController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\FinanceSettlementController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvestManageController.cs" />
+    <Compile Include="Controllers\MaterialController.cs" />
+    <Compile Include="Controllers\MaterielEquipmentController.cs" />
+    <Compile Include="Controllers\Mobile\H5Controller.cs" />
+    <Compile Include="Controllers\MonitorController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\PersonCenterController.cs" />
+    <Compile Include="Controllers\PlanController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ProjectManagementController.cs" />
+    <Compile Include="Controllers\ProjectOperateApplyController.cs" />
+    <Compile Include="Controllers\ProjectWeeklyController.cs" />
+    <Compile Include="Controllers\QualityMonitorController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\SpecialAcceptanceController.cs" />
+    <Compile Include="Controllers\SupervisorLogController.cs" />
+    <Compile Include="Controllers\SupervisorLogStatisticController.cs" />
+    <Compile Include="Controllers\testController.cs" />
+    <Compile Include="Controllers\TimeLimitAndProcedureController.cs" />
+    <Compile Include="Controllers\TrainController.cs" />
+    <Compile Include="Controllers\TzBidResultController.cs" />
+    <Compile Include="Controllers\TzConDrawingController.cs" />
+    <Compile Include="Controllers\TzDesiginChangeApplyController.cs" />
+    <Compile Include="Controllers\TzDesignSchemeController.cs" />
+    <Compile Include="Controllers\TzDevResourceReportController.cs" />
+    <Compile Include="Controllers\TzFormTalkFileController.cs" />
+    <Compile Include="Controllers\TzMeetingFileReportController.cs" />
+    <Compile Include="Controllers\TzProjectApprovalInfoController.cs" />
+    <Compile Include="Controllers\TzProjectProposalController.cs" />
+    <Compile Include="Controllers\TzGcGoodsOrdersApplyController.cs" />
+    <Compile Include="Controllers\TzFirstNegotiationController.cs" />
+    <Compile Include="Controllers\TzLandNegotiationController.cs" />
+    <Compile Include="Controllers\TzPeopleChgApplyController.cs" />
+    <Compile Include="Controllers\TzProjectStartApplyController.cs" />
+    <Compile Include="Controllers\TzProProgressChartController.cs" />
+    <Compile Include="Controllers\TzRivalStationReportController.cs" />
+    <Compile Include="Controllers\TzResearchController.cs" />
+    <Compile Include="Controllers\TzStartsApplyController.cs" />
+    <Compile Include="Controllers\TzProjectReveiewsController.cs" />
+    <Compile Include="Controllers\TzStationRemouldController.cs" />
+    <Compile Include="Controllers\TzSupMatManagementController.cs" />
+    <Compile Include="Controllers\TzSupplyMaterialApplyController.cs" />
+    <Compile Include="Controllers\TzTenderingApplyController.cs" />
+    <Compile Include="Controllers\TzTenderingCountController.cs" />
+    <Compile Include="Controllers\UploadBimController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\VideoManageController.cs" />
+    <Compile Include="Controllers\VisaController.cs" />
+    <Compile Include="Controllers\WorkController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LogAtillsoners.cs" />
+    <Compile Include="Models\LogAtillsoner.cs" />
+    <Compile Include="Models\CompanyModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ueditor\net\App_Code\Config.cs" />
+    <Compile Include="ueditor\net\App_Code\ConfigHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\CrawlerHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\Handler.cs" />
+    <Compile Include="ueditor\net\App_Code\ListFileHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\NotSupportedHandler.cs" />
+    <Compile Include="ueditor\net\App_Code\PathFormater.cs" />
+    <Compile Include="ueditor\net\App_Code\UploadHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="HtmlTemp.html" />
+    <Content Include="plupload.html" />
+    <Content Include="Resource\css\droploads.css" />
+    <Content Include="Resource\css\fileUpload.css" />
+    <Content Include="Resource\css\gartt.css" />
+    <Content Include="Resource\css\iconfont.css" />
+    <Content Include="Resource\css\layui.css" />
+    <Content Include="Resource\css\multiple-select.css" />
+    <Content Include="Resource\css\prettify.css" />
+    <Content Include="Resource\css\prettify.min.css" />
+    <Content Include="Resource\css\ProjectManagement.css" />
+    <Content Include="Resource\css\select2.css" />
+    <Content Include="Resource\css\TzDesiginChangeApply.css" />
+    <Content Include="Resource\font\iconfont.svg" />
+    <Content Include="Resource\images\android.png" />
+    <Content Include="Resource\images\bai-shu.png" />
+    <Content Include="Resource\images\bq.png" />
+    <Content Include="Resource\images\default-head.png" />
+    <Content Include="Resource\images\default_ok.png" />
+    <Content Include="Resource\images\deleteInput.png" />
+    <Content Include="Resource\images\delete_default.png" />
+    <Content Include="Resource\images\dwg.png" />
+    <Content Include="Resource\images\excel.png" />
+    <Content Include="Resource\images\file-default-dwg.jpg" />
+    <Content Include="Resource\images\file-default-excel.jpg" />
+    <Content Include="Resource\images\file-default-mp4.png" />
+    <Content Include="Resource\images\file-default-pdf.jpg" />
+    <Content Include="Resource\images\file-default-rar.jpg" />
+    <Content Include="Resource\images\file-default-word.jpg" />
+    <Content Include="Resource\images\flash.png" />
+    <Content Include="Resource\images\grid.png" />
+    <Content Include="Resource\images\icon-left-user.png" />
+    <Content Include="Resource\images\icon_sprite.png" />
+    <Content Include="Resource\images\ic_fail.png" />
+    <Content Include="Resource\images\ic_home.png" />
+    <Content Include="Resource\images\ic_success.png" />
+    <Content Include="Resource\images\ios.png" />
+    <Content Include="Resource\images\jpg.png" />
+    <Content Include="Resource\images\line.png" />
+    <Content Include="Resource\images\list1_05.png" />
+    <Content Include="Resource\images\loginremark.png" />
+    <Content Include="Resource\images\menu-right.png" />
+    <Content Include="Resource\images\moxing.jpg" />
+    <Content Include="Resource\images\mp3.png" />
+    <Content Include="Resource\images\phases_bright1.png" />
+    <Content Include="Resource\images\phases_bright2.png" />
+    <Content Include="Resource\images\phases_bright3.png" />
+    <Content Include="Resource\images\phases_bright4.png" />
+    <Content Include="Resource\images\phases_bright5.png" />
+    <Content Include="Resource\images\phases_bright6.png" />
+    <Content Include="Resource\images\phases_bright7.png" />
+    <Content Include="Resource\images\phases_gray1.png" />
+    <Content Include="Resource\images\phases_gray2.png" />
+    <Content Include="Resource\images\phases_gray3.png" />
+    <Content Include="Resource\images\phases_gray4.png" />
+    <Content Include="Resource\images\phases_gray5.png" />
+    <Content Include="Resource\images\phases_gray6.png" />
+    <Content Include="Resource\images\phases_gray7.png" />
+    <Content Include="Resource\images\phase_bright1.png" />
+    <Content Include="Resource\images\phase_bright2.png" />
+    <Content Include="Resource\images\phase_bright3.png" />
+    <Content Include="Resource\images\phase_bright4.png" />
+    <Content Include="Resource\images\phase_bright5.png" />
+    <Content Include="Resource\images\phase_bright6.png" />
+    <Content Include="Resource\images\phase_bright7.png" />
+    <Content Include="Resource\images\ppt.png" />
+    <Content Include="Resource\images\progressChart1.png" />
+    <Content Include="Resource\images\progressChart10.png" />
+    <Content Include="Resource\images\progressChart11.png" />
+    <Content Include="Resource\images\progressChart12.png" />
+    <Content Include="Resource\images\progressChart13.png" />
+    <Content Include="Resource\images\progressChart14.png" />
+    <Content Include="Resource\images\progressChart15.png" />
+    <Content Include="Resource\images\progressChart2.png" />
+    <Content Include="Resource\images\progressChart3.png" />
+    <Content Include="Resource\images\progressChart4.png" />
+    <Content Include="Resource\images\progressChart5.png" />
+    <Content Include="Resource\images\progressChart6.png" />
+    <Content Include="Resource\images\progressChart7.png" />
+    <Content Include="Resource\images\progressChart8.png" />
+    <Content Include="Resource\images\progressChart9.png" />
+    <Content Include="Resource\images\question.jpg" />
+    <Content Include="Resource\images\rar.png" />
+    <Content Include="Resource\images\rmvb.png" />
+    <Content Include="Resource\images\ScheduleImg.png" />
+    <Content Include="Resource\images\slider_handle.png" />
+    <Content Include="Resource\images\step1.png" />
+    <Content Include="Resource\images\step10.png" />
+    <Content Include="Resource\images\step11.png" />
+    <Content Include="Resource\images\step12.png" />
+    <Content Include="Resource\images\step13.png" />
+    <Content Include="Resource\images\step14.png" />
+    <Content Include="Resource\images\step15.png" />
+    <Content Include="Resource\images\step2.png" />
+    <Content Include="Resource\images\step3.png" />
+    <Content Include="Resource\images\step4.png" />
+    <Content Include="Resource\images\step5.png" />
+    <Content Include="Resource\images\step6.png" />
+    <Content Include="Resource\images\step7.png" />
+    <Content Include="Resource\images\step8.png" />
+    <Content Include="Resource\images\step9.png" />
+    <Content Include="Resource\images\sxLogo.png" />
+    <Content Include="Resource\images\tx.png" />
+    <Content Include="Resource\images\word.png" />
+    <Content Include="Resource\images\yylog.png" />
+    <Content Include="Resource\jqtree\img\addpic.jpg" />
+    <Content Include="Resource\jqtree\img\defaultLeaf.gif" />
+    <Content Include="Resource\jqtree\img\folderClose.png" />
+    <Content Include="Resource\jqtree\TreeGrid.css" />
+    <Content Include="Resource\jqtree\TreeGrid.js" />
+    <Content Include="Resource\js\My97DatePicker\calendar.js" />
+    <Content Include="Resource\js\My97DatePicker\lang\en.js" />
+    <Content Include="Resource\js\My97DatePicker\lang\zh-cn.js" />
+    <Content Include="Resource\js\My97DatePicker\lang\zh-tw.js" />
+    <Content Include="Resource\js\My97DatePicker\new_file.html" />
+    <Content Include="Resource\js\My97DatePicker\skin\datePicker.gif" />
+    <Content Include="Resource\js\My97DatePicker\skin\default\datepicker.css" />
+    <Content Include="Resource\js\My97DatePicker\skin\default\img.gif" />
+    <Content Include="Resource\js\My97DatePicker\skin\twoer\datepicker-dev.css" />
+    <Content Include="Resource\js\My97DatePicker\skin\twoer\datepicker.css" />
+    <Content Include="Resource\js\My97DatePicker\skin\twoer\img.gif" />
+    <Content Include="Resource\js\My97DatePicker\skin\twoer\img.png" />
+    <Content Include="Resource\js\My97DatePicker\skin\WdatePicker.css" />
+    <Content Include="Resource\js\My97DatePicker\skin\whyGreen\bg.jpg" />
+    <Content Include="Resource\js\My97DatePicker\skin\whyGreen\datepicker.css" />
+    <Content Include="Resource\js\My97DatePicker\skin\whyGreen\img.gif" />
+    <Content Include="Resource\js\My97DatePicker\WdatePicker.js" />
+    <Content Include="Resource\css\base.css" />
+    <Content Include="Resource\css\bootstrap.css" />
+    <Content Include="Resource\css\font-awesome.css" />
+    <Content Include="Resource\css\index.css" />
+    <Content Include="Resource\css\login.css" />
+    <Content Include="Resource\css\news.css" />
+    <Content Include="Resource\css\project.css" />
+    <Content Include="Resource\css\style.css" />
+    <Content Include="Resource\images\3Dmodel.png" />
+    <Content Include="Resource\images\andrion.jpg" />
+    <Content Include="Resource\images\api1.jpg" />
+    <Content Include="Resource\images\api2.png" />
+    <Content Include="Resource\images\api3.jpg" />
+    <Content Include="Resource\images\api4.jpg" />
+    <Content Include="Resource\images\apimouse1.png" />
+    <Content Include="Resource\images\apimouse2.jpg" />
+    <Content Include="Resource\images\apimouse3.png" />
+    <Content Include="Resource\images\apimouse4.png" />
+    <Content Include="Resource\images\askimg_06.jpg" />
+    <Content Include="Resource\images\bg-yezhu.jpg" />
+    <Content Include="Resource\images\code-1.jpg" />
+    <Content Include="Resource\images\code.jpg" />
+    <Content Include="Resource\images\construction.jpg" />
+    <Content Include="Resource\images\cooperation1.jpg" />
+    <Content Include="Resource\images\cooperation10.jpg" />
+    <Content Include="Resource\images\cooperation2.jpg" />
+    <Content Include="Resource\images\cooperation3.jpg" />
+    <Content Include="Resource\images\cooperation4.jpg" />
+    <Content Include="Resource\images\cooperation5.jpg" />
+    <Content Include="Resource\images\cooperation6.jpg" />
+    <Content Include="Resource\images\cooperation7.jpg" />
+    <Content Include="Resource\images\cooperation8.jpg" />
+    <Content Include="Resource\images\cooperation9.jpg" />
+    <Content Include="Resource\images\globe.jpg" />
+    <Content Include="Resource\images\globe1.jpg" />
+    <Content Include="Resource\images\headimg.jpg" />
+    <Content Include="Resource\images\home.jpg" />
+    <Content Include="Resource\images\imagey6_21.png" />
+    <Content Include="Resource\images\information.jpg" />
+    <Content Include="Resource\images\inter1_06.jpg" />
+    <Content Include="Resource\images\inter2_06.png" />
+    <Content Include="Resource\images\inter3_06.jpg" />
+    <Content Include="Resource\images\inter4_06.jpg" />
+    <Content Include="Resource\images\inter5_06.jpg" />
+    <Content Include="Resource\images\inter6_06.jpg" />
+    <Content Include="Resource\images\inter7_06.jpg" />
+    <Content Include="Resource\images\intermou1 .png" />
+    <Content Include="Resource\images\intermou2.png" />
+    <Content Include="Resource\images\intermou3.png" />
+    <Content Include="Resource\images\intermou4.png" />
+    <Content Include="Resource\images\intermou5.png" />
+    <Content Include="Resource\images\intermou6.png" />
+    <Content Include="Resource\images\intermou7.png" />
+    <Content Include="Resource\images\ios.jpg" />
+    <Content Include="Resource\images\lastsnow_03.jpg" />
+    <Content Include="Resource\images\lastswImg_03.jpg" />
+    <Content Include="Resource\images\latest.jpg" />
+    <Content Include="Resource\images\list1_05.jpg" />
+    <Content Include="Resource\images\list2_06.jpg" />
+    <Content Include="Resource\images\list3_06.jpg" />
+    <Content Include="Resource\images\loginbg.png" />
+    <Content Include="Resource\images\loginremark.jpg" />
+    <Content Include="Resource\images\login_03.jpg" />
+    <Content Include="Resource\images\logo.jpg" />
+    <Content Include="Resource\images\logo_03.jpg" />
+    <Content Include="Resource\images\map01.jpg" />
+    <Content Include="Resource\images\map1.jpg" />
+    <Content Include="Resource\images\map2.jpg" />
+    <Content Include="Resource\images\map4.jpg" />
+    <Content Include="Resource\images\modelimg.jpg" />
+    <Content Include="Resource\images\newest.jpg" />
+    <Content Include="Resource\images\pass.jpg" />
+    <Content Include="Resource\images\prospect.jpg" />
+    <Content Include="Resource\images\resettop.jpg" />
+    <Content Include="Resource\images\sample_1.png" />
+    <Content Include="Resource\images\sample_2.png" />
+    <Content Include="Resource\images\sample_3.png" />
+    <Content Include="Resource\images\sample_4.png" />
+    <Content Include="Resource\images\screeshow_03.jpg" />
+    <Content Include="Resource\images\sel-icon.png" />
+    <Content Include="Resource\images\supervisor.jpg" />
+    <Content Include="Resource\images\supplier.jpg" />
+    <Content Include="Resource\images\unit-logo.jpg" />
+    <Content Include="Resource\images\update.png" />
+    <Content Include="Resource\images\user.jpg" />
+    <Content Include="Resource\images\user.png" />
+    <Content Include="Resource\images\userbg_03.png" />
+    <Content Include="Resource\images\y07_23.png" />
+    <Content Include="Resource\images\y10_31.jpg" />
+    <Content Include="Resource\images\y11_34.jpg" />
+    <Content Include="Resource\images\y1_06.jpg" />
+    <Content Include="Resource\images\y2_06.jpg" />
+    <Content Include="Resource\images\y3_09.jpg" />
+    <Content Include="Resource\images\y4_12.jpg" />
+    <Content Include="Resource\images\y5_18.jpg" />
+    <Content Include="Resource\images\y6_21.jpg" />
+    <Content Include="Resource\images\y8_24.jpg" />
+    <Content Include="Resource\images\y9_29.jpg" />
+    <Content Include="Resource\images\zhuxi.jpg" />
+    <Content Include="Resource\plugins\formSelects-v3.js" />
+    <Content Include="Resource\plugins\formSelects.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\layui.css" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\layui.mobile.css" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\code.css" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\laydate\default\laydate.css" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\layer\default\icon-ext.png" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\layer\default\icon.png" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\layer\default\layer.css" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\layer\default\loading-0.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\layer\default\loading-1.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\css\modules\layer\default\loading-2.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\font\iconfont.svg" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\0.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\1.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\10.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\11.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\12.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\13.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\14.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\15.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\16.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\17.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\18.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\19.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\2.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\20.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\21.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\22.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\23.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\24.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\25.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\26.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\27.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\28.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\29.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\3.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\30.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\31.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\32.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\33.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\34.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\35.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\36.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\37.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\38.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\39.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\4.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\40.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\41.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\42.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\43.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\44.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\45.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\46.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\47.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\48.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\49.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\5.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\50.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\51.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\52.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\53.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\54.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\55.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\56.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\57.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\58.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\59.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\6.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\60.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\61.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\62.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\63.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\64.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\65.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\66.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\67.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\68.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\69.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\7.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\70.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\71.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\8.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\images\face\9.gif" />
+    <Content Include="Resource\plugins\layui-2.1.2\layui.all.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\layui.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\carousel.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\code.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\element.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\flow.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\form.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\jquery.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\laydate.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\layedit.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\layer.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\laypage.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\laytpl.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\mobile.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\table.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\tree.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\upload.js" />
+    <Content Include="Resource\plugins\layui-2.1.2\lay\modules\util.js" />
+    <Content Include="Resource\scripts\3d.js" />
+    <Content Include="Resource\scripts\3dEngine.js" />
+    <Content Include="Resource\scripts\bootstrap.js" />
+    <Content Include="Resource\scripts\bootstrap.min.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\plugins\layui-2.1.2\font\iconfont.eot" />
+    <Content Include="Resource\plugins\layui-2.1.2\font\iconfont.ttf" />
+    <Content Include="Resource\plugins\layui-2.1.2\font\iconfont.woff" />
+    <Content Include="Resource\css\bootstrap.css.map" />
+    <None Include="Properties\PublishProfiles\Web.pubxml" />
+    <Content Include="Resource\mpp.mpp" />
+    <Content Include="Resource\excel.doc" />
+    <Content Include="Resource\font\iconfont.eot" />
+    <Content Include="Resource\font\iconfont.ttf" />
+    <Content Include="Resource\font\iconfont.woff" />
+    <None Include="Resource\scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Resource\scripts\bootstrapValidator-0.4.5.js" />
+    <Content Include="Resource\scripts\bootstrapValidator.js" />
+    <Content Include="Resource\scripts\bootstrapValidator.min.js" />
+    <Content Include="Resource\scripts\comm.js" />
+    <Content Include="Resource\scripts\droploads.js" />
+    <Content Include="Resource\scripts\echarts.min.js" />
+    <Content Include="Resource\scripts\ezuikit.js" />
+    <Content Include="Resource\scripts\fileUpload.js" />
+    <Content Include="Resource\scripts\global.js" />
+    <Content Include="Resource\scripts\hc.epm.js" />
+    <Content Include="Resource\scripts\hc.fileUpload.js" />
+    <Content Include="Resource\scripts\jquery-1.10.2.js" />
+    <Content Include="Resource\scripts\jquery-1.10.2.min.js" />
+    <None Include="Resource\scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Resource\scripts\jquery.fn.gantt.js" />
+    <Content Include="Resource\scripts\jquery.validate.js" />
+    <Content Include="Resource\scripts\jquery.validate.messages.cn.js" />
+    <Content Include="Resource\scripts\jquery.validate.min.js" />
+    <Content Include="Resource\scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Resource\scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Resource\scripts\jspdf\html2canvas.js" />
+    <Content Include="Resource\scripts\jspdf\jspdf.debug.js" />
+    <Content Include="Resource\scripts\modernizr-2.6.2.js" />
+    <Content Include="Resource\scripts\multiple-select.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ar.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\az.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\bs.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\cs.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\cy.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\da.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\de.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\el.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\en.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\es.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\et.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\fa.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\fi.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\fr.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\he.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\hr.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\hu.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\hy.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\id.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\it.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ja.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ka.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\kk.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\km.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ko.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\lt.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\lv.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\mn.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ms.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\nl.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\pl.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\pt_BR.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ro.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\ru.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\sk.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\sq.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\sr.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\sr_RS.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\sv.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\th_TH.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\tr.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\uk_UA.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\zh_CN.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\i18n\zh_TW.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\images\ui-icons_454545_256x240.png" />
+    <Content Include="Resource\scripts\plupload_2_1_2\images\ui-icons_888888_256x240.png" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery-ui.min.css" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery-ui.min.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\done.gif" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\error.gif" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.plupload.queue\jquery.plupload.queue.min.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.ui.plupload\img\loading.gif" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\jquery.ui.plupload\jquery.ui.plupload.min.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\moxie.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\moxie.min.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\Moxie.swf" />
+    <Content Include="Resource\scripts\plupload_2_1_2\Moxie.xap" />
+    <Content Include="Resource\scripts\plupload_2_1_2\plupload.dev.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\plupload.full.min.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\plupload.min.js" />
+    <Content Include="Resource\scripts\plupload_2_1_2\zh_CN.js" />
+    <Content Include="Resource\scripts\prettify.min.js" />
+    <Content Include="Resource\scripts\respond.js" />
+    <Content Include="Resource\scripts\respond.min.js" />
+    <Content Include="Resource\scripts\response.js" />
+    <Content Include="Resource\scripts\select2.js" />
+    <Content Include="Resource\scripts\zeptos.min.js" />
+    <Content Include="ueditor\dialogs\anchor\anchor.html" />
+    <Content Include="ueditor\dialogs\attachment\attachment.css" />
+    <Content Include="ueditor\dialogs\attachment\attachment.html" />
+    <Content Include="ueditor\dialogs\attachment\attachment.js" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_chm.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_default.png" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_doc.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_exe.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_jpg.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_mp3.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_mv.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_pdf.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_ppt.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_psd.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_rar.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_txt.gif" />
+    <Content Include="ueditor\dialogs\attachment\fileTypeImages\icon_xls.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\alignicon.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\alignicon.png" />
+    <Content Include="ueditor\dialogs\attachment\images\bg.png" />
+    <Content Include="ueditor\dialogs\attachment\images\file-icons.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\file-icons.png" />
+    <Content Include="ueditor\dialogs\attachment\images\icons.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\icons.png" />
+    <Content Include="ueditor\dialogs\attachment\images\image.png" />
+    <Content Include="ueditor\dialogs\attachment\images\progress.png" />
+    <Content Include="ueditor\dialogs\attachment\images\success.gif" />
+    <Content Include="ueditor\dialogs\attachment\images\success.png" />
+    <Content Include="ueditor\dialogs\background\background.css" />
+    <Content Include="ueditor\dialogs\background\background.html" />
+    <Content Include="ueditor\dialogs\background\background.js" />
+    <Content Include="ueditor\dialogs\background\images\bg.png" />
+    <Content Include="ueditor\dialogs\background\images\success.png" />
+    <Content Include="ueditor\dialogs\charts\chart.config.js" />
+    <Content Include="ueditor\dialogs\charts\charts.css" />
+    <Content Include="ueditor\dialogs\charts\charts.html" />
+    <Content Include="ueditor\dialogs\charts\charts.js" />
+    <Content Include="ueditor\dialogs\charts\images\charts0.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts1.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts2.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts3.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts4.png" />
+    <Content Include="ueditor\dialogs\charts\images\charts5.png" />
+    <Content Include="ueditor\dialogs\emotion\emotion.css" />
+    <Content Include="ueditor\dialogs\emotion\emotion.html" />
+    <Content Include="ueditor\dialogs\emotion\emotion.js" />
+    <Content Include="ueditor\dialogs\emotion\images\0.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\bface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\cface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\fface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\jxface2.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\neweditor-tab-bg.png" />
+    <Content Include="ueditor\dialogs\emotion\images\tface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\wface.gif" />
+    <Content Include="ueditor\dialogs\emotion\images\yface.gif" />
+    <Content Include="ueditor\dialogs\gmap\gmap.html" />
+    <Content Include="ueditor\dialogs\help\help.css" />
+    <Content Include="ueditor\dialogs\help\help.html" />
+    <Content Include="ueditor\dialogs\help\help.js" />
+    <Content Include="ueditor\dialogs\image\image.css" />
+    <Content Include="ueditor\dialogs\image\image.html" />
+    <Content Include="ueditor\dialogs\image\image.js" />
+    <Content Include="ueditor\dialogs\image\images\alignicon.jpg" />
+    <Content Include="ueditor\dialogs\image\images\bg.png" />
+    <Content Include="ueditor\dialogs\image\images\icons.gif" />
+    <Content Include="ueditor\dialogs\image\images\icons.png" />
+    <Content Include="ueditor\dialogs\image\images\image.png" />
+    <Content Include="ueditor\dialogs\image\images\progress.png" />
+    <Content Include="ueditor\dialogs\image\images\success.gif" />
+    <Content Include="ueditor\dialogs\image\images\success.png" />
+    <Content Include="ueditor\dialogs\insertframe\insertframe.html" />
+    <Content Include="ueditor\dialogs\internal.js" />
+    <Content Include="ueditor\dialogs\link\link.html" />
+    <Content Include="ueditor\dialogs\map\map.html" />
+    <Content Include="ueditor\dialogs\map\show.html" />
+    <Content Include="ueditor\dialogs\music\music.css" />
+    <Content Include="ueditor\dialogs\music\music.html" />
+    <Content Include="ueditor\dialogs\music\music.js" />
+    <Content Include="ueditor\dialogs\preview\preview.html" />
+    <Content Include="ueditor\dialogs\scrawl\images\addimg.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\brush.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\delimg.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\delimgH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\empty.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\emptyH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\eraser.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\redo.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\redoH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\scale.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\scaleH.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\size.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\undo.png" />
+    <Content Include="ueditor\dialogs\scrawl\images\undoH.png" />
+    <Content Include="ueditor\dialogs\scrawl\scrawl.css" />
+    <Content Include="ueditor\dialogs\scrawl\scrawl.html" />
+    <Content Include="ueditor\dialogs\scrawl\scrawl.js" />
+    <Content Include="ueditor\dialogs\searchreplace\searchreplace.html" />
+    <Content Include="ueditor\dialogs\searchreplace\searchreplace.js" />
+    <Content Include="ueditor\dialogs\snapscreen\snapscreen.html" />
+    <Content Include="ueditor\dialogs\spechars\spechars.html" />
+    <Content Include="ueditor\dialogs\spechars\spechars.js" />
+    <Content Include="ueditor\dialogs\table\dragicon.png" />
+    <Content Include="ueditor\dialogs\table\edittable.css" />
+    <Content Include="ueditor\dialogs\table\edittable.html" />
+    <Content Include="ueditor\dialogs\table\edittable.js" />
+    <Content Include="ueditor\dialogs\table\edittd.html" />
+    <Content Include="ueditor\dialogs\table\edittip.html" />
+    <Content Include="ueditor\dialogs\template\config.js" />
+    <Content Include="ueditor\dialogs\template\images\bg.gif" />
+    <Content Include="ueditor\dialogs\template\images\pre0.png" />
+    <Content Include="ueditor\dialogs\template\images\pre1.png" />
+    <Content Include="ueditor\dialogs\template\images\pre2.png" />
+    <Content Include="ueditor\dialogs\template\images\pre3.png" />
+    <Content Include="ueditor\dialogs\template\images\pre4.png" />
+    <Content Include="ueditor\dialogs\template\template.css" />
+    <Content Include="ueditor\dialogs\template\template.html" />
+    <Content Include="ueditor\dialogs\template\template.js" />
+    <Content Include="ueditor\dialogs\video\images\bg.png" />
+    <Content Include="ueditor\dialogs\video\images\center_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\file-icons.gif" />
+    <Content Include="ueditor\dialogs\video\images\file-icons.png" />
+    <Content Include="ueditor\dialogs\video\images\icons.gif" />
+    <Content Include="ueditor\dialogs\video\images\icons.png" />
+    <Content Include="ueditor\dialogs\video\images\image.png" />
+    <Content Include="ueditor\dialogs\video\images\left_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\none_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\progress.png" />
+    <Content Include="ueditor\dialogs\video\images\right_focus.jpg" />
+    <Content Include="ueditor\dialogs\video\images\success.gif" />
+    <Content Include="ueditor\dialogs\video\images\success.png" />
+    <Content Include="ueditor\dialogs\video\video.css" />
+    <Content Include="ueditor\dialogs\video\video.html" />
+    <Content Include="ueditor\dialogs\video\video.js" />
+    <Content Include="ueditor\dialogs\webapp\webapp.html" />
+    <Content Include="ueditor\dialogs\wordimage\fClipboard_ueditor.swf" />
+    <Content Include="ueditor\dialogs\wordimage\imageUploader.swf" />
+    <Content Include="ueditor\dialogs\wordimage\tangram.js" />
+    <Content Include="ueditor\dialogs\wordimage\wordimage.html" />
+    <Content Include="ueditor\dialogs\wordimage\wordimage.js" />
+    <Content Include="ueditor\fileUpload\Uploader.swf" />
+    <Content Include="ueditor\fileUpload\uploadjs.js" />
+    <Content Include="ueditor\fileUpload\webuploader.css" />
+    <Content Include="ueditor\fileUpload\webuploader.custom.js" />
+    <Content Include="ueditor\fileUpload\webuploader.custom.min.js" />
+    <Content Include="ueditor\fileUpload\webuploader.fis.js" />
+    <Content Include="ueditor\fileUpload\webuploader.flashonly.js" />
+    <Content Include="ueditor\fileUpload\webuploader.flashonly.min.js" />
+    <Content Include="ueditor\fileUpload\webuploader.html5only.js" />
+    <Content Include="ueditor\fileUpload\webuploader.html5only.min.js" />
+    <Content Include="ueditor\fileUpload\webuploader.js" />
+    <Content Include="ueditor\fileUpload\webuploader.min.js" />
+    <Content Include="ueditor\fileUpload\webuploader.noimage.js" />
+    <Content Include="ueditor\fileUpload\webuploader.noimage.min.js" />
+    <Content Include="ueditor\fileUpload\webuploader.nolog.js" />
+    <Content Include="ueditor\fileUpload\webuploader.nolog.min.js" />
+    <Content Include="ueditor\fileUpload\webuploader.withoutimage.js" />
+    <Content Include="ueditor\fileUpload\webuploader.withoutimage.min.js" />
+    <Content Include="ueditor\index.html" />
+    <Content Include="ueditor\lang\zh-cn\images\copy.png" />
+    <Content Include="ueditor\lang\zh-cn\images\localimage.png" />
+    <Content Include="ueditor\lang\zh-cn\images\music.png" />
+    <Content Include="ueditor\lang\zh-cn\images\upload.png" />
+    <Content Include="ueditor\lang\zh-cn\zh-cn.js" />
+    <Content Include="ueditor\net\Bin\Newtonsoft.Json.dll" />
+    <Content Include="ueditor\net\net.sln" />
+    <Content Include="ueditor\themes\default\css\ueditor.css" />
+    <Content Include="ueditor\themes\default\css\ueditor.min.css" />
+    <Content Include="ueditor\themes\default\dialogbase.css" />
+    <Content Include="ueditor\themes\default\images\anchor.gif" />
+    <Content Include="ueditor\themes\default\images\arrow.png" />
+    <Content Include="ueditor\themes\default\images\arrow_down.png" />
+    <Content Include="ueditor\themes\default\images\arrow_up.png" />
+    <Content Include="ueditor\themes\default\images\button-bg.gif" />
+    <Content Include="ueditor\themes\default\images\cancelbutton.gif" />
+    <Content Include="ueditor\themes\default\images\charts.png" />
+    <Content Include="ueditor\themes\default\images\cursor_h.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_h.png" />
+    <Content Include="ueditor\themes\default\images\cursor_v.gif" />
+    <Content Include="ueditor\themes\default\images\cursor_v.png" />
+    <Content Include="ueditor\themes\default\images\dialog-title-bg.png" />
+    <Content Include="ueditor\themes\default\images\filescan.png" />
+    <Content Include="ueditor\themes\default\images\highlighted.gif" />
+    <Content Include="ueditor\themes\default\images\icons-all.gif" />
+    <Content Include="ueditor\themes\default\images\icons.gif" />
+    <Content Include="ueditor\themes\default\images\icons.png" />
+    <Content Include="ueditor\themes\default\images\loaderror.png" />
+    <Content Include="ueditor\themes\default\images\loading.gif" />
+    <Content Include="ueditor\themes\default\images\lock.gif" />
+    <Content Include="ueditor\themes\default\images\neweditor-tab-bg.png" />
+    <Content Include="ueditor\themes\default\images\pagebreak.gif" />
+    <Content Include="ueditor\themes\default\images\scale.png" />
+    <Content Include="ueditor\themes\default\images\sortable.png" />
+    <Content Include="ueditor\themes\default\images\spacer.gif" />
+    <Content Include="ueditor\themes\default\images\sparator_v.png" />
+    <Content Include="ueditor\themes\default\images\table-cell-align.png" />
+    <Content Include="ueditor\themes\default\images\tangram-colorpicker.png" />
+    <Content Include="ueditor\themes\default\images\toolbar_bg.png" />
+    <Content Include="ueditor\themes\default\images\unhighlighted.gif" />
+    <Content Include="ueditor\themes\default\images\upload.png" />
+    <Content Include="ueditor\themes\default\images\videologo.gif" />
+    <Content Include="ueditor\themes\default\images\word.gif" />
+    <Content Include="ueditor\themes\default\images\wordpaste.png" />
+    <Content Include="ueditor\themes\iframe.css" />
+    <Content Include="ueditor\third-party\codemirror\codemirror.css" />
+    <Content Include="ueditor\third-party\codemirror\codemirror.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\mootools-adapter.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\mootools-adapter.src.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\prototype-adapter.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\prototype-adapter.src.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\standalone-framework.js" />
+    <Content Include="ueditor\third-party\highcharts\adapters\standalone-framework.src.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts-more.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts-more.src.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts.js" />
+    <Content Include="ueditor\third-party\highcharts\highcharts.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\annotations.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\annotations.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\canvas-tools.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\canvas-tools.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\data.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\data.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\drilldown.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\drilldown.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\exporting.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\exporting.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\funnel.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\funnel.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\heatmap.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\heatmap.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\map.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\map.src.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\no-data-to-display.js" />
+    <Content Include="ueditor\third-party\highcharts\modules\no-data-to-display.src.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\dark-blue.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\dark-green.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\gray.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\grid.js" />
+    <Content Include="ueditor\third-party\highcharts\themes\skies.js" />
+    <Content Include="ueditor\third-party\jquery-1.10.2.js" />
+    <Content Include="ueditor\third-party\jquery-1.10.2.min.js" />
+    <Content Include="ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
+    <Content Include="ueditor\third-party\SyntaxHighlighter\shCore.js" />
+    <Content Include="ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.svg" />
+    <Content Include="ueditor\third-party\video-js\video-js.css" />
+    <Content Include="ueditor\third-party\video-js\video-js.min.css" />
+    <Content Include="ueditor\third-party\video-js\video-js.swf" />
+    <Content Include="ueditor\third-party\video-js\video.dev.js" />
+    <Content Include="ueditor\third-party\video-js\video.js" />
+    <Content Include="ueditor\third-party\webuploader\Uploader.swf" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.css" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.custom.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.custom.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.flashonly.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.flashonly.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.html5only.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.html5only.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.min.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.withoutimage.js" />
+    <Content Include="ueditor\third-party\webuploader\webuploader.withoutimage.min.js" />
+    <Content Include="ueditor\third-party\zeroclipboard\ZeroClipboard.js" />
+    <Content Include="ueditor\third-party\zeroclipboard\ZeroClipboard.min.js" />
+    <Content Include="ueditor\third-party\zeroclipboard\ZeroClipboard.swf" />
+    <Content Include="ueditor\ueditor.all.js" />
+    <Content Include="ueditor\ueditor.all.min.js" />
+    <Content Include="ueditor\ueditor.config.js" />
+    <Content Include="ueditor\ueditor.parse.js" />
+    <Content Include="ueditor\ueditor.parse.min.js" />
+    <Content Include="Views\Bim\Index.cshtml" />
+    <Content Include="Views\Company\Index.cshtml" />
+    <Content Include="Views\CompletionAcceptance\Index.cshtml" />
+    <Content Include="Views\Draw\Index.cshtml" />
+    <Content Include="Views\Material\Index.cshtml" />
+    <Content Include="Views\MaterielEquipment\Index.cshtml" />
+    <Content Include="Views\Plan\Index.cshtml" />
+    <Content Include="Views\Project\ScheduleInfo.cshtml" />
+    <Content Include="Views\QualityMonitor\UploadRectifyResultZL.cshtml" />
+    <Content Include="Views\Question\Index.cshtml" />
+    <Content Include="Views\SpecialAcceptance\Index.cshtml" />
+    <Content Include="Views\SupervisorLog\Index.cshtml" />
+    <Content Include="Views\Train\IndexAQ.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Visa\Add.cshtml" />
+    <Content Include="Views\Visa\Index.cshtml" />
+    <Content Include="Views\Work\Detail.cshtml" />
+    <Content Include="Views\Work\Index.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Currency\Index.cshtml" />
+    <Content Include="Views\Currency\GoToLogin.cshtml" />
+    <Content Include="Views\Currency\UnAuthorized.cshtml" />
+    <Content Include="Views\Currency\Error.cshtml" />
+    <Content Include="Views\Currency\Login.cshtml" />
+    <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutUn.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
+    <Content Include="Views\News\Detail.cshtml" />
+    <Content Include="Views\Home\SignIndex.cshtml" />
+    <Content Include="Views\PersonCenter\PersonInfo.cshtml" />
+    <Content Include="Views\PersonCenter\UpdatePass.cshtml" />
+    <Content Include="Views\PersonCenter\ProblemList.cshtml" />
+    <Content Include="Views\PersonCenter\ToDoList.cshtml" />
+    <Content Include="Views\Project\Add.cshtml" />
+    <Content Include="Views\Project\Detail.cshtml" />
+    <Content Include="Views\Project\IndexHis.cshtml" />
+    <Content Include="Views\Change\Index.cshtml" />
+    <Content Include="Views\Change\Add.cshtml" />
+    <Content Include="Views\Change\Detail.cshtml" />
+    <Content Include="Views\Contract\Index.cshtml" />
+    <Content Include="Views\Contract\Add.cshtml" />
+    <Content Include="Views\Contract\Detail.cshtml" />
+    <Content Include="Views\Bim\Add.cshtml" />
+    <Content Include="Views\Bim\Detail.cshtml" />
+    <Content Include="Views\Company\Add.cshtml" />
+    <Content Include="Views\Company\Detail.cshtml" />
+    <Content Include="Views\CompletionAcceptance\Add.cshtml" />
+    <Content Include="Views\CompletionAcceptance\Detail.cshtml" />
+    <Content Include="Views\Draw\Add.cshtml" />
+    <Content Include="Views\Draw\Detail.cshtml" />
+    <Content Include="Views\Material\Add.cshtml" />
+    <Content Include="Views\Material\Detail.cshtml" />
+    <Content Include="Views\MaterielEquipment\Add.cshtml" />
+    <Content Include="Views\MaterielEquipment\Detail.cshtml" />
+    <Content Include="Views\Plan\Add.cshtml" />
+    <Content Include="Views\Plan\Detail.cshtml" />
+    <Content Include="Views\Question\Add.cshtml" />
+    <Content Include="Views\Question\Detail.cshtml" />
+    <Content Include="Views\SpecialAcceptance\Add.cshtml" />
+    <Content Include="Views\SpecialAcceptance\Detail.cshtml" />
+    <Content Include="Views\SupervisorLog\Add.cshtml" />
+    <Content Include="Views\SupervisorLog\Detail.cshtml" />
+    <Content Include="Views\Train\AddAQ.cshtml" />
+    <Content Include="Views\Train\DetailAQ.cshtml" />
+    <Content Include="Views\Train\IndexZL.cshtml" />
+    <Content Include="Views\Train\AddZL.cshtml" />
+    <Content Include="Views\Train\DetailZL.cshtml" />
+    <Content Include="Views\User\Add.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Views\Visa\Detail.cshtml" />
+    <Content Include="Views\Work\Add.cshtml" />
+    <Content Include="Views\Project\SetMilepost.cshtml" />
+    <Content Include="Views\Project\SetData.cshtml" />
+    <Content Include="Views\Project\SetCompany.cshtml" />
+    <Content Include="Views\Home\Message.cshtml" />
+    <Content Include="Views\Home\MyJob.cshtml" />
+    <Content Include="Views\Home\UpdatePwd.cshtml" />
+    <Content Include="Views\Home\PersonInfo.cshtml" />
+    <Content Include="Views\Home\Information.cshtml" />
+    <Content Include="Views\Home\InformationDetail.cshtml" />
+    <Content Include="Views\Home\Engineering.cshtml" />
+    <Content Include="Views\Home\EngineeringDetail.cshtml" />
+    <Content Include="Views\Home\CompanyDetail.cshtml" />
+    <Content Include="Views\Home\Notice.cshtml" />
+    <Content Include="Views\Comm\SelectProject.cshtml" />
+    <Content Include="Views\Comm\Test.cshtml" />
+    <Content Include="Views\Monitor\IndexAQ.cshtml" />
+    <Content Include="Views\Monitor\AddAQ.cshtml" />
+    <Content Include="Views\Monitor\DetailAQ.cshtml" />
+    <Content Include="Views\Plan\ScheduleIndex.cshtml" />
+    <Content Include="Views\Comm\SelectMilestone.cshtml" />
+    <Content Include="Views\Comm\Milestone_del.cshtml" />
+    <Content Include="Views\Comm\SelectData.cshtml" />
+    <Content Include="Views\Shared\_TopMenu.cshtml" />
+    <Content Include="Views\Project\Edit.cshtml" />
+    <Content Include="Views\Comm\SelectOilStation.cshtml" />
+    <Content Include="Views\Bim\Edit.cshtml" />
+    <Content Include="Views\Draw\Edit.cshtml" />
+    <Content Include="Views\Work\Edit.cshtml" />
+    <Content Include="Views\Contract\Edit.cshtml" />
+    <Content Include="Views\Shared\_header.cshtml" />
+    <Content Include="Views\Shared\_LayoutPageH5.cshtml" />
+    <Content Include="Views\H5\BimInfo.cshtml" />
+    <Content Include="Resource\scripts\token.json" />
+    <Content Include="Views\H5\KpiInvestment.cshtml" />
+    <Content Include="Views\Change\Edit.cshtml" />
+    <Content Include="Views\Change\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutDialog.cshtml" />
+    <Content Include="Views\Bim\BimModel.cshtml" />
+    <Content Include="Views\Plan\SelectParent.cshtml" />
+    <Content Include="Views\Plan\Edit.cshtml" />
+    <Content Include="Views\Visa\ChangeList.cshtml" />
+    <Content Include="Views\Visa\shangchuan.cshtml" />
+    <Content Include="Views\Visa\Edit.cshtml" />
+    <Content Include="Views\Plan\Import.cshtml" />
+    <Content Include="Views\Train\EditAQ.cshtml" />
+    <Content Include="Views\SpecialAcceptance\Edit.cshtml" />
+    <Content Include="Views\Train\GetTemplateList.cshtml" />
+    <Content Include="Views\Plan\RelationBIM.cshtml" />
+    <Content Include="Views\Shared\_Breadcrumb.cshtml" />
+    <Content Include="Views\Material\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutPersonInfo.cshtml" />
+    <Content Include="Views\Train\EditZL.cshtml" />
+    <Content Include="Views\Plan\GanttChart.cshtml" />
+    <Content Include="Views\MaterielEquipment\Edit.cshtml" />
+    <Content Include="Views\Plan\SelectRelationBIM_del.cshtml" />
+    <Content Include="Views\Monitor\Edit.cshtml" />
+    <Content Include="Views\Comm\GetTemplateList.cshtml" />
+    <Content Include="Views\Monitor\RelationBIM_del.cshtml" />
+    <Content Include="Views\CompletionAcceptance\Edit.cshtml" />
+    <Content Include="Views\Monitor\UploadRectifyResult.cshtml" />
+    <Content Include="Views\Question\RelationBIM_del.cshtml" />
+    <Content Include="Views\Comm\RelationBIM.cshtml" />
+    <Content Include="Views\SupervisorLog\RelationFile.cshtml" />
+    <Content Include="Views\QualityMonitor\DetailZL.cshtml" />
+    <Content Include="Views\QualityMonitor\EditZL.cshtml" />
+    <Content Include="Views\QualityMonitor\AddZL.cshtml" />
+    <Content Include="Views\QualityMonitor\IndexZL.cshtml" />
+    <Content Include="Views\CompletionAcceptance\_AcceptanceItem.cshtml" />
+    <Content Include="Views\Project\MilestonePlan.cshtml" />
+    <Content Include="Views\Project\ApprovalConstitute.cshtml" />
+    <Content Include="Views\Project\ProjectMainPoint.cshtml" />
+    <Content Include="Views\Project\TimeManage.cshtml" />
+    <Content Include="Views\Project\ProjectISP.cshtml" />
+    <Content Include="Views\Project\AddPerson.cshtml" />
+    <Content Include="Views\Project\AuditePerson.cshtml" />
+    <Content Include="Views\Project\HApprovalConstitute.cshtml" />
+    <Content Include="Views\Project\HProjectMainPoint.cshtml" />
+    <Content Include="Views\Project\DetailApprovalConstitute.cshtml" />
+    <Content Include="Views\Project\DetailProjectMainPoint.cshtml" />
+    <Content Include="Views\Project\DetailTimeManage.cshtml" />
+    <Content Include="Views\Project\DetailMilestonePlan.cshtml" />
+    <Content Include="Views\Project\DetailProjectISP.cshtml" />
+    <Content Include="Views\DelayPlan\Add.cshtml" />
+    <Content Include="Views\DelayPlan\Detail.cshtml" />
+    <Content Include="Views\DelayPlan\Edit.cshtml" />
+    <Content Include="Views\DelayPlan\Index.cshtml" />
+    <Content Include="Views\Comm\SelectBranchCompany.cshtml" />
+    <Content Include="Views\Comm\SelectServiceCustomer.cshtml" />
+    <Content Include="Views\Comm\SelectServiceUser.cshtml" />
+    <Content Include="Views\Comm\SelectPM.cshtml" />
+    <Content Include="Views\Project\AddLinkMan.cshtml" />
+    <Content Include="Views\Project\GetLinkMan.cshtml" />
+    <Content Include="Views\Monitor\ConfirmRectifyResult.cshtml" />
+    <Content Include="Views\Comm\SelectProjectCustomer.cshtml" />
+    <Content Include="Views\ConstructionPlan\Index.cshtml" />
+    <Content Include="Views\ConstructionPlan\Add.cshtml" />
+    <Content Include="Views\ConstructionPlan\Detail.cshtml" />
+    <Content Include="Views\ConstructionPlan\Edit.cshtml" />
+    <Content Include="Views\Project\ContractInfo.cshtml" />
+    <Content Include="Views\ConstructionPlan\ScheduleIndex.cshtml" />
+    <Content Include="Views\Project\ChangeInfo.cshtml" />
+    <Content Include="Views\Project\VisaInfo.cshtml" />
+    <Content Include="Views\Project\QuestionInfo.cshtml" />
+    <Content Include="Views\Shared\_footer.cshtml" />
+    <Content Include="Views\Monitor\SelectItem.cshtml" />
+    <Content Include="Views\Monitor\AddSelectData.cshtml" />
+    <Content Include="Views\H5\AboutUs.cshtml" />
+    <Content Include="Views\H5\IssuesList.cshtml" />
+    <Content Include="Views\H5\Problem.cshtml" />
+    <Content Include="Views\H5\Questions.cshtml" />
+    <Content Include="Views\H5\RelationBim.cshtml" />
+    <Content Include="Views\Comm\GetServiceCustomerList.cshtml" />
+    <Content Include="Views\Comm\SelectContract.cshtml" />
+    <Content Include="Views\Download\TestDownLoad.cshtml" />
+    <Content Include="Views\Monitor\UploadTest.cshtml" />
+    <Content Include="Views\Monitor\hsw_upload.cshtml" />
+    <Content Include="Views\Shared\_LayoutBim.cshtml" />
+    <Content Include="Views\Project\InputContract.cshtml" />
+    <Content Include="Views\Project\ProjectData.cshtml" />
+    <Content Include="Views\Project\DetailProjectData.cshtml" />
+    <Content Include="Views\Project\CrossingsManage.cshtml" />
+    <Content Include="Views\Project\MainPointTemp.cshtml" />
+    <Content Include="Views\Project\DetailCrossingsManage.cshtml" />
+    <Content Include="Views\Monitor\Index.cshtml" />
+    <Content Include="Views\Monitor\IndexItem.cshtml" />
+    <Content Include="Views\Monitor\IndexWorkItem.cshtml" />
+    <Content Include="Views\Contract\PreviewContract.cshtml" />
+    <Content Include="Views\Project\Video.cshtml" />
+    <Content Include="Views\User\GetSignList.cshtml" />
+    <Content Include="Views\User\GetSignDetail.cshtml" />
+    <Content Include="Views\User\UserList.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
+    <Content Include="Views\User\UpdateUser.cshtml" />
+    <Content Include="Views\User\UserDetail.cshtml" />
+    <Content Include="Views\Comm\SelectServiceAll.cshtml" />
+    <Content Include="Views\ProjectOperateApply\Index.cshtml" />
+    <Content Include="Views\ProjectOperateApply\AddApply.cshtml" />
+    <Content Include="Views\ProjectOperateApply\Detail.cshtml" />
+    <Content Include="Views\InvestManage\Add.cshtml" />
+    <Content Include="Views\InvestManage\Detail.cshtml" />
+    <Content Include="Views\InvestManage\Index.cshtml" />
+    <Content Include="Views\TzProjectProposal\Index.cshtml" />
+    <Content Include="Views\TzProjectProposal\Add.cshtml" />
+    <Content Include="Views\TzProjectProposal\Edit.cshtml" />
+    <Content Include="Views\TzProjectProposal\Detail.cshtml" />
+    <Content Include="Views\Comm\SelectProjectAll.cshtml" />
+    <Content Include="Views\TzResearch\Index.cshtml" />
+    <Content Include="Views\TzResearch\Add.cshtml" />
+    <Content Include="Views\TzFirstNegotiation\Index.cshtml" />
+    <Content Include="Views\TzFirstNegotiation\Add.cshtml" />
+    <Content Include="Views\TzFirstNegotiation\Detail.cshtml" />
+    <Content Include="Views\TzResearch\Detail.cshtml" />
+    <Content Include="Views\TzLandNegotiation\Index.cshtml" />
+    <Content Include="Views\TzLandNegotiation\Detail.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzFormTalkFile.cshtml" />
+    <Content Include="Views\TzDesiginChangeApply\Add.cshtml" />
+    <Content Include="Views\TzDesiginChangeApply\Edit.cshtml" />
+    <Content Include="Views\TzStartsApply\Add.cshtml" />
+    <Content Include="Views\TzStartsApply\Edit.cshtml" />
+    <Content Include="Views\TzDesiginChangeApply\Detail.cshtml" />
+    <Content Include="Views\TzStartsApply\Detail.cshtml" />
+    <Content Include="Views\TzStartsApply\Index.cshtml" />
+    <Content Include="Views\TzDesiginChangeApply\Index.cshtml" />
+    <Content Include="Views\Comm\SelectUser.cshtml" />
+    <Content Include="Views\Comm\SelectTzGasStation.cshtml" />
+    <Content Include="Views\Comm\SelectReformRecord.cshtml" />
+    <Content Include="Views\Comm\SelectTzGasReform.cshtml" />
+    <Content Include="ueditor\fileUpload\README.md" />
+    <Content Include="ueditor\net\config.json" />
+    <Content Include="ueditor\net\controller.ashx" />
+    <Content Include="ueditor\net\README.md" />
+    <Content Include="ueditor\net\Web.config" />
+    <Content Include="ueditor\third-party\jquery-1.10.2.min.map" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.eot" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.ttf" />
+    <Content Include="ueditor\third-party\video-js\font\vjs.woff" />
+    <Content Include="Views\TzProjectProposal\_TzFirstNegotiation.cshtml" />
+    <Content Include="Views\TzDevResourceReport\Add.cshtml" />
+    <Content Include="Views\TzDevResourceReport\Edit.cshtml" />
+    <Content Include="Views\TzDevResourceReport\Detail.cshtml" />
+    <Content Include="Views\TzDevResourceReport\Index.cshtml" />
+    <Content Include="Views\TzRivalStationReport\Index.cshtml" />
+    <Content Include="Views\TzRivalStationReport\Add.cshtml" />
+    <Content Include="Views\TzRivalStationReport\Edit.cshtml" />
+    <Content Include="Views\TzRivalStationReport\Detail.cshtml" />
+    <Content Include="Views\TzPeopleChgApply\Index.cshtml" />
+    <Content Include="Views\TzPeopleChgApply\Add.cshtml" />
+    <Content Include="Views\TzPeopleChgApply\Edit.cshtml" />
+    <Content Include="Views\TzPeopleChgApply\Detail.cshtml" />
+    <Content Include="Views\ProjectWeekly\Index.cshtml" />
+    <Content Include="Views\ProjectWeekly\AllProject.cshtml" />
+    <Content Include="Views\ProjectWeekly\AddProject.cshtml" />
+    <Content Include="Views\ProjectWeekly\ReformProject.cshtml" />
+    <Content Include="Views\TzGcGoodsOrdersApply\Index.cshtml" />
+    <Content Include="Views\TzGcGoodsOrdersApply\Add.cshtml" />
+    <Content Include="Views\TzGcGoodsOrdersApply\Edit.cshtml" />
+    <Content Include="Views\TzGcGoodsOrdersApply\Detail.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectManagementList.cshtml" />
+    <Content Include="Views\ProjectManagement\ConferenceMaterials.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectApplicationAdd.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectApplicationEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\TzLandTalk.cshtml" />
+    <Content Include="Views\ProjectManagement\SceneInvestigate.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialReview.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectApprovalRecord.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectReviewRecords.cshtml" />
+    <Content Include="Views\ProjectManagement\TzInitialTalk.cshtml" />
+    <Content Include="Views\TzProjectReveiews\Add.cshtml" />
+    <Content Include="Views\TzProjectReveiews\index.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectReviewRecordsList.cshtml" />
+    <Content Include="Views\ProjectManagement\ProjectApprovalRecordList.cshtml" />
+    <Content Include="Views\ProjectManagement\ConferenceMaterialsList.cshtml" />
+    <Content Include="Views\TzLandNegotiation\Add.cshtml" />
+    <Content Include="Views\ProjectManagement\DesignScheme.cshtml" />
+    <Content Include="Views\ProjectManagement\ConstructionDrawings.cshtml" />
+    <Content Include="Views\ProjectManagement\TenderApply.cshtml" />
+    <Content Include="Views\ProjectManagement\ConstructionDrawingsAdd.cshtml" />
+    <Content Include="Views\ProjectManagement\ConstructionDrawingsEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialManage.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialApply.cshtml" />
+    <Content Include="Views\ProjectManagement\StartApply.cshtml" />
+    <Content Include="Views\ProjectManagement\TenderApplyAdd.cshtml" />
+    <Content Include="Views\ProjectManagement\StartApplyEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\StartApplyLIst.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialApplyEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialApplyList.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialManageEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialManageList.cshtml" />
+    <Content Include="Views\ProjectManagement\TenderResult.cshtml" />
+    <Content Include="Views\ProjectManagement\TenderResultAdd.cshtml" />
+    <Content Include="Views\ProjectManagement\DesignSchemeList.cshtml" />
+    <Content Include="Views\ProjectManagement\MaterialApplyDetail.cshtml" />
+    <Content Include="Views\TzFormTalkFile\Add.cshtml" />
+    <Content Include="Views\TzFormTalkFile\Index.cshtml" />
+    <Content Include="Views\TzProjectApprovalInfo\Add.cshtml" />
+    <Content Include="Views\TzProjectApprovalInfo\Index.cshtml" />
+    <Content Include="Views\TzMeetingFileReport\Add.cshtml" />
+    <Content Include="Views\TzMeetingFileReport\Index.cshtml" />
+    <Content Include="Views\TzDesignScheme\Add.cshtml" />
+    <Content Include="Views\TzDesignScheme\Edit.cshtml" />
+    <Content Include="Views\TzMeetingFileReport\Detail.cshtml" />
+    <Content Include="Views\DesignScheme\Add.cshtml" />
+    <Content Include="Views\DesignScheme\Index.cshtml" />
+    <Content Include="Views\TzConDrawing\Index.cshtml" />
+    <Content Include="Views\TzConDrawing\Add.cshtml" />
+    <Content Include="Views\TzBidResult\Add.cshtml" />
+    <Content Include="Views\TzBidResult\Detail.cshtml" />
+    <Content Include="Views\TzBidResult\Index.cshtml" />
+    <Content Include="Views\TzProjectStartApply\Add.cshtml" />
+    <Content Include="Views\TzProjectStartApply\Detail.cshtml" />
+    <Content Include="Views\TzProjectStartApply\Edit.cshtml" />
+    <Content Include="Views\TzProjectStartApply\Index.cshtml" />
+    <Content Include="Views\TzSupMatManagement\Add.cshtml" />
+    <Content Include="Views\TzSupMatManagement\Index.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\Add.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\Detail.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\Edit.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\Index.cshtml" />
+    <Content Include="Views\TzTenderingApply\Add.cshtml" />
+    <Content Include="Views\TzTenderingApply\Detail.cshtml" />
+    <Content Include="Views\TzTenderingApply\Edit.cshtml" />
+    <Content Include="Views\TzTenderingApply\Index.cshtml" />
+    <Content Include="Views\Comm\SelectTzProjectProposal.cshtml" />
+    <Content Include="Views\TzDesignScheme\Index.cshtml" />
+    <Content Include="Views\TzConDrawing\Edit.cshtml" />
+    <Content Include="Views\TzConDrawing\Detail.cshtml" />
+    <Content Include="Views\Comm\SelectDepartment.cshtml" />
+    <Content Include="Views\TzDesignScheme\Detail.cshtml" />
+    <Content Include="Views\Company\ContractorIndex.cshtml" />
+    <Content Include="Views\Company\ContractorAdd.cshtml" />
+    <Content Include="Views\Company\ContractorDetail.cshtml" />
+    <Content Include="Views\Company\ContractorEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\FinalAccepation.cshtml" />
+    <Content Include="Views\ProjectManagement\FinalAccepationEdit.cshtml" />
+    <Content Include="Views\ProjectManagement\FinalAccepationDetail.cshtml" />
+    <Content Include="Views\ProjectManagement\FinalAccepationAdd.cshtml" />
+    <Content Include="Views\TzProjectProposal\_MeetingFileReport.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzFirstNegotiation.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzLandNegotiation.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzProjectApprovalInfo.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzProjectProposal.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzProjectReveiews.cshtml" />
+    <Content Include="Views\TzProjectProposal\_TzResearch.cshtml" />
+    <Content Include="Views\TzTenderingCount\Index.cshtml" />
+    <Content Include="Views\Comm\SelectTzSupplyMaterialApply.cshtml" />
+    <Content Include="Views\Company\ServiceProviderIndex.cshtml" />
+    <Content Include="Views\Company\ServiceProviderAdd.cshtml" />
+    <Content Include="Views\Company\ServiceProviderEdit.cshtml" />
+    <Content Include="Views\Company\ServiceProviderDetail.cshtml" />
+    <Content Include="Views\Company\SupplierIndex.cshtml" />
+    <Content Include="Views\Company\SupplierAdd.cshtml" />
+    <Content Include="Views\Company\SupplierEdit.cshtml" />
+    <Content Include="Views\Company\SupplierDetail.cshtml" />
+    <Content Include="Views\CompletionAcceptanceResUpload\Index.cshtml" />
+    <Content Include="Views\CompletionAcceptanceResUpload\Detail.cshtml" />
+    <Content Include="Views\CompletionAcceptanceResUpload\Add.cshtml" />
+    <Content Include="Views\CompletionAcceptanceResUpload\Edit.cshtml" />
+    <Content Include="Views\TzProProgressChart\Index.cshtml" />
+    <Content Include="Views\Project\TimeLimitDetail.cshtml" />
+    <Content Include="Views\Project\ProcedureDetail.cshtml" />
+    <Content Include="Views\Comm\SelectContractor.cshtml" />
+    <Content Include="Views\ProjectOperateApply\Edit.cshtml" />
+    <Content Include="Views\Comm\SelectCustomerByNameOrType.cshtml" />
+    <Content Include="Views\Comm\SelectUserListByCompanyId.cshtml" />
+    <Content Include="Views\TzStationRemould\Index.cshtml" />
+    <Content Include="Views\TzStationRemould\Edit.cshtml" />
+    <Content Include="Views\TzStationRemould\Detail.cshtml" />
+    <Content Include="Views\TzStationRemould\Add.cshtml" />
+    <Content Include="Views\FinanceSettlement\Index.cshtml" />
+    <Content Include="Views\Comm\FinanceSettlementPopup.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\SupplyMaterialReport.cshtml" />
+    <Content Include="Views\VideoManage\Index.cshtml" />
+    <Content Include="Views\Project\AttendanceSet.cshtml" />
+    <Content Include="Views\AttendanceReport\FilialeIndex.cshtml" />
+    <Content Include="Views\AttendanceReport\ProIndex.cshtml" />
+    <Content Include="Views\AttendanceReport\AttendanceIndex.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\SupplyList.cshtml" />
+    <Content Include="Views\VideoManage\VideoFailure.cshtml" />
+    <Content Include="Views\Project\CKTimeLimitDetail.cshtml" />
+    <Content Include="Views\Project\CKProcedureDetail.cshtml" />
+    <Content Include="Views\SupervisorLogStatistic\Index.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\BatchExport.cshtml" />
+    <Content Include="Views\TzSupplyMaterialApply\PrintMaterial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Resource\upLoad\" />
+    <Folder Include="Views\Files\" />
+    <Folder Include="Views\SxBaseWeb\" />
+    <Folder Include="Views\test\" />
+    <Folder Include="Views\UploadBim\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Content Include="Resource\scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hc.epm.Admin.ClientProxy\hc.epm.Admin.ClientProxy.csproj">
+      <Project>{1E25102E-991F-4A3D-AC2B-C3CBD0293E98}</Project>
+      <Name>hc.epm.Admin.ClientProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.BaseCore\hc.epm.DataModel.BaseCore.csproj">
+      <Project>{f8103b09-a5c7-48bd-b736-727fb2107165}</Project>
+      <Name>hc.epm.DataModel.BaseCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Business\hc.epm.DataModel.Business.csproj">
+      <Project>{1c5dc3d9-56b1-4580-8b69-30955f72d6bd}</Project>
+      <Name>hc.epm.DataModel.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.DataModel.Msg\hc.epm.DataModel.Msg.csproj">
+      <Project>{85643354-d470-49aa-a4d0-e9b6ba8116a2}</Project>
+      <Name>hc.epm.DataModel.Msg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.Service.Basic\hc.epm.Service.Basic.csproj">
+      <Project>{12078b7d-28a5-4d0a-871d-664c65cb1df5}</Project>
+      <Name>hc.epm.Service.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.Service.ClientSite\hc.epm.Service.ClientSite.csproj">
+      <Project>{344eee4b-8211-4f9b-ae19-dc16b18fa54c}</Project>
+      <Name>hc.epm.Service.ClientSite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.UI.Common\hc.epm.UI.Common.csproj">
+      <Project>{3aa26187-687c-431b-80eb-6c7c3bb2c982}</Project>
+      <Name>hc.epm.UI.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.ViewModel\hc.epm.ViewModel.csproj">
+      <Project>{C2D7AF8D-0EFB-42D5-8B8B-AFCB1C3738B0}</Project>
+      <Name>hc.epm.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.epm.Web.ClientProxy\hc.epm.Web.ClientProxy.csproj">
+      <Project>{294a148a-f503-4155-a186-e6412f60ba9b}</Project>
+      <Name>hc.epm.Web.ClientProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.Plat.Common.Extend\hc.Plat.Common.Extend.csproj">
+      <Project>{4f59530f-798f-45a0-8500-1864e7508bbe}</Project>
+      <Name>hc.Plat.Common.Extend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.Plat.Message\taobao-sdk-net-auto_1455552377940-20160707-source\TopSdk.csproj">
+      <Project>{9C11CAE5-5188-4E71-825B-68FC3135728A}</Project>
+      <Name>TopSdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\hc.Plat.WebAPI.Base\hc.Plat.WebAPI.Base.csproj">
+      <Project>{7b8f95bc-e2d5-44ad-b1c9-75891b4654ee}</Project>
+      <Name>hc.Plat.WebAPI.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50468</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50144/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.1.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.5\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

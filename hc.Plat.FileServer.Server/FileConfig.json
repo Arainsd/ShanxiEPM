@@ -1,0 +1,46 @@
+﻿[
+  {
+    "Number": "epm0",
+    "App": "epm",
+    "FileTypeName": "static",
+    "FileTypeDirectory": "StaticResource",
+    "FileTypeExtension": ".jpg|.png|.jpeg|.gif",
+    "SaveFilePath": "StaticResource",
+    "SaveTempPath": "temp",
+    "ParentPath": "C:\\EPM\\FileServer\\",
+    "DirectoryFormat": "type/time"
+  },
+  {
+    "Number": "epm1",
+    "App": "epm",
+    "FileTypeName": "文档",
+    "FileTypeDirectory": "document",
+    "FileTypeExtension": ".doc|.docx|.xls|.xlsx|.rar|.iso|.zip|.7z|.pdf|.dwg|.*",
+    "SaveFilePath": "file",
+    "SaveTempPath": "temp",
+    "ParentPath": "C:\\EPM\\FileServer\\",
+    "DirectoryFormat": "file/type/time"
+  },
+  {
+    "Number": "epm2",
+    "App": "epm",
+    "FileTypeName": "音视频",
+    "FileTypeDirectory": "video",
+    "FileTypeExtension": ".mp3|.mp4|.avi|.rmvb|.wmv|.rm",
+    "SaveFilePath": "file",
+    "SaveTempPath": "temp",
+    "ParentPath": "C:\\EPM\\FileServer\\",
+    "DirectoryFormat": "file/time/type"
+  },
+   {
+    "Number": "epm3",
+    "App": "epm",
+    "FileTypeName": "模型",
+    "FileTypeDirectory": "model",
+    "FileTypeExtension": ".rar",
+    "SaveFilePath": "",
+    "SaveTempPath": "temp",
+    "ParentPath": "C:\\EPM\\GLBIMEngineServer\\CustomerStation\\Tools\\input\\",
+    "DirectoryFormat": ""
+  }
+]

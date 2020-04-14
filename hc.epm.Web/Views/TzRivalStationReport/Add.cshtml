@@ -1,0 +1,611 @@
+﻿@using hc.epm.Common;
+@using hc.Plat.Common.Extend
+@{
+    ViewBag.Title = "Add";
+}
+
+<style>
+    .top-title {
+        text-align: center;
+    }
+
+    .ti {
+        font-size: 20px;
+        font-weight: 800;
+        vertical-align: bottom;
+    }
+
+    .sel-pro {
+        height: 35px;
+        width: 900px;
+        border-radius: 5px;
+        padding: 0 5px;
+        border: 1px solid;
+    }
+    .select-box{
+        height: 35px;
+        width: 240px;
+        border-radius: 5px;
+        padding: 0 5px;
+        border: 1px solid;
+    }
+    .bold-name {
+        font-weight: 800;
+    }
+
+    table td {
+        width: 193px;
+    }
+
+    .timer {
+        width: 706px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+    .timers{
+        width: 300px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid;
+        padding-left: 10px;
+    }
+    .tera {
+        width: 900px;
+        height: 120px;
+        resize: none;
+        padding-left: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
+
+<div class="contentData">
+    <form id="mainForm">
+        <div class="top-title">
+            <span class="ti">陕西省各竞争对手加油（气）站现状上报流程</span>
+        </div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word;margin-top:30px;">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold-name">标题</td>
+                    <td style="text-align:center;" colspan="5">
+                        <div class="form-group">
+                            <input type="text" name="Title" placeholder="" class="sel-pro" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申报人</td>
+                    <td colspan="2">
+                        <span style="display:block;width:381px">
+                            @ViewBag.ApplyUser
+                        </span>
+                        <input type="hidden" name="ApplyUser" value="@ViewBag.ApplyUser" />
+                        <input type="hidden" name="ApplyUserId" value="@ViewBag.ApplyUserId" />
+                    </td>
+                    <td class="bold-name">申报日期</td>
+                    <td colspan="2">
+                        <span style="display:block;width:381px">@ViewBag.ApplyDate</span>
+                        <input type="hidden" name="ApplyDate" value="@ViewBag.ApplyDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">申报单位</td>
+                    <td colspan="2">
+                        <div style="width:381px">
+                            <span style="margin-right:5px;">@ViewBag.CompanyName</span>
+                            <span>@ViewBag.Department</span>
+                        </div>
+                        <input type="hidden" name="CompanyName" value="@ViewBag.CompanyName" />
+                        <input type="hidden" name="CompanyId" value="@ViewBag.CompanyId" />
+                        <input type="hidden" name="Department" value="@ViewBag.Department" />
+                        <input type="hidden" name="DepartmentId" value="@ViewBag.DepartmentId" />
+                    </td>
+                    <td class="bold-name">统计截止日期</td>
+                    <td colspan="2">
+                        <input type="text" class="select-box" id="TotalEndDate" name="TotalEndDate"  onClick="WdatePicker({ onpicked: function (dp) {  } })" placeholder="请选择统计截止日期">
+                        <input type="hidden" name="ApplyDate" value="@ViewBag.TotalEndDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">地市</td>
+                    <td colspan="5" style="text-align: left;padding-left:38px;">
+                        <select id="City" name="CityCode" class="select-box"></select>
+                        <input type="hidden" id="Citys" name="City" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站总数</td>
+                    <td colspan="5" style="text-align:left">
+                        <span id="OilStationSum" style="margin-left:38px;">0</span>
+                        <input type="hidden" id="OilStationSums" name="OilStationSum" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">全省运营加油站站总数</td>
+                    <td colspan="5" style="text-align:left">
+                        <span id="OilStaNum" style="margin-left:38px;">0</span>
+                        <input type="hidden" id="OilStaNums" name="OilStaNum" value="" />
+                    </td>
+                </tr>
+
+                @*全省运营加气站总数*@
+                <tr>
+                    <td class="bold-name" rowspan="2">全省运营加气站总数</td>
+                    <td class="bold-name">CNG</td>
+                    <td colspan="4" style="text-align:left">
+                        <span id="GasStaNumCNG" style="margin-left:38px;">0</span>
+                        <input type="hidden" id="GasStaNumCNGs" name="GasStaNumCNG" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG</td>
+                    <td colspan="4" style="text-align:left">
+                        <span id="GasStaNumLNG" style="margin-left:38px;">0</span>
+                        <input type="hidden" id="GasStaNumLNGs" name="GasStaNumLNG" value="" />
+                    </td>
+                </tr>
+
+                @*中石油*@
+                <tr>
+                    <td class="bold-name" rowspan="4">中石油</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZsyStaSum" name="ZsyStaSum" onblur="oilStationSum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZsyOilStaNum" name="ZsyOilStaNum" onblur="oilStaNum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZsyGasStaNumCNG" name="ZsyGasStaNumCNG" onblur="gasStaNumCNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZsyGasStaNumLNG" name="ZsyGasStaNumLNG" onblur="gasStaNumLNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+
+                @*中石化*@
+                <tr>
+                    <td class="bold-name" rowspan="4">中石化</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZshStaSum" name="ZshStaSum" onblur="oilStationSum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZshOilStaNum" name="ZshOilStaNum" onblur="oilStaNum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZshGasStaNumCNG" name="ZshGasStaNumCNG" onblur="gasStaNumCNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ZshGasStaNumLNG" name="ZshGasStaNumLNG" onblur="gasStaNumLNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+
+                @*延长壳牌*@
+                <tr>
+                    <td class="bold-name" rowspan="4">延长壳牌</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcqpStaSum" name="YcqpStaSum" onblur="oilStationSum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcqpOilStaNum" name="YcqpOilStaNum" onblur="oilStaNum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number"id="YcqpGasStaNumCNG" name="YcqpGasStaNumCNG" onblur="gasStaNumCNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcqpGasStaNumLNG" name="YcqpGasStaNumLNG" onblur="gasStaNumLNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+
+                @*延长石油*@
+                <tr>
+                    <td class="bold-name" rowspan="4">延长石油</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcsyStaSum" name="YcsyStaSum" onblur="oilStationSum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcsyOilStaNum" name="YcsyOilStaNum" onblur="oilStaNum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcsyGasStaNumCNG" name="YcsyGasStaNumCNG" onblur="gasStaNumCNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="YcsyGasStaNumLNG" name="YcsyGasStaNumLNG" onblur="gasStaNumLNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+
+                @*社会站*@
+                <tr>
+                    <td class="bold-name" rowspan="4">社会站</td>
+                    <td class="bold-name">总数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ShzStaSum" name="ShzStaSum" onblur="oilStationSum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">加油站运营数</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ShzOilStaNum" name="ShzOilStaNum" onblur="oilStaNum()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">CNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number" id="ShzGasStaNumCNG" name="ShzGasStaNumCNG" onblur="gasStaNumCNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">LNG加气站</td>
+                    <td colspan="4">
+                        <div class="form-group">
+                            <input type="number"id="ShzGasStaNumLNG" name="ShzGasStaNumLNG" onblur="gasStaNumLNG()" class="timer" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">备注</td>
+                    <td colspan="5">
+                        <textarea class="tera" name="Remark" rows="2"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:left;padding:10px 20px;">
+                        <p>填表说明：</p>
+                        <p>中石油总数以具备运营条件加油站数量为准(包括改造、各种原因暂时停运等)，运营数以加管BW系统当月运营站数量为准(运营站数字准确)；</p>
+                        <p>竞争对手站以分公司掌握情况为准，其中延长石油包括延长直供站、延长交通等同延长集团合作加油站；</p>
+                        <p>有需要解释事宜，在备注中进行说明；</p>
+                        <p>截止日期请填写每个月最后一天。</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">部门负责人</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            <input type="text" id="DepleaderName" name="DepleaderName" class="timers" />
+                            <input type="hidden" id="DepLeaderId" name="DepLeaderId" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bold-name">分管领导</td>
+                    <td colspan="5" style="text-align:left;padding-left:38px;">
+                        <div class="form-group">
+                            <input type="text" id="LeaderName" name="LeaderName" class="timers" />
+                            <input type="hidden" id="LeaderId" name="LeaderId" />
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="bold-name">签字意见</td>
+                    <td colspan="5">
+                        <script id="editor" name="SignIdea" type="text/javascript" style="width:900px;margin:0 auto;"></script>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="layui-form-item  btn-save" style="margin-top:60px;text-align:center;">
+            <input type="button" id="save" lay-submit lay-filter="sub" value="提&nbsp;&nbsp;&nbsp;交" class="layui-btn layui-btn-big button-base bg-save save" data-state="@(XtBusinessDataState.Auditing.GetValue().ToString())" />
+            <input type="button" id="save1" lay-submit lay-filter="sub" value="保&nbsp;&nbsp;&nbsp;存" class="layui-btn layui-btn-big button-base bg-save save" data-state="@(XtBusinessDataState.Staged.GetValue().ToString())" />
+            <input type="button" id="close" value="关&nbsp;&nbsp;&nbsp;闭" class="layui-btn layui-btn-big button-base" />
+            <input type="hidden" name="State" id="State" />
+        </div>
+    </form>
+</div>
+
+
+<script>
+    ////富文本编辑器实例化
+    var ue = UE.getEditor('editor', {
+        toolbars: [[//工具条
+          'simpleupload', 'insertimage', 'inserttable', 'attachment', 'snapscreen', 'fullscreen', 'source', 'undo', 'redo', 'bold', 'italic',
+       'underline', 'fontborder', 'backcolor', 'fontsize', 'fontfamily',
+       'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify',
+       'strikethrough', 'superscript', 'subscript', 'removeformat',
+       'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|',
+       'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
+       'selectall', 'cleardoc', 'link', 'unlink', 'emotion', 'help'
+        ]],
+        initialFrameHeight: 300
+    });
+    ////编辑器内容同步input
+    editor = UE.getEditor("editor", {
+
+    }).ready(function () {
+        var editor = UE.getEditor("editor");
+        /*找到UEditor的iframe*/
+        var contents = $('#editor').find('iframe').contents();
+        var fn = function () {
+            $("#SignIdea").val(UE.getEditor("editor").getContent());
+        }
+        if (document.all) {//document.all识别是否在IE下，在IE下为true
+            contents.get(0).attachEvent('onpropertychange', function (e) {
+                fn();
+            });
+        } else {
+            contents.on('input', fn);
+        }
+    });
+
+    //表单验证
+    $('#mainForm').bootstrapValidator({
+        excluded: [':hidden'],//[':disabled', ':hidden', ':not(:visible)'] //设置隐藏组件可验证
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            Title: {
+                validators: {
+                    notEmpty: {
+                        message: '标题不能为空'
+                    },
+                    stringLength: {
+                        max: 100,
+                        message: '项目名称不能超过100字符'
+                    },
+                },
+                CityCode: {
+                    notEmpty: {
+                        message: '地市不能为空'
+                    }
+                }
+            }
+        }
+    });
+
+    //选择地市
+    $.post("RegionList", { parentCode: "610000" }, function (data) {
+        if (data.Flag) {
+            $("#City").empty();
+            $("#City").append("<option value=''>---请选择市---</option>")
+            for (var i = 0; i < data.Data.length; i++) {
+                $("#City").append("<option value='" + data.Data[i].RegionCode + "'>" + data.Data[i].RegionName + "</option>")
+            };
+        }
+    });
+
+    //计算加油站总数
+    function oilStationSum(){
+        var oilStationSum = 0,
+            zsyStaSum = $("#ZsyStaSum").val(),
+            zshStaSum = $("#ZshStaSum").val(),
+            ycqpStaSum = $("#YcqpStaSum").val(),
+            ycsyStaSum = $("#YcsyStaSum").val(),
+            shzStaSum = $("#ShzStaSum").val();
+        oilStationSum = Number(zsyStaSum) + Number(zshStaSum) + Number(ycqpStaSum) + Number(ycsyStaSum) + Number(shzStaSum);
+        $("#OilStationSum").html(oilStationSum);
+        $("#OilStationSums").val(oilStationSum);
+    }
+
+    //计算全省运营加油站站总数
+    function oilStaNum(){
+        var oilStaNum = 0,
+            zsyOilStaNum = $("#ZsyOilStaNum").val(),
+            zshOilStaNum = $("#ZshOilStaNum").val(),
+            ycqpOilStaNum = $("#YcqpOilStaNum").val(),
+            ycsyOilStaNum = $("#YcsyOilStaNum").val(),
+            shzOilStaNum = $("#ShzOilStaNum").val();
+            oilStaNum = Number(zsyOilStaNum) + Number(zshOilStaNum) + Number(ycqpOilStaNum) + Number(ycsyOilStaNum) + Number(shzOilStaNum);
+        $("#OilStaNum").html(oilStaNum);
+        $("#OilStaNums").val(oilStaNum);
+    }
+
+    //计算CNG总数
+    function gasStaNumCNG(){
+        var gasStaNumCNG = 0,
+            zsyGasStaNumCNG = $("#ZsyGasStaNumCNG").val(),
+            zshGasStaNumCNG = $("#ZshGasStaNumCNG").val(),
+            ycqpGasStaNumCNG = $("#YcqpGasStaNumCNG").val(),
+            ycsyGasStaNumCNG = $("#YcsyGasStaNumCNG").val(),
+            shzGasStaNumCNG = $("#ShzGasStaNumCNG").val();
+        gasStaNumCNG = Number(zsyGasStaNumCNG) + Number(zshGasStaNumCNG) + Number(ycqpGasStaNumCNG) + Number(ycsyGasStaNumCNG) + Number(shzGasStaNumCNG);
+        $("#GasStaNumCNG").html(gasStaNumCNG);
+        $("#GasStaNumCNGs").val(gasStaNumCNG);
+    }
+
+    //计算LNG总数
+    function gasStaNumLNG(){
+        var gasStaNumLNG = 0,
+            zsyGasStaNumLNG = $("#ZsyGasStaNumLNG").val(),
+            zshGasStaNumLNG = $("#ZshGasStaNumLNG").val(),
+            ycqpGasStaNumLNG = $("#YcqpGasStaNumLNG").val(),
+            ycsyGasStaNumLNG = $("#YcsyGasStaNumLNG").val(),
+            shzGasStaNumLNG = $("#ShzGasStaNumLNG").val();
+        gasStaNumLNG = Number(zsyGasStaNumLNG) + Number(zshGasStaNumLNG) + Number(ycqpGasStaNumLNG) + Number(ycsyGasStaNumLNG) + Number(shzGasStaNumLNG);
+        $("#GasStaNumLNG").html(gasStaNumLNG);
+        $("#GasStaNumLNGs").val(gasStaNumLNG);
+    }
+
+    layui.use(['layer', 'form', 'element', 'laypage'], function () {
+        var layer = layui.layer, form = layui.form, element = layui.element, $ = layui.jquery, laypage = layui.laypage;
+
+        //部门负责人
+        $("#DepleaderName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择负责人"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?SelectUser=' + @ViewBag.CompanyId,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#DepleaderName").val(obj.data[0].Name);
+                        $("#DepLeaderId ").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+
+        //分管领导
+        $("#LeaderName").click(function () {
+            layer.open({
+                type: 2,
+                title: GetLayerTitle("选择分管领导"),
+                shadeClose: false, //点击遮罩关闭层
+                area: ['1000px', '680px'],
+                content: '/Comm/SelectUser?SelectUser=' + @ViewBag.CompanyId,
+                btn: ["确定", "取消"],
+                yes: function (index, layero) {
+                    var iframeWin = window[layero.find('iframe')[0]['name']];
+                    var obj = frames['layui-layer-iframe' + index].getSelectData();
+                    if (obj.flag === false) {
+                        layer.alert(obj.msg, { icon: 2 });
+                    } else {
+                        $("#LeaderName").val(obj.data[0].Name);
+                        $("#LeaderId ").val(obj.data[0].Id);
+                    }
+                    layer.close(index);
+                },
+                btn2: function (index, layero) {
+                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                    parent.layer.close(index);//关闭窗口
+                },
+                cancel: function (index, layero) {
+                },
+            });
+        });
+                
+        //数据提交
+        $(".save").click(function () {
+            //对表单进行验证
+            var bv = $('#mainForm').data('bootstrapValidator');
+            bv.validate();
+            $("#State").val($(this).data("state"))//提交或保存的状态值
+
+            //地市
+            if($("select[name='CityCode'] option:selected").val() == ""){
+                layer.msg("请选择地市", { time: 1000, icon: 2 });
+                return;
+            }
+            else{                
+                var city = $("select[name='CityCode'] option:selected").text();
+                $("#Citys").val(city);//地市名称
+                
+                var dataForm = $("#mainForm").serialize();
+                if (bv.isValid()) {
+                    $.post("Add", dataForm, function (data) {
+                        if (data.Flag) {
+                            layer.msg("操作成功", { time: 1000, icon: 1 }, function () {
+                                window.location.href = "/TzRivalStationReport/Index";
+                            });
+                        } else {
+                            layer.alert(data.Message, { icon: 2 });
+                        }
+                    });
+                } else {
+                    layer.msg("操作失败", { time: 1000, icon: 2 });
+                }
+            }
+        });
+    });
+</script>

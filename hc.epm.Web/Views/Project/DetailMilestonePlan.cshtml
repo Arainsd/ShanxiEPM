@@ -1,0 +1,152 @@
+﻿@using System.Collections.Generic;
+@using hc.epm.DataModel.Business;
+@using hc.epm.ViewModel;
+@using hc.epm.Common;
+@using hc.Plat.Common.Extend;
+@model List<PlanView>
+@{
+    ViewBag.Title = "MilestonePlan";
+}
+<style>
+      table input[type="text"] {
+        display: inline-block;
+        box-sizing: border-box;
+        padding-left: 15px;
+        height: 25px;
+        line-height: 35px;
+        border: 1px solid #C7C7C7;
+        border-radius: 1px;
+}
+    table .pic {
+    font-size: 20px; 
+    }
+    tbody tr td:nth-child(3) {
+       position:relative;
+    }
+    tbody tr td:nth-child(4) {
+        position:relative;
+    }
+    table .picstart {
+    font-size: 20px;
+    position: absolute;
+    left: 194px;
+}
+    .picend {
+        font-size: 20px;
+        position: absolute;
+        left: 194px;
+    }
+</style>
+<div class="contentData">
+    <ul class="tab-list" style="margin-bottom:38px;">
+        <li id="Detail">基本信息</li>
+        <li id="DetailApprovalConstitute">总批复构成</li>
+        <li id="DetailProjectISP">工程服务商</li>
+        <li id="DetailProjectMainPoint">工程要点</li>
+        <li id="DetailTimeManage">工期管理</li>
+        <li id="DetailMilestonePlan" class="active">工程节点</li>
+        <li id="ScheduleInfo">进度跟踪</li>
+        <li id="VisaInfo">签证信息</li>
+        <li id="QuestionInfo">问题信息</li>
+        <li id="ChangeInfo">变更信息</li>
+        <li id="ContractInfo">合同信息</li>
+        <li id="DetailCrossingsManage">外部手续</li>
+        <li id="video">视频集成</li>
+    </ul>
+    <div>
+        <table class="datalist" style="word-break:break-all;word-wrap:break-word">
+            <thead>
+                <tr>
+                    <th style="width:100px;">序号</th>
+                    <th style="width:500px;">计划名称</th>
+                    <th style="width:250px;">计划开工时间</th>
+                    <th style="width:250px;">计划完工时间</th>
+                    <th style="width:100px;">工期(天)</th>
+                    <th style="width:250px;">延期计划完工时间</th>
+                    <th style="width:250px;">实际完工时间</th>
+                    <th style="width:150px;">关联模型</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Count() > 0)
+                {
+                    int index = 0;
+                    foreach (var item in Model)
+                    {
+                        index++;
+                        <tr>
+                            <td>@index</td>
+                            <td>@item.Plan.Name</td>
+                            <td>@(item.Plan.StartTime == null ? "" : Convert.ToDateTime(item.Plan.StartTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.Plan.EndTime == null ? "" : Convert.ToDateTime(item.Plan.EndTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@item.Plan.BuildDays.ToString("#0")</td>
+                            <td>@(item.Plan.DelayTime == null ? "" : Convert.ToDateTime(item.Plan.DelayTime).ToString("yyyy-MM-dd"))</td>
+                            <td>@(item.Plan.EndDate == null ? "" : Convert.ToDateTime(item.Plan.EndDate).ToString("yyyy-MM-dd"))</td>
+                            <td></td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="4" style="font-weight:bold;">总工期</td>
+                        <td colspan="4" style="font-weight:bold;">@ViewBag.Limit</td>
+                    </tr>
+                }
+
+                else {
+                    <tr>
+                        <td colspan="7">暂无数据</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $("#Detail").click(function () {
+            window.location.href = 'Detail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailApprovalConstitute").click(function () {
+            window.location.href = 'DetailApprovalConstitute?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectMainPoint").click(function () {
+            window.location.href = 'DetailProjectMainPoint?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailTimeManage").click(function () {
+            window.location.href = 'CKTimeLimitDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectISP").click(function () {
+            window.location.href = 'DetailProjectISP?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailProjectData").click(function () {
+            window.location.href = 'DetailProjectData?projectId=@ViewBag.ProjectId';
+        });
+        $("#ScheduleInfo").click(function () {
+            window.location.href = 'ScheduleInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ContractInfo").click(function () {
+            window.location.href = 'ContractInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#ChangeInfo").click(function () {
+            window.location.href = 'ChangeInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#VisaInfo").click(function () {
+            window.location.href = 'VisaInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#QuestionInfo").click(function () {
+            window.location.href = 'QuestionInfo?projectId=@ViewBag.ProjectId';
+        });
+        $("#DetailCrossingsManage").click(function () {
+            window.location.href = 'CKProcedureDetail?projectId=@ViewBag.ProjectId';
+        });
+        $("#video").click(function () {
+            window.location.href = 'Video?projectId=@ViewBag.ProjectId';
+        });
+        $("tbody tr").each(function (index, item) {
+            $(item.children[2]).find("input").attr("disabled", true);
+            $(item.children[3]).find("input").attr("disabled", true);
+        });
+    });
+</script>
+
